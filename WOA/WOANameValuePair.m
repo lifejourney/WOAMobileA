@@ -7,6 +7,7 @@
 //
 
 #import "WOANameValuePair.h"
+#import "WOAContentModel.h"
 
 
 @implementation WOANameValuePair
@@ -142,6 +143,8 @@
             valueStr = _value ? (NSString*)_value : @"";
         else if ([_value isKindOfClass: [NSArray class]])
             valueStr = [(NSArray*)_value description];
+        else if ([_value isKindOfClass: [WOAContentModel class]])
+            valueStr = [(WOAContentModel*)_value description];
         else
             valueStr = @"";
     }
@@ -169,24 +172,25 @@ static NSArray *__typeMapArray = nil;
     //8上传附件(暂不支持上传附件)
     //9后续流程其他人员的操作步骤，这一步不可操作，提交表单时，值放空
     
-    __typeMapArray = @[@[@"text",       @(WOAPairDataType_Normal),          @"1"],
-                       @[@"int",        @(WOAPairDataType_IntString),       @"int"],
-                       @[@"date",       @(WOAPairDataType_DatePicker),      @"7"],
-                       @[@"time",       @(WOAPairDataType_TimePicker),      @"time"],
-                       @[@"datetime",   @(WOAPairDataType_DateTimePicker),  @"datetime"],
-                       @[@"combobox",   @(WOAPairDataType_SinglePicker),    @"5"],
-                       @[@"attfile",    @(WOAPairDataType_AttachFile),      @"8"], //todo
-                       @[@"textlist",   @(WOAPairDataType_TextList),        @"textlist"],
-                       @[@"checkuserlist", @(WOAPairDataType_CheckUserList),@"checkuserlist"],
+    __typeMapArray = @[@[@"text",           @(WOAPairDataType_Normal),          @"1"],
+                       @[@"int",            @(WOAPairDataType_IntString),       @"int"],
+                       @[@"date",           @(WOAPairDataType_DatePicker),      @"7"],
+                       @[@"time",           @(WOAPairDataType_TimePicker),      @"time"],
+                       @[@"datetime",       @(WOAPairDataType_DateTimePicker),  @"datetime"],
+                       @[@"combobox",       @(WOAPairDataType_SinglePicker),    @"5"],
+                       @[@"attfile",        @(WOAPairDataType_AttachFile),      @"8"], //todo
+                       @[@"textlist",       @(WOAPairDataType_TextList),        @"textlist"],
+                       @[@"checkuserlist",  @(WOAPairDataType_CheckUserList),   @"checkuserlist"],
                        
-                       @[@"2",          @(WOAPairDataType_TextArea),        @"2"], //todo
-                       @[@"3",          @(WOAPairDataType_Radio),           @"3"], //todo
-                       @[@"4",          @(WOAPairDataType_MultiPicker),     @"4"], //todo
-                       @[@"6",          @(WOAPairDataType_FixedText),       @"6"],
-                       @[@"9",          @(WOAPairDataType_FlowText),        @"9"],
+                       @[@"2",              @(WOAPairDataType_TextArea),        @"2"], //todo
+                       @[@"3",              @(WOAPairDataType_Radio),           @"3"], //todo
+                       @[@"4",              @(WOAPairDataType_MultiPicker),     @"4"], //todo
+                       @[@"6",              @(WOAPairDataType_FixedText),       @"6"],
+                       @[@"9",              @(WOAPairDataType_FlowText),        @"9"],
                        
-                       @[@"seperator",  @(WOAPairDataType_Seperator),       @"-1"],
-                       @[@"titlekey",   @(WOAPairDataType_TitleKey),        @"-2"]];
+                       @[@"seperator",      @(WOAPairDataType_Seperator),       @"-1"],
+                       @[@"titlekey",       @(WOAPairDataType_TitleKey),        @"-2"],
+                       @[@"contentModel",   @(WOAPairDataType_ContentModel),    @"-3"]];
 
 }
 

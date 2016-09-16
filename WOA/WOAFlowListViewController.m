@@ -7,20 +7,23 @@
 //
 
 #import "WOAFlowListViewController.h"
-#import "WOAContentModel.h"
 #import "WOANameValuePair.h"
 #import "WOALayout.h"
 #import "UILabel+Utility.h"
 #import "UIColor+AppTheme.h"
 #import "NSString+Utility.h"
-#import "WOAAppDelegate.h"
-#import "WOAExclusiveSelectListViewController.h"
-#import "WOAContentViewController.h"
 
 
 @interface WOAFlowListViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, weak) NSObject<WOAFlowListViewControllerDelegate> *delegate;
+
 @property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) NSArray *rootPairArray;
+@property (nonatomic, strong) NSDictionary *relatedDict;
+
+@property (nonatomic, assign) BOOL isAllContentModePair;
 
 @end
 
@@ -28,12 +31,19 @@
 
 #pragma mark - lifecycle
 
-+ (instancetype) flowListViewController: (NSString*)title
-                              pairArray: (NSArray*)pairArray
+@synthesize rootPairArray = _rootPairArray;
+
+
++ (instancetype) flowListViewController: (WOAContentModel*)contentModel
+                               delegate: (NSObject<WOAFlowListViewControllerDelegate> *)delegate
+                            relatedDict: (NSDictionary*)relatedDict
 {
     WOAFlowListViewController *vc = [[WOAFlowListViewController alloc] init];
-    vc.title = title;
-    vc.pairArray = pairArray;
+    
+    vc.delegate = delegate;
+    vc.title = contentModel.groupTitle;
+    vc.rootPairArray = contentModel.pairArray;
+    vc.relatedDict = relatedDict;
     
     return vc;
 }
@@ -57,6 +67,25 @@
     return self;
 }
 
+- (void) setRootPairArray: (NSArray *)rootPairArray
+{
+    _rootPairArray = rootPairArray;
+    
+    BOOL foundNoContentModeType = NO;
+    
+    for (WOANameValuePair *rootPair in rootPairArray)
+    {
+        if (WOAPairDataType_ContentModel != rootPair.dataType)
+        {
+            foundNoContentModeType = YES;
+            
+            break;
+        }
+    }
+    
+    self.isAllContentModePair = !foundNoContentModeType;
+}
+
 #pragma mark - private
 
 #pragma mark - delegte
@@ -72,7 +101,9 @@
     
     self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: self.title];
     
-    self.tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
+    UITableViewStyle tableViewStyle = (self.isAllContentModePair ? UITableViewStyleGrouped : UITableViewStylePlain);
+    
+    self.tableView = [[UITableView alloc] initWithFrame: CGRectZero style: tableViewStyle];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
@@ -88,16 +119,53 @@
     [self.tableView reloadData];
 }
 
+- (void) viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+}
+
 #pragma mark - table view datasource
 
 - (NSInteger) numberOfSectionsInTableView: (UITableView *)tableView
 {
-    return 1;
+    return self.isAllContentModePair ? [self.rootPairArray count] : 1;
 }
 
 - (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection: (NSInteger)section;
 {
-    return self.pairArray ? [self.pairArray count] : 0;
+    NSInteger numberOfRow;
+    
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: section];
+        WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+        
+        numberOfRow = [rootPairValue.pairArray count];
+    }
+    else
+    {
+        numberOfRow = self.rootPairArray.count;
+    }
+    
+    return numberOfRow;
+}
+
+- (NSString*) tableView: (UITableView *)tableView titleForHeaderInSection: (NSInteger)section
+{
+    NSString *titleForSection;
+    
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: section];
+        
+        titleForSection = rootPair.name;
+    }
+    else
+    {
+        titleForSection = @"";
+    }
+    
+    return titleForSection;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -105,8 +173,11 @@
     static NSString *flowListTableViewCellIdentifier = @"flowListTableViewCellIdentifier";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: flowListTableViewCellIdentifier];
+    
     if (!cell)
+    {
         cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: flowListTableViewCellIdentifier];
+    }
     else
     {
         UIView *subview;
@@ -121,13 +192,27 @@
         while (!subview);
     }
     
-    WOANameValuePair *pair = [self.pairArray objectAtIndex: indexPath.row];
-    NSString *rowTitle = pair.name;
+    NSString *titleForRow;
+    
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.section];
+        WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+        WOANameValuePair *subPair = [rootPairValue.pairArray objectAtIndex: indexPath.row];
+        
+        titleForRow = subPair.name;
+    }
+    else
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.row];
+        titleForRow = rootPair.name;
+    }
     
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
     
-    cell.textLabel.text = rowTitle;
+    cell.textLabel.text = titleForRow;
+    
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame: cell.frame];
     cell.selectedBackgroundView.backgroundColor = [UIColor mainItemBgColor];
@@ -138,87 +223,62 @@
 
 #pragma mark - table view delegate
 
+- (CGFloat) tableView: (UITableView *)tableView heightForHeaderInSection: (NSInteger)section
+{
+    return self.isAllContentModePair ? 30 : 1;
+}
+
+- (CGFloat) tableView: (UITableView *)tableView heightForFooterInSection: (NSInteger)section
+{
+    return 1;
+}
+
 - (CGFloat) tableView: (UITableView *)tableView heightForRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    WOANameValuePair *pair = [self.pairArray objectAtIndex: indexPath.row];
-    NSString *rowTitle = pair.name;
+    NSString *titleForRow;
     
-    return (rowTitle && ([rowTitle length] > 0)) ? 44 : 20;
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.section];
+        WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+        WOANameValuePair *subPair = [rootPairValue.pairArray objectAtIndex: indexPath.row];
+        
+        titleForRow = subPair.name;
+    }
+    else
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.row];
+        titleForRow = rootPair.name;
+    }
+    
+    return (titleForRow && ([titleForRow length] > 0)) ? 44 : 20;
 }
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
     
-    WOANameValuePair *pair = [self.pairArray objectAtIndex: indexPath.row];
-    //NSString *rowTitle = pair.name;
-    NSArray *modelArray = (NSArray*)pair.value;
-    
-    UIViewController *subVC = nil;
-    
-    switch (pair.actionType)
+    if (_delegate && [_delegate respondsToSelector: @selector(flowListViewControllerSelectRowAtIndexPath:selectedPair:relatedDict:navVC:)])
     {
-        case WOAModelActionType_GetTransPerson:
+        WOANameValuePair *selectedPair;
+        
+        if (self.isAllContentModePair)
         {
-            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
-            NSString *transID = [contentModel stringValueForName: @"id"];
-            NSString *transType = [contentModel stringValueForName: @"type"];
-            
-            [self getTransPerson: transID transType: transType];
+            WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.section];
+            WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+            selectedPair = [rootPairValue.pairArray objectAtIndex: indexPath.row];
         }
-            break;
-            
-        case WOAModelActionType_GetOATable:
+        else
         {
-            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
-            NSString *transID = [contentModel stringValueForName: @"id"];
-            
-            WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            [appDelegate getOATableWithID: transID
-                                    navVC: self.navigationController];
+            selectedPair = [self.rootPairArray objectAtIndex: indexPath.row];
         }
-            break;
-            
-        default:
-            break;
-    }
-    
-    if (subVC)
-    {
-        [self.navigationController pushViewController: subVC animated: YES];
+        
+        [_delegate flowListViewControllerSelectRowAtIndexPath: indexPath
+                                                 selectedPair: selectedPair
+                                                  relatedDict: self.relatedDict
+                                                        navVC: self.navigationController];
     }
 }
 
-#pragma mark -
-
-#pragma mark - public
-
-- (void) getTransPerson: (NSString*)transID
-              transType: (NSString*)transType
-{
-    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setValue: transID forKey: @"OpID"];
-    [optionDict setValue: transType forKey: @"type"];
-    
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate simpleQuery: @"getMissionPerson"
-                  optionDict: optionDict
-                  onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *personList = [WOAPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-         NSDictionary *departmentList = [WOAPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAPacketHelper modelForGetTransPerson: personList
-                                                        departmentDict: departmentList
-                                                                needXq: [transType isEqualToString: @"1"]
-                                                            actionType: WOAModelActionType_GetTransTable];
-         WOAExclusiveSelectListViewController *subVC = [WOAExclusiveSelectListViewController listWithItemArray: modelArray
-                                                                                                      delegate: nil
-                                                                                              defaultIndexPath: nil];
-         subVC.baseRequestDict = optionDict;
-         
-         [self.navigationController pushViewController: subVC animated: YES];
-     }];
-}
 
 @end

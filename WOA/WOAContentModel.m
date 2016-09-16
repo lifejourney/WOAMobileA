@@ -70,4 +70,40 @@
     
     return [pair stringValue];
 }
+
+- (WOANameValuePair*) toNameValuePair
+{
+    WOANameValuePair *pair = [WOANameValuePair pairWithName: self.groupTitle
+                                                      value: self
+                                                   dataType: WOAPairDataType_ContentModel];
+    pair.actionType = self.actionType;
+    
+    return pair;
+}
+
+#pragma mark -
+
+- (NSString*) description
+{
+    NSMutableDictionary *descDict = [NSMutableDictionary dictionary];
+    [descDict setValue: _groupTitle ? _groupTitle : @""
+                forKey: @"groupTitle"];
+    
+    NSMutableArray *pairsDescArr = [NSMutableArray array];
+    for (NSUInteger index = 0; index < [self.pairArray count]; index++)
+    {
+        WOANameValuePair *pair = [self.pairArray objectAtIndex: index];
+        
+        [pairsDescArr addObject: [pair stringValue]];
+    }
+    
+    [descDict setValue: pairsDescArr
+                forKey: @"pairArray"];
+    
+    [descDict setValue: [NSNumber numberWithInteger: self.actionType]
+                forKey: @"actionType"];
+    
+    return [NSString stringWithFormat:@"%@: %@", [super description], descDict];
+}
+
 @end

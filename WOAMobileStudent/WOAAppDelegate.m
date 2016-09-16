@@ -304,37 +304,6 @@
            onSuccuess: successHandler];
 }
 
-- (void) getOATableWithID: (NSString*)transID
-                    navVC: (UINavigationController*)navVC
-{
-    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setValue: transID forKey: @"OpID"];
-    
-    [self simpleQuery: @"getOATable"
-           optionDict: optionDict
-           onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         //TODO: tid没有返回
-         if (!tid) tid = @"0";
-         
-         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-         
-         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAPacketHelper modelForGetOATable: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
-                                                                                isEditable: YES
-                                                                                modelArray: modelArray];
-         subVC.baseRequestDict = baseDict;
-         subVC.rightButtonAction = WOAModelActionType_AddAssoc;
-         subVC.rightButtonTitle = @"提交";
-         
-         [navVC pushViewController: subVC animated: YES];
-     }];
-}
-
 @end
 
 

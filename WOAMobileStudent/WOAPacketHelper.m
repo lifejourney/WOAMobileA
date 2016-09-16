@@ -1141,8 +1141,8 @@
         {
             subDict = @{@"para_value": itemID};
         }
-        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemID
-                                                          value: name
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: name
+                                                          value: itemID
                                                      actionType: actionType];
         pair.subDictionary = subDict;
         

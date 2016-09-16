@@ -8,8 +8,6 @@
 
 #import "WOAExclusiveSelectListViewController.h"
 #import "UIColor+AppTheme.h"
-#import "WOAAppDelegate.h"
-#import "WOAContentViewController.h"
 
 
 @interface WOAExclusiveSelectListViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -29,6 +27,7 @@
                   defaultIndexPath: (NSIndexPath *)defaultIndexPath
 {
     WOAExclusiveSelectListViewController *vc;
+    
     vc = [[WOAExclusiveSelectListViewController alloc] initWithItemArray: itemArray
                                                                 delegate: delegate
                                                         defaultIndexPath: defaultIndexPath];
@@ -154,53 +153,6 @@
     {
         [_delegate listViewControllerClickOnRowOnIndexPath: indexPath];
     }
-    
-    WOAContentModel *contentModel = [_itemArray objectAtIndex: indexPath.section];
-    WOANameValuePair *pair = [contentModel.pairArray objectAtIndex: indexPath.row];
-    
-    switch (pair.actionType)
-    {
-        case WOAModelActionType_GetTransTable:
-        {
-            NSDictionary *baseDict = pair.subDictionary;
-            NSMutableDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
-            [optionDict addEntriesFromDictionary: baseDict];
-            
-            [self getTransTable: optionDict];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-#pragma mark -
-
-
-- (void) getTransTable: (NSDictionary*)optionDict
-{
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate simpleQuery: @"getMissionTable"
-                  optionDict: optionDict
-                  onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-         
-         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAPacketHelper modelForTransactionTable: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
-                                                                                isEditable: YES
-                                                                                modelArray: modelArray];
-         subVC.baseRequestDict = baseDict;
-         subVC.rightButtonAction = WOAModelActionType_SubmitTransTable;
-         subVC.rightButtonTitle = @"提交";
-         
-         [self.navigationController pushViewController: subVC animated: YES];
-     }];
 }
 
 #pragma mark -

@@ -50,8 +50,5 @@
               toDate: (NSString*)toDate
           onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
 
-- (void) getOATableWithID: (NSString*)transID
-                    navVC: (UINavigationController*)navVC;
-
 @end
 

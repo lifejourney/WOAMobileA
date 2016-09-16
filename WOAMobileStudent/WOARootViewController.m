@@ -59,7 +59,7 @@
  4. 文档里：addAssoc的位置，应该是少了点信息。 addAssoc成功后，用返回的tid发getOAPerson.
  */
 
-@interface WOARootViewController () <UITabBarControllerDelegate>
+@interface WOARootViewController () <UITabBarControllerDelegate, WOAFlowListViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *vcArray;
 @property (nonatomic, strong) UINavigationController *myProfileNavC;
@@ -742,8 +742,12 @@
          NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
          NSArray *modelArray = [WOAPacketHelper modelForMyFillFormTask: retList];
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: vcTitle
-                                                                                    pairArray: modelArray];
+         WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
+                                                                 pairArray: modelArray];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -763,8 +767,12 @@
          NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
          
          NSArray *modelArray = [WOAPacketHelper modelForCreateTransaction: retList];
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: vcTitle
-                                                                                    pairArray: modelArray];
+         WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
+                                                                 pairArray: modelArray];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -822,10 +830,10 @@
     //NSString *vcTitle = [self titleForFuncName: funcName];
     UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    //WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    [appDelegate getOATableWithID: kWOAValue_OATableID_JoinSociety
-                            navVC: ownerNav];
+    [self getOATableWithID: kWOAValue_OATableID_JoinSociety
+                     navVC: ownerNav];
 }
 
 - (void) manageSociety
@@ -924,6 +932,155 @@
                                      password: nil];
     
     [appDelegate presentLoginViewController: NO animated: YES];
+}
+
+#pragma mark - WOAFlowListViewControllerDelegate
+
+- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath
+                                       selectedPair: (WOANameValuePair*)selectedPair
+                                        relatedDict: (NSDictionary*)relatedDict
+                                              navVC: (UINavigationController *)navVC
+{
+    switch (selectedPair.actionType)
+    {
+        case WOAModelActionType_GetTransPerson:
+        {
+            NSArray *modelArray = (NSArray*)selectedPair.value;
+            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
+            
+            NSString *transID = [contentModel stringValueForName: @"id"];
+            NSString *transType = [contentModel stringValueForName: @"type"];
+            
+            [self getTransPerson: transID
+                       transType: transType
+                           navVC: navVC];
+        }
+            break;
+            
+        case WOAModelActionType_GetOATable:
+        {
+            NSArray *modelArray = (NSArray*)selectedPair.value;
+            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
+            
+            NSString *transID = [contentModel stringValueForName: @"id"];
+            
+            [self getOATableWithID: transID
+                             navVC: navVC];
+        }
+            break;
+            
+        case WOAModelActionType_GetTransTable:
+        {
+            NSMutableDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+            [optionDict addEntriesFromDictionary: selectedPair.subDictionary];
+            
+            [self getTransTable: optionDict
+                          navVC: navVC];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+#pragma mark -
+
+- (void) getTransPerson: (NSString*)transID
+              transType: (NSString*)transType
+                  navVC: (UINavigationController *)navVC
+{
+    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
+    [optionDict setValue: transID forKey: @"OpID"];
+    [optionDict setValue: transType forKey: @"type"];
+    
+    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate simpleQuery: @"getMissionPerson"
+                  optionDict: optionDict
+                  onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSDictionary *personList = [WOAPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *departmentList = [WOAPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *modelArray = [WOAPacketHelper modelForGetTransPerson: personList
+                                                        departmentDict: departmentList
+                                                                needXq: [transType isEqualToString: @"1"]
+                                                            actionType: WOAModelActionType_GetTransTable];
+         NSMutableArray *pairArray = [NSMutableArray array];
+         for (NSInteger index = 0; index < modelArray.count; index++)
+         {
+             WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
+             
+             [pairArray addObject: [contentModel toNameValuePair]];
+         }
+         
+         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
+                                                                 pairArray: pairArray];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: optionDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) getOATableWithID: (NSString*)transID
+                    navVC: (UINavigationController*)navVC
+{
+    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
+    [optionDict setValue: transID forKey: @"OpID"];
+    
+    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate simpleQuery: @"getOATable"
+                  optionDict: optionDict
+                  onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+         //TODO: tid没有返回
+         if (!tid) tid = @"0";
+         
+         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+         
+         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *modelArray = [WOAPacketHelper modelForGetOATable: retList];
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
+                                                                                isEditable: YES
+                                                                                modelArray: modelArray];
+         subVC.baseRequestDict = baseDict;
+         subVC.rightButtonAction = WOAModelActionType_AddAssoc;
+         subVC.rightButtonTitle = @"提交";
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) getTransTable: (NSDictionary*)optionDict
+                 navVC: (UINavigationController *)navVC
+{
+    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate simpleQuery: @"getMissionTable"
+                  optionDict: optionDict
+                  onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+         
+         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *modelArray = [WOAPacketHelper modelForTransactionTable: retList];
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
+                                                                                isEditable: YES
+                                                                                modelArray: modelArray];
+         subVC.baseRequestDict = baseDict;
+         subVC.rightButtonAction = WOAModelActionType_SubmitTransTable;
+         subVC.rightButtonTitle = @"提交";
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
 }
 
 @end

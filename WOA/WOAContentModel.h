@@ -27,6 +27,8 @@
 - (WOANameValuePair*) pairForName: (NSString*)name;
 - (NSString*) stringValueForName: (NSString*)name;
 
+- (WOANameValuePair*) toNameValuePair;
+
 @end
 
 

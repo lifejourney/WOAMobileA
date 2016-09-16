@@ -437,7 +437,15 @@
 
 - (void) showSinglePickerView: (id)sender
 {
-    NSInteger selectedRow = [self.optionArray indexOfObject: self.lineTextField.text];
+    NSInteger selectedRow;
+    if (self.optionArray)
+    {
+        selectedRow = [self.optionArray indexOfObject: self.lineTextField.text];
+    }
+    else
+    {
+        selectedRow = -1;
+    }
     
     _singlePickerVC = [[WOAPickerViewController alloc] initWithDelgate: self
                                                                  title: _titleLabel.text

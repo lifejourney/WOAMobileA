@@ -12,13 +12,11 @@
 
 @protocol WOAExclusiveSelectListViewControllerDelegate <NSObject>
 
-- (void) listViewControllerClickOnRowOnIndexPath: (NSIndexPath*)row;
+- (void) listViewControllerClickOnRowOnIndexPath: (NSIndexPath*)indexPath;
 
 @end
 
 @interface WOAExclusiveSelectListViewController : UIViewController
-
-@property (nonatomic, strong) NSDictionary *baseRequestDict;
 
 + (instancetype) listWithItemArray: (NSArray *)itemArray //Array of WOAContentModel
                           delegate: (NSObject<WOAExclusiveSelectListViewControllerDelegate> *)delegate

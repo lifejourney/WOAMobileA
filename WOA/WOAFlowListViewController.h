@@ -7,13 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WOAContentModel.h"
 
+
+@protocol WOAFlowListViewControllerDelegate <NSObject>
+
+- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath
+                                       selectedPair: (WOANameValuePair*)selectedPair
+                                        relatedDict: (NSDictionary*)relatedDict
+                                              navVC: (UINavigationController*)navVC;
+
+@end
 
 @interface WOAFlowListViewController : UIViewController
 
-@property (nonatomic, strong) NSArray *pairArray;
-
-+ (instancetype) flowListViewController: (NSString*)title
-                              pairArray: (NSArray*)pairArray; //array of WOANameValuePair, value of pair is array of WOAContentModel;
+//For contentModel.pairArray
+//If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
+//Else M(T, [Name, Value])
++ (instancetype) flowListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
+                               delegate: (NSObject<WOAFlowListViewControllerDelegate> *)delegate
+                            relatedDict: (NSDictionary*)relatedDict;
 
 @end

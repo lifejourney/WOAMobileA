@@ -29,6 +29,8 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     
     WOAPairDataType_Seperator,
     WOAPairDataType_TitleKey,
+    
+    WOAPairDataType_ContentModel
 };
 
 typedef NS_ENUM(NSUInteger, WOAModelActionType)
