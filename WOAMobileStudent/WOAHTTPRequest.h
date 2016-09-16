@@ -1,5 +1,5 @@
 //
-//  WOAHTTPRequester.h
+//  WOAHTTPRequest.h
 //  WOAMobile
 //
 //  Created by steven.zhuang on 6/1/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface WOAHTTPRequester : NSObject
+@interface WOAHTTPRequest : NSObject
 
 + (NSMutableURLRequest*) URLRequestWithBodyData: (NSData*)bodyData;
 + (NSMutableURLRequest*) URLRequestWithBodyString: (NSString*)bodyString;

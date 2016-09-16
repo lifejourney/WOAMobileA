@@ -1,18 +1,18 @@
 //
-//  WOAHTTPRequester.m
+//  WOAHTTPRequest.m
 //  WOAMobile
 //
 //  Created by steven.zhuang on 6/1/14.
 //  Copyright (c) 2014 steven.zhuang. All rights reserved.
 //
 
-#import "WOAHTTPRequester.h"
+#import "WOAHTTPRequest.h"
 #import "NSMutableData+AppendString.h"
 #import "WOAPacketHelper.h"
 #import "WOAPropertyInfo.h"
 
 
-@implementation WOAHTTPRequester
+@implementation WOAHTTPRequest
 
 + (NSMutableURLRequest*) URLRequestWithBodyData: (NSData*)bodyData
 {

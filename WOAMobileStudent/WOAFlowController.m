@@ -10,7 +10,7 @@
 #import "NSFileManager+AppFolder.h"
 #import "WOAAppDelegate.h"
 #import "WOAFlowDefine.h"
-#import "WOAHTTPRequester.h"
+#import "WOAHTTPRequest.h"
 #import "WOAPacketHelper.h"
 
 
@@ -126,7 +126,7 @@
         {
             self.currentActionType = requestContent.flowActionType;
             
-            NSMutableURLRequest *request = [WOAHTTPRequester URLRequestForUploadAttachment: requestContent.bodyDictionary];
+            NSMutableURLRequest *request = [WOAHTTPRequest URLRequestForUploadAttachment: requestContent.bodyDictionary];
             
             NSLog(@"To send request for upload attachment.\nFile: %@\n-------->\n\n", filePath);
             
@@ -185,7 +185,7 @@
         {
             self.currentActionType = requestContent.flowActionType;
             
-            NSMutableURLRequest *request = [WOAHTTPRequester URLRequestWithBodyData: bodyData];
+            NSMutableURLRequest *request = [WOAHTTPRequest URLRequestWithBodyData: bodyData];
             
             NSLog(@"To send request for action: %ld\n%@\n-------->\n\n",
                     (long)requestContent.flowActionType,
