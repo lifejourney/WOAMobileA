@@ -56,7 +56,8 @@
             [pairArray addObject: nameValuePair];
         }
         WOAContentModel *groupContent = [WOAContentModel contentModel: @""
-                                                            pairArray: pairArray];
+                                                            pairArray: pairArray
+                                                           actionType: WOAModelActionType_None];
         
         self.modelArray = @[groupContent];
         self.valueIndexPathDictionary = [self generateValueIndexPathDictionary];
@@ -194,33 +195,42 @@
 {
     NSArray *indexPathArray = [self indexPathArrayWithValueArray: self.selectedValueArray];
     
-    WOAMultiPickerViewController *multiPickerVC = [WOAMultiPickerViewController multiPickerViewWithDelgate: self
-                                                                                                     title: @""
-                                                                                                modelArray: self.modelArray
-                                                                                             selectedArray: indexPathArray
-                                                                                              isGroupStyle: NO
-                                                                                          submitActionType: WOAModelActionType_None];
+    WOAMultiPickerViewController *pickerVC;
+    pickerVC = [WOAMultiPickerViewController multiPickerViewController: [self.modelArray objectAtIndex: 0]
+                                                selectedIndexPathArray: indexPathArray
+                                                              delegate: self
+                                                           relatedDict: nil];
     
-    [[self.delegate hostNavigation] pushViewController: multiPickerVC animated: YES];
+    [[self.delegate hostNavigation] pushViewController: pickerVC animated: YES];
 }
 
 #pragma mark - WOAMultiPickerViewControllerDelegate
 
 - (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
-                     selectedArray: (NSArray *)selectedArray
-                        modelArray: (NSArray *)modelArray
+                        actionType: (WOAModelActionType)actionType
+                 selectedPairArray: (NSArray *)selectedPairArray
+                       relatedDict: (NSDictionary *)relatedDict
+                             navVC: (UINavigationController *)navVC
 {
-    [[self.delegate hostNavigation] popViewControllerAnimated: YES];
+    [navVC popViewControllerAnimated: YES];
     
-    self.selectedValueArray = [WOAMultiPickerViewController valueArrayWithIndexPathArray: selectedArray
-                                                                          fromModelArray: modelArray];
+    NSMutableArray *selectedValueArray = [NSMutableArray array];
+    for (NSInteger index = 0; index < selectedPairArray.count; index++)
+    {
+        WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
+        
+        [selectedValueArray addObject: pair.value];
+    }
+    
+    self.selectedValueArray = selectedValueArray;
     
     [self selectedInfoUpdated];
 }
 
 - (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController *)pickerViewController
+                                      navVC: (UINavigationController *)navVC
 {
-    [[self.delegate hostNavigation] popViewControllerAnimated: YES];
+    [navVC popViewControllerAnimated: YES];
 }
 
 #pragma mark - WOALabelButtonTableViewCellDelegate

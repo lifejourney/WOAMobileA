@@ -17,13 +17,14 @@
                                             VSSelectedTableViewCellDelegate>
 
 @property (nonatomic, weak) NSObject<WOAMultiPickerViewControllerDelegate> *delegate;
-@property (nonatomic, copy) NSString *pickerTitle;
-@property (nonatomic, assign) BOOL isGroupStyle;
-@property (nonatomic, assign) WOAModelActionType submitActionType;
-@property (nonatomic, strong) NSArray *modelArray;
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, assign) CGFloat rowHeight;
+
+@property (nonatomic, assign) WOAModelActionType submitActionType;
+@property (nonatomic, strong) NSArray *rootPairArray;
+@property (nonatomic, strong) NSDictionary *relatedDict;
+
+@property (nonatomic, assign) BOOL isAllContentModePair;
 
 @property (nonatomic, strong) NSMutableArray *statusArray;
 
@@ -32,83 +33,61 @@
 
 @implementation WOAMultiPickerViewController
 
-+ (NSArray*) pairArrayWithIndexPathArray: (NSArray*)indexPathArray
-                          fromModelArray: (NSArray*)modelArray
+@synthesize rootPairArray = _rootPairArray;
+
++ (instancetype) multiPickerViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
+                    selectedIndexPathArray: (NSArray*)selectedIndexPathArray
+                                  delegate: (NSObject<WOAMultiPickerViewControllerDelegate>*)delegate
+                               relatedDict: (NSDictionary*)relatedDict
 {
-    NSMutableArray *selectedItems = [NSMutableArray array];
+    WOAMultiPickerViewController *pickerVC = [[WOAMultiPickerViewController alloc] init];
     
-    for (NSUInteger index = 0; index < [indexPathArray count]; index++)
+    NSArray *rootPairArray = contentModel.pairArray;
+    NSMutableArray *statusArray = [NSMutableArray array];
+    
+    pickerVC.delegate = delegate;
+    pickerVC.title = contentModel.groupTitle;
+    pickerVC.rootPairArray = rootPairArray;
+    pickerVC.submitActionType = contentModel.actionType;
+    pickerVC.relatedDict = relatedDict;
+    
+    if (pickerVC.isAllContentModePair)
     {
-        NSIndexPath *indexPath = [indexPathArray objectAtIndex: index];
-        
-        if (indexPath.section < [modelArray count])
+        for (NSUInteger groupIndex = 0; groupIndex < [rootPairArray count]; groupIndex++)
         {
-            WOAContentModel *groupContent = [modelArray objectAtIndex: indexPath.section];
-            NSArray *pairArray = groupContent.pairArray;
+            WOANameValuePair *rootPair = [rootPairArray objectAtIndex: groupIndex];
+            WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+            NSArray *subPairArray = rootPairValue.pairArray;
             
-            if (indexPath.row < [pairArray count])
+            NSMutableArray *sectionArray = [NSMutableArray array];
+            for (NSUInteger index = 0; index < [subPairArray count]; index++)
             {
-                WOANameValuePair *nameValuePair = [pairArray objectAtIndex: indexPath.row];
-                
-                [selectedItems addObject: nameValuePair];
+                [sectionArray addObject: [NSNumber numberWithBool: NO]];
             }
+            
+            [statusArray addObject: sectionArray];
         }
     }
-    
-    return selectedItems;
-}
-
-+ (NSArray*) valueArrayWithIndexPathArray: (NSArray*)indexPathArray
-                           fromModelArray: (NSArray*)modelArray
-{
-    NSArray *pairArray = [self pairArrayWithIndexPathArray: indexPathArray
-                                            fromModelArray: modelArray];
-    
-    NSMutableArray *valueArray = [NSMutableArray array];
-    
-    for (NSUInteger index = 0; index < [pairArray count]; index++)
+    else
     {
-        WOANameValuePair *nameValuePair = [pairArray objectAtIndex: index];
+        NSMutableArray *sectionArray = [NSMutableArray array];
+        for (NSUInteger index = 0; index < [rootPairArray count]; index++)
+        {
+            [sectionArray addObject: [NSNumber numberWithBool: NO]];
+        }
         
-        [valueArray addObject: nameValuePair.stringValue];
+        [statusArray addObject: sectionArray];
     }
     
-    return valueArray;
-}
-
-+ (NSArray*) nameArrayWithIndexPathArray: (NSArray*)indexPathArray
-                         fromModelArray: (NSArray*)modelArray
-{
-    NSArray *pairArray = [self pairArrayWithIndexPathArray: indexPathArray
-                                            fromModelArray: modelArray];
+    pickerVC.statusArray = statusArray;
     
-    NSMutableArray *valueArray = [NSMutableArray array];
     
-    for (NSUInteger index = 0; index < [pairArray count]; index++)
+    for (NSUInteger index = 0; index < [selectedIndexPathArray count]; index++)
     {
-        WOANameValuePair *nameValuePair = [pairArray objectAtIndex: index];
+        NSIndexPath *indexPath = [selectedIndexPathArray objectAtIndex: index];
         
-        [valueArray addObject: nameValuePair.name];
+        [pickerVC setStatus: YES forIndexPath: indexPath];
     }
-    
-    return valueArray;
-}
-
-+ (instancetype) multiPickerViewWithDelgate: (NSObject<WOAMultiPickerViewControllerDelegate>*)delegate
-                                      title: (NSString*)title
-                                 modelArray: (NSArray*)modelArray //Array of WOAContentModel
-                              selectedArray: (NSArray*)selectedArray //Array of NSIndexPath
-                               isGroupStyle: (BOOL)isGroupStyle
-                           submitActionType: (WOAModelActionType)submitActionType
-{
-    WOAMultiPickerViewController *pickerVC;
-    
-    pickerVC = [[WOAMultiPickerViewController alloc] initWithDelgate: delegate
-                                                               title: title
-                                                          modelArray: modelArray
-                                                       selectedArray: selectedArray
-                                                        isGroupStyle: isGroupStyle
-                                                    submitActionType: submitActionType];
     
     return pickerVC;
 }
@@ -132,50 +111,26 @@
     return self;
 }
 
-- (instancetype) initWithDelgate: (NSObject<WOAMultiPickerViewControllerDelegate>*)delegate
-                           title: (NSString*)title
-                      modelArray: (NSArray *)modelArray
-                   selectedArray: (NSArray *)selectedArray
-                    isGroupStyle: (BOOL)isGroupStyle
-                submitActionType: (WOAModelActionType)submitActionType
+- (void) setRootPairArray: (NSArray *)rootPairArray
 {
-    if (self = [self init])
+    _rootPairArray = rootPairArray;
+    
+    BOOL foundNoContentModeType = NO;
+    
+    for (WOANameValuePair *rootPair in rootPairArray)
     {
-        self.rowHeight = 40;
-        
-        self.delegate = delegate;
-        self.pickerTitle = title;
-        self.isGroupStyle = isGroupStyle;
-        self.submitActionType = submitActionType;
-        self.modelArray = modelArray;
-        
-        self.statusArray = [NSMutableArray array];
-        
-        for (NSUInteger groupIndex = 0; groupIndex < [modelArray count]; groupIndex++)
+        if (WOAPairDataType_ContentModel != rootPair.dataType)
         {
-            WOAContentModel *groupContent = [modelArray objectAtIndex: groupIndex];
-            NSArray *pairArray = groupContent.pairArray;
+            foundNoContentModeType = YES;
             
-            NSMutableArray *sectionArray = [NSMutableArray array];
-            for (NSUInteger index = 0; index < [pairArray count]; index++)
-            {
-                [sectionArray addObject: [NSNumber numberWithBool: NO]];
-            }
-            
-            [_statusArray addObject: sectionArray];
-            
-        };
-        
-        for (NSUInteger index = 0; index < [selectedArray count]; index++)
-        {
-            NSIndexPath *indexPath = [selectedArray objectAtIndex: index];
-            
-            [self setStatus: YES forIndexPath: indexPath];
+            break;
         }
     }
     
-    return self;
+    self.isAllContentModePair = !foundNoContentModeType;
 }
+
+#pragma mark -
 
 - (void) loadView
 {
@@ -196,7 +151,7 @@
     self.navigationItem.leftBarButtonItem = [WOALayout backBarButtonItemWithTarget: self action: @selector(backAction:)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
-    UITableViewStyle tableViewStyle = _isGroupStyle ? UITableViewStyleGrouped : UITableViewStylePlain;
+    UITableViewStyle tableViewStyle = self.isAllContentModePair ? UITableViewStyleGrouped : UITableViewStylePlain;
     self.tableView = [[UITableView alloc] initWithFrame: self.view.frame style: tableViewStyle];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -207,6 +162,12 @@
     [self.tableView reloadData];
 }
 
+- (void) viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+}
+
+#pragma mark -
 
 - (BOOL) statusFromIndexPath: (NSIndexPath*)indexPath
 {
@@ -263,57 +224,53 @@
     return selectedArray;
 }
 
-#pragma mark -
-
-- (void) onAddOAPerson: (NSString*)paraValue
+- (NSArray*) pairArrayWithIndexPathArray: (NSArray*)indexPathArray
 {
-    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
-    [optionDict setValue: paraValue forKey: @"para_value"];
+    NSMutableArray *pairArray = [NSMutableArray array];
     
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate simpleQuery: @"addOAPerson"
-                  optionDict: optionDict
-                  onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         [self.navigationController popToRootViewControllerAnimated: YES];
-     }];
+    for (NSUInteger index = 0; index < [indexPathArray count]; index++)
+    {
+        NSIndexPath *indexPath = [indexPathArray objectAtIndex: index];
+        
+        if (self.isAllContentModePair)
+        {
+            WOANameValuePair *rootPair = [_rootPairArray objectAtIndex: indexPath.section];
+            WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+            NSArray *subPairArray = rootPairValue.pairArray;
+            [pairArray addObject: [subPairArray objectAtIndex: indexPath.row]];
+        }
+        else
+        {
+            [pairArray addObject: [_rootPairArray objectAtIndex: indexPath.row]];
+        }
+    }
+    
+    return pairArray;
 }
+
+#pragma mark -
 
 - (void) submitAction: (id)sender
 {
-    NSArray *selectedArray = [self indexPathArrayForSelectedRows];
-    
-    switch (self.submitActionType)
+    if (self.delegate && [self.delegate respondsToSelector: @selector(multiPickerViewController:actionType:selectedPairArray:relatedDict:navVC:)])
     {
-        case WOAModelActionType_AddOAPerson:
-        {
-            NSArray *idArray = [WOAMultiPickerViewController nameArrayWithIndexPathArray: selectedArray
-                                                                          fromModelArray: self.modelArray];
-            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
-            
-            [self onAddOAPerson: paraValue];
-        }
-            
-            break;
-            
-        default:
-        {
-            if (self.delegate && [self.delegate respondsToSelector: @selector(multiPickerViewController:selectedArray:modelArray:)])
-            {
-                [self.delegate multiPickerViewController: self
-                                           selectedArray: selectedArray
-                                              modelArray: self.modelArray];
-            }
-        }
-            break;
+        NSArray *selectedIndexPathArray = [self indexPathArrayForSelectedRows];
+        NSArray *selectedPairArray = [self pairArrayWithIndexPathArray: selectedIndexPathArray];
+        
+        [self.delegate multiPickerViewController: self
+                                      actionType: self.submitActionType
+                               selectedPairArray: selectedPairArray
+                                     relatedDict: self.relatedDict
+                                           navVC: self.navigationController];
     }
 }
 
 - (void) backAction: (id)sender
 {
-    if (self.delegate && [self.delegate respondsToSelector: @selector(multiPickerViewControllerCancelled:)])
+    if (self.delegate && [self.delegate respondsToSelector: @selector(multiPickerViewControllerCancelled:navVC:)])
     {
-        [self.delegate multiPickerViewControllerCancelled: self];
+        [self.delegate multiPickerViewControllerCancelled: self
+                                                    navVC: self.navigationController];
     }
 }
 
@@ -321,37 +278,44 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.modelArray ? [self.modelArray count] : 0;
+    return self.isAllContentModePair ? [self.rootPairArray count] : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    WOAContentModel *groupContent = [self.modelArray objectAtIndex: section];
-    NSArray *pairArray = groupContent.pairArray;
+    NSInteger numberOfRow;
     
-    return pairArray ? [pairArray count] : 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return _isGroupStyle ? 30 : 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return _isGroupStyle ? 1 : 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return self.rowHeight;
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: section];
+        WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+        
+        numberOfRow = [rootPairValue.pairArray count];
+    }
+    else
+    {
+        numberOfRow = self.rootPairArray.count;
+    }
+    
+    return numberOfRow;
 }
 
 - (NSString*) tableView: (UITableView *)tableView titleForHeaderInSection: (NSInteger)section
 {
-    WOAContentModel *groupContent = [self.modelArray objectAtIndex: section];
+    NSString *titleForSection;
     
-    return groupContent.groupTitle;
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: section];
+        
+        titleForSection = rootPair.name;
+    }
+    else
+    {
+        titleForSection = @"";
+    }
+    
+    return titleForSection;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -364,11 +328,24 @@
                                             checkedButton: [self statusFromIndexPath: indexPath]
                                                  delegate: self];
     
-    WOAContentModel *groupContent = [self.modelArray objectAtIndex: indexPath.section];
-    NSArray *pairArray = groupContent.pairArray;
-    WOANameValuePair *nameValuePair = [pairArray objectAtIndex: indexPath.row];
     
-    cell.contentLabel.text = nameValuePair.stringValue;
+    NSString *titleForRow;
+    
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.section];
+        WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+        WOANameValuePair *subPair = [rootPairValue.pairArray objectAtIndex: indexPath.row];
+        
+        titleForRow = subPair.name;
+    }
+    else
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.row];
+        titleForRow = rootPair.name;
+    }
+    
+    cell.contentLabel.text = titleForRow;
     
     cell.contentLabel.textColor = [UIColor textNormalColor];
     cell.contentLabel.highlightedTextColor = [UIColor textHighlightedColor];
@@ -380,6 +357,37 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return self.isAllContentModePair ? 30 : 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *titleForRow;
+    
+    if (self.isAllContentModePair)
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.section];
+        WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+        WOANameValuePair *subPair = [rootPairValue.pairArray objectAtIndex: indexPath.row];
+        
+        titleForRow = subPair.name;
+    }
+    else
+    {
+        WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.row];
+        titleForRow = rootPair.name;
+    }
+    
+    return (titleForRow && ([titleForRow length] > 0)) ? 44 : 20;
+}
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {

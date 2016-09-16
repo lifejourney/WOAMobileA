@@ -152,18 +152,26 @@
                                                   departmentDict: departmentList
                                                       actionType: WOAModelActionType_None];
          
+         NSMutableArray *pairArray = [NSMutableArray array];
+         for (NSInteger index = 0; index < modelArray.count; index++)
+         {
+             WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
+             
+             [pairArray addObject: [contentModel toNameValuePair]];
+         }
+         
+         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
+                                                                 pairArray: pairArray
+                                                                actionType: WOAModelActionType_AddOAPerson];
+         
          WOAMultiPickerViewController *subVC;
-         subVC=  [WOAMultiPickerViewController multiPickerViewWithDelgate: self
-                                                                    title: @""
-                                                               modelArray: modelArray
-                                                            selectedArray: nil
-                                                             isGroupStyle: YES
-                                                         submitActionType: WOAModelActionType_AddOAPerson];
-         subVC.baseRequestDict = baseDict;
+         subVC = [WOAMultiPickerViewController multiPickerViewController: flowContentModel
+                                                  selectedIndexPathArray: nil
+                                                                delegate: self
+                                                             relatedDict: baseDict];
          
          [self.navigationController pushViewController: subVC animated: YES];
      }];
-    
 }
 
 #pragma mark - WOADynamicLabelTextFieldDelegate
@@ -184,14 +192,46 @@
 #pragma mark - WOAMultiPickerViewControllerDelegate
 
 - (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
-                     selectedArray: (NSArray *)selectedArray
-                        modelArray: (NSArray *)modelArray
+                        actionType: (WOAModelActionType)actionType
+                 selectedPairArray: (NSArray *)selectedPairArray
+                       relatedDict: (NSDictionary *)relatedDict
+                             navVC: (UINavigationController *)navVC
 {
+    switch (actionType)
+    {
+        case WOAModelActionType_AddOAPerson:
+        {
+            NSMutableArray *idArray = [NSMutableArray array];
+            for (NSInteger index = 0; index < selectedPairArray.count; index++)
+            {
+                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
+                [idArray addObject: [pair stringValue]];
+            }
+            
+            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
+            
+            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+            [optionDict setValue: paraValue forKey: @"para_value"];
+            
+            WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [appDelegate simpleQuery: @"addOAPerson"
+                          optionDict: optionDict
+                          onSuccuess: ^(WOAResponeContent *responseContent)
+             {
+                 [navVC popToRootViewControllerAnimated: YES];
+             }];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController *)pickerViewController
+                                      navVC: (UINavigationController *)navVC
 {
-    [self.navigationController popViewControllerAnimated: YES];
+    [navVC popViewControllerAnimated: YES];
 }
 
 #pragma mark -

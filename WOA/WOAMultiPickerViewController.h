@@ -15,26 +15,25 @@
 @protocol WOAMultiPickerViewControllerDelegate <NSObject>
 
 - (void) multiPickerViewController: (WOAMultiPickerViewController*)pickerViewController
-                     selectedArray: (NSArray*)selectedArray //Array of NSIndexPath
-                        modelArray: (NSArray*)modelArray; //Array of WOAContentModel
-- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController;
+                        actionType: (WOAModelActionType)actionType
+                 selectedPairArray: (NSArray*)selectedPairArray
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC;
+
+- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
+                                      navVC: (UINavigationController*)navVC;
 
 @end
 
 @interface WOAMultiPickerViewController : UIViewController
 
-@property (nonatomic, strong) NSDictionary *baseRequestDict;
+//For contentModel.pairArray
+//If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
+//Else M(T, [Name, Value])
 
-+ (NSArray*) valueArrayWithIndexPathArray: (NSArray*)indexPathArray
-                           fromModelArray: (NSArray*)modelArray;
-+ (NSArray*) nameArrayWithIndexPathArray: (NSArray*)indexPathArray
-                          fromModelArray: (NSArray*)modelArray;
-
-+ (instancetype) multiPickerViewWithDelgate: (NSObject<WOAMultiPickerViewControllerDelegate>*)delegate
-                                      title: (NSString*)title
-                                 modelArray: (NSArray*)modelArray //Array of WOAContentModel
-                              selectedArray: (NSArray*)selectedArray //Array of NSIndexPath
-                               isGroupStyle: (BOOL)isGroupStyle
-                           submitActionType: (WOAModelActionType)submitActionType;
++ (instancetype) multiPickerViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
+                    selectedIndexPathArray: (NSArray*)selectedIndexPathArray
+                                  delegate: (NSObject<WOAMultiPickerViewControllerDelegate>*)delegate
+                               relatedDict: (NSDictionary*)relatedDict;
 
 @end
