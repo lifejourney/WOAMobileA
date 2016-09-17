@@ -7,7 +7,7 @@
 //
 
 #import "WOAPropertyInfo.h"
-
+#import "WOATargetInfo.h"
 
 @implementation WOAPropertyInfo
 
@@ -53,8 +53,8 @@
 
 + (NSString*) defaultServerAddress
 {
-    return @"http://220.162.12.166:8080/jsonS.php";
-    //return @"http://www.qz5z.com";
+    return [WOATargetInfo defaultServerAddrForTest];
+//    return [WOATargetInfo defaultServerAddrForProduction];
 }
 
 + (NSString*) serverAddress

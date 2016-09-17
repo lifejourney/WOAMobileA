@@ -7,6 +7,7 @@
 //
 
 #import "WOACheckForUpdate.h"
+#import "WOATargetInfo.h"
 #import "WOAAppDelegate.h"
 
 
@@ -75,7 +76,7 @@ static BOOL isNewVersionAvailable = NO;
     
     if (gotoAppStore)
     {
-        NSString *iTunesString = [NSString stringWithFormat: @"https://itunes.apple.com/app/id%@", kSelfAppleID];
+        NSString *iTunesString = [NSString stringWithFormat: @"https://itunes.apple.com/app/id%@", [WOATargetInfo appStoreID]];
         
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString: iTunesString]];
         
@@ -120,7 +121,7 @@ static BOOL isNewVersionAvailable = NO;
 {
     //isForceUpdate = forceUpdate;
     
-    NSString *storeString = [NSString stringWithFormat: @"http://itunes.apple.com/lookup?id=%@", kSelfAppleID];
+    NSString *storeString = [NSString stringWithFormat: @"http://itunes.apple.com/lookup?id=%@", [WOATargetInfo appStoreID]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL: [NSURL URLWithString: storeString]];
     request.HTTPMethod = @"GET";
     

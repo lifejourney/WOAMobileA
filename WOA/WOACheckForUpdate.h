@@ -10,8 +10,6 @@
 #import <UIKit/UIKit.h>
 
 
-#define kSelfAppleID @"1090667418"
-
 @interface WOACheckForUpdate : NSObject <UIAlertViewDelegate>
 
 + (void) checkingUpdateFromAppStore: (void (^)())startHandler endHandler: (void (^)(NSDictionary* appData))endHandler;

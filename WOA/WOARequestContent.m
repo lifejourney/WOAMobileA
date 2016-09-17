@@ -21,7 +21,8 @@
     return self;
 }
 
-+ (WOARequestContent*) contentForLogin: (NSString*)accountID password: (NSString*)password
++ (WOARequestContent*) contentForLogin: (NSString*)accountID
+                              password: (NSString*)password
 {
     WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAFLowActionType_Login];
     

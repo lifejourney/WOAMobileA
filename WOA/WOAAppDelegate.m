@@ -82,6 +82,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSString *infoPlistPath = [NSString stringWithFormat: @"%@/info.plist", [[NSBundle mainBundle] bundlePath]];
+    NSDictionary *infoPlistDict = [NSDictionary dictionaryWithContentsOfFile: infoPlistPath];
+    [[NSUserDefaults standardUserDefaults] registerDefaults: infoPlistDict];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.window.backgroundColor = [UIColor whiteColor];
@@ -204,7 +208,9 @@
                                 completion: ^
          {
              if (loginImmediately)
+             {
                  [self.loginVC tryLogin];
+             }
          }];
     }
 }

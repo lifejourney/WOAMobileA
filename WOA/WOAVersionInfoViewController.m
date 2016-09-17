@@ -7,6 +7,7 @@
 //
 
 #import "WOAVersionInfoViewController.h"
+#import "WOATargetInfo.h"
 #import "WOAAppDelegate.h"
 #import "WOACheckForUpdate.h"
 #import "WOALayout.h"
@@ -82,7 +83,7 @@
 
 - (IBAction) upgrade: (id)sender
 {
-    NSString *iTunesString = [NSString stringWithFormat: @"https://itunes.apple.com/app/id%@", kSelfAppleID];
+    NSString *iTunesString = [NSString stringWithFormat: @"https://itunes.apple.com/app/id%@", [WOATargetInfo appStoreID]];
     
     [[UIApplication sharedApplication] openURL: [NSURL URLWithString: iTunesString]];
 }

@@ -16,7 +16,8 @@
 @property (nonatomic, strong) NSDictionary *bodyDictionary;
 @property (nonatomic, strong) NSArray *multiBodyArray;
 
-+ (WOARequestContent*) contentForLogin: (NSString*)accountID password: (NSString*)password;
++ (WOARequestContent*) contentForLogin: (NSString*)accountID
+                              password: (NSString*)password;
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
                                   optionDict: (NSDictionary*)optionDict;
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
