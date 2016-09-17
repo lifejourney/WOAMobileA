@@ -15,5 +15,8 @@
 + (NSString*) defaultServerAddrForTest;
 + (NSString*) defaultServerAddrForProduction;
 
++ (NSString*) rootViewControllerClassName;
++ (NSUInteger) defaultTabID;
+
 @end
 

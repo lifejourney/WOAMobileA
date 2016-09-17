@@ -1,20 +1,21 @@
 //
-//  WOAFlowController.m
+//  WOAHttpOperation.m
 //  WOAMobile
 //
 //  Created by steven.zhuang on 6/1/14.
 //  Copyright (c) 2014 steven.zhuang. All rights reserved.
 //
 
-#import "WOAFlowController.h"
+#import "WOAHttpOperation.h"
 #import "NSFileManager+AppFolder.h"
 #import "WOAAppDelegate.h"
 #import "WOAFlowDefine.h"
 #import "WOAHTTPRequest.h"
 #import "WOAPacketHelper.h"
+#import "WOAPropertyInfo.h"
 
 
-@interface WOAFlowController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface WOAHttpOperation () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 @property (nonatomic, strong) WOAResponeContent *finalResponseContent;
 @property (nonatomic, strong) WOARequestContent *initialRequestContent;
@@ -36,7 +37,7 @@
 @end
 
 
-@implementation WOAFlowController
+@implementation WOAHttpOperation
 
 - (id) init
 {
@@ -74,9 +75,9 @@
                 completeOnMainQueue: (BOOL)completeOnMainQueue
                   completionHandler: (void (^)(WOAResponeContent *responseContent))handler;
 {
-    WOAFlowController *operation = [[WOAFlowController alloc] initWithRequestContent: requestContent
-                                                                 completeOnMainQueue: completeOnMainQueue
-                                                                   completionHandler: handler];
+    WOAHttpOperation *operation = [[WOAHttpOperation alloc] initWithRequestContent: requestContent
+                                                               completeOnMainQueue: completeOnMainQueue
+                                                                 completionHandler: handler];
     [queue addOperation: operation];
 }
 
@@ -404,7 +405,8 @@
             {
                 WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                 
-                appDelegate.sessionID = [WOAPacketHelper sessionIDFromPacketDictionary: bodyDictionary];
+                NSString *sessionID = [WOAPacketHelper sessionIDFromPacketDictionary: bodyDictionary];
+                [WOAPropertyInfo saveLatestSessionID: sessionID];
                 
                 appDelegate.latestLoginRequestContent = self.initialRequestContent;
             }
@@ -436,8 +438,7 @@
     }
     else if (requestResult == WOAHTTPRequestResult_InvalidSession)
     {
-        WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        appDelegate.sessionID = nil;
+        [WOAPropertyInfo saveLatestSessionID: nil];
         
         if (self.currentActionType == self.finalResponseContent.flowActionType)
         {

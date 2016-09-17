@@ -29,4 +29,7 @@
 + (NSString*) latestDeviceToken;
 + (void) saveLatestDeviceToken: (NSString*)deviceToken;
 
++ (NSString*) latestSessionID;
++ (void) saveLatestSessionID: (NSString*)sessionID;
+
 @end

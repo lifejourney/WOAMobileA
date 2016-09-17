@@ -8,7 +8,7 @@
 
 
 #import "WOAContentViewController.h"
-#import "WOAAppDelegate.h"
+#import "WOARequestManager.h"
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
 #import "WOADynamicLabelTextField.h"
@@ -106,10 +106,9 @@
     NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
     [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
     
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate simpleQuery: @"AddMissionTable"
-                  optionDict: optionDict
-                  onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQuery: @"AddMissionTable"
+                                         optionDict: optionDict
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self.navigationController popToRootViewControllerAnimated: YES];
      }];
@@ -120,10 +119,9 @@
     NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
     [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
     
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate simpleQuery: @"addAssoc"
-                  optionDict: optionDict
-                  onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQuery: @"addAssoc"
+                                         optionDict: optionDict
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
          NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
@@ -136,10 +134,9 @@
 
 - (void) onGetOAPerson: (NSDictionary*)optionDict
 {
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate simpleQuery: @"getOAPerson"
-                  optionDict: optionDict
-                  onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQuery: @"getOAPerson"
+                                         optionDict: optionDict
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
          NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
@@ -213,10 +210,9 @@
             NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
             [optionDict setValue: paraValue forKey: @"para_value"];
             
-            WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            [appDelegate simpleQuery: @"addOAPerson"
-                          optionDict: optionDict
-                          onSuccuess: ^(WOAResponeContent *responseContent)
+            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
+                                                 optionDict: optionDict
+                                                 onSuccuess: ^(WOAResponeContent *responseContent)
              {
                  [navVC popToRootViewControllerAnimated: YES];
              }];

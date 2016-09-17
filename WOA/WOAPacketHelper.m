@@ -39,13 +39,6 @@
     return msgType;
 }
 
-+ (NSString*) currentSessionID
-{
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    return appDelegate.sessionID;
-}
-
 + (NSMutableDictionary*) baseRequestPacketWithMsgType: (NSString*)msgType
                                             accountID: (NSString*)accountID
                                              password: (NSString*)password

@@ -7,13 +7,13 @@
 //
 
 #import "WOAAppDelegate.h"
+#import "WOATargetInfo.h"
 #import "WOARootViewController.h"
 #import "WOASplashViewController.h"
 #import "WOAStartSettingViewController.h"
 #import "WOALoginViewController.h"
-#import "WOALoadingViewController.h"
 #import "WOAContentViewController.h"
-#import "WOAFlowController.h"
+#import "WOARequestContent.h"
 #import "NSData+HexadecimalRepresentation.h"
 #import "UIColor+AppTheme.h"
 #import "WOAPropertyInfo.h"
@@ -22,7 +22,6 @@
 
 @interface WOAAppDelegate () <WOASplashViewControllerDelegate, WOAStartSettingViewControllerDelegate>
 
-@property (nonatomic, strong) WOALoadingViewController *loadingVC;
 @property (nonatomic, strong) WOALoginViewController *loginVC;
 
 @end
@@ -41,11 +40,7 @@
     {
         [WOANameValuePair initTypeMapArray];
         
-        self.loadingVC = nil;
-        
-        self.sessionID = @"";
-        self.operationQueue = [[NSOperationQueue alloc] init];
-        [self.operationQueue setMaxConcurrentOperationCount: 1];
+        [WOAPropertyInfo saveLatestSessionID: nil];
     }
     
     return self;
@@ -90,10 +85,10 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     
-    _rootViewController = [[WOARootViewController alloc] init];
+    NSString *className = [WOATargetInfo rootViewControllerClassName];
+    Class rootClass = NSClassFromString(className);
+    _rootViewController = [[rootClass alloc] init];
     self.window.rootViewController = _rootViewController;
-    
-    self.loadingVC = [[WOALoadingViewController alloc] init];
     
     UIApplication *app = [UIApplication sharedApplication];
     UIUserNotificationType settingType = UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge;
@@ -133,7 +128,8 @@
     //TO-DO: resend login when changed?
     //TO-DO: resend login when nil -> string
     NSString *latestDeviceToken = [WOAPropertyInfo latestDeviceToken];
-    if (self.sessionID && !latestDeviceToken)
+    NSString *latestSessionID = [WOAPropertyInfo latestSessionID];
+    if (latestSessionID && !latestDeviceToken)
     {
         NSLog(@"get device token after login: %@", latestDeviceToken);
     }
@@ -218,96 +214,6 @@
 - (void) dismissLoginViewController: (BOOL)animated
 {
     [self.loginVC dismissViewControllerAnimated: animated completion: ^{}];
-}
-
-- (void) showLoadingViewController: (CGFloat)backgroundAlpha
-{
-    self.loadingVC.view.alpha = backgroundAlpha;
-    
-    [[[UIApplication sharedApplication] keyWindow] addSubview: self.loadingVC.view];
-}
-
-- (void) showLoadingViewController
-{
-    [self showLoadingViewController: 0.3];
-}
-
-- (void) showTransparentLoadingView
-{
-    [self showLoadingViewController: 0];
-}
-
-- (void) hideLoadingViewController
-{
-    [self.loadingVC.view removeFromSuperview];
-}
-
-- (void) sendRequest: (WOARequestContent*)requestContent
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-           onFailure: (void (^)(WOAResponeContent *responseContent))failureHandler
-{
-    [self showLoadingViewController];
-    
-    [WOAFlowController sendAsynRequestWithContent: requestContent
-                                            queue: self.operationQueue
-                              completeOnMainQueue: YES
-                                completionHandler: ^(WOAResponeContent *responseContent)
-     {
-         [self hideLoadingViewController];
-         
-         if ((responseContent.requestResult == WOAHTTPRequestResult_Success) && successHandler)
-         {
-             successHandler(responseContent);
-         }
-         else if (failureHandler)
-         {
-             failureHandler(responseContent);
-         }
-     }];
-}
-
-
-- (void) simpleQuery: (NSString*)msgType
-          optionDict: (NSDictionary*)optionDict
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-{
-    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-                                                                      optionDict: optionDict];
-    
-    [self sendRequest: requestContent
-           onSuccuess: successHandler
-            onFailure: ^(WOAResponeContent *responseContent)
-     {
-         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
-     }];
-}
-
-- (void) simpleQuery: (NSString*)msgType
-            paraDict: (NSDictionary*)paraDict
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-{
-    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-                                                                        paraDict: paraDict];
-    
-    [self sendRequest: requestContent
-           onSuccuess: successHandler
-            onFailure: ^(WOAResponeContent *responseContent)
-     {
-         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
-     }];
-}
-
-- (void) simpleQuery: (NSString*)msgType
-            fromDate: (NSString*)fromDate
-              toDate: (NSString*)toDate
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-{
-    NSDictionary *paraDict = [WOAPacketHelper paraDictWithFromDate: fromDate
-                                                            toDate: toDate];
-    
-    [self simpleQuery: msgType
-             paraDict: paraDict
-           onSuccuess: successHandler];
 }
 
 @end

@@ -1,13 +1,18 @@
 //
-//  WOARootViewController+Teacher.m
+//  WOAStudentRootViewController.h
 //  WOAMobileA
 //
 //  Created by Steven (Shuliang) Zhuang on 9/17/16.
 //  Copyright © 2016 steven.zhuang. All rights reserved.
 //
 
-#import "WOARootViewController+Teacher.h"
+#import "WOARootViewController.h"
 
-@implementation WOARootViewController (Teacher)
+@interface WOAStudentRootViewController : WOARootViewController
 
 @end
+
+
+
+
+

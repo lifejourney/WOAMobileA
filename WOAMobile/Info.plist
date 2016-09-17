@@ -4,6 +4,10 @@
 <dict>
 	<key>WOATargetInfo</key>
 	<dict>
+		<key>RootViewControllerClass</key>
+		<string>WOATeacherRootViewController</string>
+		<key>DefaultTabID</key>
+		<integer>0</integer>
 		<key>DefaultServerAddress</key>
 		<dict>
 			<key>Production</key>

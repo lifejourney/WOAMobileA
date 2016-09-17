@@ -1,5 +1,5 @@
 //
-//  WOAFlowController.h
+//  WOAHttpOperation.h
 //  WOAMobile
 //
 //  Created by steven.zhuang on 6/1/14.
@@ -11,7 +11,7 @@
 #import "WOAResponeContent.h"
 
 
-@interface WOAFlowController : NSOperation
+@interface WOAHttpOperation : NSOperation
 
 + (void) sendAsynRequestWithContent: (WOARequestContent*)requestContent
                               queue: (NSOperationQueue*)queue

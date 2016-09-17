@@ -8,7 +8,7 @@
 
 #import "WOACheckForUpdate.h"
 #import "WOATargetInfo.h"
-#import "WOAAppDelegate.h"
+#import "WOARequestManager.h"
 
 
 static BOOL isForceUpdate = NO;
@@ -87,17 +87,14 @@ static BOOL isNewVersionAvailable = NO;
 
 + (void) requesVersionInfoStartHandler
 {
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate showLoadingViewController];
+    [[WOARequestManager sharedInstance] showLoadingViewController];
 }
 
 + (void) requestVersionInfoEndHandler: (NSDictionary*)appData
 {
     dispatch_async(dispatch_get_main_queue(), ^
     {
-        WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        
-        [appDelegate hideLoadingViewController];
+        [[WOARequestManager sharedInstance] hideLoadingViewController];
         
         NSArray *versionsInAppStore = [[appData valueForKey: @"results"] valueForKey: @"version"];
         NSString *currentAppStoreVersion;

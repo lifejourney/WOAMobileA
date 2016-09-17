@@ -1,20 +1,13 @@
 //
-//  WOARootViewController+Teacher.h
+//  WOATeacherRootViewController.m
 //  WOAMobileA
 //
 //  Created by Steven (Shuliang) Zhuang on 9/17/16.
 //  Copyright © 2016 steven.zhuang. All rights reserved.
 //
 
-#import "WOARootViewController.h"
-
-@interface WOARootViewController (Teacher)
-
-@end
-
-
-
-
+#import "WOATeacherRootViewController.h"
+#import "WOARequestManager.h"
 
 /**before public
  remove pragram mark
@@ -125,6 +118,19 @@
  4. Support show content in multiple lines.
  5. Add server setting entry in the login view.
  */
+
+
+
+@interface WOATeacherRootViewController()
+
+@end
+
+
+@implementation WOATeacherRootViewController
+
+
+
+@end
 
 
 

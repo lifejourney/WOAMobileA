@@ -42,6 +42,19 @@
     
     return serverAddrDict[@"Production"];
 }
+
++ (NSString*) rootViewControllerClassName
+{
+    return [self targetInfoDict][@"RootViewControllerClass"];
+}
+
++ (NSUInteger) defaultTabID
+{
+    NSNumber *defaultTabID = [self targetInfoDict][@"DefaultTabID"];
+    
+    return [defaultTabID unsignedIntegerValue];
+}
+
 @end
 
 

@@ -9,6 +9,7 @@
 #import "WOALoginViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "WOAAppDelegate.h"
+#import "WOARequestManager.h"
 #import "WOARootViewController.h"
 #import "WOAStartSettingViewController.h"
 #import "WOAPropertyInfo.h"
@@ -149,11 +150,9 @@
     {
         [self.latestResponder resignFirstResponder];
         
-        WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        WOARequestContent *requestContent = [WOARequestContent contentForLogin: self.accountTextField.text
-                                                                      password: self.passwordTextField.text];
-        [appDelegate sendRequest: requestContent
-                      onSuccuess:^(WOAResponeContent *responseContent)
+        [[WOARequestManager sharedInstance] sendLoginRequest: self.accountTextField.text
+                                                    password: self.passwordTextField.text
+                                                  onSuccuess: ^(WOAResponeContent *responseContent)
          {
              [WOAPropertyInfo saveLatestLoginAccountID: self.accountTextField.text
                                               password: self.passwordTextField.text];
@@ -163,12 +162,18 @@
                  [NSThread sleepForTimeInterval: 0.5f];
              }
              
+             WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+             
              [appDelegate dismissLoginViewController: YES];
              
-             [[appDelegate rootViewController] switchToMyProfileTab: YES];
+             WOARootViewController *rootVC = [appDelegate rootViewController];
+             if ([rootVC respondsToSelector: @selector(switchToDefaultTab:)])
+             {
+                 [rootVC switchToDefaultTab: YES];
+             }
              
          }
-                       onFailure:^(WOAResponeContent *responseContent)
+                                                   onFailure: ^(WOAResponeContent *responseContent)
          {
              NSLog(@"Login fail: %ld, HTTPStatus=%ld", (long)responseContent.requestResult, (long)responseContent.HTTPStatus);
          }];

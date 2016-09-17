@@ -140,6 +140,20 @@
     [userDefaults synchronize];
 }
 
++ (NSString*) latestSessionID
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults stringForKey: @"latestSessionID"];
+}
+
++ (void) saveLatestSessionID: (NSString*)sessionID
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setValue: sessionID forKey: @"latestSessionID"];
+    [userDefaults synchronize];
+}
+
 @end
 
 
