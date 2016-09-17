@@ -82,6 +82,36 @@
 		DC2257431D8C3F4E006A18E3 /* WOAPacketHelper+Teacher.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257421D8C3F4E006A18E3 /* WOAPacketHelper+Teacher.m */; };
 		DC2257461D8C41DB006A18E3 /* UIColor+AppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257451D8C41DB006A18E3 /* UIColor+AppTheme.m */; };
 		DC2257471D8C41E2006A18E3 /* UIColor+AppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257451D8C41DB006A18E3 /* UIColor+AppTheme.m */; };
+		DC2257581D8CBBC3006A18E3 /* WOAAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC22574B1D8CBBC3006A18E3 /* WOAAboutViewController.m */; };
+		DC2257591D8CBBC3006A18E3 /* WOALoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC22574C1D8CBBC3006A18E3 /* WOALoginViewController.m */; };
+		DC22575A1D8CBBC3006A18E3 /* WOAAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC22574D1D8CBBC3006A18E3 /* WOAAboutViewController.xib */; };
+		DC22575B1D8CBBC3006A18E3 /* WOALoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC22574E1D8CBBC3006A18E3 /* WOALoginViewController.xib */; };
+		DC22575C1D8CBBC3006A18E3 /* WOAResponeContent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257501D8CBBC3006A18E3 /* WOAResponeContent.m */; };
+		DC22575D1D8CBBC3006A18E3 /* WOARequestContent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257521D8CBBC3006A18E3 /* WOARequestContent.m */; };
+		DC22575E1D8CBBC3006A18E3 /* WOAStartSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC2257541D8CBBC3006A18E3 /* WOAStartSettingViewController.xib */; };
+		DC22575F1D8CBBC3006A18E3 /* WOAStartSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257551D8CBBC3006A18E3 /* WOAStartSettingViewController.m */; };
+		DC2257601D8CBBC3006A18E3 /* WOAVersionInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257561D8CBBC3006A18E3 /* WOAVersionInfoViewController.m */; };
+		DC2257611D8CBBC4006A18E3 /* WOAVersionInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC2257571D8CBBC3006A18E3 /* WOAVersionInfoViewController.xib */; };
+		DC2257621D8CBBE1006A18E3 /* WOAAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC22574B1D8CBBC3006A18E3 /* WOAAboutViewController.m */; };
+		DC2257631D8CBBE1006A18E3 /* WOALoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC22574C1D8CBBC3006A18E3 /* WOALoginViewController.m */; };
+		DC2257641D8CBBE1006A18E3 /* WOAAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC22574D1D8CBBC3006A18E3 /* WOAAboutViewController.xib */; };
+		DC2257651D8CBBE1006A18E3 /* WOALoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC22574E1D8CBBC3006A18E3 /* WOALoginViewController.xib */; };
+		DC2257661D8CBBE1006A18E3 /* WOAResponeContent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257501D8CBBC3006A18E3 /* WOAResponeContent.m */; };
+		DC2257671D8CBBE1006A18E3 /* WOARequestContent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257521D8CBBC3006A18E3 /* WOARequestContent.m */; };
+		DC2257681D8CBBE1006A18E3 /* WOAStartSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC2257541D8CBBC3006A18E3 /* WOAStartSettingViewController.xib */; };
+		DC2257691D8CBBE1006A18E3 /* WOAStartSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257551D8CBBC3006A18E3 /* WOAStartSettingViewController.m */; };
+		DC22576A1D8CBBE1006A18E3 /* WOAVersionInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257561D8CBBC3006A18E3 /* WOAVersionInfoViewController.m */; };
+		DC22576B1D8CBBE1006A18E3 /* WOAVersionInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC2257571D8CBBC3006A18E3 /* WOAVersionInfoViewController.xib */; };
+		DC22576E1D8CBCBE006A18E3 /* WOAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DC22576D1D8CBCBE006A18E3 /* WOAAppDelegate.m */; };
+		DC22576F1D8CBCC2006A18E3 /* WOAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DC22576D1D8CBCBE006A18E3 /* WOAAppDelegate.m */; };
+		DC2257C11D8CBF0E006A18E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257C01D8CBF0E006A18E3 /* main.m */; };
+		DC2257C21D8CBF23006A18E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257C01D8CBF0E006A18E3 /* main.m */; };
+		DC2257C71D8CC071006A18E3 /* WOAFlowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257C41D8CC071006A18E3 /* WOAFlowController.m */; };
+		DC2257C81D8CC071006A18E3 /* WOARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257C61D8CC071006A18E3 /* WOARootViewController.m */; };
+		DC2257C91D8CC076006A18E3 /* WOAFlowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257C41D8CC071006A18E3 /* WOAFlowController.m */; };
+		DC2257CA1D8CC076006A18E3 /* WOARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257C61D8CC071006A18E3 /* WOARootViewController.m */; };
+		DC2257CE1D8CC262006A18E3 /* WOAHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257CD1D8CC262006A18E3 /* WOAHTTPRequest.m */; };
+		DC2257CF1D8CC27A006A18E3 /* WOAHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2257CD1D8CC262006A18E3 /* WOAHTTPRequest.m */; };
 		DC5178F51C81ADC800162F92 /* WOAMultiPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */; };
 		DC5178F81C826D2B00162F92 /* WOAMultiItemSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5178F71C826D2B00162F92 /* WOAMultiItemSelectorView.m */; };
 		DC5FA6A91C5DF7E20099D95C /* WOAContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5FA6A81C5DF7E20099D95C /* WOAContentViewController.m */; };
@@ -97,7 +127,6 @@
 		DC8E9C991C4B498B00B66527 /* WOALoadingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC8E9C941C4B498B00B66527 /* WOALoadingViewController.xib */; };
 		DC8E9CA01C4B4B1200B66527 /* WOAAccountCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9C9D1C4B4B1200B66527 /* WOAAccountCredential.m */; };
 		DC8E9CA11C4B4B1200B66527 /* WOAPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9C9F1C4B4B1200B66527 /* WOAPropertyInfo.m */; };
-		DC8E9CA41C4B4B2100B66527 /* WOARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CA31C4B4B2100B66527 /* WOARootViewController.m */; };
 		DC8E9CB71C4B4FD100B66527 /* UIBarButtonItem+VSPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CA61C4B4FD100B66527 /* UIBarButtonItem+VSPopoverViewController.m */; };
 		DC8E9CB81C4B4FD100B66527 /* UINavigationController+RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CA81C4B4FD100B66527 /* UINavigationController+RootViewController.m */; };
 		DC8E9CB91C4B4FD100B66527 /* VSActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CAA1C4B4FD100B66527 /* VSActionSheetDatePicker.m */; };
@@ -124,28 +153,14 @@
 		DC8E9CF41C4B4FE300B66527 /* WOASplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CE01C4B4FE300B66527 /* WOASplashViewController.m */; };
 		DC8E9CF51C4B4FE300B66527 /* WOAURLNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CE21C4B4FE300B66527 /* WOAURLNavigationViewController.m */; };
 		DC8E9CF61C4B4FE300B66527 /* WOAURLNavigationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC8E9CE31C4B4FE300B66527 /* WOAURLNavigationViewController.xib */; };
-		DC8E9D081C4B4FF600B66527 /* WOAAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CFA1C4B4FF600B66527 /* WOAAboutViewController.m */; };
-		DC8E9D091C4B4FF600B66527 /* WOAAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC8E9CFB1C4B4FF600B66527 /* WOAAboutViewController.xib */; };
-		DC8E9D0A1C4B4FF600B66527 /* WOALoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9CFD1C4B4FF600B66527 /* WOALoginViewController.m */; };
-		DC8E9D0B1C4B4FF600B66527 /* WOALoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC8E9CFE1C4B4FF600B66527 /* WOALoginViewController.xib */; };
-		DC8E9D0D1C4B4FF600B66527 /* WOAStartSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D021C4B4FF600B66527 /* WOAStartSettingViewController.m */; };
-		DC8E9D0E1C4B4FF600B66527 /* WOAStartSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC8E9D031C4B4FF600B66527 /* WOAStartSettingViewController.xib */; };
-		DC8E9D0F1C4B4FF600B66527 /* WOAVersionInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D051C4B4FF600B66527 /* WOAVersionInfoViewController.m */; };
-		DC8E9D101C4B4FF600B66527 /* WOAVersionInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC8E9D061C4B4FF600B66527 /* WOAVersionInfoViewController.xib */; };
 		DC8E9D161C4BA52A00B66527 /* WOAPacketHelper+Student.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D141C4BA52A00B66527 /* WOAPacketHelper+Student.m */; };
-		DC8E9D1B1C4BA5D500B66527 /* WOARequestContent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D181C4BA5D500B66527 /* WOARequestContent.m */; };
-		DC8E9D1C1C4BA5D500B66527 /* WOAResponeContent.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D1A1C4BA5D500B66527 /* WOAResponeContent.m */; };
 		DC8E9D211C4BA97A00B66527 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D201C4BA97A00B66527 /* QuartzCore.framework */; };
 		DC8E9D231C4BA98A00B66527 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D221C4BA98A00B66527 /* CoreGraphics.framework */; };
 		DC8E9D251C4BA99800B66527 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D241C4BA99800B66527 /* Foundation.framework */; };
 		DC8E9D261C4BA9A700B66527 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D1D1C4BA91300B66527 /* UIKit.framework */; };
-		DC8E9D291C4BBA9B00B66527 /* WOAFlowController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D281C4BBA9B00B66527 /* WOAFlowController.m */; };
-		DC8E9D2C1C4BBB1F00B66527 /* WOAHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9D2B1C4BBB1F00B66527 /* WOAHTTPRequest.m */; };
 		DC9248C81C4BBEF8000F1765 /* WOAMenuItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9248C71C4BBEF8000F1765 /* WOAMenuItemModel.m */; };
 		DC9248CB1C4BC0A0000F1765 /* UIImage+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9248CA1C4BC0A0000F1765 /* UIImage+Utility.m */; };
 		DC9248D31C4CE440000F1765 /* WOAMenuListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9248D21C4CE43F000F1765 /* WOAMenuListViewController.m */; };
-		DCD5DC6D1D8823C800152071 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD5DC6C1D8823C800152071 /* main.m */; };
-		DCD5DC701D8823C800152071 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DCD5DC6F1D8823C800152071 /* AppDelegate.m */; };
 		DCD5DC7B1D8823C800152071 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCD5DC7A1D8823C800152071 /* Images.xcassets */; };
 		DCD5DC9F1D88262F00152071 /* NSData+HexadecimalRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9C861C4B481500B66527 /* NSData+HexadecimalRepresentation.m */; };
 		DCD5DCA01D88262F00152071 /* NSDictionary+JsonString.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8345721C62120000956544 /* NSDictionary+JsonString.m */; };
@@ -171,8 +186,6 @@
 		DCF049271C52722100928C08 /* WOANameValuePair.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF049261C52722100928C08 /* WOANameValuePair.m */; };
 		DCF0492A1C532A7800928C08 /* WOAListDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF049291C532A7800928C08 /* WOAListDetailViewController.m */; };
 		DCF0492E1C532B0200928C08 /* WOADetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF0492D1C532B0200928C08 /* WOADetailViewController.m */; };
-		DCF1343B1C4A8C45001EFBAC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF1343A1C4A8C45001EFBAC /* main.m */; };
-		DCF1343E1C4A8C45001EFBAC /* WOAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF1343D1C4A8C45001EFBAC /* WOAAppDelegate.m */; };
 		DCF134461C4A8C45001EFBAC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCF134451C4A8C45001EFBAC /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -206,6 +219,32 @@
 		DC2257421D8C3F4E006A18E3 /* WOAPacketHelper+Teacher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WOAPacketHelper+Teacher.m"; sourceTree = "<group>"; };
 		DC2257441D8C41DB006A18E3 /* UIColor+AppTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+AppTheme.h"; sourceTree = "<group>"; };
 		DC2257451D8C41DB006A18E3 /* UIColor+AppTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+AppTheme.m"; sourceTree = "<group>"; };
+		DC2257481D8CBBC3006A18E3 /* WOAAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAAboutViewController.h; sourceTree = "<group>"; };
+		DC2257491D8CBBC3006A18E3 /* WOAVersionInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAVersionInfoViewController.h; sourceTree = "<group>"; };
+		DC22574A1D8CBBC3006A18E3 /* WOAResponeContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAResponeContent.h; sourceTree = "<group>"; };
+		DC22574B1D8CBBC3006A18E3 /* WOAAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAAboutViewController.m; sourceTree = "<group>"; };
+		DC22574C1D8CBBC3006A18E3 /* WOALoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOALoginViewController.m; sourceTree = "<group>"; };
+		DC22574D1D8CBBC3006A18E3 /* WOAAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAAboutViewController.xib; sourceTree = "<group>"; };
+		DC22574E1D8CBBC3006A18E3 /* WOALoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOALoginViewController.xib; sourceTree = "<group>"; };
+		DC22574F1D8CBBC3006A18E3 /* WOAStartSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAStartSettingViewController.h; sourceTree = "<group>"; };
+		DC2257501D8CBBC3006A18E3 /* WOAResponeContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAResponeContent.m; sourceTree = "<group>"; };
+		DC2257511D8CBBC3006A18E3 /* WOARequestContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOARequestContent.h; sourceTree = "<group>"; };
+		DC2257521D8CBBC3006A18E3 /* WOARequestContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOARequestContent.m; sourceTree = "<group>"; };
+		DC2257531D8CBBC3006A18E3 /* WOALoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOALoginViewController.h; sourceTree = "<group>"; };
+		DC2257541D8CBBC3006A18E3 /* WOAStartSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAStartSettingViewController.xib; sourceTree = "<group>"; };
+		DC2257551D8CBBC3006A18E3 /* WOAStartSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAStartSettingViewController.m; sourceTree = "<group>"; };
+		DC2257561D8CBBC3006A18E3 /* WOAVersionInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAVersionInfoViewController.m; sourceTree = "<group>"; };
+		DC2257571D8CBBC3006A18E3 /* WOAVersionInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAVersionInfoViewController.xib; sourceTree = "<group>"; };
+		DC22576C1D8CBCBE006A18E3 /* WOAAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAAppDelegate.h; sourceTree = "<group>"; };
+		DC22576D1D8CBCBE006A18E3 /* WOAAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAAppDelegate.m; sourceTree = "<group>"; };
+		DC2257C01D8CBF0E006A18E3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DC2257C31D8CC071006A18E3 /* WOAFlowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAFlowController.h; sourceTree = "<group>"; };
+		DC2257C41D8CC071006A18E3 /* WOAFlowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAFlowController.m; sourceTree = "<group>"; };
+		DC2257C51D8CC071006A18E3 /* WOARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOARootViewController.h; sourceTree = "<group>"; };
+		DC2257C61D8CC071006A18E3 /* WOARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOARootViewController.m; sourceTree = "<group>"; };
+		DC2257CB1D8CC198006A18E3 /* WOAStartWorkflowActionReqeust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAStartWorkflowActionReqeust.h; sourceTree = "<group>"; };
+		DC2257CC1D8CC262006A18E3 /* WOAHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAHTTPRequest.h; sourceTree = "<group>"; };
+		DC2257CD1D8CC262006A18E3 /* WOAHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAHTTPRequest.m; sourceTree = "<group>"; };
 		DC5178F31C81ADC800162F92 /* WOAMultiPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiPickerViewController.h; sourceTree = "<group>"; };
 		DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMultiPickerViewController.m; sourceTree = "<group>"; };
 		DC5178F61C826D2B00162F92 /* WOAMultiItemSelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiItemSelectorView.h; sourceTree = "<group>"; };
@@ -236,8 +275,6 @@
 		DC8E9C9D1C4B4B1200B66527 /* WOAAccountCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAAccountCredential.m; sourceTree = "<group>"; };
 		DC8E9C9E1C4B4B1200B66527 /* WOAPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAPropertyInfo.h; sourceTree = "<group>"; };
 		DC8E9C9F1C4B4B1200B66527 /* WOAPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAPropertyInfo.m; sourceTree = "<group>"; };
-		DC8E9CA21C4B4B2100B66527 /* WOARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOARootViewController.h; sourceTree = "<group>"; };
-		DC8E9CA31C4B4B2100B66527 /* WOARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOARootViewController.m; sourceTree = "<group>"; };
 		DC8E9CA51C4B4FD100B66527 /* UIBarButtonItem+VSPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+VSPopoverViewController.h"; sourceTree = "<group>"; };
 		DC8E9CA61C4B4FD100B66527 /* UIBarButtonItem+VSPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+VSPopoverViewController.m"; sourceTree = "<group>"; };
 		DC8E9CA71C4B4FD100B66527 /* UINavigationController+RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+RootViewController.h"; sourceTree = "<group>"; };
@@ -289,43 +326,19 @@
 		DC8E9CE11C4B4FE300B66527 /* WOAURLNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAURLNavigationViewController.h; sourceTree = "<group>"; };
 		DC8E9CE21C4B4FE300B66527 /* WOAURLNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAURLNavigationViewController.m; sourceTree = "<group>"; };
 		DC8E9CE31C4B4FE300B66527 /* WOAURLNavigationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAURLNavigationViewController.xib; sourceTree = "<group>"; };
-		DC8E9CF91C4B4FF600B66527 /* WOAAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAAboutViewController.h; sourceTree = "<group>"; };
-		DC8E9CFA1C4B4FF600B66527 /* WOAAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAAboutViewController.m; sourceTree = "<group>"; };
-		DC8E9CFB1C4B4FF600B66527 /* WOAAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAAboutViewController.xib; sourceTree = "<group>"; };
-		DC8E9CFC1C4B4FF600B66527 /* WOALoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOALoginViewController.h; sourceTree = "<group>"; };
-		DC8E9CFD1C4B4FF600B66527 /* WOALoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOALoginViewController.m; sourceTree = "<group>"; };
-		DC8E9CFE1C4B4FF600B66527 /* WOALoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOALoginViewController.xib; sourceTree = "<group>"; };
-		DC8E9D011C4B4FF600B66527 /* WOAStartSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAStartSettingViewController.h; sourceTree = "<group>"; };
-		DC8E9D021C4B4FF600B66527 /* WOAStartSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAStartSettingViewController.m; sourceTree = "<group>"; };
-		DC8E9D031C4B4FF600B66527 /* WOAStartSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAStartSettingViewController.xib; sourceTree = "<group>"; };
-		DC8E9D041C4B4FF600B66527 /* WOAVersionInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAVersionInfoViewController.h; sourceTree = "<group>"; };
-		DC8E9D051C4B4FF600B66527 /* WOAVersionInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAVersionInfoViewController.m; sourceTree = "<group>"; };
-		DC8E9D061C4B4FF600B66527 /* WOAVersionInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOAVersionInfoViewController.xib; sourceTree = "<group>"; };
 		DC8E9D131C4BA52A00B66527 /* WOAPacketHelper+Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WOAPacketHelper+Student.h"; sourceTree = "<group>"; };
 		DC8E9D141C4BA52A00B66527 /* WOAPacketHelper+Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WOAPacketHelper+Student.m"; sourceTree = "<group>"; };
-		DC8E9D171C4BA5D500B66527 /* WOARequestContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOARequestContent.h; sourceTree = "<group>"; };
-		DC8E9D181C4BA5D500B66527 /* WOARequestContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOARequestContent.m; sourceTree = "<group>"; };
-		DC8E9D191C4BA5D500B66527 /* WOAResponeContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAResponeContent.h; sourceTree = "<group>"; };
-		DC8E9D1A1C4BA5D500B66527 /* WOAResponeContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAResponeContent.m; sourceTree = "<group>"; };
 		DC8E9D1D1C4BA91300B66527 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DC8E9D201C4BA97A00B66527 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DC8E9D221C4BA98A00B66527 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		DC8E9D241C4BA99800B66527 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		DC8E9D271C4BBA9B00B66527 /* WOAFlowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAFlowController.h; sourceTree = "<group>"; };
-		DC8E9D281C4BBA9B00B66527 /* WOAFlowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAFlowController.m; sourceTree = "<group>"; };
-		DC8E9D2A1C4BBB1F00B66527 /* WOAHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAHTTPRequest.h; sourceTree = "<group>"; };
-		DC8E9D2B1C4BBB1F00B66527 /* WOAHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAHTTPRequest.m; sourceTree = "<group>"; };
 		DC9248C61C4BBEF8000F1765 /* WOAMenuItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMenuItemModel.h; sourceTree = "<group>"; };
 		DC9248C71C4BBEF8000F1765 /* WOAMenuItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMenuItemModel.m; sourceTree = "<group>"; };
 		DC9248C91C4BC0A0000F1765 /* UIImage+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utility.h"; sourceTree = "<group>"; };
 		DC9248CA1C4BC0A0000F1765 /* UIImage+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utility.m"; sourceTree = "<group>"; };
-		DC9248CC1C4BC3E6000F1765 /* WOAStartWorkflowActionReqeust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAStartWorkflowActionReqeust.h; sourceTree = "<group>"; };
 		DC9248D11C4CE43F000F1765 /* WOAMenuListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMenuListViewController.h; sourceTree = "<group>"; };
 		DC9248D21C4CE43F000F1765 /* WOAMenuListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMenuListViewController.m; sourceTree = "<group>"; };
 		DCD5DC691D8823C800152071 /* WOAMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WOAMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DCD5DC6C1D8823C800152071 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DCD5DC6E1D8823C800152071 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		DCD5DC6F1D8823C800152071 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		DCD5DC7A1D8823C800152071 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DCD5DC7F1D8823C800152071 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DCEF93AE1C53B95B00414D6A /* UILabel+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Utility.h"; sourceTree = "<group>"; };
@@ -340,9 +353,6 @@
 		DCF0492D1C532B0200928C08 /* WOADetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOADetailViewController.m; sourceTree = "<group>"; };
 		DCF134351C4A8C45001EFBAC /* WOAMobileStudent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WOAMobileStudent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCF134391C4A8C45001EFBAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DCF1343A1C4A8C45001EFBAC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DCF1343C1C4A8C45001EFBAC /* WOAAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOAAppDelegate.h; sourceTree = "<group>"; };
-		DCF1343D1C4A8C45001EFBAC /* WOAAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WOAAppDelegate.m; sourceTree = "<group>"; };
 		DCF134451C4A8C45001EFBAC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -441,8 +451,14 @@
 		DC8E9C911C4B481D00B66527 /* WOA */ = {
 			isa = PBXGroup;
 			children = (
+				DC2257C01D8CBF0E006A18E3 /* main.m */,
+				DC2257481D8CBBC3006A18E3 /* WOAAboutViewController.h */,
+				DC22574B1D8CBBC3006A18E3 /* WOAAboutViewController.m */,
+				DC22574D1D8CBBC3006A18E3 /* WOAAboutViewController.xib */,
 				DC8E9C9C1C4B4B1200B66527 /* WOAAccountCredential.h */,
 				DC8E9C9D1C4B4B1200B66527 /* WOAAccountCredential.m */,
+				DC22576C1D8CBCBE006A18E3 /* WOAAppDelegate.h */,
+				DC22576D1D8CBCBE006A18E3 /* WOAAppDelegate.m */,
 				DC8E9CC01C4B4FE300B66527 /* WOABrandData.h */,
 				DC8E9CC11C4B4FE300B66527 /* WOABrandData.m */,
 				DC8E9CC21C4B4FE300B66527 /* WOACheckForUpdate.h */,
@@ -463,11 +479,15 @@
 				DC1584811C688E6800DF5E7E /* WOAExclusiveSelectListViewController.m */,
 				DC8E9CC81C4B4FE300B66527 /* WOAFileSelectorView.h */,
 				DC8E9CC91C4B4FE300B66527 /* WOAFileSelectorView.m */,
+				DC2257C31D8CC071006A18E3 /* WOAFlowController.h */,
+				DC2257C41D8CC071006A18E3 /* WOAFlowController.m */,
 				DC2257361D8C3A84006A18E3 /* WOAFlowDefine.h */,
 				DC2257351D8C3A84006A18E3 /* WOAFlowDefine.m */,
 				DC8345741C62C40E00956544 /* WOAFlowListViewController.h */,
 				DC8345751C62C40E00956544 /* WOAFlowListViewController.m */,
 				DC5178F91C8A89F600162F92 /* WOAHostNavigationDelegate.h */,
+				DC2257CC1D8CC262006A18E3 /* WOAHTTPRequest.h */,
+				DC2257CD1D8CC262006A18E3 /* WOAHTTPRequest.m */,
 				DC8E9CCB1C4B4FE300B66527 /* WOAInputTitleViewController.h */,
 				DC8E9CCC1C4B4FE300B66527 /* WOAInputTitleViewController.m */,
 				DC8E9CCD1C4B4FE300B66527 /* WOALabelButtonTableViewCell.h */,
@@ -483,6 +503,9 @@
 				DC8E9C921C4B498B00B66527 /* WOALoadingViewController.h */,
 				DC8E9C931C4B498B00B66527 /* WOALoadingViewController.m */,
 				DC8E9C941C4B498B00B66527 /* WOALoadingViewController.xib */,
+				DC2257531D8CBBC3006A18E3 /* WOALoginViewController.h */,
+				DC22574C1D8CBBC3006A18E3 /* WOALoginViewController.m */,
+				DC22574E1D8CBBC3006A18E3 /* WOALoginViewController.xib */,
 				DC9248C61C4BBEF8000F1765 /* WOAMenuItemModel.h */,
 				DC9248C71C4BBEF8000F1765 /* WOAMenuItemModel.m */,
 				DC9248D11C4CE43F000F1765 /* WOAMenuListViewController.h */,
@@ -501,15 +524,28 @@
 				DC8E9CDA1C4B4FE300B66527 /* WOAPickerViewController.m */,
 				DC8E9C9E1C4B4B1200B66527 /* WOAPropertyInfo.h */,
 				DC8E9C9F1C4B4B1200B66527 /* WOAPropertyInfo.m */,
+				DC2257511D8CBBC3006A18E3 /* WOARequestContent.h */,
+				DC2257521D8CBBC3006A18E3 /* WOARequestContent.m */,
+				DC22574A1D8CBBC3006A18E3 /* WOAResponeContent.h */,
+				DC2257501D8CBBC3006A18E3 /* WOAResponeContent.m */,
+				DC2257C51D8CC071006A18E3 /* WOARootViewController.h */,
+				DC2257C61D8CC071006A18E3 /* WOARootViewController.m */,
 				DC8E9CDB1C4B4FE300B66527 /* WOASession.h */,
 				DC8E9CDC1C4B4FE300B66527 /* WOASession.m */,
 				DC8E9CDD1C4B4FE300B66527 /* WOASessionTokens.h */,
 				DC8E9CDE1C4B4FE300B66527 /* WOASessionTokens.m */,
 				DC8E9CDF1C4B4FE300B66527 /* WOASplashViewController.h */,
 				DC8E9CE01C4B4FE300B66527 /* WOASplashViewController.m */,
+				DC22574F1D8CBBC3006A18E3 /* WOAStartSettingViewController.h */,
+				DC2257551D8CBBC3006A18E3 /* WOAStartSettingViewController.m */,
+				DC2257541D8CBBC3006A18E3 /* WOAStartSettingViewController.xib */,
+				DC2257CB1D8CC198006A18E3 /* WOAStartWorkflowActionReqeust.h */,
 				DC8E9CE11C4B4FE300B66527 /* WOAURLNavigationViewController.h */,
 				DC8E9CE21C4B4FE300B66527 /* WOAURLNavigationViewController.m */,
 				DC8E9CE31C4B4FE300B66527 /* WOAURLNavigationViewController.xib */,
+				DC2257491D8CBBC3006A18E3 /* WOAVersionInfoViewController.h */,
+				DC2257561D8CBBC3006A18E3 /* WOAVersionInfoViewController.m */,
+				DC2257571D8CBBC3006A18E3 /* WOAVersionInfoViewController.xib */,
 			);
 			path = WOA;
 			sourceTree = "<group>";
@@ -528,8 +564,6 @@
 		DCD5DC6A1D8823C800152071 /* WOAMobile */ = {
 			isa = PBXGroup;
 			children = (
-				DCD5DC6E1D8823C800152071 /* AppDelegate.h */,
-				DCD5DC6F1D8823C800152071 /* AppDelegate.m */,
 				DCD5DC7A1D8823C800152071 /* Images.xcassets */,
 				DCD5DC6B1D8823C800152071 /* Supporting Files */,
 				DC2257411D8C3F4E006A18E3 /* WOAPacketHelper+Teacher.h */,
@@ -542,7 +576,6 @@
 			isa = PBXGroup;
 			children = (
 				DCD5DC7F1D8823C800152071 /* Info.plist */,
-				DCD5DC6C1D8823C800152071 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -573,33 +606,8 @@
 			children = (
 				DCF134451C4A8C45001EFBAC /* Images.xcassets */,
 				DCF134381C4A8C45001EFBAC /* Supporting Files */,
-				DC8E9CF91C4B4FF600B66527 /* WOAAboutViewController.h */,
-				DC8E9CFA1C4B4FF600B66527 /* WOAAboutViewController.m */,
-				DC8E9CFB1C4B4FF600B66527 /* WOAAboutViewController.xib */,
-				DCF1343C1C4A8C45001EFBAC /* WOAAppDelegate.h */,
-				DCF1343D1C4A8C45001EFBAC /* WOAAppDelegate.m */,
-				DC8E9D271C4BBA9B00B66527 /* WOAFlowController.h */,
-				DC8E9D281C4BBA9B00B66527 /* WOAFlowController.m */,
-				DC8E9D2A1C4BBB1F00B66527 /* WOAHTTPRequest.h */,
-				DC8E9D2B1C4BBB1F00B66527 /* WOAHTTPRequest.m */,
-				DC8E9CFC1C4B4FF600B66527 /* WOALoginViewController.h */,
-				DC8E9CFD1C4B4FF600B66527 /* WOALoginViewController.m */,
-				DC8E9CFE1C4B4FF600B66527 /* WOALoginViewController.xib */,
 				DC8E9D131C4BA52A00B66527 /* WOAPacketHelper+Student.h */,
 				DC8E9D141C4BA52A00B66527 /* WOAPacketHelper+Student.m */,
-				DC8E9D171C4BA5D500B66527 /* WOARequestContent.h */,
-				DC8E9D181C4BA5D500B66527 /* WOARequestContent.m */,
-				DC8E9D191C4BA5D500B66527 /* WOAResponeContent.h */,
-				DC8E9D1A1C4BA5D500B66527 /* WOAResponeContent.m */,
-				DC8E9CA21C4B4B2100B66527 /* WOARootViewController.h */,
-				DC8E9CA31C4B4B2100B66527 /* WOARootViewController.m */,
-				DC8E9D011C4B4FF600B66527 /* WOAStartSettingViewController.h */,
-				DC8E9D021C4B4FF600B66527 /* WOAStartSettingViewController.m */,
-				DC8E9D031C4B4FF600B66527 /* WOAStartSettingViewController.xib */,
-				DC9248CC1C4BC3E6000F1765 /* WOAStartWorkflowActionReqeust.h */,
-				DC8E9D041C4B4FF600B66527 /* WOAVersionInfoViewController.h */,
-				DC8E9D051C4B4FF600B66527 /* WOAVersionInfoViewController.m */,
-				DC8E9D061C4B4FF600B66527 /* WOAVersionInfoViewController.xib */,
 			);
 			path = WOAMobileStudent;
 			sourceTree = "<group>";
@@ -608,7 +616,6 @@
 			isa = PBXGroup;
 			children = (
 				DCF134391C4A8C45001EFBAC /* Info.plist */,
-				DCF1343A1C4A8C45001EFBAC /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -695,6 +702,7 @@
 			files = (
 				DC2256F91D8A3CCF006A18E3 /* SearchWorkFlowIcon@2x.png in Resources */,
 				DC2257001D8A3CCF006A18E3 /* DropDownIcon@2x.png in Resources */,
+				DC2257611D8CBBC4006A18E3 /* WOAVersionInfoViewController.xib in Resources */,
 				DC2256F71D8A3CCF006A18E3 /* TodoWorkFlowIcon@2x.png in Resources */,
 				DC2256FF1D8A3CCF006A18E3 /* PasswordIcon@2x.png in Resources */,
 				DC2257021D8A3CCF006A18E3 /* checkedIcon@2x.png in Resources */,
@@ -706,10 +714,13 @@
 				DC2256FC1D8A3CCF006A18E3 /* LoginBtnBg@2x.png in Resources */,
 				DC2256FD1D8A3CCF006A18E3 /* BrandLogo@2x.png in Resources */,
 				DC2256F81D8A3CCF006A18E3 /* NewWorkFlowIcon@2x.png in Resources */,
+				DC22575A1D8CBBC3006A18E3 /* WOAAboutViewController.xib in Resources */,
+				DC22575B1D8CBBC3006A18E3 /* WOALoginViewController.xib in Resources */,
 				DC2256F41D8A3CCF006A18E3 /* NewWorkFlowSelectedIcon@2x.png in Resources */,
 				DCD5DC7B1D8823C800152071 /* Images.xcassets in Resources */,
 				DC2257011D8A3CCF006A18E3 /* BackIndicatorIcon@2x.png in Resources */,
 				DC2257341D8A4A8E006A18E3 /* WOAURLNavigationViewController.xib in Resources */,
+				DC22575E1D8CBBC3006A18E3 /* WOAStartSettingViewController.xib in Resources */,
 				DC2256F31D8A3CCF006A18E3 /* TabBarBg@2x.png in Resources */,
 				DC2256F51D8A3CCF006A18E3 /* TodoWorkFlowSelectedIcon@2x.png in Resources */,
 				DC2256FA1D8A3CCF006A18E3 /* MoreFeatureIcon@2x.png in Resources */,
@@ -722,6 +733,7 @@
 			files = (
 				DC2257041D8A3CEB006A18E3 /* TabBarBg@2x.png in Resources */,
 				DC2257051D8A3CEB006A18E3 /* NewWorkFlowSelectedIcon@2x.png in Resources */,
+				DC22576B1D8CBBE1006A18E3 /* WOAVersionInfoViewController.xib in Resources */,
 				DC2257061D8A3CEB006A18E3 /* TodoWorkFlowSelectedIcon@2x.png in Resources */,
 				DC2257071D8A3CEB006A18E3 /* SearchWorkFlowSelectedIcon@2x.png in Resources */,
 				DC2257081D8A3CEB006A18E3 /* TodoWorkFlowIcon@2x.png in Resources */,
@@ -733,17 +745,16 @@
 				DC22570E1D8A3CEB006A18E3 /* BrandLogo@2x.png in Resources */,
 				DC22570F1D8A3CEB006A18E3 /* AccountIcon@2x.png in Resources */,
 				DC2257101D8A3CEB006A18E3 /* PasswordIcon@2x.png in Resources */,
+				DC2257641D8CBBE1006A18E3 /* WOAAboutViewController.xib in Resources */,
+				DC2257651D8CBBE1006A18E3 /* WOALoginViewController.xib in Resources */,
 				DC2257111D8A3CEB006A18E3 /* DropDownIcon@2x.png in Resources */,
 				DC2257121D8A3CEB006A18E3 /* BackIndicatorIcon@2x.png in Resources */,
 				DC2257131D8A3CEB006A18E3 /* checkedIcon@2x.png in Resources */,
 				DC2257141D8A3CEB006A18E3 /* NavigationBarBg@2x.png in Resources */,
-				DC8E9D101C4B4FF600B66527 /* WOAVersionInfoViewController.xib in Resources */,
+				DC2257681D8CBBE1006A18E3 /* WOAStartSettingViewController.xib in Resources */,
 				DC8E9C991C4B498B00B66527 /* WOALoadingViewController.xib in Resources */,
-				DC8E9D091C4B4FF600B66527 /* WOAAboutViewController.xib in Resources */,
-				DC8E9D0B1C4B4FF600B66527 /* WOALoginViewController.xib in Resources */,
 				DCF134461C4A8C45001EFBAC /* Images.xcassets in Resources */,
 				DC8E9CF61C4B4FE300B66527 /* WOAURLNavigationViewController.xib in Resources */,
-				DC8E9D0E1C4B4FF600B66527 /* WOAStartSettingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -762,20 +773,25 @@
 				DC2257311D8A4A8E006A18E3 /* WOASplashViewController.m in Sources */,
 				DC2257301D8A4A8E006A18E3 /* WOASessionTokens.m in Sources */,
 				DC22572E1D8A4A8E006A18E3 /* WOAPropertyInfo.m in Sources */,
+				DC2257591D8CBBC3006A18E3 /* WOALoginViewController.m in Sources */,
 				DC2257231D8A4A8E006A18E3 /* WOALinkLabel.m in Sources */,
 				DC22571E1D8A4A8E006A18E3 /* WOAExclusiveSelectListViewController.m in Sources */,
 				DC22571D1D8A4A8E006A18E3 /* WOADynamicLabelTextField.m in Sources */,
+				DC22575C1D8CBBC3006A18E3 /* WOAResponeContent.m in Sources */,
 				DC2257191D8A4A8E006A18E3 /* WOAContentViewController.m in Sources */,
 				DC2257321D8A4A8E006A18E3 /* WOAURLNavigationViewController.m in Sources */,
+				DC2257C11D8CBF0E006A18E3 /* main.m in Sources */,
 				DCD5DCAA1D88262F00152071 /* VSActionSheetDatePicker.m in Sources */,
 				DC22571A1D8A4A8E006A18E3 /* WOADateFromToPickerViewController.m in Sources */,
 				DCD5DCB01D88262F00152071 /* VSSelectedTableViewCell.m in Sources */,
+				DC22575D1D8CBBC3006A18E3 /* WOARequestContent.m in Sources */,
 				DCD5DCA91D88262F00152071 /* UIView+IndexPathTag.m in Sources */,
+				DC22575F1D8CBBC3006A18E3 /* WOAStartSettingViewController.m in Sources */,
 				DCD5DCAC1D88262F00152071 /* VSPopoverBackgroundView.m in Sources */,
 				DC2257291D8A4A8E006A18E3 /* WOAMultiItemSelectorView.m in Sources */,
 				DC22572A1D8A4A8E006A18E3 /* WOAMultiLineLabel.m in Sources */,
+				DC22576E1D8CBCBE006A18E3 /* WOAAppDelegate.m in Sources */,
 				DCD5DCAD1D88262F00152071 /* VSPopoverController.m in Sources */,
-				DCD5DC701D8823C800152071 /* AppDelegate.m in Sources */,
 				DCD5DCAB1D88262F00152071 /* VSActionSheetPickerView.m in Sources */,
 				DC2257281D8A4A8E006A18E3 /* WOAMenuListViewController.m in Sources */,
 				DC22571B1D8A4A8E006A18E3 /* WOADateTimePickerViewController.m in Sources */,
@@ -783,6 +799,7 @@
 				DCD5DCA81D88262F00152071 /* UINavigationController+RootViewController.m in Sources */,
 				DCD5DCA61D88262F00152071 /* UIImage+Utility.m in Sources */,
 				DC2257201D8A4A8E006A18E3 /* WOAFlowListViewController.m in Sources */,
+				DC2257C81D8CC071006A18E3 /* WOARootViewController.m in Sources */,
 				DC2257251D8A4A8E006A18E3 /* WOAListViewController.m in Sources */,
 				DC2257161D8A4A8E006A18E3 /* WOABrandData.m in Sources */,
 				DC22573F1D8C3D86006A18E3 /* WOAPacketHelper.m in Sources */,
@@ -797,7 +814,7 @@
 				DCD5DCA31D88262F00152071 /* NSString+PinyinInitial.m in Sources */,
 				DCD5DCA11D88262F00152071 /* NSFileManager+AppFolder.m in Sources */,
 				DC22572B1D8A4A8E006A18E3 /* WOAMultiPickerViewController.m in Sources */,
-				DCD5DC6D1D8823C800152071 /* main.m in Sources */,
+				DC2257581D8CBBC3006A18E3 /* WOAAboutViewController.m in Sources */,
 				DCD5DC9F1D88262F00152071 /* NSData+HexadecimalRepresentation.m in Sources */,
 				DC2257181D8A4A8E006A18E3 /* WOAContentModel.m in Sources */,
 				DCD5DCA21D88262F00152071 /* NSMutableData+AppendString.m in Sources */,
@@ -805,10 +822,13 @@
 				DC22572C1D8A4A8E006A18E3 /* WOANameValuePair.m in Sources */,
 				DC2257261D8A4A8E006A18E3 /* WOALoadingViewController.m in Sources */,
 				DCD5DCD31D882B4000152071 /* WOALayout.m in Sources */,
+				DC2257601D8CBBC3006A18E3 /* WOAVersionInfoViewController.m in Sources */,
 				DC22571C1D8A4A8E006A18E3 /* WOADetailViewController.m in Sources */,
+				DC2257CE1D8CC262006A18E3 /* WOAHTTPRequest.m in Sources */,
 				DC2257221D8A4A8E006A18E3 /* WOALabelButtonTableViewCell.m in Sources */,
 				DCD5DCA41D88262F00152071 /* NSString+Utility.m in Sources */,
 				DCD5DCA01D88262F00152071 /* NSDictionary+JsonString.m in Sources */,
+				DC2257C71D8CC071006A18E3 /* WOAFlowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,23 +836,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC2257C91D8CC076006A18E3 /* WOAFlowController.m in Sources */,
 				DC1584821C688E6800DF5E7E /* WOAExclusiveSelectListViewController.m in Sources */,
-				DC8E9D291C4BBA9B00B66527 /* WOAFlowController.m in Sources */,
 				DC8E9CF31C4B4FE300B66527 /* WOASessionTokens.m in Sources */,
-				DC8E9D0A1C4B4FF600B66527 /* WOALoginViewController.m in Sources */,
-				DC8E9D0D1C4B4FF600B66527 /* WOAStartSettingViewController.m in Sources */,
 				DC9248CB1C4BC0A0000F1765 /* UIImage+Utility.m in Sources */,
 				DC8E9CEA1C4B4FE300B66527 /* WOAInputTitleViewController.m in Sources */,
 				DC9248C81C4BBEF8000F1765 /* WOAMenuItemModel.m in Sources */,
+				DC2257C21D8CBF23006A18E3 /* main.m in Sources */,
 				DC8E9CB71C4B4FD100B66527 /* UIBarButtonItem+VSPopoverViewController.m in Sources */,
 				DC2257471D8C41E2006A18E3 /* UIColor+AppTheme.m in Sources */,
 				DC8345761C62C40E00956544 /* WOAFlowListViewController.m in Sources */,
 				DC8E9CBF1C4B4FD100B66527 /* VSSelectedTableViewCell.m in Sources */,
 				DC2257401D8C3DB9006A18E3 /* WOAPacketHelper.m in Sources */,
+				DC2257671D8CBBE1006A18E3 /* WOARequestContent.m in Sources */,
 				DC8E9CE71C4B4FE300B66527 /* WOADynamicLabelTextField.m in Sources */,
 				DC5178F81C826D2B00162F92 /* WOAMultiItemSelectorView.m in Sources */,
+				DC22576F1D8CBCC2006A18E3 /* WOAAppDelegate.m in Sources */,
 				DC8E9CA01C4B4B1200B66527 /* WOAAccountCredential.m in Sources */,
+				DC2257631D8CBBE1006A18E3 /* WOALoginViewController.m in Sources */,
 				DCEF93B01C53B95B00414D6A /* UILabel+Utility.m in Sources */,
+				DC22576A1D8CBBE1006A18E3 /* WOAVersionInfoViewController.m in Sources */,
 				DC8E9C8F1C4B481500B66527 /* NSMutableData+AppendString.m in Sources */,
 				DC8E9CBB1C4B4FD100B66527 /* VSPopoverBackgroundView.m in Sources */,
 				DC8E9CF51C4B4FE300B66527 /* WOAURLNavigationViewController.m in Sources */,
@@ -845,15 +868,15 @@
 				DC5FA6B01C5E19B80099D95C /* NSString+Utility.m in Sources */,
 				DC2257381D8C3A8F006A18E3 /* WOAFlowDefine.m in Sources */,
 				DC5FA6A91C5DF7E20099D95C /* WOAContentViewController.m in Sources */,
-				DC8E9D0F1C4B4FF600B66527 /* WOAVersionInfoViewController.m in Sources */,
-				DC8E9D2C1C4BBB1F00B66527 /* WOAHTTPRequest.m in Sources */,
+				DC2257661D8CBBE1006A18E3 /* WOAResponeContent.m in Sources */,
 				DC8E9CA11C4B4B1200B66527 /* WOAPropertyInfo.m in Sources */,
 				DC5178F51C81ADC800162F92 /* WOAMultiPickerViewController.m in Sources */,
-				DC8E9CA41C4B4B2100B66527 /* WOARootViewController.m in Sources */,
 				DC9248D31C4CE440000F1765 /* WOAMenuListViewController.m in Sources */,
+				DC2257691D8CBBE1006A18E3 /* WOAStartSettingViewController.m in Sources */,
 				DCF049271C52722100928C08 /* WOANameValuePair.m in Sources */,
 				DC8E9CBD1C4B4FD100B66527 /* VSPopoverDefine.m in Sources */,
 				DC8E9CED1C4B4FE300B66527 /* WOALinkLabel.m in Sources */,
+				DC2257621D8CBBE1006A18E3 /* WOAAboutViewController.m in Sources */,
 				DC8E9CE81C4B4FE300B66527 /* WOAFileSelectorView.m in Sources */,
 				DC8E9C8E1C4B481500B66527 /* NSFileManager+AppFolder.m in Sources */,
 				DC8345731C62120000956544 /* NSDictionary+JsonString.m in Sources */,
@@ -865,18 +888,15 @@
 				DC8E9CF41C4B4FE300B66527 /* WOASplashViewController.m in Sources */,
 				DC1584851C6EFD1400DF5E7E /* UIView+IndexPathTag.m in Sources */,
 				DC8E9CEB1C4B4FE300B66527 /* WOALabelButtonTableViewCell.m in Sources */,
-				DC8E9D081C4B4FF600B66527 /* WOAAboutViewController.m in Sources */,
 				DC8E9CF21C4B4FE300B66527 /* WOASession.m in Sources */,
 				DCF0492E1C532B0200928C08 /* WOADetailViewController.m in Sources */,
-				DCF1343E1C4A8C45001EFBAC /* WOAAppDelegate.m in Sources */,
 				DC8E9CEE1C4B4FE300B66527 /* WOAListViewController.m in Sources */,
 				DC8E9C901C4B481500B66527 /* NSString+PinyinInitial.m in Sources */,
-				DCF1343B1C4A8C45001EFBAC /* main.m in Sources */,
-				DC8E9D1B1C4BA5D500B66527 /* WOARequestContent.m in Sources */,
 				DC8E9CE51C4B4FE300B66527 /* WOACheckForUpdate.m in Sources */,
 				DC8E9CE41C4B4FE300B66527 /* WOABrandData.m in Sources */,
 				DCF049241C50FD9500928C08 /* WOADateFromToPickerViewController.m in Sources */,
-				DC8E9D1C1C4BA5D500B66527 /* WOAResponeContent.m in Sources */,
+				DC2257CF1D8CC27A006A18E3 /* WOAHTTPRequest.m in Sources */,
+				DC2257CA1D8CC076006A18E3 /* WOARootViewController.m in Sources */,
 				DC8E9C8D1C4B481500B66527 /* NSData+HexadecimalRepresentation.m in Sources */,
 				DC8E9CB81C4B4FD100B66527 /* UINavigationController+RootViewController.m in Sources */,
 				DC8E9CBA1C4B4FD100B66527 /* VSActionSheetPickerView.m in Sources */,
