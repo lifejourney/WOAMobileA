@@ -9,6 +9,7 @@
 #import "WOAStudentRootViewController.h"
 #import "WOAAppDelegate.h"
 #import "WOARequestManager.h"
+#import "WOAPacketHelper+Teacher.h"
 #import "WOAMenuListViewController.h"
 #import "WOADateFromToPickerViewController.h"
 #import "WOAVersionInfoViewController.h"

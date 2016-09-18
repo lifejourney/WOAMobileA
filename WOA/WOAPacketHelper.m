@@ -7,7 +7,6 @@
 //
 
 #import "WOAPacketHelper.h"
-#import "WOAAppDelegate.h"
 #import "CommonCrypto/CommonDigest.h"
 #import "WOAPropertyInfo.h"
 #import "WOANameValuePair.h"
@@ -39,15 +38,37 @@
     return msgType;
 }
 
++ (NSDictionary*) headerForMsgType: (NSString*)msgType
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [dict setValue: msgType forKey: @"msgType"];
+    
+    if (![msgType isEqualToString: kWOAValue_MsgType_Login])
+    {
+        [dict setValue: [WOAPropertyInfo latestSessionID] forKey: @"sessionID"];
+    }
+    
+    //Redunctant
+    [dict setValue: [WOAPropertyInfo latestAccountID] forKey: @"account"];
+    [dict setValue: [WOAPropertyInfo latestAccountPassword] forKey: @"psw"];
+    
+    
+    return dict;
+}
+
++ (NSDictionary*) headerForFlowActionType: (WOAFLowActionType)flowActionType
+{
+    NSString *msgType = [self msgTypeByFlowActionType: flowActionType];
+    
+    return [self headerForMsgType: msgType];
+}
+
 + (NSMutableDictionary*) baseRequestPacketWithMsgType: (NSString*)msgType
-                                            accountID: (NSString*)accountID
-                                             password: (NSString*)password
 {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity: 3];
     
-    NSDictionary *headerDict = @{@"msgType": msgType,
-                                 @"account": accountID,
-                                 @"psw": password};
+    NSDictionary *headerDict = [self headerForMsgType: msgType];
     
     [dict setValue: headerDict forKey: @"head"];
     [dict setValue: [WOAPropertyInfo latestDeviceToken] forKey: @"deviceToken"];
@@ -55,18 +76,40 @@
     return dict;
 }
 
-+ (NSMutableDictionary*) baseRequestPacketWithMsgType: (NSString*)msgType
++ (NSString*) checkSumForLogin: (NSString*)account password: (NSString*)password
 {
-    return [self baseRequestPacketWithMsgType: msgType
-                                    accountID: [WOAPropertyInfo latestAccountID]
-                                     password: [WOAPropertyInfo latestAccountPassword]];
+    NSString *mixed = [NSString stringWithFormat: @"%@%@%@", kWOAValue_MsgType_Login, account, password];
+    
+    const char *cStr = [mixed UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH] = {0};
+    CC_MD5(cStr, (CC_LONG)strlen(cStr), result);
+    NSString *md5 = [NSString stringWithFormat:
+                     @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+                     result[0], result[1], result[2], result[3],
+                     result[4], result[5], result[6], result[7],
+                     result[8], result[9], result[10], result[11],
+                     result[12], result[13], result[14], result[15]
+                     ];
+    
+    NSRange range = NSMakeRange(8, 24);
+    return [md5 substringWithRange: range];
 }
 
 + (NSDictionary*) packetForLogin: (NSString*)accountID password: (NSString*)password
 {
-    return [self baseRequestPacketWithMsgType: @"login"
-                                    accountID: accountID
-                                     password: password];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary: [self baseRequestPacketWithMsgType: kWOAValue_MsgType_Login]];
+    
+    [dict setValue: accountID forKey: @"account"];
+    [dict setValue: password forKey: @"psw"];
+    [dict setValue: [self checkSumForLogin: accountID password: password] forKey: @"checkSum"];
+    
+    //Reductant
+    NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithDictionary: [dict valueForKey: @"head"]];
+    [headerDict setValue: accountID forKey: @"account"];
+    [headerDict setValue: password forKey: @"psw"];
+    [dict setValue: headerDict forKey: @"head"];
+    
+    return dict;
 }
 
 + (NSDictionary*) packetForSimpleQuery: (NSString*)msgType

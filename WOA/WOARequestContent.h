@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WOAPacketHelper.h"
+#import "WOAFlowDefine.h"
 
 
 @interface WOARequestContent : NSObject

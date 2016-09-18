@@ -7,6 +7,7 @@
 //
 
 #import "WOARequestContent.h"
+#import "WOAPacketHelper.h"
 
 
 @implementation WOARequestContent

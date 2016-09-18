@@ -9,6 +9,7 @@
 
 #import "WOAContentViewController.h"
 #import "WOARequestManager.h"
+#import "WOAPacketHelper.h"
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
 #import "WOADynamicLabelTextField.h"

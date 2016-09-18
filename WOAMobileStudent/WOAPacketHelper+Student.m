@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 steven.zhuang. All rights reserved.
 //
 
-#import "WOAPacketHelper.h"
-#import "WOAAppDelegate.h"
+#import "WOAPacketHelper+Teacher.h"
 #import "CommonCrypto/CommonDigest.h"
 #import "WOAPropertyInfo.h"
 #import "WOANameValuePair.h"

@@ -149,12 +149,16 @@ static WOARequestManager *requestManager = nil;
               toDate: (NSString*)toDate
           onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
 {
-    NSDictionary *paraDict = [WOAPacketHelper paraDictWithFromDate: fromDate
-                                                            toDate: toDate];
+    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
+                                                                        fromDate: fromDate
+                                                                          toDate: toDate];
     
-    [self simpleQuery: msgType
-             paraDict: paraDict
-           onSuccuess: successHandler];
+    [self sendRequest: requestContent
+           onSuccuess: successHandler
+            onFailure: ^(WOAResponeContent *responseContent)
+     {
+         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
+     }];
 }
 
 #pragma mark -
