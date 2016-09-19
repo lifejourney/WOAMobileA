@@ -16,6 +16,13 @@
 @property (nonatomic, strong) NSDictionary *bodyDictionary;
 @property (nonatomic, strong) NSArray *multiBodyArray;
 
+#pragma mark -
+
++ (WOARequestContent*) latestRequestLoginContent;
++ (void) setLatestRequestLoginContent: (WOARequestContent*)reqCont;
+
+#pragma mark -
+
 + (WOARequestContent*) contentForLogin: (NSString*)accountID
                               password: (NSString*)password;
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType

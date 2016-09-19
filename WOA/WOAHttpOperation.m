@@ -403,12 +403,11 @@
             
             if (self.currentActionType == WOAFLowActionType_Login)
             {
-                WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                 
                 NSString *sessionID = [WOAPacketHelper sessionIDFromPacketDictionary: bodyDictionary];
                 [WOAPropertyInfo saveLatestSessionID: sessionID];
                 
-                appDelegate.latestLoginRequestContent = self.initialRequestContent;
+                [WOARequestContent setLatestRequestLoginContent: self.initialRequestContent];
             }
             else if (self.currentActionType == WOAFLowActionType_UploadAttachment)
             {
@@ -461,9 +460,7 @@
                 {
                     self.hasRefreshSession = YES;
                     
-                    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                    
-                    [self sendRequestWithContent: appDelegate.latestLoginRequestContent];
+                    [self sendRequestWithContent: [WOARequestContent latestRequestLoginContent]];
                 }
             }
         }

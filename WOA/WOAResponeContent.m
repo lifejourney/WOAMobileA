@@ -7,7 +7,6 @@
 //
 
 #import "WOAResponeContent.h"
-#import "WOAPacketHelper.h"
 
 
 @implementation WOAResponeContent

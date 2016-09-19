@@ -10,7 +10,25 @@
 #import "WOAPacketHelper.h"
 
 
+static WOARequestContent *_latestRequestLoginContent = nil;
+
 @implementation WOARequestContent
+
+
+#pragma mark -
+
++ (WOARequestContent*) latestRequestLoginContent
+{
+    return _latestRequestLoginContent;
+}
+
+
++ (void) setLatestRequestLoginContent: (WOARequestContent *)reqCont
+{
+    _latestRequestLoginContent = reqCont;
+}
+
+#pragma mark -
 
 - (instancetype) initWithFlowActionType: (WOAFLowActionType)flowActionType
 {

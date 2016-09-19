@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WOARequestContent.h"
-#import "WOAResponeContent.h"
 #import "UIColor+AppTheme.h"
 
 
@@ -20,7 +18,6 @@
 
 @property (nonatomic, strong, readonly) WOARootViewController *rootViewController;
 
-@property (nonatomic, strong) WOARequestContent *latestLoginRequestContent;
 @property (nonatomic, assign) BOOL isLaunchByAPNS;
 
 - (UIViewController*) presentedViewController;
