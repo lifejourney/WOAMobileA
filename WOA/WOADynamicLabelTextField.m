@@ -676,7 +676,12 @@
     {
         if (_multiLabel)
         {
-            NSArray *valueArray = [_multiLabel textsArray];
+            //NSArray *valueArray = [_multiLabel textsArray];
+            NSMutableArray *valueArray = [NSMutableArray array];
+            for (WOANameValuePair *pair in _multiLabel.contentModel.pairArray)
+            {
+                [valueArray addObject: [pair stringValue]];
+            }
             
             NSString *fixedValue = [valueArray componentsJoinedByString: kWOA_Level_2_Seperator];
             
