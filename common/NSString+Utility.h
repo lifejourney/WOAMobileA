@@ -10,6 +10,9 @@
 
 @interface NSString (Utility)
 
++ (BOOL) isEmptyString: (NSString*)str;
++ (BOOL) isNotEmptyString: (NSString*)str;
+
 - (NSString*) trim;
 - (BOOL) isNotEmpty;
 

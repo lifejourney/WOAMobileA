@@ -192,6 +192,36 @@
     return forView ? MAX(forView.frame.size.height, minimumHeight) : 0;
 }
 
+- (NSString*) titleByIndex: (NSInteger)index arrayValue: (NSArray*)arrayValue
+{
+    NSString *title;
+    
+    if (index >= 0 & index < [arrayValue count])
+    {
+        NSDictionary *info = [arrayValue objectAtIndex: index];
+        title = [WOAPacketHelper attachmentTitleFromDictionary: info];
+    }
+    else
+        title = nil;
+    
+    return title;
+}
+
+- (NSString*) URLByIndex: (NSInteger)index arrayValue: (NSArray*)arrayValue
+{
+    NSString *URLString;
+    
+    if (index >= 0 & index < [arrayValue count])
+    {
+        NSDictionary *info = [arrayValue objectAtIndex: index];
+        URLString = [WOAPacketHelper attachmentURLFromDictionary: info];
+    }
+    else
+        URLString = nil;
+    
+    return URLString;
+}
+
 - (instancetype) initWithFrame: (CGRect)frame
              popoverShowInView: (UIView*)popoverShowInView
                        section: (NSInteger)section
@@ -299,11 +329,25 @@
                     arrayValue = @[textValue];
             }
             
-            BOOL isAttachment = (_pairType == WOAPairDataType_AttachFile);
+            WOAContentModel *labelContentModel = [[WOAContentModel alloc] init];
+            for (NSInteger index = 0; index < arrayValue.count; index++)
+            {
+                NSString *name = [self titleByIndex: index arrayValue: arrayValue];
+                NSString *value = nil;
+                WOAModelActionType actionType = WOAModelActionType_None;
+                if (_pairType == WOAPairDataType_AttachFile)
+                {
+                    value = [self URLByIndex: index arrayValue: arrayValue];
+                    actionType = WOAModelActionType_OpenUrl;
+                }
+                
+                [labelContentModel addPair: [WOANameValuePair pairWithName: name
+                                                                     value: value
+                                                                actionType: actionType]];
+            }
             
             self.multiLabel = [[WOAMultiLineLabel alloc] initWithFrame: initiateFrame
-                                                            textsArray: arrayValue
-                                                          isAttachment: isAttachment];
+                                                          contentModel: labelContentModel];
             _multiLabel.delegate = self;
             
             [self addSubview: _multiLabel];

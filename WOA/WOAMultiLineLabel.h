@@ -7,16 +7,16 @@
 //
 
 #import "WOAHostNavigationDelegate.h"
+#import "WOAContentModel.h"
 #import <UIKit/UIKit.h>
 
 
 @interface WOAMultiLineLabel : UIView
 
 @property (nonatomic, weak) NSObject<WOAHostNavigationDelegate> *delegate;
-@property (nonatomic, strong) NSArray *textsArray;
+@property (nonatomic, strong) WOAContentModel *contentModel;
 
 - (instancetype) initWithFrame: (CGRect)frame
-                    textsArray: (NSArray*)textsArray
-                  isAttachment: (BOOL)isAttachment;
+                  contentModel: (WOAContentModel*)contentModel;
 
 @end

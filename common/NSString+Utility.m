@@ -10,6 +10,17 @@
 
 @implementation NSString (Utility)
 
++ (BOOL) isEmptyString: (NSString*)str
+{
+    return ((str == nil) ||
+            ([str length] == 0));
+}
+
++ (BOOL) isNotEmptyString: (NSString*)str
+{
+    return ![self isEmptyString: str];
+}
+
 - (NSString*) trim
 {
     return [self stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];

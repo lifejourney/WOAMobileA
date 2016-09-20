@@ -11,13 +11,11 @@
 #import "WOALayout.h"
 #import "UIColor+AppTheme.h"
 #import "WOALinkLabel.h"
-#import "WOAPacketHelper.h"
 #import "WOAPropertyInfo.h"
+#import "NSString+Utility.h"
 
 
 @interface WOAMultiLineLabel () <WOALinkLabelDelegate>
-
-@property (nonatomic, assign) BOOL isAttachment;
 
 @end
 
@@ -32,44 +30,12 @@
     return self;
 }
 
-- (NSString*) titleByIndex: (NSInteger)index
-{
-    NSString *title;
-    
-    if (index >= 0 & index < [_textsArray count])
-    {
-        NSDictionary *info = [_textsArray objectAtIndex: index];
-        title = [WOAPacketHelper attachmentTitleFromDictionary: info];
-    }
-    else
-        title = nil;
-    
-    return title;
-}
-
-- (NSString*) URLByIndex: (NSInteger)index
-{
-    NSString *URLString;
-    
-    if (index >= 0 & index < [_textsArray count])
-    {
-        NSDictionary *info = [_textsArray objectAtIndex: index];
-        URLString = [WOAPacketHelper attachmentURLFromDictionary: info];
-    }
-    else
-        URLString = nil;
-    
-    return URLString;
-}
-
 - (instancetype) initWithFrame: (CGRect)frame
-                    textsArray: (NSArray*)textsArray
-                  isAttachment: (BOOL)isAttachment
+                  contentModel: (WOAContentModel*)contentModel
 {
     if (self = [self initWithFrame: frame])
     {
-        self.textsArray = textsArray;
-        self.isAttachment = isAttachment;
+        self.contentModel = contentModel;
         
         CGFloat originY = 0;
         
@@ -81,9 +47,14 @@
         CGFloat viewHeight = 0;
         CGFloat onelineWidth = viewWidth;
         CGSize onelineSize;
-        for (NSInteger index = 0; index < [textsArray count]; index++)
+        
+        NSArray *pairArray = self.contentModel.pairArray;
+        
+        for (NSInteger index = 0; index < [pairArray count]; index++)
         {
-            NSString *textContent = isAttachment ? [self titleByIndex: index] : [textsArray objectAtIndex: index];
+            WOANameValuePair *pair = pairArray[index];
+            
+            NSString *textContent = pair.name;
             onelineSize = [WOALayout sizeForText: textContent
                                            width: onelineWidth
                                             font: labelFont];
@@ -94,9 +65,10 @@
         CGRect selfRect = CGRectMake(frame.origin.x, frame.origin.y, viewWidth, viewHeight);
         [self setFrame: selfRect];
         
-        for (NSInteger index = 0; index < [textsArray count]; index++)
+        for (NSInteger index = 0; index < [pairArray count]; index++)
         {
-            NSString *textContent = isAttachment ? [self titleByIndex: index] : [textsArray objectAtIndex: index];
+            WOANameValuePair *pair = pairArray[index];
+            NSString *textContent = pair.name;
             
             originY += lineMargin;
             
@@ -106,7 +78,7 @@
             CGRect textRect = CGRectMake(0, originY, onelineSize.width, onelineSize.height);
             
             UILabel *oneLineLabel;
-            if (isAttachment)
+            if (pair.actionType == WOAModelActionType_OpenUrl)
             {
                 WOALinkLabel *linkLabel = [[WOALinkLabel alloc] initWithFrame: textRect];
                 linkLabel.delegate = self;
@@ -123,7 +95,7 @@
             oneLineLabel.text = textContent;
             oneLineLabel.tag = index;
             oneLineLabel.textAlignment = NSTextAlignmentLeft;
-            oneLineLabel.userInteractionEnabled = isAttachment;
+            oneLineLabel.userInteractionEnabled = (pair.actionType == WOAModelActionType_OpenUrl);
             
             [self addSubview: oneLineLabel];
             
@@ -141,25 +113,30 @@
 
 - (void) label: (WOALinkLabel *)label touchesWithTag: (NSInteger)tag
 {
-    NSString *URLString = [self URLByIndex: tag];
+    WOANameValuePair *pair = self.contentModel.pairArray[tag];
     
-    if (URLString)
+    if (pair.actionType == WOAModelActionType_OpenUrl)
     {
-        URLString = [NSString stringWithFormat: @"%@%@", [WOAPropertyInfo serverAddress], URLString];
+        NSString *urlString = [pair stringValue];
         
-        NSURL *url = [NSURL URLWithString: URLString];
-        
-        if (self.delegate && [self.delegate respondsToSelector: @selector(hostNavigation)])
+        if ([NSString isNotEmptyString: urlString])
         {
-            WOAURLNavigationViewController *navigationVC = [[WOAURLNavigationViewController alloc] init];
-            navigationVC.url = url;
-            navigationVC.urlTitle = label.text;
+            urlString = [NSString stringWithFormat: @"%@%@", [WOAPropertyInfo serverAddress], urlString];
             
-            [[self.delegate hostNavigation] pushViewController: navigationVC animated: YES];
+            NSURL *url = [NSURL URLWithString: urlString];
+            
+            if (self.delegate && [self.delegate respondsToSelector: @selector(hostNavigation)])
+            {
+                WOAURLNavigationViewController *navigationVC = [[WOAURLNavigationViewController alloc] init];
+                navigationVC.url = url;
+                navigationVC.urlTitle = label.text;
+                
+                [[self.delegate hostNavigation] pushViewController: navigationVC animated: YES];
+            }
+            else
+            {
+                [[UIApplication sharedApplication] openURL: url];
         }
-        else
-        {
-            [[UIApplication sharedApplication] openURL: url];
         }
     }
 }

@@ -11,7 +11,14 @@
 typedef NS_ENUM(NSUInteger, WOAPairDataType)
 {
     WOAPairDataType_Normal,
-
+    
+    //Common Type
+    WOAPairDataType_Seperator,
+    WOAPairDataType_TitleKey,
+    
+    WOAPairDataType_ContentModel, //Recursion
+    
+    //WOA business type
     WOAPairDataType_IntString,
     WOAPairDataType_DatePicker,
     WOAPairDataType_TimePicker,
@@ -26,17 +33,18 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     WOAPairDataType_MultiPicker,
     WOAPairDataType_FixedText,
     WOAPairDataType_FlowText,
-    
-    WOAPairDataType_Seperator,
-    WOAPairDataType_TitleKey,
-    
-    WOAPairDataType_ContentModel
 };
 
 typedef NS_ENUM(NSUInteger, WOAModelActionType)
 {
     WOAModelActionType_None,
+    
+    //Common action
     WOAModelActionType_FlowDone,
+    
+    WOAModelActionType_OpenUrl,
+    
+    //WOA bussiness action
     WOAModelActionType_GetTransPerson,
     WOAModelActionType_GetTransTable,
     WOAModelActionType_SubmitTransTable,
