@@ -126,6 +126,8 @@
 		DC2258A71D8D9424006A18E3 /* WOAStudentRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258A61D8D9424006A18E3 /* WOAStudentRootViewController.m */; };
 		DC2258FE1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258FD1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m */; };
 		DC2259011D8FF6D2006A18E3 /* WOARequestContent+Student.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2259001D8FF6D2006A18E3 /* WOARequestContent+Student.m */; };
+		DC2259041D917E61006A18E3 /* WOAMultiStyleItemField.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */; };
+		DC2259051D917E6E006A18E3 /* WOAMultiStyleItemField.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */; };
 		DC5178F51C81ADC800162F92 /* WOAMultiPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */; };
 		DC5178F81C826D2B00162F92 /* WOAMultiItemSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5178F71C826D2B00162F92 /* WOAMultiItemSelectorView.m */; };
 		DC5FA6A91C5DF7E20099D95C /* WOAContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5FA6A81C5DF7E20099D95C /* WOAContentViewController.m */; };
@@ -272,6 +274,8 @@
 		DC2258FD1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WOARequestContent+Teacher.m"; sourceTree = "<group>"; };
 		DC2258FF1D8FF6D2006A18E3 /* WOARequestContent+Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WOARequestContent+Student.h"; sourceTree = "<group>"; };
 		DC2259001D8FF6D2006A18E3 /* WOARequestContent+Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WOARequestContent+Student.m"; sourceTree = "<group>"; };
+		DC2259021D917E61006A18E3 /* WOAMultiStyleItemField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiStyleItemField.h; sourceTree = "<group>"; };
+		DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMultiStyleItemField.m; sourceTree = "<group>"; };
 		DC5178F31C81ADC800162F92 /* WOAMultiPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiPickerViewController.h; sourceTree = "<group>"; };
 		DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMultiPickerViewController.m; sourceTree = "<group>"; };
 		DC5178F61C826D2B00162F92 /* WOAMultiItemSelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiItemSelectorView.h; sourceTree = "<group>"; };
@@ -547,6 +551,8 @@
 				DC8E9CD61C4B4FE300B66527 /* WOAMultiLineLabel.m */,
 				DC5178F31C81ADC800162F92 /* WOAMultiPickerViewController.h */,
 				DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */,
+				DC2259021D917E61006A18E3 /* WOAMultiStyleItemField.h */,
+				DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */,
 				DCF049281C52723300928C08 /* WOANameValuePair.h */,
 				DCF049261C52722100928C08 /* WOANameValuePair.m */,
 				DC22573D1D8C3D86006A18E3 /* WOAPacketHelper.h */,
@@ -884,6 +890,7 @@
 				DCD5DCD31D882B4000152071 /* WOALayout.m in Sources */,
 				DC2257601D8CBBC3006A18E3 /* WOAVersionInfoViewController.m in Sources */,
 				DC22571C1D8A4A8E006A18E3 /* WOADetailViewController.m in Sources */,
+				DC2259051D917E6E006A18E3 /* WOAMultiStyleItemField.m in Sources */,
 				DC2257CE1D8CC262006A18E3 /* WOAHTTPRequest.m in Sources */,
 				DC2257221D8A4A8E006A18E3 /* WOALabelButtonTableViewCell.m in Sources */,
 				DCD5DCA41D88262F00152071 /* NSString+Utility.m in Sources */,
@@ -959,6 +966,7 @@
 				DC8E9CE51C4B4FE300B66527 /* WOACheckForUpdate.m in Sources */,
 				DC8E9CE41C4B4FE300B66527 /* WOABrandData.m in Sources */,
 				DCF049241C50FD9500928C08 /* WOADateFromToPickerViewController.m in Sources */,
+				DC2259041D917E61006A18E3 /* WOAMultiStyleItemField.m in Sources */,
 				DC2257CF1D8CC27A006A18E3 /* WOAHTTPRequest.m in Sources */,
 				DC2257CA1D8CC076006A18E3 /* WOARootViewController.m in Sources */,
 				DC8E9C8D1C4B481500B66527 /* NSData+HexadecimalRepresentation.m in Sources */,

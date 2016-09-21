@@ -55,10 +55,10 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
 
 @interface WOANameValuePair : NSObject
 
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *name;  //Generally take it as title.
 @property (nonatomic, strong) NSObject *value;
 @property (nonatomic, assign) BOOL isWritable;
-@property (nonatomic, strong) NSArray *subArray; //For select list
+@property (nonatomic, strong) NSArray *subArray; //For selective list
 @property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
 @property (nonatomic, assign) WOAPairDataType dataType;
 @property (nonatomic, assign) WOAModelActionType actionType;
@@ -72,7 +72,7 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
                    actionType: (WOAModelActionType)actionType;
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
-                    subArray: (NSArray*)subArray
+                     subArray: (NSArray*)subArray
                      dataType: (WOAPairDataType)dataType;
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
