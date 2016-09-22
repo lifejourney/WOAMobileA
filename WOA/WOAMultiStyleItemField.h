@@ -32,8 +32,7 @@
                      indexPath: (NSIndexPath*)indexPath
                      itemModel: (WOANameValuePair*)itemModel;
 
-- (NSDictionary*) toDataModelWithIndexPath;
-- (NSString*) toSimpleDataModelValue;
+- (WOANameValuePair*) saveBackToItemModel;
 
 - (void) selectDefaultValueFromPickerView;
 

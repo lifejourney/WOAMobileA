@@ -7,7 +7,6 @@
 //
 
 #import "WOAMultiStyleItemField.h"
-#import "WOAPacketHelper.h"
 #import "WOAPickerViewController.h"
 #import "WOADateTimePickerViewController.h"
 #import "WOAMultiLineLabel.h"
@@ -36,19 +35,17 @@
 @property (nonatomic, strong) WOAFileSelectorView *fileSelectorView;
 @property (nonatomic, strong) WOAMultiItemSelectorView *multiSelectorView;
 
-@property (nonatomic, assign) NSInteger section;
-@property (nonatomic, assign) NSInteger row;
-@property (nonatomic, assign) BOOL isEditable;
-@property (nonatomic, assign) BOOL isWritable;
-
-//TO-DO: weak? strong?
-@property (nonatomic, weak) UIView *popoverShowInView;
-
-@property (nonatomic, assign) WOAPairDataType pairType;
-@property (nonatomic, strong) NSArray *optionArray;
-
+//Accessories
 @property (nonatomic, strong) WOAPickerViewController *singlePickerVC;
 @property (nonatomic, strong) WOADateTimePickerViewController *datePickerVC;
+
+//Data model
+@property (nonatomic, strong) WOANameValuePair *itemModel;
+
+//Owner info
+//TO-DO: weak? strong?
+@property (nonatomic, weak) UIView *popoverShowInView;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 @end
 
@@ -66,19 +63,19 @@
     return self;
 }
 
-- (BOOL) couldUserInteractEvenUnWritable: (WOAPairDataType)pairType
+- (BOOL) couldUserInteractEvenUnWritable: (WOAPairDataType)pairDataType
 {
-    return (pairType == WOAPairDataType_AttachFile ||
-            pairType == WOAPairDataType_MultiPicker);
+    return (pairDataType == WOAPairDataType_AttachFile ||
+            pairDataType == WOAPairDataType_MultiPicker);
 }
 
-//- (UIView*) rightViewWithpairType: (WOAPairDataType)pairType isWritable: (BOOL)isWritable viewHeight: (CGFloat)viewHeight
-- (SEL) clickSelectorWithpairType: (WOAPairDataType)pairType
-                       isWritable: (BOOL)isWritable
+//- (UIView*) rightViewWithpairDataType: (WOAPairDataType)pairDataType isWritable: (BOOL)isWritable viewHeight: (CGFloat)viewHeight
+- (SEL) clickSelectorWithPairDataType: (WOAPairDataType)pairDataType
+                           isWritable: (BOOL)isWritable
 {
     SEL clickSelector;
     
-    switch (_pairType)
+    switch (pairDataType)
     {
         case WOAPairDataType_Normal:
         case WOAPairDataType_IntString:
@@ -113,7 +110,7 @@
             break;
     }
     
-    BOOL couldShouldRightView = ((_isEditable && isWritable) || [self couldUserInteractEvenUnWritable: pairType]);
+    BOOL couldShouldRightView = (isWritable || [self couldUserInteractEvenUnWritable: pairDataType]);
     
     if (!couldShouldRightView)
     {
@@ -123,13 +120,13 @@
     return clickSelector;
 }
 
-- (UIImageView*) rightViewWithpairType: (WOAPairDataType)pairType
-                            isWritable: (BOOL)isWritable
+- (UIImageView*) rightViewWithPairDataType: (WOAPairDataType)pairDataType
+                                isWritable: (BOOL)isWritable
 {
     UIImage *buttonImage;
     UIImage *dropDownImage = [UIImage imageNamed: @"DropDownIcon"];
     
-    switch (_pairType)
+    switch (pairDataType)
     {
         case WOAPairDataType_Normal:
         case WOAPairDataType_IntString:
@@ -164,7 +161,7 @@
             break;
     }
     
-    BOOL couldShouldRightView = ((_isEditable && isWritable) || [self couldUserInteractEvenUnWritable: pairType]);
+    BOOL couldShouldRightView = (isWritable || [self couldUserInteractEvenUnWritable: pairDataType]);
     
     if (!couldShouldRightView)
     {
@@ -175,15 +172,18 @@
 }
 
 - (void) addRightViewForTextField: (UITextField*)textField
-                         pairType: (WOAPairDataType)pairType
+                     pairDataType: (WOAPairDataType)pairDataType
                        isWritable: (BOOL)isWritable
 {
-    SEL clickSelector = [self clickSelectorWithpairType: pairType isWritable: isWritable];
-    UIImageView *rightView = [self rightViewWithpairType: pairType isWritable: isWritable];
+    SEL clickSelector = [self clickSelectorWithPairDataType: pairDataType isWritable: isWritable];
+    UIImageView *rightView = [self rightViewWithPairDataType: pairDataType isWritable: isWritable];
     
-    [textField addTarget: self action: clickSelector forControlEvents: UIControlEventTouchDown];
     textField.rightView = rightView;
     textField.rightViewMode = rightView ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
+    
+    [textField addTarget: self
+                  action: clickSelector
+        forControlEvents: UIControlEventTouchDown];
 }
 
 - (CGFloat) requireMinimumHeight: (CGFloat)minimumHeight
@@ -192,60 +192,24 @@
     return forView ? MAX(forView.frame.size.height, minimumHeight) : 0;
 }
 
-- (NSString*) titleByIndex: (NSInteger)index arrayValue: (NSArray*)arrayValue
-{
-    NSString *title;
-    
-    if (index >= 0 & index < [arrayValue count])
-    {
-        NSDictionary *info = [arrayValue objectAtIndex: index];
-        title = [WOAPacketHelper attachmentTitleFromDictionary: info];
-    }
-    else
-        title = nil;
-    
-    return title;
-}
-
-- (NSString*) URLByIndex: (NSInteger)index arrayValue: (NSArray*)arrayValue
-{
-    NSString *URLString;
-    
-    if (index >= 0 & index < [arrayValue count])
-    {
-        NSDictionary *info = [arrayValue objectAtIndex: index];
-        URLString = [WOAPacketHelper attachmentURLFromDictionary: info];
-    }
-    else
-        URLString = nil;
-    
-    return URLString;
-}
-
 - (instancetype) initWithFrame: (CGRect)frame
              popoverShowInView: (UIView*)popoverShowInView
-                       section: (NSInteger)section
-                           row: (NSInteger)row
-                    isEditable: (BOOL)isEditable
-                     itemModel: (NSDictionary*)itemModel
+                     indexPath: (NSIndexPath*)indexPath
+                     itemModel: (WOANameValuePair*)itemModel
 {
     if (self = [self initWithFrame: frame])
     {
-        NSString *labelText = [WOAPacketHelper itemNameFromDictionary: itemModel];
-        id itemValue = [WOAPacketHelper itemValueFromDictionary: itemModel];
-        self.pairType = [WOANameValuePair pairTypeFromTextType: [WOAPacketHelper itemTypeFromDictionary: itemModel]];
-        BOOL isWritable = [WOAPacketHelper itemWritableFromDictionary: itemModel];
-        self.optionArray = [WOAPacketHelper optionArrayFromDictionary: itemModel];
-        
-        isWritable = isWritable && (_pairType != WOAPairDataType_FlowText);
-        
         self.popoverShowInView = popoverShowInView;
-        self.section = section;
-        self.row = row;
-        self.isEditable = isEditable;
-        self.isWritable = isWritable;
+        self.indexPath = indexPath;
+        self.itemModel = itemModel;
         
-        self.tag = [UIView tagByIndexPathE: [NSIndexPath indexPathForRow: row inSection: section]];
+        WOAPairDataType pairDataType = itemModel.dataType;
+        NSString *itemTitle = itemModel.name;
+        BOOL isWritable = itemModel.isWritable;
+        
+        
+        self.tag = [UIView tagByIndexPathE: [NSIndexPath indexPathForRow: indexPath.row
+                                                               inSection: indexPath.section]];
         
         NSString *textValue;
         NSArray *arrayValue;
@@ -271,21 +235,21 @@
         CGFloat textOriginX = labelOriginX + labelWidth + kWOALayout_ItemLabelTextField_Gap;
         CGFloat textWidth = frame.size.width - textOriginX;
         
-        if (_pairType == WOAPairDataType_TitleKey)
+        if (pairDataType == WOAPairDataType_TitleKey)
         {
             labelWidth = frame.size.width - labelOriginX;
         }
         
         ////////////////////////////////
         //Create left column: tilte label
-        CGSize titleLabelSize = [WOALayout sizeForText: labelText
+        CGSize titleLabelSize = [WOALayout sizeForText: itemTitle
                                                  width: labelWidth
                                                   font: labelFont];
         self.titleLabel = [[UILabel alloc] initWithFrame: CGRectMake(0, 0, titleLabelSize.width, titleLabelSize.height)];
         _titleLabel.font = labelFont;
         _titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _titleLabel.numberOfLines = 0;
-        _titleLabel.text = labelText;
+        _titleLabel.text = itemTitle;
         _titleLabel.textAlignment = NSTextAlignmentLeft;
         [self addSubview: _titleLabel];
         
@@ -294,20 +258,20 @@
         
         BOOL shouldShowReadonlyLineList;
         BOOL shouldShowInputComponent;
-        if (_pairType == WOAPairDataType_TextList ||
-            _pairType == WOAPairDataType_CheckUserList)
+        if (pairDataType == WOAPairDataType_TextList ||
+            pairDataType == WOAPairDataType_CheckUserList)
         {
             shouldShowReadonlyLineList = YES;
-            shouldShowInputComponent = _isWritable;
+            shouldShowInputComponent = isWritable;
         }
-        else if (_pairType == WOAPairDataType_AttachFile ||
-                 _pairType == WOAPairDataType_MultiPicker)
+        else if (pairDataType == WOAPairDataType_AttachFile ||
+                 pairDataType == WOAPairDataType_MultiPicker)
         {
-            shouldShowReadonlyLineList = !_isWritable;
-            shouldShowInputComponent = _isWritable;
+            shouldShowReadonlyLineList = !isWritable;
+            shouldShowInputComponent = isWritable;
         }
-        else if (_pairType == WOAPairDataType_TitleKey ||
-                 _pairType == WOAPairDataType_Seperator)
+        else if (pairDataType == WOAPairDataType_TitleKey ||
+                 pairDataType == WOAPairDataType_Seperator)
         {
             shouldShowReadonlyLineList = NO;
             shouldShowInputComponent = NO;
@@ -323,31 +287,16 @@
         if (shouldShowReadonlyLineList)
         {
             //TO-DO, temporarily
-            if (_pairType == WOAPairDataType_CheckUserList)
+            if (pairDataType == WOAPairDataType_CheckUserList)
             {
                 if (!arrayValue && textValue)
                     arrayValue = @[textValue];
             }
             
-            WOAContentModel *labelContentModel = [[WOAContentModel alloc] init];
-            for (NSInteger index = 0; index < arrayValue.count; index++)
-            {
-                NSString *name = [self titleByIndex: index arrayValue: arrayValue];
-                NSString *value = nil;
-                WOAModelActionType actionType = WOAModelActionType_None;
-                if (_pairType == WOAPairDataType_AttachFile)
-                {
-                    value = [self URLByIndex: index arrayValue: arrayValue];
-                    actionType = WOAModelActionType_OpenUrl;
-                }
-                
-                [labelContentModel addPair: [WOANameValuePair pairWithName: name
-                                                                     value: value
-                                                                actionType: actionType]];
-            }
+            WOAContentModel *modelValue = (WOAContentModel*)itemModel.value;
             
             self.multiLabel = [[WOAMultiLineLabel alloc] initWithFrame: initiateFrame
-                                                          contentModel: labelContentModel];
+                                                          contentModel: modelValue];
             _multiLabel.delegate = self;
             
             [self addSubview: _multiLabel];
@@ -358,14 +307,14 @@
         
         if (shouldShowInputComponent)
         {
-            if (_pairType == WOAPairDataType_AttachFile)
+            if (pairDataType == WOAPairDataType_AttachFile)
             {
                 self.fileSelectorView = [[WOAFileSelectorView alloc] initWithFrame: initiateFrame
                                                                           delegate: self];
                 
                 [self addSubview: _fileSelectorView];
             }
-            else if (_pairType == WOAPairDataType_MultiPicker)
+            else if (pairDataType == WOAPairDataType_MultiPicker)
             {
                 self.multiSelectorView = [[WOAMultiItemSelectorView alloc] initWithFrame: initiateFrame
                                                                                 delegate: self
@@ -373,7 +322,7 @@
                                                                             defaultArray: arrayValue];
                 [self addSubview: _multiSelectorView];
             }
-            else if (_pairType == WOAPairDataType_TextArea)
+            else if (pairDataType == WOAPairDataType_TextArea)
             {
                 NSString *testString = @"test1\r\n\test2";
                 CGSize testSize = [WOALayout sizeForText: testString
@@ -394,11 +343,11 @@
                 
                 [self addSubview: _lineTextView];
             }
-            else if (!_isWritable &&
-                     (_pairType == WOAPairDataType_Normal ||
-                      _pairType == WOAPairDataType_IntString ||
-                      _pairType == WOAPairDataType_FixedText ||
-                      _pairType == WOAPairDataType_FlowText))
+            else if (isWritable &&
+                     (pairDataType == WOAPairDataType_Normal ||
+                      pairDataType == WOAPairDataType_IntString ||
+                      pairDataType == WOAPairDataType_FixedText ||
+                      pairDataType == WOAPairDataType_FlowText))
             {
                 CGSize onelineSize = [WOALayout sizeForText: textValue
                                                       width: textWidth
@@ -421,11 +370,11 @@
                 _lineTextField.delegate = self;
                 _lineTextField.text = textValue;
                 _lineTextField.textAlignment = NSTextAlignmentLeft;
-                _lineTextField.borderStyle = (isEditable && _isWritable) ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
-                _lineTextField.userInteractionEnabled = _isWritable || [self couldUserInteractEvenUnWritable: _pairType];
-                _lineTextField.keyboardType = (_pairType == WOAPairDataType_IntString) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
+                _lineTextField.borderStyle = isWritable ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+                _lineTextField.userInteractionEnabled = _isWritable || [self couldUserInteractEvenUnWritable: pairDataType];
+                _lineTextField.keyboardType = (pairDataType == WOAPairDataType_IntString) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
                 
-                [self addRightViewForTextField: _lineTextField pairType:_pairType isWritable: _isWritable];
+                [self addRightViewForTextField: _lineTextField pairType:pairDataType isWritable: _isWritable];
                 
                 [self addSubview: _lineTextField];
             }
@@ -474,6 +423,11 @@
     return self;
 }
 
+- (WOANameValuePair*) saveBackToItemModel
+{
+    return self.itemModel;
+}
+
 - (void) layoutSubviews
 {
     [super layoutSubviews];
@@ -502,7 +456,7 @@
 - (void) showDatePickerView: (id)sender
 {
     NSString *dateFormatString;
-    switch (_pairType)
+    switch (self.itemModel.dataType)
     {
         case WOAPairDataType_DatePicker:
             dateFormatString = kWOADefaultDateFormat;
@@ -557,149 +511,6 @@
     }
     
     return retString;
-}
-
-- (NSDictionary*) toDataModelWithIndexPath
-{
-//    NSNumber *sectionNum = [NSNumber numberWithInteger: self.section];
-//    NSNumber *rowNum = [NSNumber numberWithInteger: self.row];
-//    
-//    id value;
-//    
-//    if (_isWritable && (_pairType == WOAPairDataType_SinglePicker))
-//    {
-//        value = [self removeNumberOrderPrefix: self.lineTextField.text];
-//    }
-//    else if (!_isWritable && (_pairType == WOAPairDataType_Normal))
-//    {
-//        value = self.lineLabel.text;
-//    }
-//    else if (!_isWritable && (_pairType == WOAPairDataType_TitleKey))
-//    {
-//        value = nil;
-//    }
-//    else if (_pairType == WOAPairDataType_AttachFile)
-//    {
-//        if (_isWritable)
-//        {
-//            NSMutableArray *attachmentArray = [[NSMutableArray alloc] initWithCapacity: _imageURLArray.count];
-//            
-//            for (NSInteger index = 0; index < _imageURLArray.count; index++)
-//            {
-//                NSDictionary *attachmentInfo = @{@"title": self.imageTitleArray[index],
-//                                                 @"url": self.imageURLArray[index]};
-//                
-//                [attachmentArray addObject: attachmentInfo];
-//            }
-//            
-//            value = attachmentArray;
-//        }
-//        else
-//        {
-//            value = nil;
-//            //TO-DO:
-//            //value = self.multiLabel.textsArray;
-//        }
-//    }
-//    else if (0 && _isWritable && (_pairType == WOAPairDataType_Normal ||
-//                             _pairType == WOAPairDataType_TextList ||
-//                             _pairType == WOAPairDataType_CheckUserList))
-//    {
-//        value = self.lineTextView.text;
-//    }
-////TO-DO:
-////    else if (_pairType == WOAPairDataType_TextList)
-////    {
-////        NSString *userInputValue = self.lineTextField.text;
-////        NSMutableArray *arrayValue = [[NSMutableArray alloc] initWithArray: self.multiLabel.textsArray];
-////        if (userInputValue && [userInputValue length] > 0)
-////        {
-////            [arrayValue addObject: userInputValue];
-////        }
-////
-////        value = arrayValue;
-////    }
-////    else if (_pairType == WOAPairDataType_CheckUserList)
-////    {
-////        value = self.multiLabel.textsArray;
-////    }
-//    else
-//    {
-//        value = self.lineTextField.text;
-//    }
-//    
-////    return [WOAPacketHelper packetForItemWithKey: self.titleLabel.text
-////                                           value: value
-////                                      typeString: self.pairTypeString
-////                                         section: sectionNum
-////                                             row: rowNum];
-    
-    return nil;
-}
-
-- (NSString*) toSimpleDataModelValue
-{
-    NSString *textValue;
-    
-    if (_lineLabel)
-    {
-        textValue = _lineLabel.text;
-    }
-    else if (_lineTextField)
-    {
-        textValue = _lineTextField.text;
-    }
-    else if (_lineTextView)
-    {
-        textValue = _lineTextView.text;
-    }
-    else if (_fileSelectorView)
-    {
-        //TODO
-        textValue = nil;
-    }
-    else if (_multiSelectorView)
-    {
-        NSArray *valueArray = [_multiSelectorView selectedValueArray];
-       
-        textValue = [valueArray componentsJoinedByString: kWOA_Level_2_Seperator];
-    }
-    else
-    {
-        textValue = nil;
-    }
-    
-    if (_pairType == WOAPairDataType_TextList ||
-        _pairType == WOAPairDataType_CheckUserList ||
-        _pairType == WOAPairDataType_AttachFile ||
-        _pairType == WOAPairDataType_MultiPicker)
-    {
-        if (_multiLabel)
-        {
-            //NSArray *valueArray = [_multiLabel textsArray];
-            NSMutableArray *valueArray = [NSMutableArray array];
-            for (WOANameValuePair *pair in _multiLabel.contentModel.pairArray)
-            {
-                [valueArray addObject: [pair stringValue]];
-            }
-            
-            NSString *fixedValue = [valueArray componentsJoinedByString: kWOA_Level_2_Seperator];
-            
-            NSMutableArray *combinedArray = [NSMutableArray array];
-            if (fixedValue && [fixedValue length] > 0)
-            {
-                [combinedArray addObject: fixedValue];
-            }
-            if (textValue && [textValue length] > 0)
-            {
-                [combinedArray addObject: textValue];
-            }
-            
-            textValue = [combinedArray componentsJoinedByString: kWOA_Level_2_Seperator];
-        }
-    }
-    
-    return textValue;
 }
 
 #pragma mark - UITextFieldDelegate
