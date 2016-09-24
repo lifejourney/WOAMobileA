@@ -41,6 +41,7 @@
 
 //Data model
 @property (nonatomic, strong) WOANameValuePair *itemModel;
+@property (nonatomic, assign) BOOL isHostReadonly;
 
 //Owner info
 //TO-DO: weak? strong?
@@ -110,7 +111,8 @@
             break;
     }
     
-    BOOL couldShouldRightView = (isWritable || [self couldUserInteractEvenUnWritable: pairDataType]);
+    BOOL couldShouldRightView = ((!_isHostReadonly && isWritable) ||
+                                 [self couldUserInteractEvenUnWritable: pairDataType]);
     
     if (!couldShouldRightView)
     {
@@ -161,7 +163,8 @@
             break;
     }
     
-    BOOL couldShouldRightView = (isWritable || [self couldUserInteractEvenUnWritable: pairDataType]);
+    BOOL couldShouldRightView = ((!_isHostReadonly && isWritable) ||
+                                 [self couldUserInteractEvenUnWritable: pairDataType]);
     
     if (!couldShouldRightView)
     {
@@ -196,12 +199,14 @@
              popoverShowInView: (UIView*)popoverShowInView
                      indexPath: (NSIndexPath*)indexPath
                      itemModel: (WOANameValuePair*)itemModel
+                isHostReadonly: (BOOL)isHostReadonly
 {
     if (self = [self initWithFrame: frame])
     {
         self.popoverShowInView = popoverShowInView;
         self.indexPath = indexPath;
         self.itemModel = itemModel;
+        self.isHostReadonly = isHostReadonly;
         
         WOAPairDataType pairDataType = itemModel.dataType;
         NSString *itemTitle = itemModel.name;
@@ -210,20 +215,6 @@
         
         self.tag = [UIView tagByIndexPathE: [NSIndexPath indexPathForRow: indexPath.row
                                                                inSection: indexPath.section]];
-        
-        NSString *textValue;
-        NSArray *arrayValue;
-        //TO-DO,
-        if ([itemValue isKindOfClass: [NSArray class]])
-        {
-            textValue = nil;
-            arrayValue = itemValue;
-        }
-        else
-        {
-            textValue = itemValue;
-            arrayValue = nil;
-        }
         
         UILabel *testLabel = [[UILabel alloc] initWithFrame: CGRectZero];
         UIFont *labelFont = [testLabel.font fontWithSize: kWOALayout_DetailItemFontSize];
@@ -286,13 +277,6 @@
         //Create right column: read only line list
         if (shouldShowReadonlyLineList)
         {
-            //TO-DO, temporarily
-            if (pairDataType == WOAPairDataType_CheckUserList)
-            {
-                if (!arrayValue && textValue)
-                    arrayValue = @[textValue];
-            }
-            
             WOAContentModel *modelValue = (WOAContentModel*)itemModel.value;
             
             self.multiLabel = [[WOAMultiLineLabel alloc] initWithFrame: initiateFrame
@@ -316,19 +300,24 @@
             }
             else if (pairDataType == WOAPairDataType_MultiPicker)
             {
+                NSArray *defaultValue = (NSArray*)itemModel.value;
+                NSArray *itemList = itemModel.subArray;
+                
                 self.multiSelectorView = [[WOAMultiItemSelectorView alloc] initWithFrame: initiateFrame
                                                                                 delegate: self
-                                                                               itemArray: self.optionArray
-                                                                            defaultArray: arrayValue];
+                                                                               itemArray: itemList
+                                                                            defaultArray: defaultValue];
                 [self addSubview: _multiSelectorView];
             }
             else if (pairDataType == WOAPairDataType_TextArea)
             {
+                NSString *defaultValue = [itemModel stringValue];
+                
                 NSString *testString = @"test1\r\n\test2";
                 CGSize testSize = [WOALayout sizeForText: testString
                                                    width: textWidth
                                                     font: labelFont];
-                CGSize textViewSize = [WOALayout sizeForText: textValue
+                CGSize textViewSize = [WOALayout sizeForText: defaultValue
                                                        width: textWidth
                                                         font: labelFont];
                 textViewSize.height = MAX(testSize.height, textViewSize.height);
@@ -336,20 +325,22 @@
                 self.lineTextView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, textViewSize.width, textViewSize.height)];
                 _lineTextView.font = [_lineTextView.font fontWithSize: kWOALayout_DetailItemFontSize];
                 _lineTextView.delegate = self;
-                _lineTextView.text = textValue;
+                _lineTextView.text = defaultValue;
                 _lineTextView.textAlignment = NSTextAlignmentLeft;
                 _lineTextView.userInteractionEnabled = YES;
                 _lineTextView.keyboardType = UIKeyboardTypeDefault;
                 
                 [self addSubview: _lineTextView];
             }
-            else if (isWritable &&
+            else if (!isWritable &&
                      (pairDataType == WOAPairDataType_Normal ||
                       pairDataType == WOAPairDataType_IntString ||
                       pairDataType == WOAPairDataType_FixedText ||
                       pairDataType == WOAPairDataType_FlowText))
             {
-                CGSize onelineSize = [WOALayout sizeForText: textValue
+                NSString *defaultValue = [itemModel stringValue];
+                
+                CGSize onelineSize = [WOALayout sizeForText: defaultValue
                                                       width: textWidth
                                                        font: labelFont];
                 
@@ -357,7 +348,7 @@
                 _lineLabel.font = labelFont;
                 _lineLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 _lineLabel.numberOfLines = 0;
-                _lineLabel.text = textValue;
+                _lineLabel.text = defaultValue;
                 _lineLabel.textAlignment = NSTextAlignmentLeft;
                 _lineLabel.userInteractionEnabled = NO;
                 
@@ -365,16 +356,20 @@
             }
             else
             {
+                NSString *defaultValue = [itemModel stringValue];
+                
                 self.lineTextField = [[UITextField alloc] initWithFrame: CGRectZero];
                 _lineTextField.font = [_lineTextField.font fontWithSize: kWOALayout_DetailItemFontSize];
                 _lineTextField.delegate = self;
-                _lineTextField.text = textValue;
+                _lineTextField.text = defaultValue;
                 _lineTextField.textAlignment = NSTextAlignmentLeft;
-                _lineTextField.borderStyle = isWritable ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
-                _lineTextField.userInteractionEnabled = _isWritable || [self couldUserInteractEvenUnWritable: pairDataType];
+                _lineTextField.borderStyle = (!_isHostReadonly && isWritable) ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+                _lineTextField.userInteractionEnabled = isWritable || [self couldUserInteractEvenUnWritable: pairDataType];
                 _lineTextField.keyboardType = (pairDataType == WOAPairDataType_IntString) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
                 
-                [self addRightViewForTextField: _lineTextField pairType:pairDataType isWritable: _isWritable];
+                [self addRightViewForTextField: _lineTextField
+                                  pairDataType: pairDataType
+                                    isWritable: isWritable];
                 
                 [self addSubview: _lineTextField];
             }
@@ -436,9 +431,11 @@
 - (void) showSinglePickerView: (id)sender
 {
     NSInteger selectedRow;
-    if (self.optionArray)
+    NSArray *itemList = self.itemModel.subArray;
+    
+    if (itemList)
     {
-        selectedRow = [self.optionArray indexOfObject: self.lineTextField.text];
+        selectedRow = [itemList indexOfObject: self.lineTextField.text];
     }
     else
     {
@@ -447,7 +444,7 @@
     
     _singlePickerVC = [[WOAPickerViewController alloc] initWithDelgate: self
                                                                  title: _titleLabel.text
-                                                             dataModel: _optionArray
+                                                             dataModel: itemList
                                                            selectedRow: selectedRow];
     
     [[self hostNavigation] pushViewController: _singlePickerVC animated: NO];
@@ -516,12 +513,13 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    //TO-DO
-    BOOL allowEditing = (_pairType == WOAPairDataType_Normal ||
-                         _pairType == WOAPairDataType_IntString ||
-                         _pairType == WOAPairDataType_TextList ||
-                         _pairType == WOAPairDataType_CheckUserList ||
-                         _pairType == WOAPairDataType_TextArea);
+    WOAPairDataType pairDataType = self.itemModel.dataType;
+    
+    BOOL allowEditing = (pairDataType == WOAPairDataType_Normal ||
+                         pairDataType == WOAPairDataType_IntString ||
+                         pairDataType == WOAPairDataType_TextList ||
+                         pairDataType == WOAPairDataType_CheckUserList ||
+                         pairDataType == WOAPairDataType_TextArea);
     
     if (self.delegate && [self.delegate respondsToSelector: @selector(textFieldTryBeginEditing:allowEditing:)])
     {
@@ -541,11 +539,14 @@
 
 - (void) selectDefaultValueFromPickerView
 {
-    if (_pairType == WOAPairDataType_SinglePicker)
+    WOAPairDataType pairDataType = self.itemModel.dataType;
+    NSArray *itemList = self.itemModel.subArray;
+    
+    if (pairDataType == WOAPairDataType_SinglePicker)
     {
         if ([_lineTextField.text length] <= 0)
         {
-            _lineTextField.text = [self.optionArray firstObject];
+            _lineTextField.text = [itemList firstObject];
         }
     }
 }

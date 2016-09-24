@@ -11,17 +11,52 @@
 
 @implementation WOAContentModel
 
-
 + (instancetype) contentModel: (NSString*)groupTitle
                     pairArray: (NSArray*)pairArray
+                 contentArray: (NSArray*)contentArray
                    actionType: (WOAModelActionType)actionType
+                   actionName: (NSString*)actionName
+                   isReadonly: (BOOL)isReadonly
+                      subDict: (NSDictionary*)subDict
 {
     WOAContentModel *model = [[WOAContentModel alloc] init];
     model.groupTitle = groupTitle;
     model.pairArray = pairArray;
+    model.contentArray = contentArray;
     model.actionType = actionType;
+    model.actionName = actionName;
+    model.isReadonly = isReadonly;
+    model.subDict = subDict;
     
     return model;
+}
+
++ (instancetype) contentModel: (NSString*)groupTitle
+                    pairArray: (NSArray*)pairArray
+                   actionType: (WOAModelActionType)actionType
+                   isReadonly: (BOOL)isReadonly
+{
+    return [self contentModel: groupTitle
+                    pairArray: pairArray
+                 contentArray: nil
+                   actionType: actionType
+                   actionName: @""
+                   isReadonly: isReadonly
+                      subDict: nil];
+}
+
++ (instancetype) contentModel: (NSString*)groupTitle
+                 contentArray: (NSArray*)contentArray
+                   actionType: (WOAModelActionType)actionType
+                   isReadonly: (BOOL)isReadonly
+{
+    return [self contentModel: groupTitle
+                    pairArray: nil
+                 contentArray: contentArray
+                   actionType: actionType
+                   actionName: @""
+                   isReadonly: isReadonly
+                      subDict: nil];
 }
 
 + (instancetype) contentModel: (NSString *)groupTitle
@@ -29,7 +64,11 @@
 {
     return [self contentModel: groupTitle
                     pairArray: pairArray
-                   actionType: WOAModelActionType_None];
+                 contentArray: nil
+                   actionType: WOAModelActionType_None
+                   actionName: @""
+                   isReadonly: YES
+                      subDict: nil];
 }
 
 - (void) addPair: (WOANameValuePair*)pair
@@ -102,6 +141,10 @@
     
     [descDict setValue: [NSNumber numberWithInteger: self.actionType]
                 forKey: @"actionType"];
+    [descDict setValue: self.actionName
+                forKey: @"actionName"];
+    [descDict setValue: [NSNumber numberWithInteger: self.isReadonly]
+                forKey: @"isReadonly"];
     
     return [NSString stringWithFormat:@"%@: %@", [super description], descDict];
 }

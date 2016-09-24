@@ -1,5 +1,5 @@
 //
-//  WOAPacketHelper+Student.h
+//  WOAStudentPacketHelper.h
 //  WOAMobile
 //
 //  Created by steven.zhuang on 6/6/14.
@@ -11,7 +11,7 @@
 
 #define kWOAValue_OATableID_JoinSociety @"23"
 
-@interface WOAPacketHelper (Student)
+@interface WOAStudentPacketHelper: WOAPacketHelper
 
 #pragma mark - Packet to model
 

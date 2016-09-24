@@ -9,21 +9,18 @@
 
 #import "WOAContentViewController.h"
 #import "WOARequestManager.h"
-#import "WOAPacketHelper.h"
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
-#import "WOADynamicLabelTextField.h"
+#import "WOAMultiStyleItemField.h"
 #import "WOALayout.h"
 #import "UIColor+AppTheme.h"
 #import "UIView+IndexPathTag.h"
-#import "WOAMultiPickerViewController.h"
 
 
-@interface WOAContentViewController () <WOADynamicLabelTextFieldDelegate,
-                                        WOAMultiPickerViewControllerDelegate>
+@interface WOAContentViewController () <WOAMultiStyleItemFieldDelegate>
 
-@property (nonatomic, assign) BOOL isEditable;
-@property (nonatomic, strong) NSArray *modelArray;
+@property (nonatomic, weak) NSObject<WOAContentViewControllerDelegate> *delegate;
+@property (nonatomic, strong) WOAContentModel *contentModel;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UITextField *latestFirstResponderTextField;
@@ -33,18 +30,12 @@
 
 @implementation WOAContentViewController
 
-+ (instancetype) contentViewController: (NSString *)title
-                            isEditable: (BOOL)isEditable
-                            modelArray: (NSArray *)modelArray
++ (instancetype) contentViewController: (WOAContentModel*)contentModel
+                              delegate: (NSObject<WOAContentViewControllerDelegate>*)delegate
 {
     WOAContentViewController *vc = [[WOAContentViewController alloc] init];
-    vc.title = title;
-    vc.isEditable = isEditable;
-    vc.modelArray = modelArray;
-    
-    vc.baseRequestDict = nil;
-    vc.rightButtonAction = WOAModelActionType_None;
-    vc.rightButtonTitle = nil;
+    vc.delegate = delegate;
+    vc.contentModel = contentModel;
     
     return vc;
 }
@@ -61,12 +52,13 @@
     [super viewDidLoad];
     
     self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: self.title];
-    if (self.rightButtonTitle)
+    if (self.contentModel.actionName)
     {
-        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: self.rightButtonTitle
-                                                                               style: UIBarButtonItemStylePlain
-                                                                              target: self
-                                                                              action: @selector(onRightButtonAction:)];
+        UIBarButtonItem *rightBarButtonItem;
+        rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: self.contentModel.actionName
+                                                              style: UIBarButtonItemStylePlain
+                                                             target: self
+                                                             action: @selector(onRightButtonAction:)];
         self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     }
     
@@ -86,93 +78,24 @@
     [_scrollView addGestureRecognizer: tapGesture];
 }
 
+- (void) updateToContentModel
+{
+    
+}
+
 - (void) onRightButtonAction: (id)sender
 {
-    switch (self.rightButtonAction) {
-        case WOAModelActionType_SubmitTransTable:
-            [self onSubmitTransTable];
-            break;
-            
-        case WOAModelActionType_AddAssoc:
-            [self onAddAssoc];
-            break;
-            
-        default:
-            break;
+    [self updateToContentModel];
+    
+    if (self.delegate &&
+        [self.delegate respondsToSelector: @selector(contentViewController:rightButtonClick:)])
+    {
+        [self.delegate contentViewController: self
+                            rightButtonClick: self.contentModel];
     }
 }
 
-- (void) onSubmitTransTable
-{
-    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
-    [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: @"AddMissionTable"
-                                         optionDict: optionDict
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         [self.navigationController popToRootViewControllerAnimated: YES];
-     }];
-}
-
-- (void) onAddAssoc
-{
-    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
-    [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: @"addAssoc"
-                                         optionDict: optionDict
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-         [baseDict removeObjectForKey: @"para_value"];
-         
-         [self onGetOAPerson: baseDict];
-     }];
-}
-
-- (void) onGetOAPerson: (NSDictionary*)optionDict
-{
-    [[WOARequestManager sharedInstance] simpleQuery: @"getOAPerson"
-                                         optionDict: optionDict
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-         
-         NSDictionary *personList = [WOAPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-         NSDictionary *departmentList = [WOAPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAPacketHelper modelForAddAssoc: personList
-                                                  departmentDict: departmentList
-                                                      actionType: WOAModelActionType_None];
-         
-         NSMutableArray *pairArray = [NSMutableArray array];
-         for (NSInteger index = 0; index < modelArray.count; index++)
-         {
-             WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
-             
-             [pairArray addObject: [contentModel toNameValuePair]];
-         }
-         
-         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
-                                                                 pairArray: pairArray
-                                                                actionType: WOAModelActionType_AddOAPerson];
-         
-         WOAMultiPickerViewController *subVC;
-         subVC = [WOAMultiPickerViewController multiPickerViewController: flowContentModel
-                                                  selectedIndexPathArray: nil
-                                                                delegate: self
-                                                             relatedDict: baseDict];
-         
-         [self.navigationController pushViewController: subVC animated: YES];
-     }];
-}
-
-#pragma mark - WOADynamicLabelTextFieldDelegate
+#pragma mark - WOAMultiStyleItemFieldDelegate
 
 - (void) textFieldDidBecameFirstResponder: (UITextField *)textField
 {
@@ -185,50 +108,6 @@
     {
         [self.latestFirstResponderTextField resignFirstResponder];
     }
-}
-
-#pragma mark - WOAMultiPickerViewControllerDelegate
-
-- (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
-                        actionType: (WOAModelActionType)actionType
-                 selectedPairArray: (NSArray *)selectedPairArray
-                       relatedDict: (NSDictionary *)relatedDict
-                             navVC: (UINavigationController *)navVC
-{
-    switch (actionType)
-    {
-        case WOAModelActionType_AddOAPerson:
-        {
-            NSMutableArray *idArray = [NSMutableArray array];
-            for (NSInteger index = 0; index < selectedPairArray.count; index++)
-            {
-                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
-                [idArray addObject: [pair stringValue]];
-            }
-            
-            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
-            
-            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-            [optionDict setValue: paraValue forKey: @"para_value"];
-            
-            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
-                                                 optionDict: optionDict
-                                                 onSuccuess: ^(WOAResponeContent *responseContent)
-             {
-                 [navVC popToRootViewControllerAnimated: YES];
-             }];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController *)pickerViewController
-                                      navVC: (UINavigationController *)navVC
-{
-    [navVC popViewControllerAnimated: YES];
 }
 
 #pragma mark -
@@ -290,6 +169,7 @@
                       fromOrigin: (CGPoint)fromOrigin
                        sizeWidth: (CGFloat)sizeWidth
                       groupIndex: (NSUInteger)groupIndex
+               groupContentModel: (WOAContentModel*)groupContentModel
 {
     CGFloat itemOriginX = fromOrigin.x;
     CGFloat itemOriginY = fromOrigin.y;
@@ -298,9 +178,9 @@
     CGFloat totalHeight = 0;
     UINavigationController *hostNavigationController = self.navigationController;
     
-    WOAContentModel *groupContent = self.modelArray[groupIndex];
-    NSString *groupTitle = groupContent.groupTitle;
-    NSArray *pairArray = groupContent.pairArray;
+    NSString *groupTitle = groupContentModel.groupTitle;
+    NSArray *itemPairArray = groupContentModel.pairArray;
+    BOOL isGroupReadonly = (groupContentModel.isReadonly || self.contentModel.isReadonly);
     
     CGFloat itemHeight;
     
@@ -315,12 +195,12 @@
         itemOriginY += itemHeight;
     }
     
-    WOADynamicLabelTextField *itemTextField;
+    WOAMultiStyleItemField *itemTextField;
     CGRect rect;
     
-    for (NSInteger pairIndex = 0; pairIndex < [pairArray count]; pairIndex++)
+    for (NSInteger itemIndex = 0; itemIndex < [itemPairArray count]; itemIndex++)
     {
-        WOANameValuePair *pair = pairArray[pairIndex];
+        WOANameValuePair *pair = itemPairArray[itemIndex];
         
         if (pair.dataType == WOAPairDataType_Seperator)
         {
@@ -331,14 +211,15 @@
         else
         {
             rect = CGRectMake(itemOriginX, itemOriginY, itemSizeWidth, itemSizeHeight);
-            NSDictionary *modelDict = [pair toTextTypeModel];
             
-            itemTextField = [[WOADynamicLabelTextField alloc] initWithFrame: rect
-                                                          popoverShowInView: self.view
-                                                                    section: groupIndex
-                                                                        row: pairIndex
-                                                                 isEditable: _isEditable
-                                                                  itemModel: modelDict];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: itemIndex
+                                                        inSection: groupIndex];
+            
+            itemTextField = [[WOAMultiStyleItemField alloc] initWithFrame: rect
+                                                        popoverShowInView: self.view
+                                                                indexPath: indexPath
+                                                                itemModel: pair
+                                                           isHostReadonly: isGroupReadonly];
             itemTextField.delegate = self;
             itemTextField.hostNavigation = hostNavigationController;
             
@@ -361,12 +242,15 @@
     
     CGFloat contentWidth = _scrollView.frame.size.width - kWOALayout_DefaultLeftMargin - kWOALayout_DefaultRightMargin;
     
-    for (NSUInteger index = 0; index < [_modelArray count]; index++)
+    for (NSUInteger index = 0; index < [self.contentModel.contentArray count]; index++)
     {
+        WOAContentModel *groupContentModel = self.contentModel.contentArray[index];
+        
         totalHeight += [self createPairItemInView: _scrollView
                                        fromOrigin: CGPointMake(kWOALayout_DefaultLeftMargin, totalHeight)
                                         sizeWidth: contentWidth
-                                       groupIndex: index];
+                                       groupIndex: index
+                                groupContentModel: groupContentModel];
         
         totalHeight += kWOALayout_DefaultBottomMargin;
     }
@@ -374,73 +258,73 @@
     return totalHeight;
 }
 
-- (NSString*) valueForContentModelSection: (NSInteger)section
-                                seperator: (NSString*)seperator
-{
-    WOAContentModel *contentModel = [self.modelArray objectAtIndex: section];
-    NSInteger rowCount = contentModel.pairArray.count;
-    
-    NSMutableArray *rowArray = [[NSMutableArray alloc] init];
-    for (NSInteger row = 0; row < rowCount; row++)
-    {
-        WOANameValuePair *pair = [contentModel.pairArray objectAtIndex: row];
-        if ([pair isSeperatorPair])
-            continue;
-        
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: section];
-        NSInteger tag = [UIView tagByIndexPathE: indexPath];
-        UIView *subView = [self.view viewWithTag: tag];
-        
-        NSString *itemValue = nil;
-        if (subView && [subView isKindOfClass: [WOADynamicLabelTextField class]])
-        {
-            WOADynamicLabelTextField *subField = (WOADynamicLabelTextField*)subView;
-            itemValue = [subField toSimpleDataModelValue];
-        }
-        
-        if (!itemValue)
-        {
-            itemValue = @"";
-        }
-        
-        [rowArray addObject: itemValue];
-    }
-    
-    NSString *contentValue = [rowArray componentsJoinedByString: seperator];
-    
-    return contentValue;
-}
-
-- (NSString*) toSimpleDataModelValue
-{
-    NSString *contentValue;
-    NSInteger sectionCount = self.modelArray.count;
-    
-    if (sectionCount == 1)
-    {
-        contentValue = [self valueForContentModelSection: 0
-                                               seperator: kWOA_Level_1_Seperator];
-    }
-    else if (sectionCount > 1)
-    {
-        NSMutableArray *sectionArray = [[NSMutableArray alloc] init];
-        
-        for (NSInteger section = 0; section < sectionCount; section++)
-        {
-            NSString *sectionValue = [self valueForContentModelSection: section
-                                                             seperator: kWOA_Level_2_Seperator];
-            
-            [sectionArray addObject: sectionValue];
-        }
-        
-        contentValue = [sectionArray componentsJoinedByString: kWOA_Level_1_Seperator];
-    }
-    else
-    {
-        contentValue = @"";
-    }
-    
-    return contentValue;
-}
+//- (NSString*) valueForContentModelSection: (NSInteger)section
+//                                seperator: (NSString*)seperator
+//{
+//    WOAContentModel *contentModel = [self.modelArray objectAtIndex: section];
+//    NSInteger rowCount = contentModel.pairArray.count;
+//    
+//    NSMutableArray *rowArray = [[NSMutableArray alloc] init];
+//    for (NSInteger row = 0; row < rowCount; row++)
+//    {
+//        WOANameValuePair *pair = [contentModel.pairArray objectAtIndex: row];
+//        if ([pair isSeperatorPair])
+//            continue;
+//        
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: section];
+//        NSInteger tag = [UIView tagByIndexPathE: indexPath];
+//        UIView *subView = [self.view viewWithTag: tag];
+//        
+//        NSString *itemValue = nil;
+//        if (subView && [subView isKindOfClass: [WOAMultiStyleItemField class]])
+//        {
+//            WOAMultiStyleItemField *subField = (WOAMultiStyleItemField*)subView;
+//            itemValue = [subField toSimpleDataModelValue];
+//        }
+//        
+//        if (!itemValue)
+//        {
+//            itemValue = @"";
+//        }
+//        
+//        [rowArray addObject: itemValue];
+//    }
+//    
+//    NSString *contentValue = [rowArray componentsJoinedByString: seperator];
+//    
+//    return contentValue;
+//}
+//
+//- (NSString*) toSimpleDataModelValue
+//{
+//    NSString *contentValue;
+//    NSInteger sectionCount = self.modelArray.count;
+//    
+//    if (sectionCount == 1)
+//    {
+//        contentValue = [self valueForContentModelSection: 0
+//                                               seperator: kWOA_Level_1_Seperator];
+//    }
+//    else if (sectionCount > 1)
+//    {
+//        NSMutableArray *sectionArray = [[NSMutableArray alloc] init];
+//        
+//        for (NSInteger section = 0; section < sectionCount; section++)
+//        {
+//            NSString *sectionValue = [self valueForContentModelSection: section
+//                                                             seperator: kWOA_Level_2_Seperator];
+//            
+//            [sectionArray addObject: sectionValue];
+//        }
+//        
+//        contentValue = [sectionArray componentsJoinedByString: kWOA_Level_1_Seperator];
+//    }
+//    else
+//    {
+//        contentValue = @"";
+//    }
+//    
+//    return contentValue;
+//}
 
 @end

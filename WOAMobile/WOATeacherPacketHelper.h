@@ -1,13 +1,14 @@
 //
-//  WOAPacketHelper+Teacher.m
+//  WOATeacherPacketHelper.h
 //  WOAMobileA
 //
 //  Created by Steven (Shuliang) Zhuang on 9/16/16.
 //  Copyright © 2016 steven.zhuang. All rights reserved.
 //
 
-#import "WOAPacketHelper+Teacher.h"
+#import "WOAPacketHelper.h"
 
-@implementation WOAPacketHelper (Teacher)
+
+@interface WOATeacherPacketHelper: WOAPacketHelper
 
 @end

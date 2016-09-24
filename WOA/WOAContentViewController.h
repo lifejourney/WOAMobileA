@@ -10,15 +10,22 @@
 #import <UIKit/UIKit.h>
 #import "WOAContentModel.h"
 
+@class WOAContentViewController;
+
+@protocol WOAContentViewControllerDelegate <NSObject>
+
+@optional
+- (void) contentViewController: (WOAContentViewController*)vc
+              rightButtonClick: (WOAContentModel*)contentModel;
+- (void) textFieldTryBeginEditing: (UITextField *)textField allowEditing: (BOOL)allowEditing;
+- (void) textFieldDidBecameFirstResponder: (UITextField *)textField;
+
+@end
+
 @interface WOAContentViewController : UIViewController
 
-@property (nonatomic, strong) NSDictionary *baseRequestDict;
-@property (nonatomic, assign) WOAModelActionType rightButtonAction;
-@property (nonatomic, copy) NSString *rightButtonTitle;
-
-+ (instancetype) contentViewController: (NSString*)title
-                            isEditable: (BOOL)isEditable //Content view is in readonly model or not
-                            modelArray: (NSArray*)modelArray; //Array of WOAContentModel
++ (instancetype) contentViewController: (WOAContentModel*)contentModel //WOAContentModel values in contentArray
+                              delegate: (NSObject<WOAContentViewControllerDelegate>*)delegate;
 
 @end
 

@@ -30,7 +30,8 @@
 - (instancetype) initWithFrame: (CGRect)frame
              popoverShowInView: (UIView*)popoverShowInView
                      indexPath: (NSIndexPath*)indexPath
-                     itemModel: (WOANameValuePair*)itemModel;
+                     itemModel: (WOANameValuePair*)itemModel
+                isHostReadonly: (BOOL)isHostReadonly;
 
 - (WOANameValuePair*) saveBackToItemModel;
 

@@ -12,7 +12,6 @@
 #import "WOASplashViewController.h"
 #import "WOAStartSettingViewController.h"
 #import "WOALoginViewController.h"
-#import "WOAContentViewController.h"
 #import "NSData+HexadecimalRepresentation.h"
 #import "UIColor+AppTheme.h"
 #import "WOAPropertyInfo.h"

@@ -57,7 +57,8 @@
         }
         WOAContentModel *groupContent = [WOAContentModel contentModel: @""
                                                             pairArray: pairArray
-                                                           actionType: WOAModelActionType_None];
+                                                           actionType: WOAModelActionType_None
+                                                           isReadonly: YES];
         
         self.modelArray = @[groupContent];
         self.valueIndexPathDictionary = [self generateValueIndexPathDictionary];

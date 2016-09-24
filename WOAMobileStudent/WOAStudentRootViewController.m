@@ -9,7 +9,7 @@
 #import "WOAStudentRootViewController.h"
 #import "WOAAppDelegate.h"
 #import "WOARequestManager.h"
-#import "WOAPacketHelper+Teacher.h"
+#import "WOATeacherPacketHelper.h"
 #import "WOAMenuListViewController.h"
 #import "WOADateFromToPickerViewController.h"
 #import "WOAVersionInfoViewController.h"
@@ -908,6 +908,137 @@
      }];
 }
 
+//- (void) onRightButtonAction: (id)sender
+//{
+//    switch (self.rightButtonAction) {
+//        case WOAModelActionType_SubmitTransTable:
+//            [self onSubmitTransTable];
+//            break;
+//            
+//        case WOAModelActionType_AddAssoc:
+//            [self onAddAssoc];
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//}
+//
+//- (void) onSubmitTransTable
+//{
+//    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
+//    [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
+//    
+//    [[WOARequestManager sharedInstance] simpleQuery: @"AddMissionTable"
+//                                         optionDict: optionDict
+//                                         onSuccuess: ^(WOAResponeContent *responseContent)
+//     {
+//         [self.navigationController popToRootViewControllerAnimated: YES];
+//     }];
+//}
+//
+//- (void) onAddAssoc
+//{
+//    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
+//    [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
+//    
+//    [[WOARequestManager sharedInstance] simpleQuery: @"addAssoc"
+//                                         optionDict: optionDict
+//                                         onSuccuess: ^(WOAResponeContent *responseContent)
+//     {
+//         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+//         [baseDict removeObjectForKey: @"para_value"];
+//         
+//         [self onGetOAPerson: baseDict];
+//     }];
+//}
+//
+//- (void) onGetOAPerson: (NSDictionary*)optionDict
+//{
+//    [[WOARequestManager sharedInstance] simpleQuery: @"getOAPerson"
+//                                         optionDict: optionDict
+//                                         onSuccuess: ^(WOAResponeContent *responseContent)
+//     {
+//         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+//         
+//         NSDictionary *personList = [WOAPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
+//         NSDictionary *departmentList = [WOAPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
+//         
+//         NSArray *modelArray = [WOAPacketHelper modelForAddAssoc: personList
+//                                                  departmentDict: departmentList
+//                                                      actionType: WOAModelActionType_None];
+//         
+//         NSMutableArray *pairArray = [NSMutableArray array];
+//         for (NSInteger index = 0; index < modelArray.count; index++)
+//         {
+//             WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
+//             
+//             [pairArray addObject: [contentModel toNameValuePair]];
+//         }
+//         
+//         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
+//                                                                 pairArray: pairArray
+//                                                                actionType: WOAModelActionType_AddOAPerson];
+//         
+//         WOAMultiPickerViewController *subVC;
+//         subVC = [WOAMultiPickerViewController multiPickerViewController: flowContentModel
+//                                                  selectedIndexPathArray: nil
+//                                                                delegate: self
+//                                                             relatedDict: baseDict];
+//         
+//         [self.navigationController pushViewController: subVC animated: YES];
+//     }];
+//}
+
+
+
+//#pragma mark - WOAMultiPickerViewControllerDelegate
+//
+//- (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
+//                        actionType: (WOAModelActionType)actionType
+//                 selectedPairArray: (NSArray *)selectedPairArray
+//                       relatedDict: (NSDictionary *)relatedDict
+//                             navVC: (UINavigationController *)navVC
+//{
+//    switch (actionType)
+//    {
+//        case WOAModelActionType_AddOAPerson:
+//        {
+//            NSMutableArray *idArray = [NSMutableArray array];
+//            for (NSInteger index = 0; index < selectedPairArray.count; index++)
+//            {
+//                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
+//                [idArray addObject: [pair stringValue]];
+//            }
+//            
+//            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
+//            
+//            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+//            [optionDict setValue: paraValue forKey: @"para_value"];
+//            
+//            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
+//                                                 optionDict: optionDict
+//                                                 onSuccuess: ^(WOAResponeContent *responseContent)
+//             {
+//                 [navVC popToRootViewControllerAnimated: YES];
+//             }];
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//}
+//
+//- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController *)pickerViewController
+//                                      navVC: (UINavigationController *)navVC
+//{
+//    [navVC popViewControllerAnimated: YES];
+//}
 
 @end
 

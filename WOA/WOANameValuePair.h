@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     
     WOAPairDataType_TextArea,
     WOAPairDataType_Radio,
-    WOAPairDataType_MultiPicker,
+    WOAPairDataType_MultiPicker,  //Array value
     WOAPairDataType_FixedText,
     WOAPairDataType_FlowText,
 };
@@ -58,7 +58,7 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
 @property (nonatomic, copy) NSString *name;  //Generally take it as title.
 @property (nonatomic, strong) NSObject *value;
 @property (nonatomic, assign) BOOL isWritable;
-@property (nonatomic, strong) NSArray *subArray; //For selective list
+@property (nonatomic, strong) NSArray *subArray; //For selective list, array of string
 @property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
 @property (nonatomic, assign) WOAPairDataType dataType;
 @property (nonatomic, assign) WOAModelActionType actionType;

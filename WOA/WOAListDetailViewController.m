@@ -183,9 +183,9 @@
         }
         else if (_detailStyle == WOAListDetailStyleContent)
         {
-            detailVC = [WOAContentViewController contentViewController: rowTitle
-                                                            isEditable: NO
-                                                            modelArray: modelArray];
+//            detailVC = [WOAContentViewController contentViewController: rowTitle
+//                                                            isEditable: NO
+//                                                            modelArray: modelArray];
         }
         
         if (detailVC)
