@@ -150,7 +150,7 @@
     if (itemModel.delegate && itemModel.selector)
     {
         #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [itemModel.delegate performSelector: itemModel.selector];
+        [itemModel.delegate performSelector: itemModel.selector withObject: itemModel.itemID];
     }
 }
 

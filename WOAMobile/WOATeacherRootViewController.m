@@ -7,6 +7,7 @@
 //
 
 #import "WOATeacherRootViewController.h"
+#import "WOAMenuListViewController.h"
 #import "WOARequestManager.h"
 
 /**before public
@@ -123,12 +124,58 @@
 
 @interface WOATeacherRootViewController()
 
+@property (nonatomic, strong) UINavigationController *myOANavC;
+@property (nonatomic, strong) UINavigationController *myBusinessNavC;
+@property (nonatomic, strong) UINavigationController *myStudyNavC;
+@property (nonatomic, strong) UINavigationController *moreFeatureNavC;
+
 @end
 
 
 @implementation WOATeacherRootViewController
 
+- (instancetype) init
+{
+    if (self = [super init])
+    {
+        self.funcDictionary = @{@"checkForUpdate":          @[@"版本",     @(3), @(NO), @(NO), @""]
+                                ,@"aboutManufactor":        @[@"关于我们",  @(3), @(NO), @(NO), @""]
+                                ,@"_31":                    @[@"-",        @(3), @(NO), @(NO), @""]
+                                ,@"logout":                 @[@"退出登录",  @(3), @(NO), @(NO), @""]
+                                };
+        
+        NSArray *rootLevelMenuArray = [self rootLevelMenuListArray: 4];
+        NSArray *myOAMenuList       = rootLevelMenuArray[0];
+        NSArray *myBusinessList     = rootLevelMenuArray[1];
+        NSArray *myStudentList      = rootLevelMenuArray[2];
+        NSArray *moreFeatureList    = rootLevelMenuArray[3];
+        
+        self.myOANavC           = [self navigationControllerWithTitle: @"办公管理"
+                                                             menuList: myOAMenuList
+                                                      normalImageName: @"TodoWorkFlowIcon"
+                                                    selectedImageName: @"TodoWorkFlowSelectedIcon"];
+        self.myBusinessNavC     = [self navigationControllerWithTitle: @"业务管理"
+                                                             menuList: myBusinessList
+                                                      normalImageName: @"NewWorkFlowIcon"
+                                                    selectedImageName: @"NewWorkFlowSelectedIcon"];
+        self.myStudyNavC        = [self navigationControllerWithTitle: @"学生管理"
+                                                             menuList: myStudentList
+                                                      normalImageName: @"SearchWorkFlowIcon"
+                                                    selectedImageName: @"SearchWorkFlowSelectedIcon"];
+        self.moreFeatureNavC    = [self navigationControllerWithTitle: @"更多"
+                                                             menuList: moreFeatureList
+                                                      normalImageName: @"MoreFeatureIcon"
+                                                    selectedImageName: @"MoreFeatureSelectedIcon"];
+        
+        self.vcArray = @[self.myOANavC, self.myBusinessNavC, self.myStudyNavC, self.moreFeatureNavC];
+        self.viewControllers = self.vcArray;
+    }
+    
+    return self;
+}
 
+
+#pragma mark - action for myOA
 
 @end
 

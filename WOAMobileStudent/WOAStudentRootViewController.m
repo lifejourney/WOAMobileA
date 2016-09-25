@@ -7,13 +7,10 @@
 //
 
 #import "WOAStudentRootViewController.h"
-#import "WOAAppDelegate.h"
 #import "WOARequestManager.h"
 #import "WOATeacherPacketHelper.h"
 #import "WOAMenuListViewController.h"
 #import "WOADateFromToPickerViewController.h"
-#import "WOAVersionInfoViewController.h"
-#import "WOAAboutViewController.h"
 #import "WOADetailViewController.h"
 #import "WOAListDetailViewController.h"
 #import "WOAContentViewController.h"
@@ -729,38 +726,6 @@
      }];
 }
 
-#pragma mark - action for moreFeature
-
-- (void) checkForUpdate
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    WOAVersionInfoViewController *versionVC = [[WOAVersionInfoViewController alloc] init];
-    
-    [ownerNav pushViewController: versionVC animated: YES];
-}
-
-- (void) aboutManufactor
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    WOAAboutViewController *aboutVC = [[WOAAboutViewController alloc] init];
-    
-    [ownerNav pushViewController: aboutVC animated: YES];
-}
-
-- (void) logout
-{
-    [WOAPropertyInfo saveLatestSessionID: nil];
-    
-    [WOAPropertyInfo saveLatestLoginAccountID: nil
-                                     password: nil];
-    
-    WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate presentLoginViewController: NO animated: YES];
-}
 
 #pragma mark - WOAFlowListViewControllerDelegate
 
