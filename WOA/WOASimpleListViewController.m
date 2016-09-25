@@ -1,12 +1,12 @@
 //
-//  WOADetailViewController.m
+//  WOASimpleListViewController.m
 //  WOAMobileStudent
 //
 //  Created by Steven (Shuliang) Zhuang on 1/23/16.
 //  Copyright (c) 2016 steven.zhuang. All rights reserved.
 //
 
-#import "WOADetailViewController.h"
+#import "WOASimpleListViewController.h"
 #import "WOANameValuePair.h"
 #import "WOALayout.h"
 #import "UITableView+Utility.h"
@@ -14,7 +14,7 @@
 #import "UIColor+AppTheme.h"
 
 
-@interface WOADetailViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface WOASimpleListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) NSArray *modelArray;
 @property (nonatomic, assign) UITableViewCellStyle cellStyle;
@@ -23,15 +23,15 @@
 
 @end
 
-@implementation WOADetailViewController
+@implementation WOASimpleListViewController
 
 #pragma mark - lifecycle
 
-+ (instancetype) detailViewController: (NSString*)title
-                           modelArray: (NSArray*)modelArray
-                            cellStyle: (UITableViewCellStyle)cellStyle
++ (instancetype) listViewController: (NSString*)title
+                         modelArray: (NSArray*)modelArray
+                          cellStyle: (UITableViewCellStyle)cellStyle
 {
-    WOADetailViewController *vc = [[WOADetailViewController alloc] init];
+    WOASimpleListViewController *vc = [[WOASimpleListViewController alloc] init];
     vc.title = title;
     vc.modelArray = modelArray;
     vc.cellStyle = cellStyle;

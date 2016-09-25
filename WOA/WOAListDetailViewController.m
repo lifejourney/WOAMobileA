@@ -7,7 +7,7 @@
 //
 
 #import "WOAListDetailViewController.h"
-#import "WOADetailViewController.h"
+#import "WOASimpleListViewController.h"
 #import "WOAContentViewController.h"
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
@@ -150,21 +150,21 @@
         
         if (_detailStyle == WOAListDetailStyleSimple)
         {
-            detailVC = [WOADetailViewController detailViewController: rowTitle
-                                                          modelArray: modelArray
-                                                           cellStyle: UITableViewCellStyleDefault];
+            detailVC = [WOASimpleListViewController listViewController: rowTitle
+                                                            modelArray: modelArray
+                                                             cellStyle: UITableViewCellStyleDefault];
         }
         else if (_detailStyle == WOAListDetailStyleSettings)
         {
-            detailVC = [WOADetailViewController detailViewController: rowTitle
-                                                          modelArray: modelArray
-                                                           cellStyle: UITableViewCellStyleValue1];
+            detailVC = [WOASimpleListViewController listViewController: rowTitle
+                                                            modelArray: modelArray
+                                                             cellStyle: UITableViewCellStyleValue1];
         }
         else if (_detailStyle == WOAListDetailStyleSubtitle)
         {
-            detailVC = [WOADetailViewController detailViewController: rowTitle
-                                                          modelArray: modelArray
-                                                           cellStyle: UITableViewCellStyleSubtitle];
+            detailVC = [WOASimpleListViewController listViewController: rowTitle
+                                                            modelArray: modelArray
+                                                             cellStyle: UITableViewCellStyleSubtitle];
         }
         else if (_detailStyle == WOAListDetailStyleContent)
         {

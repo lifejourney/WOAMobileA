@@ -11,7 +11,7 @@
 #import "WOATeacherPacketHelper.h"
 #import "WOAMenuListViewController.h"
 #import "WOADateFromToPickerViewController.h"
-#import "WOADetailViewController.h"
+#import "WOASimpleListViewController.h"
 #import "WOAListDetailViewController.h"
 #import "WOAContentViewController.h"
 #import "WOAFlowListViewController.h"
@@ -225,9 +225,11 @@
                          NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
                          
                          WOAContentModel *contentModel = [WOAPacketHelper modelForConsumeInfo: retList];
-                         WOADetailViewController *subVC = [WOADetailViewController detailViewController: vcTitle
-                                                                                             modelArray: @[contentModel]
-                                                                                              cellStyle: UITableViewCellStyleValue1];
+                         
+                         WOASimpleListViewController *subVC;
+                         subVC = [WOASimpleListViewController listViewController: vcTitle
+                                                                      modelArray: @[contentModel]
+                                                                       cellStyle: UITableViewCellStyleValue1];
                          
                          [ownerNav pushViewController: subVC animated: YES];
                      }];
@@ -259,9 +261,11 @@
                          NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
                          
                          WOAContentModel *contentModel = [WOAPacketHelper modelForAttendanceInfo: retList];
-                         WOADetailViewController *subVC = [WOADetailViewController detailViewController: vcTitle
-                                                                                             modelArray: @[contentModel]
-                                                                                              cellStyle: UITableViewCellStyleDefault];
+                         
+                         WOASimpleListViewController *subVC
+                         subVC = [WOASimpleListViewController listViewController: vcTitle
+                                                                      modelArray: @[contentModel]
+                                                                       cellStyle: UITableViewCellStyleDefault];
                          
                          [ownerNav pushViewController: subVC animated: YES];
                      }];
