@@ -117,8 +117,6 @@
 		DC2257DE1D8CFF2A006A18E3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D241C4BA99800B66527 /* Foundation.framework */; };
 		DC2257DF1D8CFF40006A18E3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D201C4BA97A00B66527 /* QuartzCore.framework */; };
 		DC2257E01D8CFF4C006A18E3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC8E9D221C4BA98A00B66527 /* CoreGraphics.framework */; };
-		DC2258911D8D1D7F006A18E3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DCD5DC7F1D8823C800152071 /* Info.plist */; };
-		DC2258921D8D1D85006A18E3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DCF134391C4A8C45001EFBAC /* Info.plist */; };
 		DC2258951D8D56B1006A18E3 /* WOARequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258941D8D56B1006A18E3 /* WOARequestManager.m */; };
 		DC2258961D8D56B1006A18E3 /* WOARequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258941D8D56B1006A18E3 /* WOARequestManager.m */; };
 		DC2258991D8D7923006A18E3 /* WOATeacherRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258981D8D7923006A18E3 /* WOATeacherRootViewController.m */; };
@@ -711,7 +709,7 @@
 		DCF1342D1C4A8C45001EFBAC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = steven.zhuang;
 				TargetAttributes = {
 					DCD5DC681D8823C800152071 = {
@@ -781,7 +779,6 @@
 				DC22575E1D8CBBC3006A18E3 /* WOAStartSettingViewController.xib in Resources */,
 				DC2256F31D8A3CCF006A18E3 /* TabBarBg@2x.png in Resources */,
 				DC2256F51D8A3CCF006A18E3 /* TodoWorkFlowSelectedIcon@2x.png in Resources */,
-				DC2258911D8D1D7F006A18E3 /* Info.plist in Resources */,
 				DC2256FA1D8A3CCF006A18E3 /* MoreFeatureIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -813,7 +810,6 @@
 				DC2257681D8CBBE1006A18E3 /* WOAStartSettingViewController.xib in Resources */,
 				DC8E9C991C4B498B00B66527 /* WOALoadingViewController.xib in Resources */,
 				DCF134461C4A8C45001EFBAC /* Images.xcassets in Resources */,
-				DC2258921D8D1D85006A18E3 /* Info.plist in Resources */,
 				DC8E9CF61C4B4FE300B66527 /* WOAURLNavigationViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1029,6 +1025,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
