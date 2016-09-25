@@ -2,44 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>WOATargetInfo</key>
-	<dict>
-		<key>RootViewControllerClass</key>
-		<string>WOATeacherRootViewController</string>
-		<key>DefaultTabID</key>
-		<integer>0</integer>
-		<key>DefaultServerAddress</key>
-		<dict>
-			<key>Production</key>
-			<string>http://www.qz5z.com</string>
-			<key>Test</key>
-			<string>http://220.162.12.167:8080</string>
-		</dict>
-		<key>AppStoreID</key>
-		<string>908853362</string>
-	</dict>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>${ProductCNName}</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.03.02</string>
+	<string>2.01.01</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>2</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -63,5 +47,21 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>WOATargetInfo</key>
+	<dict>
+		<key>AppStoreID</key>
+		<string>908853362</string>
+		<key>DefaultServerAddress</key>
+		<dict>
+			<key>Production</key>
+			<string>http://www.qz5z.com</string>
+			<key>Test</key>
+			<string>http://220.162.12.167:8080</string>
+		</dict>
+		<key>DefaultTabID</key>
+		<integer>0</integer>
+		<key>RootViewControllerClass</key>
+		<string>WOATeacherRootViewController</string>
+	</dict>
 </dict>
 </plist>

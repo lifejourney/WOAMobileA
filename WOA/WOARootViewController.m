@@ -39,6 +39,36 @@
 
 #pragma mark -
 
+- (NSArray*) sortedFuncItemNameArray
+{
+    NSArray *allFuncItemName = [self.funcDictionary allKeys];
+    
+    return [allFuncItemName sortedArrayUsingComparator: ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+            {
+                NSArray *funcInfo1 = [self funcInfoWithFunc: obj1];
+                NSArray *funcInfo2 = [self funcInfoWithFunc: obj2];
+                
+                NSUInteger orderIndex1 = [self orderIndexInFuncInfo: funcInfo1];
+                NSUInteger orderIndex2 = [self orderIndexInFuncInfo: funcInfo2];
+                
+                NSComparisonResult comparisonResult;
+                if (orderIndex1 < orderIndex2)
+                {
+                    comparisonResult = NSOrderedAscending;
+                }
+                else if (orderIndex1 > orderIndex2)
+                {
+                    comparisonResult = NSOrderedDescending;
+                }
+                else
+                {
+                    comparisonResult = NSOrderedSame;
+                }
+                
+                return comparisonResult;
+            }];
+}
+
 - (NSArray*) funcInfoWithFunc: (NSString*)funcName
 {
     return [_funcDictionary valueForKey: funcName];
@@ -57,9 +87,14 @@
     return funcName;
 }
 
+- (NSUInteger) orderIndexInFuncInfo: (NSArray *)funcInfo
+{
+    return [funcInfo[0] unsignedIntegerValue];
+}
+
 - (NSString*) titleInFuncInfo: (NSArray*)funcInfo
 {
-    return funcInfo[0];
+    return funcInfo[1];
 }
 
 - (NSString*) titleForFuncName: (NSString*)funcName
@@ -71,7 +106,7 @@
 
 - (NSUInteger) tabIndexInFuncInfo: (NSArray *)funcInfo
 {
-    return [funcInfo[1] unsignedIntegerValue];
+    return [funcInfo[2] unsignedIntegerValue];
 }
 
 - (NSArray*) updatedFuncInfo: (NSArray*)funcInfo
@@ -79,7 +114,7 @@
 {
     NSMutableArray *newFuncInfo = [NSMutableArray arrayWithArray: funcInfo];
     
-    newFuncInfo[1] = [NSNumber numberWithUnsignedInteger: tabIndex];
+    newFuncInfo[2] = [NSNumber numberWithUnsignedInteger: tabIndex];
     
     return newFuncInfo;
 }
@@ -92,14 +127,24 @@
     return self.viewControllers[tabIndex];
 }
 
-- (BOOL) hasChildItems: (NSArray*)funcInfo
+- (BOOL) shouldShowAccessory: (NSArray *)funcInfo
 {
     return [funcInfo[3] boolValue];
 }
 
+- (BOOL) hasChildItems: (NSArray*)funcInfo
+{
+    return [funcInfo[4] boolValue];
+}
+
 - (NSString*) parentItemFuncName: (NSArray*)funcInfo
 {
-    return funcInfo[4];
+    return funcInfo[5];
+}
+
+- (NSString*) imageNameInFuncInfo: (NSArray *)funcInfo
+{
+    return funcInfo[6];
 }
 
 - (BOOL) isRootLevelItem: (NSArray*)funcInfo
@@ -154,11 +199,13 @@
             funcSel = NSSelectorFromString(funcName);
         }
         
-        NSString *title = funcInfo[0];
-        BOOL showAccessory = [funcInfo[2] boolValue];
+        NSString *title = [self titleInFuncInfo: funcInfo];
+        BOOL showAccessory = [self shouldShowAccessory: funcInfo];
+        NSString *imageName = [self imageNameInFuncInfo: funcInfo];
+        
         itemModel = [WOAMenuItemModel menuItemModel: title
                                              itemID: funcName
-                                          imageName: nil
+                                          imageName: imageName
                                       showAccessory: showAccessory
                                            delegate: self
                                            selector: funcSel];
@@ -191,7 +238,7 @@
         [listArray addObject: menuList];
     }
     
-    for (NSString *funcName in _funcDictionary.allKeys)
+    for (NSString *funcName in [self sortedFuncItemNameArray])
     {
         NSArray *funcInfo = [self funcInfoWithFunc: funcName];
         NSUInteger tabIndex = [self tabIndexInFuncInfo: funcInfo];
@@ -217,7 +264,7 @@
     NSArray *funcInfo = [self funcInfoWithFunc: funcName];
     NSUInteger tabIndex = [self tabIndexInFuncInfo: funcInfo];
     
-    for (NSString *childFuncName in _funcDictionary.allKeys)
+    for (NSString *childFuncName in [self sortedFuncItemNameArray])
     {
         NSArray *childFuncInfo = [self funcInfoWithFunc: childFuncName];
         NSString *parentItemName = [self parentItemFuncName: childFuncInfo];

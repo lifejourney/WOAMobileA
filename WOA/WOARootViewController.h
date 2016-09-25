@@ -19,14 +19,17 @@
 
 - (NSArray*) funcInfoWithFunc: (NSString*)funcName;
 - (NSString*) simpleFuncName: (const char*)cFuncName;
+- (NSUInteger) orderIndexInFuncInfo: (NSArray*)funcInfo;
 - (NSString*) titleInFuncInfo: (NSArray*)funcInfo;
 - (NSString*) titleForFuncName: (NSString*)funcName;
 - (NSUInteger) tabIndexInFuncInfo: (NSArray*)funcInfo;
 - (NSArray*) updatedFuncInfo: (NSArray*)funcInfo
                 withTabIndex: (NSUInteger)tabIndex;
 - (UINavigationController*) navForFuncName: (NSString*)funcName;
+- (BOOL) shouldShowAccessory: (NSArray*)funcInfo;
 - (BOOL) hasChildItems: (NSArray*)funcInfo;
 - (NSString*) parentItemFuncName: (NSArray*)funcInfo;
+- (NSString*) imageNameInFuncInfo: (NSArray*)funcInfo;
 - (BOOL) isRootLevelItem: (NSArray*)funcInfo;
 - (BOOL) isSeperatorItem: (NSArray*)funcInfo;
 

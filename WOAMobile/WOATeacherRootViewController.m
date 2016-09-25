@@ -138,11 +138,41 @@
 {
     if (self = [super init])
     {
-        self.funcDictionary = @{@"checkForUpdate":          @[@"版本",     @(3), @(NO), @(NO), @""]
-                                ,@"aboutManufactor":        @[@"关于我们",  @(3), @(NO), @(NO), @""]
-                                ,@"_31":                    @[@"-",        @(3), @(NO), @(NO), @""]
-                                ,@"logout":                 @[@"退出登录",  @(3), @(NO), @(NO), @""]
-                                };
+        /*
+        key:    funcName
+        value:  order,
+                title,
+                tabIndex
+                showAccesory
+                hasChild
+                parentItemName
+                imageName
+        */
+        self.funcDictionary =
+  @{@"checkForUpdate":          @[@(1),     @"版本",             @(3), @(NO), @(NO), @"",                      @""]
+    ,@"aboutManufactor":        @[@(2),     @"关于我们",          @(3), @(NO), @(NO), @"",                      @""]
+    ,@"_31":                    @[@(3),     @"-",                @(3), @(NO), @(NO), @"",                      @""]
+    ,@"logout":                 @[@(4),     @"退出登录",          @(3), @(NO), @(NO), @"",                      @""]
+    
+    ,@"tchrTodoOA":             @[@(1),     @"待办工作",          @(0), @(NO), @(NO), @"",                      @""]
+    ,@"tchrNewOA":              @[@(2),     @"新建工作",          @(0), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQueryOA":            @[@(3),     @"查询工作",          @(0), @(NO), @(NO), @"",                      @""]
+    
+    ,@"tchrQuerySyllabus":      @[@(1),     @"课表查询",          @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrFillTable":          @[@(2),     @"表格填写",          @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQueryContacts":      @[@(3),     @"电话查询",          @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrApplyTakeover":      @[@(4),     @"调代课申请",        @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrApproveTakeover":    @[@(5),     @"审批调代课申请",     @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQueryMyConsume":     @[@(6),     @"本人消费查询",       @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQuerySalary":        @[@(7),     @"工资查询",          @(1), @(YES), @(YES), @"",                    @""]
+    ,@"tchrQueryPayoffSalary":  @[@(8),     @"已发工资",          @(1), @(NO), @(NO), @"tchrQuerySalary",       @""]
+    ,@"tchrQueryMeritPay":      @[@(9),     @"绩效工资",          @(1), @(NO), @(NO), @"tchrQuerySalary",       @""]
+    
+    ,@"tchrCheckOnStudent":     @[@(1),     @"学生考勤",          @(2), @(NO), @(NO), @"",                      @""]
+    ,@"thcrEvaluateStuendt":    @[@(2),     @"评价学生",          @(2), @(YES), @(YES), @"",                    @""]
+    ,@"thcrCommentStuendt":     @[@(3),     @"学生评语",          @(2), @(NO), @(NO), @"thcrEvaluateStuendt",   @""]
+    ,@"thcrQuantativeEval":     @[@(4),     @"量化评价",          @(2), @(NO), @(NO), @"thcrEvaluateStuendt",   @""]
+    };
         
         NSArray *rootLevelMenuArray = [self rootLevelMenuListArray: 4];
         NSArray *myOAMenuList       = rootLevelMenuArray[0];
