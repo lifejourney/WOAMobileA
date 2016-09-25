@@ -31,4 +31,14 @@
     return [self length] > 0;
 }
 
+#pragma mark -
+
+- (BOOL) hasContainSubString: (NSString*)subString
+                     options: (NSStringCompareOptions)options
+{
+    NSRange foundRange = [self rangeOfString: subString options: options];
+    
+    return (foundRange.length > 0);
+}
+
 @end

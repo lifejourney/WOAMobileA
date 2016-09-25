@@ -16,4 +16,9 @@
 - (NSString*) trim;
 - (BOOL) isNotEmpty;
 
+#pragma mark -
+
+- (BOOL) hasContainSubString: (NSString*)subString
+                     options: (NSStringCompareOptions)options;
+
 @end

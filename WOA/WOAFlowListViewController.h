@@ -12,7 +12,7 @@
 
 @protocol WOAFlowListViewControllerDelegate <NSObject>
 
-- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath
+- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath //Notice: indexPath for filtered Array.
                                        selectedPair: (WOANameValuePair*)selectedPair
                                         relatedDict: (NSDictionary*)relatedDict
                                               navVC: (UINavigationController*)navVC;
@@ -20,6 +20,8 @@
 @end
 
 @interface WOAFlowListViewController : UIViewController
+
+@property (nonatomic, assign) BOOL shouldShowSearchBar;
 
 //For contentModel.pairArray
 //If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])

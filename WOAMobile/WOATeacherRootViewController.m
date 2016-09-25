@@ -232,6 +232,7 @@
          WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
                                                                                      delegate: self
                                                                                   relatedDict: nil];
+         subVC.shouldShowSearchBar = YES;
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
