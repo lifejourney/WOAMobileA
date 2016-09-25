@@ -1037,9 +1037,9 @@
 				INFOPLIST_FILE = WOAMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				ProductCNName = "智慧云";
+				ProductCNName = "智慧云2";
 			};
 			name = Debug;
 		};
@@ -1055,9 +1055,9 @@
 				INFOPLIST_FILE = WOAMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				ProductCNName = "智慧云";
+				ProductCNName = "智慧云2";
 			};
 			name = Release;
 		};
