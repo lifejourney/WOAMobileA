@@ -13,7 +13,8 @@
 
 #pragma mark -
 
-+ (NSArray*) itemPairsForTchrQueryTodoOA: (NSDictionary*)respDict;
++ (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
+                          pairActionType: (WOAModelActionType)pairActionType;
 
 
 @end

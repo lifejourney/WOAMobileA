@@ -29,12 +29,14 @@
 
 #pragma mark -
 
-+ (NSString*) msgTypeByFlowActionType: (WOAModelActionType)actionType;
++ (void) initActionMapDict;
++ (NSString*) actionTypeName: (WOAModelActionType)actionType;
++ (NSString*) msgTypeByActionType: (WOAModelActionType)actionType;
 
 #pragma mark -
 
 + (NSDictionary*) headerForMsgType: (NSString*)msgType;
-+ (NSDictionary*) headerForFlowActionType: (WOAModelActionType)actionType;
++ (NSDictionary*) headerForActionType: (WOAModelActionType)actionType;
 + (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType;
 + (NSMutableDictionary*) baseRequestPacketForActionType: (WOAModelActionType)actionType;
 

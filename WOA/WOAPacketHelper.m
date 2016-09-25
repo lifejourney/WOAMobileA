@@ -14,44 +14,76 @@
 #import "NSString+Utility.h"
 
 
+static NSDictionary *__actionMapDict = nil;
+
 @implementation WOAPacketHelper
 
-+ (NSString*) msgTypeByFlowActionType: (WOAModelActionType)actionType
++ (void) initActionMapDict
 {
-    NSString *msgType;
+    if (__actionMapDict)
+        return;
     
-    switch (actionType)
-    {
-        case WOAModelActionType_Login:
-            msgType = kWOAValue_MsgType_Login;
-            break;
-            
-        case WOAModelActionType_Logout:
-            msgType = @"logout";
-            break;
-            
-        case WOAModelActionType_TeacherQueryTodoOA:
-            msgType = @"getWorkList";
-            break;
-            
-        case WOAModelActionType_TeacherQueryOATableList:
-            msgType = @"getTableList";
-            break;
-            
-        case WOAModelActionType_TeacherQueryHistoryOA:
-            msgType = @"getQueryList";
-            break;
-            
-        case WOAModelActionType_TeacherQueryOADetail:
-            msgType = @"getTableDetail";
-            break;
-            
-        default:
-            msgType = nil;
-            break;
-    }
+    __actionMapDict =
+    @{@(WOAModelActionType_None):                       @[@"None",
+                                                          @""],
+      @(WOAModelActionType_FlowDone):                   @[@"FlowDone",
+                                                          @""],
+      @(WOAModelActionType_Login):                      @[@"Login",
+                                                          kWOAValue_MsgType_Login],
+      @(WOAModelActionType_Logout):                     @[@"Logout",
+                                                          @""],
+      @(WOAModelActionType_UploadAttachment):           @[@"UploadAttachment",
+                                                          @""],
+      @(WOAModelActionType_OpenUrl):                    @[@"OpenUrl",
+                                                          @""],
+      
+      //OA
+      @(WOAModelActionType_TeacherQueryTodoOA):         @[@"TeacherQueryTodoOA",
+                                                          @"getWorkList"],
+      @(WOAModelActionType_TeacherProcessOAItem):       @[@"TeacherProcessOAItem",
+                                                          @"getTableDetail"],
+      @(WOAModelActionType_TeacherSubmitOAProcess):     @[@"TeacherSubmitOAProcess",
+                                                          @"sendProcessing"],
+      
+      @(WOAModelActionType_TeacherOAProcessStyle):      @[@"TeacherOAProcessStyle",
+                                                          @"sendProcessingStyle"],
+      @(WOAModelActionType_TeacherNextAccounts):        @[@"TeacherNextAccounts",
+                                                          @"sendNextStep"],
+      
+      @(WOAModelActionType_TeacherQueryOATableList):    @[@"TeacherQueryOATableList",
+                                                          @"getTableList"],
+      @(WOAModelActionType_TeacherCreateOAItem):        @[@"TeacherCreateOAItem",
+                                                          @"getWorkTable"],
+      @(WOAModelActionType_TeacherSubmitOACreate):      @[@"TeacherSubmitOACreate",
+                                                          @"sendWorkTable"],
+      
+      @(WOAModelActionType_TeacherQueryHistoryOA):      @[@"TeacherQueryHistoryOA",
+                                                          @"getQueryList"],
+      @(WOAModelActionType_TeacherQueryOADetail):       @[@"TeacherQueryOADetail",
+                                                          @"getViewTable"],
+      
+      //Business
+//      @(WOAModelActionType_):               @[@"",
+//                                              @""],
+      };
     
-    return msgType;
+    
+}
+
++ (NSString*) actionTypeName: (WOAModelActionType)actionType
+{
+    NSNumber *actionTypeNumber = [NSNumber numberWithUnsignedInteger: actionType];
+    NSArray *actionInfoArray = [__actionMapDict objectForKey: actionTypeNumber];
+    
+    return actionInfoArray ? actionInfoArray[0] : @"";
+}
+
++ (NSString*) msgTypeByActionType: (WOAModelActionType)actionType
+{
+    NSNumber *actionTypeNumber = [NSNumber numberWithUnsignedInteger: actionType];
+    NSArray *actionInfoArray = [__actionMapDict objectForKey: actionTypeNumber];
+    
+    return actionInfoArray ? actionInfoArray[1] : @"";
 }
 
 #pragma mark -
@@ -75,9 +107,9 @@
     return dict;
 }
 
-+ (NSDictionary*) headerForFlowActionType: (WOAModelActionType)actionType
++ (NSDictionary*) headerForActionType: (WOAModelActionType)actionType
 {
-    NSString *msgType = [self msgTypeByFlowActionType: actionType];
+    NSString *msgType = [self msgTypeByActionType: actionType];
     
     return [self headerForMsgType: msgType];
 }
@@ -96,7 +128,7 @@
 
 + (NSMutableDictionary*) baseRequestPacketForActionType: (WOAModelActionType)actionType
 {
-    return [self baseRequestPacketForMsgType: [self msgTypeByFlowActionType: actionType]];
+    return [self baseRequestPacketForMsgType: [self msgTypeByActionType: actionType]];
 }
 
 #pragma mark -

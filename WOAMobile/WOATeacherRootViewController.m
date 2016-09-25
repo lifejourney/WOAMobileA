@@ -210,21 +210,32 @@
 
 #pragma mark - action for myOA
 
-- (void) tchrQueryTodoOA
+- (void) tchrQueryOAList: (WOAModelActionType)actionType
+                   title: (NSString*)title
+               ownerNavC: (UINavigationController*)ownerNavC
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAModelActionType_TeacherQueryTodoOA
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
                                                     addtionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryTodoOA: responseContent.bodyDictionary];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+         WOAModelActionType itemActionType;
+         
+         if (actionType == WOAModelActionType_TeacherQueryTodoOA)
+         {
+             itemActionType = WOAModelActionType_TeacherProcessOAItem;
+         }
+         else
+         {
+             itemActionType = WOAModelActionType_TeacherQueryOADetail;
+         }
+         
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOAList: responseContent.bodyDictionary
+                                                                   pairActionType: itemActionType];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: title
                                                              pairArray: pairArray
                                                           contentArray: nil
-                                                            actionType: WOAModelActionType_TeacherQueryOADetail
+                                                            actionType: itemActionType
                                                             actionName: @""
                                                             isReadonly: YES
                                                                subDict: nil];
@@ -234,7 +245,57 @@
                                                                                   relatedDict: nil];
          subVC.shouldShowSearchBar = YES;
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) tchrQueryTodoOA
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [self tchrQueryOAList: WOAModelActionType_TeacherQueryTodoOA
+                    title: vcTitle
+                ownerNavC: ownerNavC];
+}
+
+- (void) tchrQueryHistoryOA
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [self tchrQueryOAList: WOAModelActionType_TeacherQueryHistoryOA
+                    title: vcTitle
+                ownerNavC: ownerNavC];
+}
+
+- (void) tchrNewOATask
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAModelActionType_TeacherQueryOATableList
+                                                    addtionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+//         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOAList: responseContent.bodyDictionary];
+//         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+//                                                             pairArray: pairArray
+//                                                          contentArray: nil
+//                                                            actionType: WOAModelActionType_TeacherQueryOADetail
+//                                                            actionName: @""
+//                                                            isReadonly: YES
+//                                                               subDict: nil];
+//         
+//         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+//                                                                                     delegate: self
+//                                                                                  relatedDict: nil];
+//         subVC.shouldShowSearchBar = YES;
+//         
+//         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -245,8 +306,37 @@
                                         relatedDict: (NSDictionary*)relatedDict
                                               navVC: (UINavigationController*)navVC
 {
-    
+    switch (selectedPair.actionType)
+    {
+        case WOAModelActionType_TeacherProcessOAItem:
+            break;
+            
+        case WOAModelActionType_TeacherSubmitOAProcess:
+            break;
+            
+        case WOAModelActionType_TeacherOAProcessStyle:
+            break;
+            
+        case WOAModelActionType_TeacherNextAccounts:
+            break;
+            
+        case WOAModelActionType_TeacherQueryOATableList:
+            break;
+            
+        case WOAModelActionType_TeacherCreateOAItem:
+            break;
+            
+        case WOAModelActionType_TeacherSubmitOACreate:
+            break;
+            
+        case WOAModelActionType_TeacherQueryOADetail:
+            break;
+            
+        default:
+            break;
+    }
 }
+
 
 @end
 

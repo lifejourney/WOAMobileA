@@ -15,6 +15,7 @@
 #import "NSData+HexadecimalRepresentation.h"
 #import "UIColor+AppTheme.h"
 #import "WOAPropertyInfo.h"
+#import "WOAPacketHelper.h"
 #import "WOANameValuePair.h"
 
 
@@ -37,6 +38,7 @@
     if (self = [super init])
     {
         [WOANameValuePair initTypeMapArray];
+        [WOAPacketHelper initActionMapDict];
         
         [WOAPropertyInfo saveLatestSessionID: nil];
     }

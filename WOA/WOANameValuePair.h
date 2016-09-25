@@ -52,9 +52,17 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
     
     //Teacher
     WOAModelActionType_TeacherQueryTodoOA,
-    WOAModelActionType_TeacherQueryOATableList,
-    WOAModelActionType_TeacherQueryHistoryOA,
+    WOAModelActionType_TeacherProcessOAItem,
+    WOAModelActionType_TeacherSubmitOAProcess,
     
+    WOAModelActionType_TeacherOAProcessStyle,
+    WOAModelActionType_TeacherNextAccounts,
+    
+    WOAModelActionType_TeacherQueryOATableList,
+    WOAModelActionType_TeacherCreateOAItem,
+    WOAModelActionType_TeacherSubmitOACreate,
+    
+    WOAModelActionType_TeacherQueryHistoryOA,
     WOAModelActionType_TeacherQueryOADetail,
     
     //Student

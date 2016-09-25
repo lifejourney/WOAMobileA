@@ -19,7 +19,8 @@
 
 #pragma mark -
 
-+ (NSArray*) itemPairsForTchrQueryTodoOA: (NSDictionary*)respDict
++ (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
+                          pairActionType: (WOAModelActionType)pairActionType
 {
     NSMutableArray *pairArray = [NSMutableArray array];
     NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
@@ -29,12 +30,19 @@
         NSString *itemName = [self formTitleFromDictionary: itemDict];
         NSString *itemID = [self itemIDFromDictionary: itemDict];
         NSString *pinyinInitial = [itemName pinyinInitials];
-        NSString *subValue = [NSString stringWithFormat: @"%@ %@",
-                              [self abstractFromDictionary: itemDict],
-                              [self createTimeFromDictionary: itemDict]];
-        NSDictionary *pairValue = @{kWOAKeyForItemID: itemID,
-                                    kWOAKeyForSubValue: subValue,
-                                    kWOAKeyForPinyinInitial: pinyinInitial};
+        
+        NSString *abstractText = [self abstractFromDictionary: itemDict];
+        NSString *createTime = [self createTimeFromDictionary: itemDict];
+        NSString *spacingText = (abstractText && createTime) ? @" " : @"";
+        NSString *subValue = [NSString stringWithFormat: @"%@%@%@",
+                              abstractText ? abstractText : @"",
+                              spacingText,
+                              createTime ? createTime: @""];
+        
+        NSMutableDictionary *pairValue = [NSMutableDictionary dictionary];
+        [pairValue setValue: itemID forKey: kWOAKeyForItemID];
+        [pairValue setValue: subValue forKey: kWOAKeyForSubValue];
+        [pairValue setValue: pinyinInitial forKey: kWOAKeyForPinyinInitial];
         
         WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
                                                           value: pairValue
@@ -42,7 +50,7 @@
                                                        subArray: nil
                                                         subDict: nil
                                                        dataType: WOAPairDataType_Dictionary
-                                                     actionType: WOAModelActionType_TeacherQueryOADetail];
+                                                     actionType: pairActionType];
         
         [pairArray addObject: pair];
     }
