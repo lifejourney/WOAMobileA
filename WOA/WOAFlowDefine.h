@@ -9,18 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-typedef NS_ENUM(NSUInteger, WOAFLowActionType)
-{
-    WOAFLowActionType_None,
-    WOAFLowActionType_Login,
-    WOAFLowActionType_Logout,
-    
-    WOAFLowActionType_SimpleQuery,
-    WOAFLowActionType_Others,
-    
-    WOAFLowActionType_UploadAttachment
-};
-
 typedef NS_ENUM(NSUInteger, WOAHTTPRequestResult)
 {
     WOAHTTPRequestResult_Unknown,

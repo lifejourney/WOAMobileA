@@ -10,4 +10,39 @@
 
 @implementation WOARequestContent (Student)
 
++ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
+                                  optionDict: (NSDictionary*)optionDict
+{
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_SimpleQuery];
+    
+    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
+                                                        optionDict: optionDict];
+    
+    return content;
+}
+
++ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
+                                    paraDict: (NSDictionary*)paraDict
+{
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_SimpleQuery];
+    
+    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
+                                                          paraDict: paraDict];
+    
+    return content;
+}
+
++ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
+                                    fromDate: (NSString*)fromDate
+                                      toDate: (NSString*)toDate
+{
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_SimpleQuery];
+    
+    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
+                                                          fromDate: fromDate
+                                                            toDate: toDate];
+    
+    return content;
+}
+
 @end

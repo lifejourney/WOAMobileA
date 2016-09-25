@@ -8,7 +8,10 @@
 
 #import "WOATeacherRootViewController.h"
 #import "WOAMenuListViewController.h"
+#import "WOAFlowListViewController.h"
+#import "WOAContentViewController.h"
 #import "WOARequestManager.h"
+#import "WOATeacherPacketHelper.h"
 
 /**before public
  remove pragram mark
@@ -122,7 +125,7 @@
 
 
 
-@interface WOATeacherRootViewController()
+@interface WOATeacherRootViewController() <WOAFlowListViewControllerDelegate>
 
 @property (nonatomic, strong) UINavigationController *myOANavC;
 @property (nonatomic, strong) UINavigationController *myBusinessNavC;
@@ -149,14 +152,14 @@
                 imageName
         */
         self.funcDictionary =
-  @{@"checkForUpdate":          @[@(1),     @"版本",             @(3), @(NO), @(NO), @"",                      @""]
+   @{@"checkForUpdate":         @[@(1),     @"版本",             @(3), @(NO), @(NO), @"",                      @""]
     ,@"aboutManufactor":        @[@(2),     @"关于我们",          @(3), @(NO), @(NO), @"",                      @""]
     ,@"_31":                    @[@(3),     @"-",                @(3), @(NO), @(NO), @"",                      @""]
     ,@"logout":                 @[@(4),     @"退出登录",          @(3), @(NO), @(NO), @"",                      @""]
     
-    ,@"tchrTodoOA":             @[@(1),     @"待办工作",          @(0), @(NO), @(NO), @"",                      @""]
-    ,@"tchrNewOA":              @[@(2),     @"新建工作",          @(0), @(NO), @(NO), @"",                      @""]
-    ,@"tchrQueryOA":            @[@(3),     @"查询工作",          @(0), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQueryTodoOA":        @[@(1),     @"待办工作",          @(0), @(NO), @(NO), @"",                      @""]
+    ,@"tchrNewOATask":          @[@(2),     @"新建工作",          @(0), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQueryHistoryOA":     @[@(3),     @"查询工作",          @(0), @(NO), @(NO), @"",                      @""]
     
     ,@"tchrQuerySyllabus":      @[@(1),     @"课表查询",          @(1), @(NO), @(NO), @"",                      @""]
     ,@"tchrFillTable":          @[@(2),     @"表格填写",          @(1), @(NO), @(NO), @"",                      @""]
@@ -206,6 +209,43 @@
 
 
 #pragma mark - action for myOA
+
+- (void) tchrQueryTodoOA
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAModelActionType_TeacherQueryTodoOA
+                                                    addtionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryTodoOA: responseContent.bodyDictionary];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                          contentArray: nil
+                                                            actionType: WOAModelActionType_TeacherQueryOADetail
+                                                            actionName: @""
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         
+         [ownerNav pushViewController: subVC animated: YES];
+     }];
+}
+
+#pragma mark - delegate for WOAFlowListViewControllerDelegate
+
+- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath
+                                       selectedPair: (WOANameValuePair*)selectedPair
+                                        relatedDict: (NSDictionary*)relatedDict
+                                              navVC: (UINavigationController*)navVC
+{
+    
+}
 
 @end
 

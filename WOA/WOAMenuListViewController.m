@@ -9,6 +9,7 @@
 #import "WOAMenuListViewController.h"
 #import "WOAMenuItemModel.h"
 #import "WOALayout.h"
+#import "UITableView+Utility.h"
 #import "UIColor+AppTheme.h"
 
 
@@ -102,24 +103,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *moreFeatureTableViewCellIdentifier = @"moreFeatureTableViewCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: moreFeatureTableViewCellIdentifier];
-    if (!cell)
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: moreFeatureTableViewCellIdentifier];
-    else
-    {
-        UIView *subview;
-        
-        do
-        {
-            subview = [cell.contentView.subviews lastObject];
-            
-            if (subview)
-                [subview removeFromSuperview];
-        }
-        while (!subview);
-    }
+    UITableViewCell *cell = [tableView cellWithIdentifier: @"moreFeatureTableViewCellIdentifier"
+                                                cellStyle: UITableViewCellStyleDefault];
     
     WOAMenuItemModel *itemModel = [self.itemArray objectAtIndex: indexPath.row];
     

@@ -15,4 +15,17 @@
 
 #pragma mark - Packet to model
 
+
+#pragma mark -
+
++ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
+                            optionDict: (NSDictionary*)optionDict;
++ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
+                              paraDict: (NSDictionary*)paraDict;
++ (NSDictionary*) paraDictWithFromDate: (NSString*)fromDate
+                                toDate: (NSString*)toDate;
++ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
+                              fromDate: (NSString*)fromDate
+                                toDate: (NSString*)toDate;
+
 @end

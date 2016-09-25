@@ -9,6 +9,7 @@
 #import "WOAFlowListViewController.h"
 #import "WOANameValuePair.h"
 #import "WOALayout.h"
+#import "UITableView+Utility.h"
 #import "UILabel+Utility.h"
 #import "UIColor+AppTheme.h"
 #import "NSString+Utility.h"
@@ -170,29 +171,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *flowListTableViewCellIdentifier = @"flowListTableViewCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: flowListTableViewCellIdentifier];
-    
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: flowListTableViewCellIdentifier];
-    }
-    else
-    {
-        UIView *subview;
-        
-        do
-        {
-            subview = [cell.contentView.subviews lastObject];
-            
-            if (subview)
-                [subview removeFromSuperview];
-        }
-        while (!subview);
-    }
-    
     NSString *titleForRow;
+    NSString *subTitle;
+    UITableViewCellStyle cellStyle;
     
     if (self.isAllContentModePair)
     {
@@ -201,22 +182,62 @@
         WOANameValuePair *subPair = [rootPairValue.pairArray objectAtIndex: indexPath.row];
         
         titleForRow = subPair.name;
+        if (subPair.dataType == WOAPairDataType_Dictionary)
+        {
+            cellStyle = UITableViewCellStyleSubtitle;
+            
+            NSDictionary *pairValue = (NSDictionary*)subPair.value;
+            subTitle = pairValue[kWOAKeyForSubValue];
+        }
+        else
+        {
+            cellStyle = UITableViewCellStyleValue1;
+            subTitle = nil;
+        }
     }
     else
     {
         WOANameValuePair *rootPair = [self.rootPairArray objectAtIndex: indexPath.row];
         titleForRow = rootPair.name;
+        if (rootPair.dataType == WOAPairDataType_Dictionary)
+        {
+            cellStyle = UITableViewCellStyleSubtitle;
+            
+            NSDictionary *pairValue = (NSDictionary*)rootPair.value;
+            subTitle = pairValue[kWOAKeyForSubValue];
+        }
+        else
+        {
+            cellStyle = UITableViewCellStyleValue1;
+            subTitle = nil;
+        }
     }
+    
+    UITableViewCell *cell = [tableView cellWithIdentifier: @"flowListTableViewCellIdentifier"
+                                                cellStyle: cellStyle];
+    
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
     
     cell.textLabel.text = titleForRow;
+    cell.detailTextLabel.text = subTitle;
     
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    if (cellStyle == UITableViewCellStyleSubtitle)
+    {
+        cell.textLabel.textColor = [UIColor textNormalColor];
+        cell.textLabel.highlightedTextColor = [UIColor textHighlightedColor];
+        
+        //TO-DO, detailTextLabel
+        cell.backgroundColor = ((indexPath.row % 2) == 0) ? [UIColor listDarkBgColor] : [UIColor listLightBgColor];
+    }
+    else
+    {
+        cell.textLabel.highlightedTextColor = [UIColor mainItemColor];
+    }
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame: cell.frame];
     cell.selectedBackgroundView.backgroundColor = [UIColor mainItemBgColor];
-    cell.textLabel.highlightedTextColor = [UIColor mainItemColor];
     
     return cell;
 }

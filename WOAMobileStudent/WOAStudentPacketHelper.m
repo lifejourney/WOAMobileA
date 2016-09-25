@@ -21,6 +21,68 @@
 
 @implementation WOAStudentPacketHelper
 
+
+#pragma mark -
+
++ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
+                            optionDict: (NSDictionary*)optionDict
+{
+    NSMutableDictionary *dict = [self baseRequestPacketForMsgType: msgType];
+    
+    if (optionDict)
+    {
+        [dict setValuesForKeysWithDictionary: optionDict];
+    }
+    
+    return dict;
+}
+
++ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
+                              paraDict: (NSDictionary*)paraDict
+{
+    NSMutableDictionary *dict = [self baseRequestPacketForMsgType: msgType];
+    
+    if (paraDict)
+    {
+        [dict setValue: paraDict forKey: @"para"];
+    }
+    
+    return dict;
+}
+
++ (NSDictionary*) paraDictWithFromDate: (NSString*)fromDate
+                                toDate: (NSString*)toDate
+{
+    NSMutableDictionary *paraDict;
+    if (fromDate || toDate)
+    {
+        paraDict = [[NSMutableDictionary alloc] init];
+        if (fromDate)
+        {
+            [paraDict setValue: fromDate forKey: @"beginDate"];
+        }
+        if (toDate)
+        {
+            [paraDict setValue: toDate forKey: @"endDate"];
+        }
+    }
+    else
+    {
+        paraDict = nil;
+    }
+    
+    return paraDict;
+}
+
++ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
+                              fromDate: (NSString*)fromDate
+                                toDate: (NSString*)toDate
+{
+    return [self packetForSimpleQuery: msgType
+                             paraDict: [self paraDictWithFromDate: fromDate
+                                                           toDate: toDate]];
+}
+
 @end
 
 

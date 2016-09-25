@@ -30,11 +30,18 @@ static WOARequestContent *_latestRequestLoginContent = nil;
 
 #pragma mark -
 
-- (instancetype) initWithFlowActionType: (WOAFLowActionType)flowActionType
+- (NSString*) msgType
+{
+    return [WOAPacketHelper msgTypeFromPacketDictionary: self.bodyDictionary];
+}
+
+#pragma mark -
+
+- (instancetype) initWithFlowActionType: (WOAModelActionType)actionType
 {
     if (self = [self init])
     {
-        self.flowActionType = flowActionType;
+        self.actionType = actionType;
     }
     
     return self;
@@ -43,7 +50,7 @@ static WOARequestContent *_latestRequestLoginContent = nil;
 + (WOARequestContent*) contentForLogin: (NSString*)accountID
                               password: (NSString*)password
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAFLowActionType_Login];
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_Login];
     
     content.bodyDictionary = [WOAPacketHelper packetForLogin: accountID
                                                     password: password];
@@ -51,37 +58,15 @@ static WOARequestContent *_latestRequestLoginContent = nil;
     return content;
 }
 
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                  optionDict: (NSDictionary*)optionDict
-{
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAFLowActionType_SimpleQuery];
-    
-    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
-                                                        optionDict: optionDict];
-    
-    return content;
-}
+#pragma mark -
 
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                    paraDict: (NSDictionary*)paraDict
++ (WOARequestContent*) contentForSimpleQuery: (WOAModelActionType)actionType
+                              additionalDict: (NSDictionary*)additionalDict
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAFLowActionType_SimpleQuery];
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: actionType];
     
-    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
-                                                          paraDict: paraDict];
-    
-    return content;
-}
-
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                    fromDate: (NSString*)fromDate
-                                      toDate: (NSString*)toDate
-{
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAFLowActionType_SimpleQuery];
-    
-    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
-                                                          fromDate: fromDate
-                                                            toDate: toDate];
+    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: actionType
+                                                    additionalDict: additionalDict];
     
     return content;
 }

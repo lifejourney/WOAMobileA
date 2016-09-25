@@ -36,16 +36,20 @@
 
 #pragma mark -
 
-- (void) simpleQuery: (NSString*)msgType
-          optionDict: (NSDictionary*)optionDict
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
-- (void) simpleQuery: (NSString*)msgType
-            paraDict: (NSDictionary*)paraDict
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
-- (void) simpleQuery: (NSString*)msgType
-            fromDate: (NSString*)fromDate
-              toDate: (NSString*)toDate
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
+- (void) simpleQueryFlowActionType: (WOAModelActionType)actionType
+                     addtionalDict: (NSDictionary*)addtionalDict
+                        onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
+
+//- (void) simpleQuery: (NSString*)msgType
+//          optionDict: (NSDictionary*)optionDict
+//          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
+//- (void) simpleQuery: (NSString*)msgType
+//            paraDict: (NSDictionary*)paraDict
+//          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
+//- (void) simpleQuery: (NSString*)msgType
+//            fromDate: (NSString*)fromDate
+//              toDate: (NSString*)toDate
+//          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
 
 @end
 

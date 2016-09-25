@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "WOAFlowDefine.h"
+#import "WOANameValuePair.h"
 
 
 @interface WOAResponeContent : NSObject
 
-@property (nonatomic, assign) WOAFLowActionType flowActionType;
+@property (nonatomic, assign) WOAModelActionType actionType;
 
 @property (nonatomic, assign) NSInteger HTTPStatus;
 @property (nonatomic, assign) WOAHTTPRequestResult requestResult;

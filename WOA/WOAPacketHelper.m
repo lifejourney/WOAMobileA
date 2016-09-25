@@ -16,27 +16,45 @@
 
 @implementation WOAPacketHelper
 
-+ (NSString*) msgTypeByFlowActionType: (WOAFLowActionType)flowActionType
++ (NSString*) msgTypeByFlowActionType: (WOAModelActionType)actionType
 {
     NSString *msgType;
     
-    switch (flowActionType)
+    switch (actionType)
     {
-        case WOAFLowActionType_Login:
+        case WOAModelActionType_Login:
             msgType = kWOAValue_MsgType_Login;
             break;
             
-        case WOAFLowActionType_Logout:
+        case WOAModelActionType_Logout:
             msgType = @"logout";
             break;
             
+        case WOAModelActionType_TeacherQueryTodoOA:
+            msgType = @"getWorkList";
+            break;
+            
+        case WOAModelActionType_TeacherQueryOATableList:
+            msgType = @"getTableList";
+            break;
+            
+        case WOAModelActionType_TeacherQueryHistoryOA:
+            msgType = @"getQueryList";
+            break;
+            
+        case WOAModelActionType_TeacherQueryOADetail:
+            msgType = @"getTableDetail";
+            break;
+            
         default:
-            msgType = @"";
+            msgType = nil;
             break;
     }
     
     return msgType;
 }
+
+#pragma mark -
 
 + (NSDictionary*) headerForMsgType: (NSString*)msgType
 {
@@ -57,14 +75,14 @@
     return dict;
 }
 
-+ (NSDictionary*) headerForFlowActionType: (WOAFLowActionType)flowActionType
++ (NSDictionary*) headerForFlowActionType: (WOAModelActionType)actionType
 {
-    NSString *msgType = [self msgTypeByFlowActionType: flowActionType];
+    NSString *msgType = [self msgTypeByFlowActionType: actionType];
     
     return [self headerForMsgType: msgType];
 }
 
-+ (NSMutableDictionary*) baseRequestPacketWithMsgType: (NSString*)msgType
++ (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType
 {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity: 3];
     
@@ -75,6 +93,13 @@
     
     return dict;
 }
+
++ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAModelActionType)actionType
+{
+    return [self baseRequestPacketForMsgType: [self msgTypeByFlowActionType: actionType]];
+}
+
+#pragma mark -
 
 + (NSString*) checkSumForLogin: (NSString*)account password: (NSString*)password
 {
@@ -97,7 +122,7 @@
 
 + (NSDictionary*) packetForLogin: (NSString*)accountID password: (NSString*)password
 {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary: [self baseRequestPacketWithMsgType: kWOAValue_MsgType_Login]];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary: [self baseRequestPacketForMsgType: kWOAValue_MsgType_Login]];
     
     [dict setValue: accountID forKey: @"account"];
     [dict setValue: password forKey: @"psw"];
@@ -112,63 +137,19 @@
     return dict;
 }
 
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                            optionDict: (NSDictionary*)optionDict
+#pragma mark -
+
++ (NSDictionary*) packetForSimpleQuery: (WOAModelActionType)actionType
+                        additionalDict: (NSDictionary*)additionalDict
 {
-    NSMutableDictionary *dict = [self baseRequestPacketWithMsgType: msgType];
+    NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType];
     
-    if (optionDict)
+    if (additionalDict)
     {
-        [dict setValuesForKeysWithDictionary: optionDict];
+        [dict setValuesForKeysWithDictionary: additionalDict];
     }
     
     return dict;
-}
-
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              paraDict: (NSDictionary*)paraDict
-{
-    NSMutableDictionary *dict = [self baseRequestPacketWithMsgType: msgType];
-    
-    if (paraDict)
-    {
-        [dict setValue: paraDict forKey: @"para"];
-    }
-    
-    return dict;
-}
-
-+ (NSDictionary*) paraDictWithFromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate
-{
-    NSMutableDictionary *paraDict;
-    if (fromDate || toDate)
-    {
-        paraDict = [[NSMutableDictionary alloc] init];
-        if (fromDate)
-        {
-            [paraDict setValue: fromDate forKey: @"beginDate"];
-        }
-        if (toDate)
-        {
-            [paraDict setValue: toDate forKey: @"endDate"];
-        }
-    }
-    else
-    {
-        paraDict = nil;
-    }
-    
-    return paraDict;
-}
-
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              fromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate
-{
-    return [self packetForSimpleQuery: msgType
-                             paraDict: [self paraDictWithFromDate: fromDate
-                                                           toDate: toDate]];
 }
 
 #pragma mark -
@@ -184,6 +165,15 @@
     
     return [header valueForKeyPath: @"sessionID"];
 }
+
++ (NSString*) msgTypeFromPacketDictionary: (NSDictionary*)dict
+{
+    NSDictionary *header = [self headerFromPacketDictionary: dict];
+    
+    return [header valueForKeyPath: @"msgType"];
+}
+
+#pragma mark -
 
 + (NSDictionary*) resultFromPacketDictionary: (NSDictionary*)dict
 {
@@ -205,6 +195,36 @@
     
     return resultCode;
 }
+
+#pragma mark -
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 + (NSString*) resultPromptFromPacketDictionary: (NSDictionary*)dict
 {
@@ -261,7 +281,7 @@
 
 + (NSString*) itemIDFromDictionary: (NSDictionary*)dict
 {
-    return [dict valueForKey: @"itemID"];
+    return [dict valueForKey: kWOAKeyForItemID];
 }
 
 + (NSArray*) itemsArrayFromPacketDictionary: (NSDictionary*)dict

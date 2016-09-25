@@ -143,6 +143,8 @@
             valueStr = _value ? (NSString*)_value : @"";
         else if ([_value isKindOfClass: [NSArray class]])
             valueStr = [(NSArray*)_value description];
+        else if ([_value isKindOfClass: [NSDictionary class]])
+            valueStr = [(NSDictionary*)_value description];
         else if ([_value isKindOfClass: [WOAContentModel class]])
             valueStr = [(WOAContentModel*)_value description];
         else
@@ -190,7 +192,8 @@ static NSArray *__typeMapArray = nil;
                        
                        @[@"seperator",      @(WOAPairDataType_Seperator),       @"-1"],
                        @[@"titlekey",       @(WOAPairDataType_TitleKey),        @"-2"],
-                       @[@"contentModel",   @(WOAPairDataType_ContentModel),    @"-3"]];
+                       @[@"dictionary",     @(WOAPairDataType_Dictionary),      @"-3"],
+                       @[@"contentModel",   @(WOAPairDataType_ContentModel),    @"-4"]];
 
 }
 

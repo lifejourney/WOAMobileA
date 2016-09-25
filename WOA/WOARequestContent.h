@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WOAFlowDefine.h"
+#import "WOANameValuePair.h"
 
 
 @interface WOARequestContent : NSObject
 
-@property (nonatomic, assign) WOAFLowActionType flowActionType;
+@property (nonatomic, assign) WOAModelActionType actionType;
 @property (nonatomic, strong) NSDictionary *bodyDictionary;
 @property (nonatomic, strong) NSArray *multiBodyArray;
 
@@ -23,14 +23,16 @@
 
 #pragma mark -
 
+- (NSString*) msgType;
+
+#pragma mark -
+
 + (WOARequestContent*) contentForLogin: (NSString*)accountID
                               password: (NSString*)password;
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                  optionDict: (NSDictionary*)optionDict;
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                    paraDict: (NSDictionary*)paraDict;
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                    fromDate: (NSString*)fromDate
-                                      toDate: (NSString*)toDate;
+
+#pragma mark -
+
++ (WOARequestContent*) contentForSimpleQuery: (WOAModelActionType)actionType
+                              additionalDict: (NSDictionary*)additionalDict;
 
 @end

@@ -9,6 +9,7 @@
 #import "WOADetailViewController.h"
 #import "WOANameValuePair.h"
 #import "WOALayout.h"
+#import "UITableView+Utility.h"
 #import "UILabel+Utility.h"
 #import "UIColor+AppTheme.h"
 
@@ -115,24 +116,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *detailTableViewCellIdentifier = @"detailTableViewCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: detailTableViewCellIdentifier];
-    if (!cell)
-        cell = [[UITableViewCell alloc] initWithStyle: self.cellStyle reuseIdentifier: detailTableViewCellIdentifier];
-    else
-    {
-        UIView *subview;
-        
-        do
-        {
-            subview = [cell.contentView.subviews lastObject];
-            
-            if (subview)
-                [subview removeFromSuperview];
-        }
-        while (!subview);
-    }
+    UITableViewCell *cell = [tableView cellWithIdentifier: @"detailTableViewCellIdentifier"
+                                                cellStyle: self.cellStyle];
     
     WOAContentModel *contentModel = self.modelArray[indexPath.section];
     WOANameValuePair *pair = contentModel.pairArray[indexPath.row];

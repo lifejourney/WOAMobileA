@@ -11,7 +11,6 @@
 #import "WOAContentModel.h"
 
 
-#define kWOAKey_PinyinInitial @"_pinyin"
 #define kWOAItemIndexPath_SectionKey @"_section"
 #define kWOAItemIndexPath_RowKey @"_row"
 #define kWOAKey_ProcessID @"processID"
@@ -28,23 +27,73 @@
 
 @interface WOAPacketHelper : NSObject
 
+#pragma mark -
+
++ (NSString*) msgTypeByFlowActionType: (WOAModelActionType)actionType;
+
+#pragma mark -
+
++ (NSDictionary*) headerForMsgType: (NSString*)msgType;
++ (NSDictionary*) headerForFlowActionType: (WOAModelActionType)actionType;
++ (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType;
++ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAModelActionType)actionType;
+
+#pragma mark -
+
 + (NSDictionary*) packetForLogin: (NSString*)accountID password: (NSString*)password;
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                            optionDict: (NSDictionary*)optionDict;
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              paraDict: (NSDictionary*)paraDict;
-+ (NSDictionary*) paraDictWithFromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate;
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              fromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate;
+
+#pragma mark -
+
++ (NSDictionary*) packetForSimpleQuery: (WOAModelActionType)actionType
+                        additionalDict: (NSDictionary*)additionalDict;
+
+#pragma mark -
 
 + (NSString*) sessionIDFromPacketDictionary: (NSDictionary*)dict;
++ (NSString*) msgTypeFromPacketDictionary: (NSDictionary*)dict;
+
+#pragma mark -
 
 + (NSDictionary*) resultFromPacketDictionary: (NSDictionary*)dict;
 + (WOAWorkflowResultCode) resultCodeFromPacketDictionary: (NSDictionary*)dict;
+
+#pragma mark -
+
 + (NSString*) resultPromptFromPacketDictionary: (NSDictionary*)dict;
 + (NSString*) promptFromPacketDictionary: (NSDictionary*)dict;
+
+#pragma mark -
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 + (NSDictionary*) retListFromPacketDictionary: (NSDictionary*)dict;
 + (NSDictionary*) opListFromPacketDictionary: (NSDictionary *)dict;

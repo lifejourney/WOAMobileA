@@ -88,7 +88,7 @@
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"sessionID" value: sessionID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"workID" value: workID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"tableID" value: tableID];
-    [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"itemID" value: itemID];
+    [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: kWOAKeyForItemID value: itemID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"fieldname" value: @"附件"];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"fieldtype" value: @"attfile"];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"att_title" value: title];

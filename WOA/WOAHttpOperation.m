@@ -22,7 +22,7 @@
 @property (nonatomic, copy) void (^completionHandler)(WOAResponeContent *responseContent);
 @property (nonatomic, assign) BOOL completeOnMainQueue;
 
-@property (nonatomic, assign) WOAFLowActionType currentActionType;
+@property (nonatomic, assign) WOAModelActionType currentActionType;
 @property (nonatomic, assign) BOOL hasRefreshSession;
 
 @property (nonatomic, strong) NSArray *multiBodyArray;
@@ -43,7 +43,7 @@
 {
     if (self = [super init])
     {
-        self.currentActionType = WOAFLowActionType_None;
+        self.currentActionType = WOAModelActionType_None;
         self.hasRefreshSession = NO;
         
         self.finalResponseContent = [[WOAResponeContent alloc] init];
@@ -125,7 +125,7 @@
     {
         if ([[NSFileManager defaultManager] fileExistsAtPath: filePath])
         {
-            self.currentActionType = requestContent.flowActionType;
+            self.currentActionType = requestContent.actionType;
             
             NSMutableURLRequest *request = [WOAHTTPRequest URLRequestForUploadAttachment: requestContent.bodyDictionary];
             
@@ -158,7 +158,7 @@
 
 - (void) sendRequestWithContent: (WOARequestContent*)requestContent
 {
-    if (requestContent.flowActionType == WOAFLowActionType_UploadAttachment)
+    if (requestContent.actionType == WOAModelActionType_UploadAttachment)
     {
         self.multiBodyArray = requestContent.multiBodyArray;
         self.finalResponseContent.multiBodyArray = [[NSMutableArray alloc] initWithCapacity: self.multiBodyArray.count];
@@ -184,12 +184,12 @@
         
         if (bodyData)
         {
-            self.currentActionType = requestContent.flowActionType;
+            self.currentActionType = requestContent.actionType;
             
             NSMutableURLRequest *request = [WOAHTTPRequest URLRequestWithBodyData: bodyData];
             
             NSLog(@"To send request for action: %ld\n%@\n-------->\n\n",
-                    (long)requestContent.flowActionType,
+                    (long)requestContent.actionType,
                     [self formattedString: [[NSString alloc] initWithData: bodyData encoding: NSUTF8StringEncoding]]);//requestContent.bodyDictionary);
             
             self.httpConnection = [[NSURLConnection alloc] initWithRequest: request
@@ -248,7 +248,7 @@
 
 - (void) main
 {
-    self.finalResponseContent.flowActionType = self.initialRequestContent.flowActionType;
+    self.finalResponseContent.actionType = self.initialRequestContent.actionType;
     self.finalResponseContent.requestResult = WOAHTTPRequestResult_Unknown;
     
     if (!self.isCancelled)
@@ -397,11 +397,11 @@
     
     if (requestResult == WOAHTTPRequestResult_Success)
     {
-        if (self.currentActionType == self.finalResponseContent.flowActionType)
+        if (self.currentActionType == self.finalResponseContent.actionType)
         {
             BOOL allRequestDone = YES;
             
-            if (self.currentActionType == WOAFLowActionType_Login)
+            if (self.currentActionType == WOAModelActionType_Login)
             {
                 
                 NSString *sessionID = [WOAPacketHelper sessionIDFromPacketDictionary: bodyDictionary];
@@ -409,7 +409,7 @@
                 
                 [WOARequestContent setLatestRequestLoginContent: self.initialRequestContent];
             }
-            else if (self.currentActionType == WOAFLowActionType_UploadAttachment)
+            else if (self.currentActionType == WOAModelActionType_UploadAttachment)
             {
                 [self.finalResponseContent.multiBodyArray addObject: bodyDictionary];
                 
@@ -439,9 +439,9 @@
     {
         [WOAPropertyInfo saveLatestSessionID: nil];
         
-        if (self.currentActionType == self.finalResponseContent.flowActionType)
+        if (self.currentActionType == self.finalResponseContent.actionType)
         {
-            if (self.finalResponseContent.flowActionType == WOAFLowActionType_Login)
+            if (self.finalResponseContent.actionType == WOAModelActionType_Login)
             {
                 NSLog(@"Request fail for invalid session (login). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
                 
@@ -466,7 +466,7 @@
         }
         else
         {
-            NSLog(@"currentAction: %ld, origin action: %ld", (long)self.currentActionType, (long)self.finalResponseContent.flowActionType);
+            NSLog(@"currentAction: %ld, origin action: %ld", (long)self.currentActionType, (long)self.finalResponseContent.actionType);
             NSLog(@"Request fail for invalid session (login when retrying). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
             
             self.httpConnection = nil;

@@ -11,4 +11,15 @@
 
 @interface WOATeacherPacketHelper: WOAPacketHelper
 
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrQueryTodoOA: (NSDictionary*)respDict;
+
+
 @end
+
+
+
+
+
+

@@ -16,6 +16,7 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     WOAPairDataType_Seperator,
     WOAPairDataType_TitleKey,
     
+    WOAPairDataType_Dictionary,
     WOAPairDataType_ContentModel, //Recursion
     
     //WOA business type
@@ -42,9 +43,27 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
     //Common action
     WOAModelActionType_FlowDone,
     
+    WOAModelActionType_Login,
+    WOAModelActionType_Logout,
+    
+    WOAModelActionType_UploadAttachment,
+    
     WOAModelActionType_OpenUrl,
     
+    //Teacher
+    WOAModelActionType_TeacherQueryTodoOA,
+    WOAModelActionType_TeacherQueryOATableList,
+    WOAModelActionType_TeacherQueryHistoryOA,
+    
+    WOAModelActionType_TeacherQueryOADetail,
+    
+    //Student
+    
+    WOAModelActionType_SimpleQuery,
+    WOAModelActionType_Others,
+    
     //WOA bussiness action
+    
     WOAModelActionType_GetTransPerson,
     WOAModelActionType_GetTransTable,
     WOAModelActionType_SubmitTransTable,

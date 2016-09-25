@@ -12,6 +12,7 @@
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
 #import "WOALayout.h"
+#import "UITableView+Utility.h"
 #import "UILabel+Utility.h"
 #import "UIColor+AppTheme.h"
 #import "NSString+Utility.h"
@@ -105,24 +106,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *listDetailTableViewCellIdentifier = @"listDetailTableViewCellIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: listDetailTableViewCellIdentifier];
-    if (!cell)
-        cell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleValue1 reuseIdentifier: listDetailTableViewCellIdentifier];
-    else
-    {
-        UIView *subview;
-        
-        do
-        {
-            subview = [cell.contentView.subviews lastObject];
-            
-            if (subview)
-                [subview removeFromSuperview];
-        }
-        while (!subview);
-    }
+    UITableViewCell *cell = [tableView cellWithIdentifier: @"listDetailTableViewCellIdentifier"
+                                                cellStyle: UITableViewCellStyleValue1];
     
     WOANameValuePair *pair = [self.pairArray objectAtIndex: indexPath.row];
     NSString *rowTitle = pair.name;

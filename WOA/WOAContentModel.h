@@ -10,6 +10,13 @@
 #import <Foundation/Foundation.h>
 #import "WOANameValuePair.h"
 
+
+#define kWOAKeyForPinyinInitial @"_pinyin"
+#define kWOAKeyForMainValue @"mainValue"
+#define kWOAKeyForSubValue @"subValue"
+
+#define kWOAKeyForItemID @"itemID"
+
 @interface WOAContentModel : NSObject
 
 @property (nonatomic, copy) NSString *groupTitle;
@@ -25,7 +32,7 @@
                     pairArray: (NSArray*)pairArray
                  contentArray: (NSArray*)contentArray
                    actionType: (WOAModelActionType)actionType
-                   actionName: (NSString*)actionName
+                   actionName: (NSString*)actionName //RightButton Title
                    isReadonly: (BOOL)isReadonly
                       subDict: (NSDictionary*)subDict;
 + (instancetype) contentModel: (NSString*)groupTitle
