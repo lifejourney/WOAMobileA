@@ -22,7 +22,7 @@
 @property (nonatomic, copy) void (^completionHandler)(WOAResponeContent *responseContent);
 @property (nonatomic, assign) BOOL completeOnMainQueue;
 
-@property (nonatomic, assign) WOAModelActionType currentActionType;
+@property (nonatomic, assign) WOAActionType currentActionType;
 @property (nonatomic, assign) BOOL hasRefreshSession;
 
 @property (nonatomic, strong) NSArray *multiBodyArray;
@@ -43,7 +43,7 @@
 {
     if (self = [super init])
     {
-        self.currentActionType = WOAModelActionType_None;
+        self.currentActionType = WOAActionType_None;
         self.hasRefreshSession = NO;
         
         self.finalResponseContent = [[WOAResponeContent alloc] init];
@@ -158,7 +158,7 @@
 
 - (void) sendRequestWithContent: (WOARequestContent*)requestContent
 {
-    if (requestContent.actionType == WOAModelActionType_UploadAttachment)
+    if (requestContent.actionType == WOAActionType_UploadAttachment)
     {
         self.multiBodyArray = requestContent.multiBodyArray;
         self.finalResponseContent.multiBodyArray = [[NSMutableArray alloc] initWithCapacity: self.multiBodyArray.count];
@@ -401,7 +401,7 @@
         {
             BOOL allRequestDone = YES;
             
-            if (self.currentActionType == WOAModelActionType_Login)
+            if (self.currentActionType == WOAActionType_Login)
             {
                 
                 NSString *sessionID = [WOAPacketHelper sessionIDFromPacketDictionary: bodyDictionary];
@@ -409,7 +409,7 @@
                 
                 [WOARequestContent setLatestRequestLoginContent: self.initialRequestContent];
             }
-            else if (self.currentActionType == WOAModelActionType_UploadAttachment)
+            else if (self.currentActionType == WOAActionType_UploadAttachment)
             {
                 [self.finalResponseContent.multiBodyArray addObject: bodyDictionary];
                 
@@ -441,7 +441,7 @@
         
         if (self.currentActionType == self.finalResponseContent.actionType)
         {
-            if (self.finalResponseContent.actionType == WOAModelActionType_Login)
+            if (self.finalResponseContent.actionType == WOAActionType_Login)
             {
                 NSLog(@"Request fail for invalid session (login). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
                 

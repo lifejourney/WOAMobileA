@@ -18,7 +18,7 @@
                      subArray: (NSArray*)subArray
                       subDict: (NSDictionary*)subDict
                      dataType: (WOAPairDataType)dataType
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
 {
     WOANameValuePair *pair = [[WOANameValuePair alloc] init];
     
@@ -44,13 +44,13 @@
                      subArray: subArray
                       subDict: nil
                      dataType: dataType
-                   actionType: WOAModelActionType_None];
+                   actionType: WOAActionType_None];
 }
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                      dataType: (WOAPairDataType)dataType
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
 {
     return [self pairWithName: name
                         value: value
@@ -71,12 +71,12 @@
                      subArray: nil
                       subDict: nil
                      dataType: dataType
-                   actionType: WOAModelActionType_None];
+                   actionType: WOAActionType_None];
 }
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
 {
     return [self pairWithName: name
                         value: value
@@ -96,7 +96,7 @@
                      subArray: nil
                       subDict: nil
                      dataType: WOAPairDataType_Normal
-                   actionType: WOAModelActionType_None];
+                   actionType: WOAActionType_None];
 }
 
 + (instancetype) pairOnlyName: (NSString*)name
@@ -107,7 +107,7 @@
                      subArray: nil
                       subDict: nil
                      dataType: WOAPairDataType_TitleKey
-                   actionType: WOAModelActionType_None];
+                   actionType: WOAActionType_None];
 }
 
 + (instancetype) seperatorPair
@@ -118,7 +118,7 @@
                      subArray: nil
                       subDict: nil
                      dataType: WOAPairDataType_Seperator
-                   actionType: WOAModelActionType_None];
+                   actionType: WOAActionType_None];
 }
 
 #pragma mark -

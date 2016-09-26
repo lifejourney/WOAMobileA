@@ -21,7 +21,7 @@
 #pragma mark -
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
-                          pairActionType: (WOAModelActionType)pairActionType
+                          pairActionType: (WOAActionType)pairActionType
 {
     NSMutableArray *pairArray = [NSMutableArray array];
     NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
@@ -60,7 +60,7 @@
 }
 
 + (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
-                               pairActionType: (WOAModelActionType)pairActionType
+                               pairActionType: (WOAActionType)pairActionType
 {
     NSMutableArray *pairArray = [NSMutableArray array];
     NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
@@ -122,7 +122,7 @@
 }
 
 + (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
-                        pairActionType: (WOAModelActionType)pairActionType
+                        pairActionType: (WOAActionType)pairActionType
 {
     NSMutableArray *pairArray = [NSMutableArray array];
     NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];

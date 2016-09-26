@@ -13,7 +13,7 @@
 
 @interface WOAResponeContent : NSObject
 
-@property (nonatomic, assign) WOAModelActionType actionType;
+@property (nonatomic, assign) WOAActionType actionType;
 
 @property (nonatomic, assign) NSInteger HTTPStatus;
 @property (nonatomic, assign) WOAHTTPRequestResult requestResult;

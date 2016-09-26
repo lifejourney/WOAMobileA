@@ -15,7 +15,7 @@
 @protocol WOAMultiPickerViewControllerDelegate <NSObject>
 
 - (void) multiPickerViewController: (WOAMultiPickerViewController*)pickerViewController
-                        actionType: (WOAModelActionType)actionType
+                        actionType: (WOAActionType)actionType
                  selectedPairArray: (NSArray*)selectedPairArray
                        relatedDict: (NSDictionary*)relatedDict
                              navVC: (UINavigationController*)navVC;

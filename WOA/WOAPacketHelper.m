@@ -24,117 +24,117 @@ static NSDictionary *__actionMapDict = nil;
         return;
     
     __actionMapDict =
-    @{@(WOAModelActionType_None):                           @[@"None",
+    @{@(WOAActionType_None):                                @[@"None",
                                                               @""],
-      @(WOAModelActionType_FlowDone):                       @[@"FlowDone",
+      @(WOAActionType_FlowDone):                            @[@"FlowDone",
                                                               @""],
-      @(WOAModelActionType_Login):                          @[@"Login",
+      @(WOAActionType_Login):                               @[@"Login",
                                                               kWOAValue_MsgType_Login],
-      @(WOAModelActionType_Logout):                         @[@"Logout",
+      @(WOAActionType_Logout):                              @[@"Logout",
                                                               @""],
-      @(WOAModelActionType_UploadAttachment):               @[@"UploadAttachment",
+      @(WOAActionType_UploadAttachment):                    @[@"UploadAttachment",
                                                             @""],
-      @(WOAModelActionType_OpenUrl):                        @[@"OpenUrl",
+      @(WOAActionType_OpenUrl):                             @[@"OpenUrl",
                                                               @""],
       
       //Teacher OA
-      @(WOAModelActionType_TeacherQueryTodoOA):             @[@"TeacherQueryTodoOA",
+      @(WOAActionType_TeacherQueryTodoOA):                  @[@"TeacherQueryTodoOA",
                                                               @"getWorkList"],
-      @(WOAModelActionType_TeacherProcessOAItem):           @[@"TeacherProcessOAItem",
+      @(WOAActionType_TeacherProcessOAItem):                @[@"TeacherProcessOAItem",
                                                               @"getTableDetail"],
-      @(WOAModelActionType_TeacherSubmitOAProcess):         @[@"TeacherSubmitOAProcess",
+      @(WOAActionType_TeacherSubmitOAProcess):              @[@"TeacherSubmitOAProcess",
                                                               @"sendProcessing"],
       
-      @(WOAModelActionType_TeacherQueryOATableList):        @[@"TeacherQueryOATableList",
+      @(WOAActionType_TeacherQueryOATableList):             @[@"TeacherQueryOATableList",
                                                               @"getTableList"],
-      @(WOAModelActionType_TeacherCreateOAItem):            @[@"TeacherCreateOAItem",
+      @(WOAActionType_TeacherCreateOAItem):                 @[@"TeacherCreateOAItem",
                                                               @"getWorkTable"],
-      @(WOAModelActionType_TeacherSubmitOACreate):          @[@"TeacherSubmitOACreate",
+      @(WOAActionType_TeacherSubmitOACreate):               @[@"TeacherSubmitOACreate",
                                                               @"sendWorkTable"],
       
-      @(WOAModelActionType_TeacherOAProcessStyle):          @[@"TeacherOAProcessStyle",
+      @(WOAActionType_TeacherOAProcessStyle):               @[@"TeacherOAProcessStyle",
                                                               @"sendProcessingStyle"],
-      @(WOAModelActionType_TeacherNextAccounts):            @[@"TeacherNextAccounts",
+      @(WOAActionType_TeacherNextAccounts):                 @[@"TeacherNextAccounts",
                                                               @"sendNextStep"],
       
-      @(WOAModelActionType_TeacherQueryHistoryOA):          @[@"TeacherQueryHistoryOA",
+      @(WOAActionType_TeacherQueryHistoryOA):               @[@"TeacherQueryHistoryOA",
                                                               @"getQueryList"],
-      @(WOAModelActionType_TeacherQueryOADetail):           @[@"TeacherQueryOADetail",
+      @(WOAActionType_TeacherQueryOADetail):                @[@"TeacherQueryOADetail",
                                                               @"getViewTable"],
       
       //Teacher Business
-      @(WOAModelActionType_TeacherGetSyllabusConditions):   @[@"TeacherGetSyllabusConditions",
+      @(WOAActionType_TeacherGetSyllabusConditions):        @[@"TeacherGetSyllabusConditions",
                                                               @"getMastInfo"],
-      @(WOAModelActionType_TeacherQuerySyllabus):           @[@"TeacherQuerySyllabus",
+      @(WOAActionType_TeacherQuerySyllabus):                @[@"TeacherQuerySyllabus",
                                                               @"syllabusQuery"],
       
-      @(WOAModelActionType_TeacherQueryBusinessTableList):  @[@"TeacherQueryBusinessTableList",
+      @(WOAActionType_TeacherQueryBusinessTableList):       @[@"TeacherQueryBusinessTableList",
                                                               @"getTeacherTableList"],
-      @(WOAModelActionType_TeacherCreateBusinessItem):      @[@"TeacherCreateBusinessItem",
+      @(WOAActionType_TeacherCreateBusinessItem):           @[@"TeacherCreateBusinessItem",
                                                               @"getTeacherTable"],
-      @(WOAModelActionType_TeacherSelectOtherTeacher):      @[@"TeacherSelectOtherTeacher",
+      @(WOAActionType_TeacherSelectOtherTeacher):           @[@"TeacherSelectOtherTeacher",
                                                               @""],
-      @(WOAModelActionType_TeacherSubmitBusinessCreate):    @[@"TeacherSubmitBusinessCreate",
+      @(WOAActionType_TeacherSubmitBusinessCreate):         @[@"TeacherSubmitBusinessCreate",
                                                               @"submitTeacherTable"],
       
-      @(WOAModelActionType_TeacherQueryContacts):           @[@"TeacherQueryContacts",
+      @(WOAActionType_TeacherQueryContacts):                @[@"TeacherQueryContacts",
                                                               @"telephoneQuery"],
       
-      @(WOAModelActionType_TeacherQueryMySubject):          @[@"TeacherQueryMySubject",
+      @(WOAActionType_TeacherQueryMySubject):               @[@"TeacherQueryMySubject",
                                                               @"mySubjectQuery"],
-      @(WOAModelActionType_TeacherQueryAvailableTakeover):  @[@"TeacherQueryAvailableTakeover",
+      @(WOAActionType_TeacherQueryAvailableTakeover):       @[@"TeacherQueryAvailableTakeover",
                                                               @"getAvailableSubject"],
-      @(WOAModelActionType_TeacherSubmitTakeover):          @[@"TeacherSubmitTakeover",
+      @(WOAActionType_TeacherSubmitTakeover):               @[@"TeacherSubmitTakeover",
                                                               @"changeSubject"],
       
-      @(WOAModelActionType_TeacherQueryTodoTakeover):       @[@"TeacherQueryTodoTakeover",
+      @(WOAActionType_TeacherQueryTodoTakeover):            @[@"TeacherQueryTodoTakeover",
                                                               @"changeSubjectQuery"],
-      @(WOAModelActionType_TeacherApproveTakeover):         @[@"TeacherApproveTakeover",
+      @(WOAActionType_TeacherApproveTakeover):              @[@"TeacherApproveTakeover",
                                                               @"sendChangeSubject"],
       
-      @(WOAModelActionType_TeacherQueryMyConsume):          @[@"TeacherQueryMyConsume",
+      @(WOAActionType_TeacherQueryMyConsume):               @[@"TeacherQueryMyConsume",
                                                               @"GetConsumList"],
       
-      @(WOAModelActionType_TeacherQueryPayoffSalary):       @[@"TeacherQueryPayoffSalary",
+      @(WOAActionType_TeacherQueryPayoffSalary):            @[@"TeacherQueryPayoffSalary",
                                                               @"getPayoffInfo"],
-      @(WOAModelActionType_TeacherQueryMeritPay):           @[@"TeacherQueryMeritPay",
+      @(WOAActionType_TeacherQueryMeritPay):                @[@"TeacherQueryMeritPay",
                                                               @"getWageInfo"],
       
       //Teacher Student
       
-      @(WOAModelActionType_TeacherGetAttdConditions):       @[@"TeacherGetAttdConditions",
+      @(WOAActionType_TeacherGetAttdConditions):            @[@"TeacherGetAttdConditions",
                                                               @"studentAttendance"],
-      @(WOAModelActionType_TeacherCreateAttdEval):          @[@"TeacherCreateAttdEval",
+      @(WOAActionType_TeacherCreateAttdEval):               @[@"TeacherCreateAttdEval",
                                                               @"toAttendance"],
-      @(WOAModelActionType_TeacherSubmitAttdEval):          @[@"TeacherSubmitAttdEval",
+      @(WOAActionType_TeacherSubmitAttdEval):               @[@"TeacherSubmitAttdEval",
                                                               @"postAttendance"],
       
-      @(WOAModelActionType_TeacherGetCommentConditions):    @[@"TeacherGetCommentConditions",
+      @(WOAActionType_TeacherGetCommentConditions):         @[@"TeacherGetCommentConditions",
                                                               @"evaluationQuery"],
-      @(WOAModelActionType_TeacherGetCommentStudents):      @[@"TeacherGetCommentStudents",
+      @(WOAActionType_TeacherGetCommentStudents):           @[@"TeacherGetCommentStudents",
                                                               @"evaluationClass"],
-      @(WOAModelActionType_TeacherGetStudentComments):      @[@"TeacherGetStudentComments",
+      @(WOAActionType_TeacherGetStudentComments):           @[@"TeacherGetStudentComments",
                                                               @"queryEvalById"],
-      @(WOAModelActionType_TeacherCreateStudentComment):    @[@"TeacherCreateStudentComment",
+      @(WOAActionType_TeacherCreateStudentComment):         @[@"TeacherCreateStudentComment",
                                                               @""],
-      @(WOAModelActionType_TeacherSubmitCommentCreate):     @[@"TeacherSubmitCommentCreate",
+      @(WOAActionType_TeacherSubmitCommentCreate):          @[@"TeacherSubmitCommentCreate",
                                                               @"evaluationStudent"],
-      @(WOAModelActionType_TeacherUpdateStudentComment):    @[@"TeacherUpdateStudentComment",
+      @(WOAActionType_TeacherUpdateStudentComment):         @[@"TeacherUpdateStudentComment",
                                                               @""],
-      @(WOAModelActionType_TeacherSubmitCommentUpdate):     @[@"TeacherSubmitCommentUpdate",
+      @(WOAActionType_TeacherSubmitCommentUpdate):          @[@"TeacherSubmitCommentUpdate",
                                                               @"postEditevaluation"],
-      @(WOAModelActionType_TeacherSubmitCommentDelete):     @[@"TeacherSubmitCommentDelete",
+      @(WOAActionType_TeacherSubmitCommentDelete):          @[@"TeacherSubmitCommentDelete",
                                                               @"deleEvaluation"],
       
-      @(WOAModelActionType_TeacherGetQuatEvalItems):        @[@"TeacherGetQuatEvalItems",
+      @(WOAActionType_TeacherGetQuatEvalItems):             @[@"TeacherGetQuatEvalItems",
                                                               @"quantitativeEval"],
-      @(WOAModelActionType_TeacherGetQuatEvalClasses):      @[@"TeacherGetQuatEvalClasses",
+      @(WOAActionType_TeacherGetQuatEvalClasses):           @[@"TeacherGetQuatEvalClasses",
                                                               @"evalStudentList"],
-      @(WOAModelActionType_TeacherGetQuatEvalStudents):     @[@"TeacherGetQuatEvalStudents",
+      @(WOAActionType_TeacherGetQuatEvalStudents):          @[@"TeacherGetQuatEvalStudents",
                                                               @"loadStudentList"],
-      @(WOAModelActionType_TeacherSelectQuatEvalStudent):   @[@"TeacherSelectQuatEvalStudent",
+      @(WOAActionType_TeacherSelectQuatEvalStudent):        @[@"TeacherSelectQuatEvalStudent",
                                                               @""],
-      @(WOAModelActionType_TeacherSubmitStudentQuatEval):   @[@"TeacherSubmitStudentQuatEval",
+      @(WOAActionType_TeacherSubmitStudentQuatEval):        @[@"TeacherSubmitStudentQuatEval",
                                                               @"postEvalData"],
       
       };
@@ -142,7 +142,7 @@ static NSDictionary *__actionMapDict = nil;
     
 }
 
-+ (NSString*) actionTypeName: (WOAModelActionType)actionType
++ (NSString*) actionTypeName: (WOAActionType)actionType
 {
     NSNumber *actionTypeNumber = [NSNumber numberWithUnsignedInteger: actionType];
     NSArray *actionInfoArray = [__actionMapDict objectForKey: actionTypeNumber];
@@ -150,7 +150,7 @@ static NSDictionary *__actionMapDict = nil;
     return actionInfoArray ? actionInfoArray[0] : @"";
 }
 
-+ (NSString*) msgTypeByActionType: (WOAModelActionType)actionType
++ (NSString*) msgTypeByActionType: (WOAActionType)actionType
 {
     NSNumber *actionTypeNumber = [NSNumber numberWithUnsignedInteger: actionType];
     NSArray *actionInfoArray = [__actionMapDict objectForKey: actionTypeNumber];
@@ -179,7 +179,7 @@ static NSDictionary *__actionMapDict = nil;
     return dict;
 }
 
-+ (NSDictionary*) headerForActionType: (WOAModelActionType)actionType
++ (NSDictionary*) headerForActionType: (WOAActionType)actionType
 {
     NSString *msgType = [self msgTypeByActionType: actionType];
     
@@ -198,7 +198,7 @@ static NSDictionary *__actionMapDict = nil;
     return dict;
 }
 
-+ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAModelActionType)actionType
++ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAActionType)actionType
 {
     return [self baseRequestPacketForMsgType: [self msgTypeByActionType: actionType]];
 }
@@ -243,7 +243,7 @@ static NSDictionary *__actionMapDict = nil;
 
 #pragma mark -
 
-+ (NSDictionary*) packetForSimpleQuery: (WOAModelActionType)actionType
++ (NSDictionary*) packetForSimpleQuery: (WOAActionType)actionType
                         additionalDict: (NSDictionary*)additionalDict
 {
     NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType];
@@ -1159,7 +1159,7 @@ static NSDictionary *__actionMapDict = nil;
         
         [groupArray addObject: [WOANameValuePair pairWithName: name
                                                         value: modelArray
-                                                   actionType: WOAModelActionType_GetTransPerson]];
+                                                   actionType: WOAActionType_GetTransPerson]];
     }
     
     return groupArray;
@@ -1184,7 +1184,7 @@ static NSDictionary *__actionMapDict = nil;
         
         [groupArray addObject: [WOANameValuePair pairWithName: name
                                                         value: modelArray
-                                                   actionType: WOAModelActionType_GetOATable]];
+                                                   actionType: WOAActionType_GetOATable]];
     }
     
     return groupArray;
@@ -1266,7 +1266,7 @@ static NSDictionary *__actionMapDict = nil;
 + (NSArray*) modelForGetTransPerson: (NSDictionary*)personDict
                      departmentDict: (NSDictionary*)departmentDict
                              needXq: (BOOL)needXq
-                         actionType: (WOAModelActionType)actionType
+                         actionType: (WOAActionType)actionType
 {
     NSDictionary *gList = [self dictForGroup: departmentDict
                                      keyName: @"id"
@@ -1416,7 +1416,7 @@ static NSDictionary *__actionMapDict = nil;
                                                        subArray: optionArray
                                                         subDict: nil
                                                        dataType: dataType
-                                                     actionType: WOAModelActionType_None];
+                                                     actionType: WOAActionType_None];
         
         [pairArray addObject: pair];
         [pairArray addObject: seperatorPair];
@@ -1436,7 +1436,7 @@ static NSDictionary *__actionMapDict = nil;
 
 + (NSArray*) modelForAddAssoc: (NSDictionary*)personDict
                departmentDict: (NSDictionary*)departmentDict
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
 {
     return [self modelForGetTransPerson: personDict
                          departmentDict: departmentDict

@@ -14,7 +14,7 @@
 + (instancetype) contentModel: (NSString*)groupTitle
                     pairArray: (NSArray*)pairArray
                  contentArray: (NSArray*)contentArray
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
                    actionName: (NSString*)actionName
                    isReadonly: (BOOL)isReadonly
                       subDict: (NSDictionary*)subDict
@@ -33,7 +33,7 @@
 
 + (instancetype) contentModel: (NSString *)groupTitle
                     pairArray: (NSArray *)pairArray
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
 {
     return [self contentModel: groupTitle
                     pairArray: pairArray
@@ -50,7 +50,7 @@
     return [self contentModel: groupTitle
                     pairArray: pairArray
                  contentArray: nil
-                   actionType: WOAModelActionType_None
+                   actionType: WOAActionType_None
                    actionName: @""
                    isReadonly: YES
                       subDict: nil];
@@ -58,7 +58,7 @@
 
 + (instancetype) contentModel: (NSString*)groupTitle
                  contentArray: (NSArray*)contentArray
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
                    isReadonly: (BOOL)isReadonly
 {
     return [self contentModel: groupTitle

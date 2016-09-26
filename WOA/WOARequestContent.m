@@ -37,7 +37,7 @@ static WOARequestContent *_latestRequestLoginContent = nil;
 
 #pragma mark -
 
-- (instancetype) initWithFlowActionType: (WOAModelActionType)actionType
+- (instancetype) initWithFlowActionType: (WOAActionType)actionType
 {
     if (self = [self init])
     {
@@ -50,7 +50,7 @@ static WOARequestContent *_latestRequestLoginContent = nil;
 + (WOARequestContent*) contentForLogin: (NSString*)accountID
                               password: (NSString*)password
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_Login];
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_Login];
     
     content.bodyDictionary = [WOAPacketHelper packetForLogin: accountID
                                                     password: password];
@@ -60,7 +60,7 @@ static WOARequestContent *_latestRequestLoginContent = nil;
 
 #pragma mark -
 
-+ (WOARequestContent*) contentForSimpleQuery: (WOAModelActionType)actionType
++ (WOARequestContent*) contentForSimpleQuery: (WOAActionType)actionType
                               additionalDict: (NSDictionary*)additionalDict
 {
     WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: actionType];

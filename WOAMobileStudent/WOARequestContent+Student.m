@@ -13,7 +13,7 @@
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
                                   optionDict: (NSDictionary*)optionDict
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_SimpleQuery];
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_SimpleQuery];
     
     content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
                                                         optionDict: optionDict];
@@ -24,7 +24,7 @@
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
                                     paraDict: (NSDictionary*)paraDict
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_SimpleQuery];
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_SimpleQuery];
     
     content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
                                                           paraDict: paraDict];
@@ -36,7 +36,7 @@
                                     fromDate: (NSString*)fromDate
                                       toDate: (NSString*)toDate
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAModelActionType_SimpleQuery];
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_SimpleQuery];
     
     content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
                                                           fromDate: fromDate

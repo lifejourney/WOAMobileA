@@ -334,11 +334,11 @@
             {
                 NSString *name = [self titleByIndex: index arrayValue: arrayValue];
                 NSString *value = nil;
-                WOAModelActionType actionType = WOAModelActionType_None;
+                WOAActionType actionType = WOAActionType_None;
                 if (_pairType == WOAPairDataType_AttachFile)
                 {
                     value = [self URLByIndex: index arrayValue: arrayValue];
-                    actionType = WOAModelActionType_OpenUrl;
+                    actionType = WOAActionType_OpenUrl;
                 }
                 
                 [labelContentModel addPair: [WOANameValuePair pairWithName: name

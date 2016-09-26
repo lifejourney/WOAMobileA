@@ -212,7 +212,7 @@
 
 #pragma mark - action for myOA
 
-- (void) tchrQueryOAList: (WOAModelActionType)actionType
+- (void) tchrQueryOAList: (WOAActionType)actionType
                    title: (NSString*)title
                ownerNavC: (UINavigationController*)ownerNavC
 {
@@ -220,15 +220,15 @@
                                                     addtionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAModelActionType itemActionType;
+         WOAActionType itemActionType;
          
-         if (actionType == WOAModelActionType_TeacherQueryTodoOA)
+         if (actionType == WOAActionType_TeacherQueryTodoOA)
          {
-             itemActionType = WOAModelActionType_TeacherProcessOAItem;
+             itemActionType = WOAActionType_TeacherProcessOAItem;
          }
          else
          {
-             itemActionType = WOAModelActionType_TeacherQueryOADetail;
+             itemActionType = WOAActionType_TeacherQueryOADetail;
          }
          
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOAList: responseContent.bodyDictionary
@@ -253,7 +253,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [self tchrQueryOAList: WOAModelActionType_TeacherQueryTodoOA
+    [self tchrQueryOAList: WOAActionType_TeacherQueryTodoOA
                     title: vcTitle
                 ownerNavC: ownerNavC];
 }
@@ -264,7 +264,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [self tchrQueryOAList: WOAModelActionType_TeacherQueryHistoryOA
+    [self tchrQueryOAList: WOAActionType_TeacherQueryHistoryOA
                     title: vcTitle
                 ownerNavC: ownerNavC];
 }
@@ -275,15 +275,15 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAModelActionType_TeacherQueryOATableList
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryOATableList
                                                     addtionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOATableList: responseContent.bodyDictionary
-                                                                        pairActionType: WOAModelActionType_TeacherCreateOAItem];
+                                                                        pairActionType: WOAActionType_TeacherCreateOAItem];
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                              pairArray: pairArray
-                                                            actionType: WOAModelActionType_TeacherCreateOAItem];
+                                                            actionType: WOAActionType_TeacherCreateOAItem];
          
          WOAFilterListViewController *subVC = [WOAFilterListViewController filterListViewController: contentModel
                                                                                            delegate: self
@@ -302,28 +302,28 @@
 {
     switch (selectedPair.actionType)
     {
-        case WOAModelActionType_TeacherProcessOAItem:
+        case WOAActionType_TeacherProcessOAItem:
             break;
             
-        case WOAModelActionType_TeacherSubmitOAProcess:
+        case WOAActionType_TeacherSubmitOAProcess:
             break;
             
-        case WOAModelActionType_TeacherOAProcessStyle:
+        case WOAActionType_TeacherOAProcessStyle:
             break;
             
-        case WOAModelActionType_TeacherNextAccounts:
+        case WOAActionType_TeacherNextAccounts:
             break;
             
-        case WOAModelActionType_TeacherQueryOATableList:
+        case WOAActionType_TeacherQueryOATableList:
             break;
             
-        case WOAModelActionType_TeacherCreateOAItem:
+        case WOAActionType_TeacherCreateOAItem:
             break;
             
-        case WOAModelActionType_TeacherSubmitOACreate:
+        case WOAActionType_TeacherSubmitOACreate:
             break;
             
-        case WOAModelActionType_TeacherQueryOADetail:
+        case WOAActionType_TeacherQueryOADetail:
             break;
             
         default:
@@ -340,28 +340,28 @@
 {
     switch (selectedPair.actionType)
     {
-        case WOAModelActionType_TeacherProcessOAItem:
+        case WOAActionType_TeacherProcessOAItem:
             break;
             
-        case WOAModelActionType_TeacherSubmitOAProcess:
+        case WOAActionType_TeacherSubmitOAProcess:
             break;
             
-        case WOAModelActionType_TeacherOAProcessStyle:
+        case WOAActionType_TeacherOAProcessStyle:
             break;
             
-        case WOAModelActionType_TeacherNextAccounts:
+        case WOAActionType_TeacherNextAccounts:
             break;
             
-        case WOAModelActionType_TeacherQueryOATableList:
+        case WOAActionType_TeacherQueryOATableList:
             break;
             
-        case WOAModelActionType_TeacherCreateOAItem:
+        case WOAActionType_TeacherCreateOAItem:
             break;
             
-        case WOAModelActionType_TeacherSubmitOACreate:
+        case WOAActionType_TeacherSubmitOACreate:
             break;
             
-        case WOAModelActionType_TeacherQueryOADetail:
+        case WOAActionType_TeacherQueryOADetail:
             break;
             
         default:

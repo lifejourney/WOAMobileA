@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, assign) WOAModelActionType submitActionType;
+@property (nonatomic, assign) WOAActionType submitActionType;
 @property (nonatomic, strong) NSArray *rootPairArray;
 @property (nonatomic, strong) NSDictionary *relatedDict;
 

@@ -14,11 +14,11 @@
 #pragma mark -
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
-                          pairActionType: (WOAModelActionType)pairActionType;
+                          pairActionType: (WOAActionType)pairActionType;
 + (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
-                               pairActionType: (WOAModelActionType)pairActionType;
+                               pairActionType: (WOAActionType)pairActionType;
 + (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
-                        pairActionType: (WOAModelActionType)pairActionType;
+                        pairActionType: (WOAActionType)pairActionType;
 
 @end
 

@@ -57,7 +57,7 @@
         }
         WOAContentModel *groupContent = [WOAContentModel contentModel: @""
                                                             pairArray: pairArray
-                                                           actionType: WOAModelActionType_None];
+                                                           actionType: WOAActionType_None];
         
         self.modelArray = @[groupContent];
         self.valueIndexPathDictionary = [self generateValueIndexPathDictionary];
@@ -207,7 +207,7 @@
 #pragma mark - WOAMultiPickerViewControllerDelegate
 
 - (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
-                        actionType: (WOAModelActionType)actionType
+                        actionType: (WOAActionType)actionType
                  selectedPairArray: (NSArray *)selectedPairArray
                        relatedDict: (NSDictionary *)relatedDict
                              navVC: (UINavigationController *)navVC

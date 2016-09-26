@@ -114,7 +114,7 @@ static WOARequestManager *requestManager = nil;
 
 #pragma mark -
 
-- (void) simpleQueryFlowActionType: (WOAModelActionType)actionType
+- (void) simpleQueryFlowActionType: (WOAActionType)actionType
                      addtionalDict: (NSDictionary*)addtionalDict
                         onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
 {

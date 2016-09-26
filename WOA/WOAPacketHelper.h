@@ -30,15 +30,15 @@
 #pragma mark -
 
 + (void) initActionMapDict;
-+ (NSString*) actionTypeName: (WOAModelActionType)actionType;
-+ (NSString*) msgTypeByActionType: (WOAModelActionType)actionType;
++ (NSString*) actionTypeName: (WOAActionType)actionType;
++ (NSString*) msgTypeByActionType: (WOAActionType)actionType;
 
 #pragma mark -
 
 + (NSDictionary*) headerForMsgType: (NSString*)msgType;
-+ (NSDictionary*) headerForActionType: (WOAModelActionType)actionType;
++ (NSDictionary*) headerForActionType: (WOAActionType)actionType;
 + (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType;
-+ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAModelActionType)actionType;
++ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAActionType)actionType;
 
 #pragma mark -
 
@@ -46,7 +46,7 @@
 
 #pragma mark -
 
-+ (NSDictionary*) packetForSimpleQuery: (WOAModelActionType)actionType
++ (NSDictionary*) packetForSimpleQuery: (WOAActionType)actionType
                         additionalDict: (NSDictionary*)additionalDict;
 
 #pragma mark -
@@ -155,11 +155,11 @@
 + (NSArray*) modelForGetTransPerson: (NSDictionary*)personDict
                      departmentDict: (NSDictionary*)departmentDict
                              needXq: (BOOL)needXq
-                         actionType: (WOAModelActionType)actionType;
+                         actionType: (WOAActionType)actionType;
 + (NSArray*) modelForTransactionTable: (NSDictionary*)retDict;
 + (NSArray*) modelForGetOATable: (NSDictionary*)retDict;
 + (NSArray*) modelForAddAssoc: (NSDictionary*)personDict
                departmentDict: (NSDictionary*)departmentDict
-                   actionType: (WOAModelActionType)actionType;
+                   actionType: (WOAActionType)actionType;
 
 @end

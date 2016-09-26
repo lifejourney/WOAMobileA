@@ -22,7 +22,7 @@
 @property (nonatomic, copy) NSString *groupTitle;
 @property (nonatomic, strong) NSArray *pairArray;       //Array of WOANameValuePair
 @property (nonatomic, strong) NSArray *contentArray;    //Array of WOAContentModel, Ex: ContentViewController.
-@property (nonatomic, assign) WOAModelActionType actionType;
+@property (nonatomic, assign) WOAActionType actionType;
 @property (nonatomic, copy) NSString *actionName;
 @property (nonatomic, assign) BOOL isReadonly;
 @property (nonatomic, strong) NSDictionary *subDict; //For reference list
@@ -31,20 +31,20 @@
 + (instancetype) contentModel: (NSString*)groupTitle
                     pairArray: (NSArray*)pairArray
                  contentArray: (NSArray*)contentArray
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
                    actionName: (NSString*)actionName //RightButton Title
                    isReadonly: (BOOL)isReadonly
                       subDict: (NSDictionary*)subDict;
 
 + (instancetype) contentModel: (NSString*)groupTitle
                     pairArray: (NSArray*)pairArray
-                   actionType: (WOAModelActionType)actionType;
+                   actionType: (WOAActionType)actionType;
 + (instancetype) contentModel: (NSString*)groupTitle
                     pairArray: (NSArray*)pairArray;
 
 + (instancetype) contentModel: (NSString*)groupTitle
                  contentArray: (NSArray*)contentArray
-                   actionType: (WOAModelActionType)actionType
+                   actionType: (WOAActionType)actionType
                    isReadonly: (BOOL)isReadonly;
 
 - (void) addPair: (WOANameValuePair*)pair;

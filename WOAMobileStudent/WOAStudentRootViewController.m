@@ -740,7 +740,7 @@
 {
     switch (selectedPair.actionType)
     {
-        case WOAModelActionType_GetTransPerson:
+        case WOAActionType_GetTransPerson:
         {
             NSArray *modelArray = (NSArray*)selectedPair.value;
             WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
@@ -754,7 +754,7 @@
         }
             break;
             
-        case WOAModelActionType_GetOATable:
+        case WOAActionType_GetOATable:
         {
             NSArray *modelArray = (NSArray*)selectedPair.value;
             WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
@@ -766,7 +766,7 @@
         }
             break;
             
-        case WOAModelActionType_GetTransTable:
+        case WOAActionType_GetTransTable:
         {
             NSMutableDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
             [optionDict addEntriesFromDictionary: selectedPair.subDictionary];
@@ -801,7 +801,7 @@
          NSArray *modelArray = [WOAPacketHelper modelForGetTransPerson: personList
                                                         departmentDict: departmentList
                                                                 needXq: [transType isEqualToString: @"1"]
-                                                            actionType: WOAModelActionType_GetTransTable];
+                                                            actionType: WOAActionType_GetTransTable];
          NSMutableArray *pairArray = [NSMutableArray array];
          for (NSInteger index = 0; index < modelArray.count; index++)
          {
@@ -845,7 +845,7 @@
                                                                                 isEditable: YES
                                                                                 modelArray: modelArray];
          subVC.baseRequestDict = baseDict;
-         subVC.rightButtonAction = WOAModelActionType_AddAssoc;
+         subVC.rightButtonAction = WOAActionType_AddAssoc;
          subVC.rightButtonTitle = @"提交";
          
          [navVC pushViewController: subVC animated: YES];
@@ -870,7 +870,7 @@
                                                                                 isEditable: YES
                                                                                 modelArray: modelArray];
          subVC.baseRequestDict = baseDict;
-         subVC.rightButtonAction = WOAModelActionType_SubmitTransTable;
+         subVC.rightButtonAction = WOAActionType_SubmitTransTable;
          subVC.rightButtonTitle = @"提交";
          
          [navVC pushViewController: subVC animated: YES];
@@ -880,11 +880,11 @@
 //- (void) onRightButtonAction: (id)sender
 //{
 //    switch (self.rightButtonAction) {
-//        case WOAModelActionType_SubmitTransTable:
+//        case WOAActionType_SubmitTransTable:
 //            [self onSubmitTransTable];
 //            break;
 //            
-//        case WOAModelActionType_AddAssoc:
+//        case WOAActionType_AddAssoc:
 //            [self onAddAssoc];
 //            break;
 //            
@@ -939,7 +939,7 @@
 //         
 //         NSArray *modelArray = [WOAPacketHelper modelForAddAssoc: personList
 //                                                  departmentDict: departmentList
-//                                                      actionType: WOAModelActionType_None];
+//                                                      actionType: WOAActionType_None];
 //         
 //         NSMutableArray *pairArray = [NSMutableArray array];
 //         for (NSInteger index = 0; index < modelArray.count; index++)
@@ -951,7 +951,7 @@
 //         
 //         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
 //                                                                 pairArray: pairArray
-//                                                                actionType: WOAModelActionType_AddOAPerson];
+//                                                                actionType: WOAActionType_AddOAPerson];
 //         
 //         WOAMultiPickerViewController *subVC;
 //         subVC = [WOAMultiPickerViewController multiPickerViewController: flowContentModel
@@ -968,14 +968,14 @@
 //#pragma mark - WOAMultiPickerViewControllerDelegate
 //
 //- (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
-//                        actionType: (WOAModelActionType)actionType
+//                        actionType: (WOAActionType)actionType
 //                 selectedPairArray: (NSArray *)selectedPairArray
 //                       relatedDict: (NSDictionary *)relatedDict
 //                             navVC: (UINavigationController *)navVC
 //{
 //    switch (actionType)
 //    {
-//        case WOAModelActionType_AddOAPerson:
+//        case WOAActionType_AddOAPerson:
 //        {
 //            NSMutableArray *idArray = [NSMutableArray array];
 //            for (NSInteger index = 0; index < selectedPairArray.count; index++)

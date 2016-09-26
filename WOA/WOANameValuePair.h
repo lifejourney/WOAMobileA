@@ -36,94 +36,94 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     WOAPairDataType_FlowText,
 };
 
-typedef NS_ENUM(NSUInteger, WOAModelActionType)
+typedef NS_ENUM(NSUInteger, WOAActionType)
 {
-    WOAModelActionType_None,
+    WOAActionType_None,
     
     //Common action
-    WOAModelActionType_FlowDone,
+    WOAActionType_FlowDone,
     
-    WOAModelActionType_Login,
-    WOAModelActionType_Logout,
+    WOAActionType_Login,
+    WOAActionType_Logout,
     
-    WOAModelActionType_UploadAttachment,
+    WOAActionType_UploadAttachment,
     
-    WOAModelActionType_OpenUrl,
+    WOAActionType_OpenUrl,
     
     //Teacher OA
-    WOAModelActionType_TeacherQueryTodoOA,
-    WOAModelActionType_TeacherProcessOAItem,
-    WOAModelActionType_TeacherSubmitOAProcess,
+    WOAActionType_TeacherQueryTodoOA,
+    WOAActionType_TeacherProcessOAItem,
+    WOAActionType_TeacherSubmitOAProcess,
     
-    WOAModelActionType_TeacherQueryOATableList,
-    WOAModelActionType_TeacherCreateOAItem,
-    WOAModelActionType_TeacherSubmitOACreate,
+    WOAActionType_TeacherQueryOATableList,
+    WOAActionType_TeacherCreateOAItem,
+    WOAActionType_TeacherSubmitOACreate,
     
-    WOAModelActionType_TeacherOAProcessStyle,
-    WOAModelActionType_TeacherNextAccounts,
+    WOAActionType_TeacherOAProcessStyle,
+    WOAActionType_TeacherNextAccounts,
     
-    WOAModelActionType_TeacherQueryHistoryOA,
-    WOAModelActionType_TeacherQueryOADetail,
+    WOAActionType_TeacherQueryHistoryOA,
+    WOAActionType_TeacherQueryOADetail,
     
     //Teacher Business
-    WOAModelActionType_TeacherGetSyllabusConditions,
-    WOAModelActionType_TeacherQuerySyllabus,
+    WOAActionType_TeacherGetSyllabusConditions,
+    WOAActionType_TeacherQuerySyllabus,
     
-    WOAModelActionType_TeacherQueryBusinessTableList,
-    WOAModelActionType_TeacherCreateBusinessItem,
-    WOAModelActionType_TeacherSelectOtherTeacher,
-    WOAModelActionType_TeacherSubmitBusinessCreate,
+    WOAActionType_TeacherQueryBusinessTableList,
+    WOAActionType_TeacherCreateBusinessItem,
+    WOAActionType_TeacherSelectOtherTeacher,
+    WOAActionType_TeacherSubmitBusinessCreate,
     
-    WOAModelActionType_TeacherQueryContacts,
+    WOAActionType_TeacherQueryContacts,
     
     ////////////////////////////////////////
-    WOAModelActionType_TeacherQueryMySubject,
-    WOAModelActionType_TeacherQueryAvailableTakeover,
-    WOAModelActionType_TeacherSubmitTakeover,
+    WOAActionType_TeacherQueryMySubject,
+    WOAActionType_TeacherQueryAvailableTakeover,
+    WOAActionType_TeacherSubmitTakeover,
     
-    WOAModelActionType_TeacherQueryTodoTakeover,
-    WOAModelActionType_TeacherApproveTakeover,
+    WOAActionType_TeacherQueryTodoTakeover,
+    WOAActionType_TeacherApproveTakeover,
     ////////////////////////////////////////
     
-    WOAModelActionType_TeacherQueryMyConsume,
+    WOAActionType_TeacherQueryMyConsume,
     
-    WOAModelActionType_TeacherQueryPayoffSalary,
-    WOAModelActionType_TeacherQueryMeritPay,
+    WOAActionType_TeacherQueryPayoffSalary,
+    WOAActionType_TeacherQueryMeritPay,
     
     //Teacher Student
     
-    WOAModelActionType_TeacherGetAttdConditions,
-    WOAModelActionType_TeacherCreateAttdEval,
-    WOAModelActionType_TeacherSubmitAttdEval,
+    WOAActionType_TeacherGetAttdConditions,
+    WOAActionType_TeacherCreateAttdEval,
+    WOAActionType_TeacherSubmitAttdEval,
     
-    WOAModelActionType_TeacherGetCommentConditions,
-    WOAModelActionType_TeacherGetCommentStudents,
-    WOAModelActionType_TeacherGetStudentComments,
-    WOAModelActionType_TeacherCreateStudentComment,
-    WOAModelActionType_TeacherSubmitCommentCreate,
-    WOAModelActionType_TeacherUpdateStudentComment,
-    WOAModelActionType_TeacherSubmitCommentUpdate,
-    WOAModelActionType_TeacherSubmitCommentDelete,
+    WOAActionType_TeacherGetCommentConditions,
+    WOAActionType_TeacherGetCommentStudents,
+    WOAActionType_TeacherGetStudentComments,
+    WOAActionType_TeacherCreateStudentComment,
+    WOAActionType_TeacherSubmitCommentCreate,
+    WOAActionType_TeacherUpdateStudentComment,
+    WOAActionType_TeacherSubmitCommentUpdate,
+    WOAActionType_TeacherSubmitCommentDelete,
     
-    WOAModelActionType_TeacherGetQuatEvalItems,
-    WOAModelActionType_TeacherGetQuatEvalClasses,
-    WOAModelActionType_TeacherGetQuatEvalStudents,
-    WOAModelActionType_TeacherSelectQuatEvalStudent,
-    WOAModelActionType_TeacherSubmitStudentQuatEval,
+    WOAActionType_TeacherGetQuatEvalItems,
+    WOAActionType_TeacherGetQuatEvalClasses,
+    WOAActionType_TeacherGetQuatEvalStudents,
+    WOAActionType_TeacherSelectQuatEvalStudent,
+    WOAActionType_TeacherSubmitStudentQuatEval,
     
     //Student
     
-    WOAModelActionType_SimpleQuery,
-    WOAModelActionType_Others,
+    WOAActionType_SimpleQuery,
+    WOAActionType_Others,
     
     //WOA bussiness action
     
-    WOAModelActionType_GetTransPerson,
-    WOAModelActionType_GetTransTable,
-    WOAModelActionType_SubmitTransTable,
-    WOAModelActionType_GetOATable,
-    WOAModelActionType_AddAssoc,
-    WOAModelActionType_AddOAPerson,
+    WOAActionType_GetTransPerson,
+    WOAActionType_GetTransTable,
+    WOAActionType_SubmitTransTable,
+    WOAActionType_GetOATable,
+    WOAActionType_AddAssoc,
+    WOAActionType_AddOAPerson,
 };
 
 @interface WOANameValuePair : NSObject
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
 @property (nonatomic, strong) NSArray *subArray; //For selective list, array of string
 @property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
 @property (nonatomic, assign) WOAPairDataType dataType;
-@property (nonatomic, assign) WOAModelActionType actionType;
+@property (nonatomic, assign) WOAActionType actionType;
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
@@ -142,7 +142,7 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
                      subArray: (NSArray*)subArray
                       subDict: (NSDictionary*)subDict
                      dataType: (WOAPairDataType)dataType
-                   actionType: (WOAModelActionType)actionType;
+                   actionType: (WOAActionType)actionType;
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
@@ -152,13 +152,13 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                      dataType: (WOAPairDataType)dataType
-                   actionType: (WOAModelActionType)actionType;
+                   actionType: (WOAActionType)actionType;
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                      dataType: (WOAPairDataType)dataType;
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
-                   actionType: (WOAModelActionType)actionType;
+                   actionType: (WOAActionType)actionType;
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value;

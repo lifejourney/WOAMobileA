@@ -12,7 +12,7 @@
 
 @interface WOARequestContent : NSObject
 
-@property (nonatomic, assign) WOAModelActionType actionType;
+@property (nonatomic, assign) WOAActionType actionType;
 @property (nonatomic, strong) NSDictionary *bodyDictionary;
 @property (nonatomic, strong) NSArray *multiBodyArray;
 
@@ -32,7 +32,7 @@
 
 #pragma mark -
 
-+ (WOARequestContent*) contentForSimpleQuery: (WOAModelActionType)actionType
++ (WOARequestContent*) contentForSimpleQuery: (WOAActionType)actionType
                               additionalDict: (NSDictionary*)additionalDict;
 
 @end

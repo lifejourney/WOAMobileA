@@ -78,7 +78,7 @@
             CGRect textRect = CGRectMake(0, originY, onelineSize.width, onelineSize.height);
             
             UILabel *oneLineLabel;
-            if (pair.actionType == WOAModelActionType_OpenUrl)
+            if (pair.actionType == WOAActionType_OpenUrl)
             {
                 WOALinkLabel *linkLabel = [[WOALinkLabel alloc] initWithFrame: textRect];
                 linkLabel.delegate = self;
@@ -95,7 +95,7 @@
             oneLineLabel.text = textContent;
             oneLineLabel.tag = index;
             oneLineLabel.textAlignment = NSTextAlignmentLeft;
-            oneLineLabel.userInteractionEnabled = (pair.actionType == WOAModelActionType_OpenUrl);
+            oneLineLabel.userInteractionEnabled = (pair.actionType == WOAActionType_OpenUrl);
             
             [self addSubview: oneLineLabel];
             
@@ -115,7 +115,7 @@
 {
     WOANameValuePair *pair = self.contentModel.pairArray[tag];
     
-    if (pair.actionType == WOAModelActionType_OpenUrl)
+    if (pair.actionType == WOAActionType_OpenUrl)
     {
         NSString *urlString = [pair stringValue];
         
