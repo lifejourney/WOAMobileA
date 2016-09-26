@@ -50,20 +50,66 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
     
     WOAModelActionType_OpenUrl,
     
-    //Teacher
+    //Teacher OA
     WOAModelActionType_TeacherQueryTodoOA,
     WOAModelActionType_TeacherProcessOAItem,
     WOAModelActionType_TeacherSubmitOAProcess,
-    
-    WOAModelActionType_TeacherOAProcessStyle,
-    WOAModelActionType_TeacherNextAccounts,
     
     WOAModelActionType_TeacherQueryOATableList,
     WOAModelActionType_TeacherCreateOAItem,
     WOAModelActionType_TeacherSubmitOACreate,
     
+    WOAModelActionType_TeacherOAProcessStyle,
+    WOAModelActionType_TeacherNextAccounts,
+    
     WOAModelActionType_TeacherQueryHistoryOA,
     WOAModelActionType_TeacherQueryOADetail,
+    
+    //Teacher Business
+    WOAModelActionType_TeacherGetSyllabusConditions,
+    WOAModelActionType_TeacherQuerySyllabus,
+    
+    WOAModelActionType_TeacherQueryBusinessTableList,
+    WOAModelActionType_TeacherCreateBusinessItem,
+    WOAModelActionType_TeacherSelectOtherTeacher,
+    WOAModelActionType_TeacherSubmitBusinessCreate,
+    
+    WOAModelActionType_TeacherQueryContacts,
+    
+    ////////////////////////////////////////
+    WOAModelActionType_TeacherQueryMySubject,
+    WOAModelActionType_TeacherQueryAvailableTakeover,
+    WOAModelActionType_TeacherSubmitTakeover,
+    
+    WOAModelActionType_TeacherQueryTodoTakeover,
+    WOAModelActionType_TeacherApproveTakeover,
+    ////////////////////////////////////////
+    
+    WOAModelActionType_TeacherQueryMyConsume,
+    
+    WOAModelActionType_TeacherQueryPayoffSalary,
+    WOAModelActionType_TeacherQueryMeritPay,
+    
+    //Teacher Student
+    
+    WOAModelActionType_TeacherGetAttdConditions,
+    WOAModelActionType_TeacherCreateAttdEval,
+    WOAModelActionType_TeacherSubmitAttdEval,
+    
+    WOAModelActionType_TeacherGetCommentConditions,
+    WOAModelActionType_TeacherGetCommentStudents,
+    WOAModelActionType_TeacherGetStudentComments,
+    WOAModelActionType_TeacherCreateStudentComment,
+    WOAModelActionType_TeacherSubmitCommentCreate,
+    WOAModelActionType_TeacherUpdateStudentComment,
+    WOAModelActionType_TeacherSubmitCommentUpdate,
+    WOAModelActionType_TeacherSubmitCommentDelete,
+    
+    WOAModelActionType_TeacherGetQuatEvalItems,
+    WOAModelActionType_TeacherGetQuatEvalClasses,
+    WOAModelActionType_TeacherGetQuatEvalStudents,
+    WOAModelActionType_TeacherSelectQuatEvalStudent,
+    WOAModelActionType_TeacherSubmitStudentQuatEval,
     
     //Student
     
