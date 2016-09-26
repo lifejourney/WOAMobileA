@@ -330,16 +330,16 @@ static NSDictionary *__actionMapDict = nil;
 
 
 
-+ (NSString*) resultPromptFromPacketDictionary: (NSDictionary*)dict
++ (NSString*) resultDescriptionFromPacketDictionary: (NSDictionary*)dict
 {
     NSDictionary *resultDict = [self resultFromPacketDictionary: dict];
     
-    return [resultDict valueForKey: @"prompt"];
+    return [resultDict valueForKey: kWOAKeyNameForResultDescription];
 }
 
-+ (NSString*) promptFromPacketDictionary: (NSDictionary*)dict
++ (NSString*) descriptionFromPacketDictionary: (NSDictionary*)dict
 {
-    return [dict valueForKey: @"prompt"];
+    return [dict valueForKey: kWOAKeyNameForResultDescription];
 }
 
 + (NSDictionary*) retListFromPacketDictionary: (NSDictionary *)dict

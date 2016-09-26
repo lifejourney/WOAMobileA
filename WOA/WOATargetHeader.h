@@ -9,7 +9,15 @@
 #ifndef WOATargetHeader_h
 #define WOATargetHeader_h
 
+#ifdef WOAMobileTeacher
 
+#define kWOAKeyNameForResultDescription @"description"
+
+#else
+
+#define kWOAKeyNameForResultDescription @"prompt"
+
+#endif
 
 
 #endif /* WOATargetHeader_h */

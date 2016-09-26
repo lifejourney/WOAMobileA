@@ -13,6 +13,11 @@
 
 #pragma mark -
 
++ (NSDictionary*) packetDictWithFromTime: (NSString*)fromTimeStr
+                                  toTime: (NSString*)endTimeStr;
+
+#pragma mark -
+
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
                           pairActionType: (WOAActionType)pairActionType;
 + (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict

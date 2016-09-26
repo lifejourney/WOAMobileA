@@ -37,7 +37,7 @@
 #pragma mark -
 
 - (void) simpleQueryFlowActionType: (WOAActionType)actionType
-                     addtionalDict: (NSDictionary*)addtionalDict
+                    additionalDict: (NSDictionary*)additionalDict
                         onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
 
 //- (void) simpleQuery: (NSString*)msgType

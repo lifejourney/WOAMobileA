@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WOATargetHeader.h"
+
 
 typedef NS_ENUM(NSUInteger, WOAPairDataType)
 {

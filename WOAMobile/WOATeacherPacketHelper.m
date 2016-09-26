@@ -20,6 +20,20 @@
 
 #pragma mark -
 
++ (NSDictionary*) packetDictWithFromTime: (NSString*)fromTimeStr
+                                  toTime: (NSString*)endTimeStr
+{
+    NSMutableDictionary *packetDict = [NSMutableDictionary dictionary];
+    
+    [packetDict setValue: fromTimeStr forKey: @"fromTime"];
+    [packetDict setValue: endTimeStr forKey: @"toTime"];
+    //[packetDict setValue: @"1" forKey: @"pageNum"];
+    
+    return packetDict;
+}
+
+#pragma mark -
+
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
                           pairActionType: (WOAActionType)pairActionType
 {

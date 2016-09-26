@@ -11,106 +11,9 @@
 #import "WOAFlowListViewController.h"
 #import "WOAFilterListViewController.h"
 #import "WOAContentViewController.h"
+#import "WOADateFromToPickerViewController.h"
 #import "WOARequestManager.h"
 #import "WOATeacherPacketHelper.h"
-
-/**before public
- remove pragram mark
- 
- */
-/**issue
- 0. 内存
- 1. length for account and password
- 2. http request error for login fail, session invalid
- 3. protocol:
- -- phoneID --> deviceToken, and should be string
- -- checkSum: how to calculate
- -- prefer to be string type
- -- sessionID --> string type
- -- should define the component order? Test JSON order and dictionary key order?
- -- what would return for session invalid.
- -- the item count in response isn't needed.
- -- 日期选择器, date format
- -- int: int32? int64?
- -- tableName & name ==> tableName
- itmes --> items
- -- dateTime: date, time, dateTime
- -- abstract
- -- isWrite = false, do not need to submit?
- 
- 
- 4. Needed edge case:
- -- connection error: login, workflow
- */
-
-/** RC Research
- RCMenuController
- AppDelegate:
- tabBarController
- RCSendMessageView
- 
- deviceToken: translate
- */
-
-/** Research
- tabBarItem怎样只有标题，没有图片
- tableView, reuseIdentifier
- 
- 在navigation的VC里，为什么加一个table view，就可以自动调整好位置
- 而其他的不行?
- 怎样让加进去的view 自动在navigation bar的下面?
- UIPickerView的整体高度怎么自定义
- 
- 真机调试，crash的调用栈
- */
-
-/**
- App:
- App status response:
- start/terminate
- forground
- background
- activity for network response
- ViewControllers:
- RootViewController -- TabBar
- Login
- Loading
- InitiateWorkflowNavC:
- WorkflowCategoryListVC
- WorkflowTypeListVC
- InitiateWorkflowVC
- SelectNextStepVC
- SelectNextReviewerVC
- SubmitResult
- TodoWorkflowNavC:
- TodoWorkflowListVC
- ReviewWorkflowVC
- SelectNextStepVC
- SelectNextReviewerVC
- SubmitResult
- AppliedWorkflowNavC
- AppliedWorkflowVC
- WorkflowDetailVC
- MoreFeatureNavC
- MoreFeatureVC
- Dictionary To View Item
- View Item to Dictionary
- TO-DO:
- APN
- Attachment
- Controller:
- LocalStorage,
- Session,
- 
- FLowController,
- FlowType
- FlowSteps
- Model:
- PropertyInfo,
- Connection, Requester, JSON Parser/Serializer
- Utility:
- BrandData
- */
 
 /**
  Ver 1.02.02:
@@ -123,8 +26,6 @@
  4. Support show content in multiple lines.
  5. Add server setting entry in the login view.
  */
-
-
 
 @interface WOATeacherRootViewController() <WOAFlowListViewControllerDelegate,
                                             WOAFilterListViewControllerDelegate>
@@ -217,7 +118,7 @@
                ownerNavC: (UINavigationController*)ownerNavC
 {
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                    addtionalDict: nil
+                                                   additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType;
@@ -276,7 +177,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryOATableList
-                                                    addtionalDict: nil
+                                                   additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOATableList: responseContent.bodyDictionary
@@ -290,6 +191,168 @@
                                                                                         relatedDict: nil];
          
          [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+#pragma mark - action for Business
+
+- (void) tchrQuerySyllabus
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetSyllabusConditions
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) tchrFillTable
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryBusinessTableList
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) tchrQueryContacts
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryContacts
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) tchrApplyTakeover
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryMySubject
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) tchrApproveTakeover
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryTodoTakeover
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) tchrQueryMyConsume
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    __block WOADateFromToPickerViewController *pickerVC;
+    pickerVC = [WOADateFromToPickerViewController pickerWithTitle: @"查询时间段"
+                                                       onSuccuess: ^(NSString *fromDateString, NSString *toDateString)
+                {
+                    [pickerVC.navigationController popViewControllerAnimated: YES];
+                    
+                    NSDictionary *addtDict = [WOATeacherPacketHelper packetDictWithFromTime: fromDateString
+                                                                                     toTime: toDateString];
+                    
+                    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryMyConsume
+                                                                   additionalDict: addtDict
+                                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+                     {
+                     }];
+                }
+                                                         onCancel: ^()
+                {
+                }];
+    
+    [ownerNavC pushViewController: pickerVC animated: YES];
+}
+
+- (void) tchrQueryPayoffSalary
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryPayoffSalary
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) tchrQueryMeritPay
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryMeritPay
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+#pragma mark - action for Student Manage
+
+- (void) tchrCheckStudentAttd
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetAttdConditions
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) thcrCommentStuendt
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetCommentConditions
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+     }];
+}
+
+- (void) thcrQuantativeEval
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetQuatEvalItems
+                                                   additionalDict: nil
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
      }];
 }
 

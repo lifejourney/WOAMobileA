@@ -1056,6 +1056,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				ProductCNName = "智慧云2";
+				WOAMobileTeacher = 1;
 			};
 			name = Debug;
 		};
@@ -1074,6 +1075,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				ProductCNName = "智慧云2";
+				WOAMobileTeacher = 1;
 			};
 			name = Release;
 		};
@@ -1170,6 +1172,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				ProductCNName = "智慧云学生版";
+				WOAMobileStudent = 2;
 			};
 			name = Debug;
 		};
@@ -1187,6 +1190,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				ProductCNName = "智慧云学生版";
+				WOAMobileStudent = 2;
 			};
 			name = Release;
 		};

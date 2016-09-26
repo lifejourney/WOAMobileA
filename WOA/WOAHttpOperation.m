@@ -351,7 +351,7 @@
                 
                 if (resultCode != WOAWorkflowResultCode_Success)
                 {
-                    resultDescription = [WOAPacketHelper resultPromptFromPacketDictionary: bodyDictionary];
+                    resultDescription = [WOAPacketHelper resultDescriptionFromPacketDictionary: bodyDictionary];
                     
                     //TO-DO, temporarily
 //                    if (resultCode == WOAWorkflowResultCode_InvalidSession)

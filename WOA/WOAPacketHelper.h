@@ -61,8 +61,8 @@
 
 #pragma mark -
 
-+ (NSString*) resultPromptFromPacketDictionary: (NSDictionary*)dict;
-+ (NSString*) promptFromPacketDictionary: (NSDictionary*)dict;
++ (NSString*) resultDescriptionFromPacketDictionary: (NSDictionary*)dict;
++ (NSString*) descriptionFromPacketDictionary: (NSDictionary*)dict;
 
 #pragma mark -
 
