@@ -97,16 +97,23 @@ typedef NS_ENUM(NSUInteger, WOAModelActionType)
                       subDict: (NSDictionary*)subDict
                      dataType: (WOAPairDataType)dataType
                    actionType: (WOAModelActionType)actionType;
+
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                      subArray: (NSArray*)subArray
                      dataType: (WOAPairDataType)dataType;
+
++ (instancetype) pairWithName: (NSString*)name
+                        value: (NSObject*)value
+                     dataType: (WOAPairDataType)dataType
+                   actionType: (WOAModelActionType)actionType;
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                      dataType: (WOAPairDataType)dataType;
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                    actionType: (WOAModelActionType)actionType;
+
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value;
 + (instancetype) pairOnlyName: (NSString*)name;

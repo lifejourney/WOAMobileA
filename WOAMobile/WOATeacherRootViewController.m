@@ -9,6 +9,7 @@
 #import "WOATeacherRootViewController.h"
 #import "WOAMenuListViewController.h"
 #import "WOAFlowListViewController.h"
+#import "WOAFilterListViewController.h"
 #import "WOAContentViewController.h"
 #import "WOARequestManager.h"
 #import "WOATeacherPacketHelper.h"
@@ -125,7 +126,8 @@
 
 
 
-@interface WOATeacherRootViewController() <WOAFlowListViewControllerDelegate>
+@interface WOATeacherRootViewController() <WOAFlowListViewControllerDelegate,
+                                            WOAFilterListViewControllerDelegate>
 
 @property (nonatomic, strong) UINavigationController *myOANavC;
 @property (nonatomic, strong) UINavigationController *myBusinessNavC;
@@ -234,11 +236,7 @@
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: title
                                                              pairArray: pairArray
-                                                          contentArray: nil
-                                                            actionType: itemActionType
-                                                            actionName: @""
-                                                            isReadonly: YES
-                                                               subDict: nil];
+                                                            actionType: itemActionType];
          
          WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
                                                                                      delegate: self
@@ -281,21 +279,17 @@
                                                     addtionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-//         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOAList: responseContent.bodyDictionary];
-//         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-//                                                             pairArray: pairArray
-//                                                          contentArray: nil
-//                                                            actionType: WOAModelActionType_TeacherQueryOADetail
-//                                                            actionName: @""
-//                                                            isReadonly: YES
-//                                                               subDict: nil];
-//         
-//         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
-//                                                                                     delegate: self
-//                                                                                  relatedDict: nil];
-//         subVC.shouldShowSearchBar = YES;
-//         
-//         [ownerNavC pushViewController: subVC animated: YES];
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOATableList: responseContent.bodyDictionary
+                                                                        pairActionType: WOAModelActionType_TeacherCreateOAItem];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                            actionType: WOAModelActionType_TeacherCreateOAItem];
+         
+         WOAFilterListViewController *subVC = [WOAFilterListViewController filterListViewController: contentModel
+                                                                                           delegate: self
+                                                                                        relatedDict: nil];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -337,6 +331,43 @@
     }
 }
 
+#pragma mark - WOAFilterListViewControllerDelegate
+
+- (void) filterListViewControllerSelectRowAtIndexPath: (NSIndexPath *)indexPath
+                                         selectedPair: (WOANameValuePair *)selectedPair
+                                          relatedDict: (NSDictionary *)relatedDict
+                                                navVC: (UINavigationController *)navVC
+{
+    switch (selectedPair.actionType)
+    {
+        case WOAModelActionType_TeacherProcessOAItem:
+            break;
+            
+        case WOAModelActionType_TeacherSubmitOAProcess:
+            break;
+            
+        case WOAModelActionType_TeacherOAProcessStyle:
+            break;
+            
+        case WOAModelActionType_TeacherNextAccounts:
+            break;
+            
+        case WOAModelActionType_TeacherQueryOATableList:
+            break;
+            
+        case WOAModelActionType_TeacherCreateOAItem:
+            break;
+            
+        case WOAModelActionType_TeacherSubmitOACreate:
+            break;
+            
+        case WOAModelActionType_TeacherQueryOADetail:
+            break;
+            
+        default:
+            break;
+    }
+}
 
 @end
 

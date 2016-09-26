@@ -6,8 +6,8 @@
 //  Copyright (c) 2016 steven.zhuang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "WOAContentModel.h"
+#import <UIKit/UIKit.h>
 
 
 @protocol WOAFlowListViewControllerDelegate <NSObject>

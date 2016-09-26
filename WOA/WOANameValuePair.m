@@ -50,6 +50,20 @@
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                      dataType: (WOAPairDataType)dataType
+                   actionType: (WOAModelActionType)actionType
+{
+    return [self pairWithName: name
+                        value: value
+                   isWritable: NO
+                     subArray: nil
+                      subDict: nil
+                     dataType: dataType
+                   actionType: actionType];
+}
+
++ (instancetype) pairWithName: (NSString*)name
+                        value: (NSObject*)value
+                     dataType: (WOAPairDataType)dataType
 {
     return [self pairWithName: name
                         value: value

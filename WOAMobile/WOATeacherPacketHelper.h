@@ -15,7 +15,10 @@
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
                           pairActionType: (WOAModelActionType)pairActionType;
-
++ (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
+                               pairActionType: (WOAModelActionType)pairActionType;
++ (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
+                        pairActionType: (WOAModelActionType)pairActionType;
 
 @end
 

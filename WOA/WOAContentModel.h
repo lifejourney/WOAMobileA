@@ -20,8 +20,8 @@
 @interface WOAContentModel : NSObject
 
 @property (nonatomic, copy) NSString *groupTitle;
-@property (nonatomic, strong) NSArray *pairArray;
-@property (nonatomic, strong) NSArray *contentArray;
+@property (nonatomic, strong) NSArray *pairArray;       //Array of WOANameValuePair
+@property (nonatomic, strong) NSArray *contentArray;    //Array of WOAContentModel, Ex: ContentViewController.
 @property (nonatomic, assign) WOAModelActionType actionType;
 @property (nonatomic, copy) NSString *actionName;
 @property (nonatomic, assign) BOOL isReadonly;
@@ -35,17 +35,17 @@
                    actionName: (NSString*)actionName //RightButton Title
                    isReadonly: (BOOL)isReadonly
                       subDict: (NSDictionary*)subDict;
+
 + (instancetype) contentModel: (NSString*)groupTitle
                     pairArray: (NSArray*)pairArray
-                   actionType: (WOAModelActionType)actionType
-                   isReadonly: (BOOL)isReadonly;
+                   actionType: (WOAModelActionType)actionType;
++ (instancetype) contentModel: (NSString*)groupTitle
+                    pairArray: (NSArray*)pairArray;
+
 + (instancetype) contentModel: (NSString*)groupTitle
                  contentArray: (NSArray*)contentArray
                    actionType: (WOAModelActionType)actionType
                    isReadonly: (BOOL)isReadonly;
-
-+ (instancetype) contentModel: (NSString*)groupTitle
-                    pairArray: (NSArray*)pairArray;
 
 - (void) addPair: (WOANameValuePair*)pair;
 - (WOANameValuePair*) pairForName: (NSString*)name;

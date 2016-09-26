@@ -31,17 +31,28 @@
     return model;
 }
 
-+ (instancetype) contentModel: (NSString*)groupTitle
-                    pairArray: (NSArray*)pairArray
++ (instancetype) contentModel: (NSString *)groupTitle
+                    pairArray: (NSArray *)pairArray
                    actionType: (WOAModelActionType)actionType
-                   isReadonly: (BOOL)isReadonly
 {
     return [self contentModel: groupTitle
                     pairArray: pairArray
                  contentArray: nil
                    actionType: actionType
                    actionName: @""
-                   isReadonly: isReadonly
+                   isReadonly: YES
+                      subDict: nil];
+}
+
++ (instancetype) contentModel: (NSString*)groupTitle
+                    pairArray: (NSArray*)pairArray
+{
+    return [self contentModel: groupTitle
+                    pairArray: pairArray
+                 contentArray: nil
+                   actionType: WOAModelActionType_None
+                   actionName: @""
+                   isReadonly: YES
                       subDict: nil];
 }
 
@@ -56,18 +67,6 @@
                    actionType: actionType
                    actionName: @""
                    isReadonly: isReadonly
-                      subDict: nil];
-}
-
-+ (instancetype) contentModel: (NSString *)groupTitle
-                    pairArray: (NSArray *)pairArray
-{
-    return [self contentModel: groupTitle
-                    pairArray: pairArray
-                 contentArray: nil
-                   actionType: WOAModelActionType_None
-                   actionName: @""
-                   isReadonly: YES
                       subDict: nil];
 }
 
