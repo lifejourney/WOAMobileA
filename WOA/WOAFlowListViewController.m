@@ -242,6 +242,10 @@
     
     UITableViewCell *cell = [tableView cellWithIdentifier: @"flowListTableViewCellIdentifier"
                                                 cellStyle: cellStyle];
+    if (self.textLabelFont != nil)
+    {
+        cell.textLabel.font = self.textLabelFont;
+    }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
     

@@ -12,7 +12,7 @@
 @interface WOAMenuItemModel : NSObject
 
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *itemID;
+@property (nonatomic, copy) NSString *itemID; //funcName
 @property (nonatomic, copy) NSString *imageName;
 @property (nonatomic, assign) BOOL showAccessory;
 @property (nonatomic, weak) NSObject *delegate;

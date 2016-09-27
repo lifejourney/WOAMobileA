@@ -177,6 +177,8 @@
 		DC9248C81C4BBEF8000F1765 /* WOAMenuItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9248C71C4BBEF8000F1765 /* WOAMenuItemModel.m */; };
 		DC9248CB1C4BC0A0000F1765 /* UIImage+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9248CA1C4BC0A0000F1765 /* UIImage+Utility.m */; };
 		DC9248D31C4CE440000F1765 /* WOAMenuListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9248D21C4CE43F000F1765 /* WOAMenuListViewController.m */; };
+		DCA4BCB81D9A3C93009FB8D2 /* WOAActionDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = DCA4BCB71D9A3C93009FB8D2 /* WOAActionDefine.m */; };
+		DCA4BCB91D9A3C96009FB8D2 /* WOAActionDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = DCA4BCB71D9A3C93009FB8D2 /* WOAActionDefine.m */; };
 		DCD5DC7B1D8823C800152071 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCD5DC7A1D8823C800152071 /* Images.xcassets */; };
 		DCD5DC9F1D88262F00152071 /* NSData+HexadecimalRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8E9C861C4B481500B66527 /* NSData+HexadecimalRepresentation.m */; };
 		DCD5DCA01D88262F00152071 /* NSDictionary+JsonString.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8345721C62120000956544 /* NSDictionary+JsonString.m */; };
@@ -373,6 +375,8 @@
 		DC9248CA1C4BC0A0000F1765 /* UIImage+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utility.m"; sourceTree = "<group>"; };
 		DC9248D11C4CE43F000F1765 /* WOAMenuListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMenuListViewController.h; sourceTree = "<group>"; };
 		DC9248D21C4CE43F000F1765 /* WOAMenuListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMenuListViewController.m; sourceTree = "<group>"; };
+		DCA4BCB61D9A3C93009FB8D2 /* WOAActionDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAActionDefine.h; sourceTree = "<group>"; };
+		DCA4BCB71D9A3C93009FB8D2 /* WOAActionDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAActionDefine.m; sourceTree = "<group>"; };
 		DCD5DC691D8823C800152071 /* WOAMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WOAMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD5DC7A1D8823C800152071 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DCD5DC7F1D8823C800152071 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -516,10 +520,14 @@
 			children = (
 				DC8E9C9C1C4B4B1200B66527 /* WOAAccountCredential.h */,
 				DC8E9C9D1C4B4B1200B66527 /* WOAAccountCredential.m */,
+				DCA4BCB61D9A3C93009FB8D2 /* WOAActionDefine.h */,
+				DCA4BCB71D9A3C93009FB8D2 /* WOAActionDefine.m */,
 				DC8E9CC01C4B4FE300B66527 /* WOABrandData.h */,
 				DC8E9CC11C4B4FE300B66527 /* WOABrandData.m */,
 				DC5FA6AB1C5DF8350099D95C /* WOAContentModel.h */,
 				DC5FA6AC1C5DF8420099D95C /* WOAContentModel.m */,
+				DC9248C61C4BBEF8000F1765 /* WOAMenuItemModel.h */,
+				DC9248C71C4BBEF8000F1765 /* WOAMenuItemModel.m */,
 				DCF049281C52723300928C08 /* WOANameValuePair.h */,
 				DCF049261C52722100928C08 /* WOANameValuePair.m */,
 				DC8E9C9E1C4B4B1200B66527 /* WOAPropertyInfo.h */,
@@ -530,8 +538,6 @@
 				DC8E9CDE1C4B4FE300B66527 /* WOASessionTokens.m */,
 				DC2257D91D8CD6EF006A18E3 /* WOATargetInfo.h */,
 				DC2257D61D8CD6DA006A18E3 /* WOATargetInfo.m */,
-				DC9248C61C4BBEF8000F1765 /* WOAMenuItemModel.h */,
-				DC9248C71C4BBEF8000F1765 /* WOAMenuItemModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -955,6 +961,7 @@
 				DC22571C1D8A4A8E006A18E3 /* WOASimpleListViewController.m in Sources */,
 				DC2259051D917E6E006A18E3 /* WOAMultiStyleItemField.m in Sources */,
 				DC2257CE1D8CC262006A18E3 /* WOAHTTPRequest.m in Sources */,
+				DCA4BCB81D9A3C93009FB8D2 /* WOAActionDefine.m in Sources */,
 				DC2257221D8A4A8E006A18E3 /* WOALabelButtonTableViewCell.m in Sources */,
 				DCD5DCA41D88262F00152071 /* NSString+Utility.m in Sources */,
 				DCD5DCA01D88262F00152071 /* NSDictionary+JsonString.m in Sources */,
@@ -1032,6 +1039,7 @@
 				DCF049241C50FD9500928C08 /* WOADateFromToPickerViewController.m in Sources */,
 				DC2259041D917E61006A18E3 /* WOAMultiStyleItemField.m in Sources */,
 				DC2257CF1D8CC27A006A18E3 /* WOAHTTPRequest.m in Sources */,
+				DCA4BCB91D9A3C96009FB8D2 /* WOAActionDefine.m in Sources */,
 				DC2257CA1D8CC076006A18E3 /* WOARootViewController.m in Sources */,
 				DC8E9C8D1C4B481500B66527 /* NSData+HexadecimalRepresentation.m in Sources */,
 				DC8E9CB81C4B4FD100B66527 /* UINavigationController+RootViewController.m in Sources */,

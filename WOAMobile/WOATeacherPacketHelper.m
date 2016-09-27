@@ -27,7 +27,6 @@
     
     [packetDict setValue: fromTimeStr forKey: @"fromTime"];
     [packetDict setValue: endTimeStr forKey: @"toTime"];
-    //[packetDict setValue: @"1" forKey: @"pageNum"];
     
     return packetDict;
 }
@@ -159,6 +158,47 @@
         [pairValue setValue: itemID forKey: kWOAKeyForItemID];
         [pairValue setValue: subValue forKey: kWOAKeyForSubValue];
         [pairValue setValue: pinyinInitial forKey: kWOAKeyForPinyinInitial];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: pairValue
+                                                     isWritable: NO
+                                                       subArray: nil
+                                                        subDict: nil
+                                                       dataType: WOAPairDataType_Dictionary
+                                                     actionType: pairActionType];
+        
+        [pairArray addObject: pair];
+    }
+    
+    return pairArray;
+}
+
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = [self consumListArrayFromPacketDictionary: respDict];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *consumType = itemDict[@"ConsumType"];
+        NSString *consumChangeNum = itemDict[@"ConsumChangeNum"];
+        NSString *consumBalance = itemDict[@"ConsumBalance"];
+        NSString *consumTime = itemDict[@"ConsumTime"];
+        NSString *consumMemo = itemDict[@"ConsumMemo"];
+        
+        NSString *itemName = [NSString stringWithFormat: @"%@   %@: %@ 余额: %@",
+                              [consumTime rightPaddingWhitespace: 19],
+                              consumType,
+                              [consumChangeNum rightPaddingWhitespace: 8],
+                              consumBalance];
+        NSString *subValue = [NSString stringWithFormat: @"备注: %@", consumMemo];
+        NSMutableDictionary *pairValue = [NSMutableDictionary dictionary];
+        [pairValue setValue: subValue forKey: kWOAKeyForSubValue];
+        [pairValue setValue: [consumType pinyinInitials] forKey: @"ConsumType_Pinyin"];
+        [pairValue setValue: [consumMemo pinyinInitials] forKey: @"ConsumMemo_Pinyin"];
         
         WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
                                                           value: pairValue

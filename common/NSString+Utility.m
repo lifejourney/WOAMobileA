@@ -41,4 +41,13 @@
     return (foundRange.length > 0);
 }
 
+#pragma mark -
+
+- (NSString*) rightPaddingWhitespace: (NSUInteger)fixedLength
+{
+    NSString *paddingStr = [NSString stringWithFormat: @"%@%*s", self, (int)fixedLength, " "];
+    
+    return [paddingStr substringToIndex: fixedLength];
+}
+
 @end

@@ -15,7 +15,6 @@
 #define kWOAItemIndexPath_RowKey @"_row"
 #define kWOAKey_ProcessID @"processID"
 #define kWOAKey_CreateTime @"createTime"
-#define kWOAValue_MsgType_Login @"login"
 
 #define kWOA_Level_1_Seperator @"|"
 #define kWOA_Level_2_Seperator @","
@@ -26,12 +25,6 @@
 #define kWOAValue_OATableID_JoinSociety @"23"
 
 @interface WOAPacketHelper : NSObject
-
-#pragma mark -
-
-+ (void) initActionMapDict;
-+ (NSString*) actionTypeName: (WOAActionType)actionType;
-+ (NSString*) msgTypeByActionType: (WOAActionType)actionType;
 
 #pragma mark -
 
@@ -66,7 +59,9 @@
 
 #pragma mark -
 
++ (NSArray*) consumListArrayFromPacketDictionary: (NSDictionary*)dict;
 
+#pragma mark -
 
 
 

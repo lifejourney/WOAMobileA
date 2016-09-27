@@ -25,6 +25,10 @@
 + (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
                         pairActionType: (WOAActionType)pairActionType;
 
+#pragma mark -
++ (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType;
+
 @end
 
 

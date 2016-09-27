@@ -21,4 +21,8 @@
 - (BOOL) hasContainSubString: (NSString*)subString
                      options: (NSStringCompareOptions)options;
 
+#pragma mark -
+
+- (NSString*) rightPaddingWhitespace: (NSUInteger)fixedLength;
+
 @end

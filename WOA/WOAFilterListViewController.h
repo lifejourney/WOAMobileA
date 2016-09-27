@@ -21,6 +21,8 @@
 
 @interface WOAFilterListViewController : UIViewController
 
+@property (nonatomic, strong) UIFont *textLabelFont;
+
 //For contentModel.pairArray
 //pairArray[].value is a ContentModel type, it is a grounped list. M(T, [(Name, M(T, [Name, Value]))])
 + (instancetype) filterListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])

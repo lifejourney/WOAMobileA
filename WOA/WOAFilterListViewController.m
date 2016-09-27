@@ -146,6 +146,10 @@
 {
     UITableViewCell *cell = [tableView cellWithIdentifier: @"filterListTableViewCellIdentifier"
                                                 cellStyle: UITableViewCellStyleDefault];
+    if (self.textLabelFont != nil)
+    {
+        cell.textLabel.font = self.textLabelFont;
+    }
     
     WOANameValuePair *groupPair = self.contentModel.pairArray[_selectedCategory];
     WOAContentModel *groupValue =(WOAContentModel*)groupPair.value;

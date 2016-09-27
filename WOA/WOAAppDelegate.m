@@ -38,7 +38,7 @@
     if (self = [super init])
     {
         [WOANameValuePair initTypeMapArray];
-        [WOAPacketHelper initActionMapDict];
+        [WOAActionDefine initActionMapDict];
         
         [WOAPropertyInfo saveLatestSessionID: nil];
     }

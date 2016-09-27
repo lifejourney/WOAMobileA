@@ -280,6 +280,19 @@
                                                                    additionalDict: addtDict
                                                                        onSuccuess: ^(WOAResponeContent *responseContent)
                      {
+                         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryMyConsume: responseContent.bodyDictionary
+                                                                                      pairActionType: WOAActionType_None];
+                         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                                             pairArray: pairArray
+                                                                            actionType: WOAActionType_None];
+                         
+                         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                                     delegate: self
+                                                                                                  relatedDict: nil];
+                         subVC.shouldShowSearchBar = YES;
+                         subVC.textLabelFont = [UIFont fontWithName: @"Arial" size: 12.0F];
+                         
+                         [ownerNavC pushViewController: subVC animated: YES];
                      }];
                 }
                                                          onCancel: ^()
@@ -295,11 +308,57 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
+    WOAActionType actionType = WOAActionType_TeacherSelectPayoffYear;
+    
+    NSArray *yearArray = [self yearArrayWithBackCount: 50 minYear: 2012];
+    NSMutableArray *yearPairArray = [NSMutableArray array];
+    for (NSString *yearStr in yearArray)
+    {
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: yearStr
+                                                          value: yearStr
+                                                       dataType: WOAPairDataType_Normal
+                                                     actionType: actionType];
+        
+        [yearPairArray addObject: pair];
+    }
+    
+    WOAContentModel *yearContentModel = [WOAContentModel contentModel: @"查询年份"
+                                                            pairArray: yearPairArray
+                                                           actionType: actionType];
+    
+    WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: yearContentModel
+                                                                                delegate: self
+                                                                             relatedDict: nil];
+    
+    [ownerNavC pushViewController: subVC animated: YES];
+}
+
+- (void) onSelectPayoffYear: (WOANameValuePair *)selectedPair
+                relatedDict: (NSDictionary *)relatedDict
+                      navVC: (UINavigationController *)navVC
+{
+    NSString *selectedYear = [selectedPair name];
+    NSString *pageSize = @"20";
+    NSDictionary *addtDict = @{@"year": selectedYear,
+                               @"pageSize": pageSize};
+    
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryPayoffSalary
-                                                   additionalDict: nil
+                                                   additionalDict: addtDict
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+//         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOATableList: responseContent.bodyDictionary
+//                                                                        pairActionType: WOAActionType_TeacherCreateOAItem];
+//         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+//                                                             pairArray: pairArray
+//                                                            actionType: WOAActionType_TeacherCreateOAItem];
+//         
+//         WOAFilterListViewController *subVC = [WOAFilterListViewController filterListViewController: contentModel
+//                                                                                           delegate: self
+//                                                                                        relatedDict: nil];
+//         
+//         [navVC pushViewController: subVC animated: YES];
      }];
+    
 }
 
 - (void) tchrQueryMeritPay
@@ -371,12 +430,6 @@
         case WOAActionType_TeacherSubmitOAProcess:
             break;
             
-        case WOAActionType_TeacherOAProcessStyle:
-            break;
-            
-        case WOAActionType_TeacherNextAccounts:
-            break;
-            
         case WOAActionType_TeacherQueryOATableList:
             break;
             
@@ -388,6 +441,23 @@
             
         case WOAActionType_TeacherQueryOADetail:
             break;
+            
+        case WOAActionType_TeacherOAProcessStyle:
+            break;
+            
+        case WOAActionType_TeacherNextAccounts:
+            break;
+            
+        ////////////////////////////////////////
+        case WOAActionType_TeacherSelectPayoffYear:
+        {
+            [self onSelectPayoffYear: selectedPair
+                         relatedDict: nil
+                               navVC: navVC];
+            
+            break;
+        }
+        ////////////////////////////////////////
             
         default:
             break;
@@ -430,6 +500,30 @@
         default:
             break;
     }
+}
+
+#pragma mark - private
+
+- (NSArray*) yearArrayWithBackCount: (NSUInteger)backYearCount
+                            minYear: (NSInteger)minYear
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyy"];
+    NSString *curYearString = [dateFormatter stringFromDate: [NSDate date]];
+    NSInteger curYear = [curYearString integerValue];
+    
+    NSMutableArray *yearArray = [NSMutableArray array];
+    for (NSInteger year = curYear; year >= curYear - backYearCount; year--)
+    {
+        if (year < minYear)
+            break;
+        
+        NSString *yearString = [NSString stringWithFormat: @"%ld", (long)year];
+        
+        [yearArray addObject: yearString];
+    }
+    
+    return yearArray;
 }
 
 @end

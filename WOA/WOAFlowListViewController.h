@@ -22,6 +22,7 @@
 @interface WOAFlowListViewController : UIViewController
 
 @property (nonatomic, assign) BOOL shouldShowSearchBar;
+@property (nonatomic, strong) UIFont *textLabelFont;
 
 //For contentModel.pairArray
 //If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
