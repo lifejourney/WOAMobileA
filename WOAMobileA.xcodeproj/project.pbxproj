@@ -1050,13 +1050,17 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"WOAMobileTeacher=1",
+				);
 				INFOPLIST_FILE = WOAMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				ProductCNName = "智慧云2";
-				WOAMobileTeacher = 1;
 			};
 			name = Debug;
 		};
@@ -1069,13 +1073,13 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "WOAMobileTeacher=1";
 				INFOPLIST_FILE = WOAMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yfsky.WOAMobile2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				ProductCNName = "智慧云2";
-				WOAMobileTeacher = 1;
 			};
 			name = Release;
 		};
@@ -1172,7 +1176,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				ProductCNName = "智慧云学生版";
-				WOAMobileStudent = 2;
 			};
 			name = Debug;
 		};
@@ -1190,7 +1193,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				ProductCNName = "智慧云学生版";
-				WOAMobileStudent = 2;
 			};
 			name = Release;
 		};
