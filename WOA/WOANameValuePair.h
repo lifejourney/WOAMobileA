@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WOATargetHeader.h"
 #import "WOAActionDefine.h"
+#import "WOAConstDefine.h"
+#import "WOATargetHeader.h"
 
 
 typedef NS_ENUM(NSUInteger, WOAPairDataType)
@@ -27,14 +28,14 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     WOAPairDataType_DatePicker,
     WOAPairDataType_TimePicker,
     WOAPairDataType_DateTimePicker,
-    WOAPairDataType_SinglePicker,
-    WOAPairDataType_AttachFile,
-    WOAPairDataType_TextList,
-    WOAPairDataType_CheckUserList,
+    WOAPairDataType_SinglePicker, //Value is string, with string array subArray
+    WOAPairDataType_AttachFile,  //Value is Array of dictionary. @[@{kWOASrvKeyForAttachmentTitle: xxx, kWOASrvKeyForAttachmentUrl: xxx}, ...]
+    WOAPairDataType_TextList,  //Value is Readonly Array of string, not subArray. View should show the string list and provide an input.
+    WOAPairDataType_CheckUserList,  //Currently, take as Normal
     
     WOAPairDataType_TextArea,
     WOAPairDataType_Radio,
-    WOAPairDataType_MultiPicker,  //Array value
+    WOAPairDataType_MultiPicker,  //Value is Array, subArray ?
     WOAPairDataType_FixedText,
     WOAPairDataType_FlowText,
 };

@@ -205,6 +205,7 @@
 		DCF0492A1C532A7800928C08 /* WOAListDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF049291C532A7800928C08 /* WOAListDetailViewController.m */; };
 		DCF0492E1C532B0200928C08 /* WOASimpleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF0492D1C532B0200928C08 /* WOASimpleListViewController.m */; };
 		DCF134461C4A8C45001EFBAC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCF134451C4A8C45001EFBAC /* Images.xcassets */; };
+		DCF8E3731D9B335300399B6B /* WOAConstDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF8E3711D9B335300399B6B /* WOAConstDefine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -297,6 +298,7 @@
 		DC83480D1D97BCE80055B031 /* UITableView+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utility.m"; sourceTree = "<group>"; };
 		DC8348171D982ACD0055B031 /* WOAFilterListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAFilterListViewController.m; sourceTree = "<group>"; };
 		DC8348181D982ACD0055B031 /* WOAFilterListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAFilterListViewController.h; sourceTree = "<group>"; };
+		DC83486C1D9AC1090055B031 /* WOASinglePickerViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOASinglePickerViewControllerDelegate.h; sourceTree = "<group>"; };
 		DC8E9C851C4B481500B66527 /* NSData+HexadecimalRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+HexadecimalRepresentation.h"; sourceTree = "<group>"; };
 		DC8E9C861C4B481500B66527 /* NSData+HexadecimalRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+HexadecimalRepresentation.m"; sourceTree = "<group>"; };
 		DC8E9C871C4B481500B66527 /* NSFileManager+AppFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+AppFolder.h"; sourceTree = "<group>"; };
@@ -393,6 +395,8 @@
 		DCF134351C4A8C45001EFBAC /* WOAMobileStudent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WOAMobileStudent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCF134391C4A8C45001EFBAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DCF134451C4A8C45001EFBAC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DCF8E3711D9B335300399B6B /* WOAConstDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAConstDefine.m; sourceTree = "<group>"; };
+		DCF8E3721D9B335300399B6B /* WOAConstDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAConstDefine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -524,6 +528,8 @@
 				DCA4BCB71D9A3C93009FB8D2 /* WOAActionDefine.m */,
 				DC8E9CC01C4B4FE300B66527 /* WOABrandData.h */,
 				DC8E9CC11C4B4FE300B66527 /* WOABrandData.m */,
+				DCF8E3721D9B335300399B6B /* WOAConstDefine.h */,
+				DCF8E3711D9B335300399B6B /* WOAConstDefine.m */,
 				DC5FA6AB1C5DF8350099D95C /* WOAContentModel.h */,
 				DC5FA6AC1C5DF8420099D95C /* WOAContentModel.m */,
 				DC9248C61C4BBEF8000F1765 /* WOAMenuItemModel.h */,
@@ -589,6 +595,7 @@
 				DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */,
 				DCF0492C1C532AEA00928C08 /* WOASimpleListViewController.h */,
 				DCF0492D1C532B0200928C08 /* WOASimpleListViewController.m */,
+				DC83486C1D9AC1090055B031 /* WOASinglePickerViewControllerDelegate.h */,
 			);
 			name = FunctionViewController;
 			sourceTree = "<group>";
@@ -915,6 +922,7 @@
 				DCD5DCAA1D88262F00152071 /* VSActionSheetDatePicker.m in Sources */,
 				DC22571A1D8A4A8E006A18E3 /* WOADateFromToPickerViewController.m in Sources */,
 				DCD5DCB01D88262F00152071 /* VSSelectedTableViewCell.m in Sources */,
+				DCF8E3731D9B335300399B6B /* WOAConstDefine.m in Sources */,
 				DC22575D1D8CBBC3006A18E3 /* WOARequestContent.m in Sources */,
 				DCD5DCA91D88262F00152071 /* UIView+IndexPathTag.m in Sources */,
 				DC22575F1D8CBBC3006A18E3 /* WOAStartSettingViewController.m in Sources */,

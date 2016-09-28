@@ -20,6 +20,10 @@
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
                           pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) contentArrayForTchrProcessOAItem: (NSDictionary*)respDict
+                                    tableName: (NSString*)tableName
+                                   isReadonly: (BOOL)isReadonly;
+
 + (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
                                pairActionType: (WOAActionType)pairActionType;
 + (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict

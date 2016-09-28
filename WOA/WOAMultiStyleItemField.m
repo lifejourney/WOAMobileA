@@ -195,6 +195,45 @@
     return forView ? MAX(forView.frame.size.height, minimumHeight) : 0;
 }
 
+- (WOAContentModel*) contentModelWithAttachemntValue: (WOANameValuePair*)modelPair
+{
+    NSArray *atthArray = (NSArray*)modelPair.value;
+    NSMutableArray *atthPairArray = [NSMutableArray array];
+    
+    for (NSDictionary *atthDict in atthArray)
+    {
+        NSString *atthTitle = atthDict[kWOASrvKeyForAttachmentTitle];
+        NSString *atthUrl = atthDict[kWOASrvKeyForAttachmentUrl];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: atthTitle
+                                                          value: atthUrl
+                                                     actionType: WOAActionType_OpenUrl];
+        
+        [atthPairArray addObject: pair];
+    }
+    
+    return [WOAContentModel contentModel: modelPair.name
+                               pairArray: atthPairArray];
+}
+
+- (WOAContentModel*) contentModelWithStringArrayValue: (WOANameValuePair*)modelPair
+{
+    NSArray *valueArray = (NSArray*)modelPair.value;
+    NSMutableArray *atthPairArray = [NSMutableArray array];
+    
+    for (NSString *subValue in valueArray)
+    {
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: subValue
+                                                          value: subValue
+                                                     actionType: WOAActionType_None];
+        
+        [atthPairArray addObject: pair];
+    }
+    
+    return [WOAContentModel contentModel: modelPair.name
+                               pairArray: atthPairArray];
+}
+
 - (instancetype) initWithFrame: (CGRect)frame
              popoverShowInView: (UIView*)popoverShowInView
                      indexPath: (NSIndexPath*)indexPath
@@ -249,8 +288,8 @@
         
         BOOL shouldShowReadonlyLineList;
         BOOL shouldShowInputComponent;
-        if (pairDataType == WOAPairDataType_TextList ||
-            pairDataType == WOAPairDataType_CheckUserList)
+        if (pairDataType == WOAPairDataType_TextList )/*||
+            pairDataType == WOAPairDataType_CheckUserList)*/
         {
             shouldShowReadonlyLineList = YES;
             shouldShowInputComponent = isWritable;
@@ -277,10 +316,18 @@
         //Create right column: read only line list
         if (shouldShowReadonlyLineList)
         {
-            WOAContentModel *modelValue = (WOAContentModel*)itemModel.value;
+            WOAContentModel *modelForMultiLineLabel;
+            if (pairDataType == WOAPairDataType_AttachFile)
+            {
+                modelForMultiLineLabel = [self contentModelWithAttachemntValue: itemModel];
+            }
+            else
+            {
+                modelForMultiLineLabel = [self contentModelWithStringArrayValue: itemModel];
+            }
             
             self.multiLabel = [[WOAMultiLineLabel alloc] initWithFrame: initiateFrame
-                                                          contentModel: modelValue];
+                                                          contentModel: modelForMultiLineLabel];
             _multiLabel.delegate = self;
             
             [self addSubview: _multiLabel];
@@ -356,7 +403,15 @@
             }
             else
             {
-                NSString *defaultValue = [itemModel stringValue];
+                NSString *defaultValue;
+                if (pairDataType == WOAPairDataType_TextList)
+                {
+                    defaultValue = @"";
+                }
+                else
+                {
+                    defaultValue = [itemModel stringValue];
+                }
                 
                 self.lineTextField = [[UITextField alloc] initWithFrame: CGRectZero];
                 _lineTextField.font = [_lineTextField.font fontWithSize: kWOALayout_DetailItemFontSize];

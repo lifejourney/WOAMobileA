@@ -586,8 +586,8 @@
 //            
 //            for (NSInteger index = 0; index < _imageURLArray.count; index++)
 //            {
-//                NSDictionary *attachmentInfo = @{@"title": self.imageTitleArray[index],
-//                                                 @"url": self.imageURLArray[index]};
+//                NSDictionary *attachmentInfo = @{kWOASrvKeyForAttachmentTitle: self.imageTitleArray[index],
+//                                                 kWOASrvKeyForAttachmentUrl: self.imageURLArray[index]};
 //                
 //                [attachmentArray addObject: attachmentInfo];
 //            }

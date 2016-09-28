@@ -31,7 +31,7 @@
     return packetDict;
 }
 
-#pragma mark -
+#pragma mark - OA
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
                           pairActionType: (WOAActionType)pairActionType
@@ -54,7 +54,7 @@
                               createTime ? createTime: @""];
         
         NSMutableDictionary *pairValue = [NSMutableDictionary dictionary];
-        [pairValue setValue: itemID forKey: kWOAKeyForItemID];
+        [pairValue setValue: itemID forKey: kWOASrvKeyForItemID];
         [pairValue setValue: subValue forKey: kWOAKeyForSubValue];
         [pairValue setValue: pinyinInitial forKey: kWOAKeyForPinyinInitial];
         
@@ -72,6 +72,66 @@
     return pairArray;
 }
 
++ (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict
+{
+    //NSString *itemID = itemDict[kWOASrvKeyForItemID];
+    NSString *itemName = itemDict[kWOASrvKeyForItemName];
+    NSString *itemType = itemDict[kWOASrvKeyForItemType];
+    NSObject *itemValue= itemDict[kWOASrvKeyForItemValue];
+    NSString *itemWritable= itemDict[kWOASrvKeyForItemWritable];
+    NSArray *itemOptions = [self optionArrayFromDictionary: itemDict];
+    
+    BOOL isWritable = itemWritable && [itemWritable boolValue];
+    WOAPairDataType dataType = [WOANameValuePair pairTypeFromTextType: itemType];
+    
+    return [WOANameValuePair pairWithName: itemName
+                                    value: itemValue
+                               isWritable: isWritable
+                                 subArray: itemOptions
+                                  subDict: nil
+                                 dataType: dataType
+                               actionType: WOAActionType_None];
+}
+
++ (NSArray*) contentArrayForTchrProcessOAItem: (NSDictionary*)respDict
+                                    tableName: (NSString*)tableName
+                                   isReadonly: (BOOL)isReadonly
+{
+    BOOL gotFirstGroup = NO;
+    
+    NSMutableArray *groupArray = [NSMutableArray array];
+    NSArray *itemArrArray = [self itemsArrayFromPacketDictionary: respDict];
+    
+    for (NSArray *itemArray in itemArrArray)
+    {
+        NSMutableArray *pairArray = [NSMutableArray array];
+        
+        for (NSDictionary *itemDict in itemArray)
+        {
+            [pairArray addObject: [self pairFromItemDict: itemDict]];
+            [pairArray addObject: [WOANameValuePair seperatorPair]];
+        }
+        
+        if ([pairArray count] > 0)
+        {
+            NSString *groupTitle = gotFirstGroup ? nil : tableName;
+            
+            WOAContentModel *groupContentModel = [WOAContentModel contentModel: groupTitle
+                                                                     pairArray: pairArray
+                                                                    actionType: WOAActionType_None
+                                                                    isReadonly: isReadonly];
+            
+            [groupArray addObject: groupContentModel];
+            
+            gotFirstGroup = YES;
+        }
+    }
+    
+    return groupArray;
+}
+
+#pragma mark -
+
 + (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
                                pairActionType: (WOAActionType)pairActionType
 {
@@ -81,7 +141,8 @@
     NSMutableArray *allGroupPairArray = [NSMutableArray array];
     WOAContentModel *allGroupValue = [WOAContentModel contentModel: @"全部"
                                                          pairArray: allGroupPairArray
-                                                        actionType: pairActionType];
+                                                        actionType: pairActionType
+                                                        isReadonly: YES];
     WOANameValuePair *allGroupPair = [WOANameValuePair pairWithName: @"全部"
                                                               value: allGroupValue
                                                          isWritable: NO
@@ -93,7 +154,7 @@
     
     for (NSDictionary *itemDict in itemsArray)
     {
-        NSString *itemName = [self itemNameFromDictionary: itemDict];
+        NSString *itemName = itemDict[kWOASrvKeyForItemName];
         NSArray *optionArray = [self optionArrayFromDictionary: itemDict];
         
         if ([NSString isEmptyString: itemName])
@@ -104,7 +165,8 @@
         NSMutableArray *optionGroupPairArray = [NSMutableArray array];
         WOAContentModel *optionGroupValue = [WOAContentModel contentModel: itemName
                                                                 pairArray: optionGroupPairArray
-                                                               actionType: pairActionType];
+                                                               actionType: pairActionType
+                                                               isReadonly: YES];
         WOANameValuePair *optionGroupPair = [WOANameValuePair pairWithName: itemName
                                                                      value: optionGroupValue
                                                                 isWritable: NO
@@ -134,6 +196,8 @@
     return pairArray;
 }
 
+#pragma mark -
+
 + (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
                         pairActionType: (WOAActionType)pairActionType
 {
@@ -155,7 +219,7 @@
                               createTime ? createTime: @""];
         
         NSMutableDictionary *pairValue = [NSMutableDictionary dictionary];
-        [pairValue setValue: itemID forKey: kWOAKeyForItemID];
+        [pairValue setValue: itemID forKey: kWOASrvKeyForItemID];
         [pairValue setValue: subValue forKey: kWOAKeyForSubValue];
         [pairValue setValue: pinyinInitial forKey: kWOAKeyForPinyinInitial];
         
@@ -173,7 +237,7 @@
     return pairArray;
 }
 
-#pragma mark -
+#pragma mark - Business
 
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
@@ -213,6 +277,9 @@
     
     return pairArray;
 }
+
+#pragma mark - Student Manage
+
 
 @end
 

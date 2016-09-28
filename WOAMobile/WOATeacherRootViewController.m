@@ -10,6 +10,7 @@
 #import "WOAMenuListViewController.h"
 #import "WOAFlowListViewController.h"
 #import "WOAFilterListViewController.h"
+#import "WOAMultiPickerViewController.h"
 #import "WOAContentViewController.h"
 #import "WOADateFromToPickerViewController.h"
 #import "WOARequestManager.h"
@@ -27,8 +28,9 @@
  5. Add server setting entry in the login view.
  */
 
-@interface WOATeacherRootViewController() <WOAFlowListViewControllerDelegate,
-                                            WOAFilterListViewControllerDelegate>
+@interface WOATeacherRootViewController() <WOASinglePickerViewControllerDelegate,
+                                            WOAMultiPickerViewControllerDelegate,
+                                            WOAContentViewControllerDelegate>
 
 @property (nonatomic, strong) UINavigationController *myOANavC;
 @property (nonatomic, strong) UINavigationController *myBusinessNavC;
@@ -137,7 +139,8 @@
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: title
                                                              pairArray: pairArray
-                                                            actionType: itemActionType];
+                                                            actionType: itemActionType
+                                                            isReadonly: YES];
          
          WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
                                                                                      delegate: self
@@ -147,6 +150,8 @@
          [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
+
+#pragma mark -
 
 - (void) tchrQueryTodoOA
 {
@@ -159,16 +164,46 @@
                 ownerNavC: ownerNavC];
 }
 
-- (void) tchrQueryHistoryOA
+- (void) onTchrProcessOAItem: (WOANameValuePair *)selectedPair
+                 relatedDict: (NSDictionary *)relatedDict
+                       navVC: (UINavigationController *)navVC
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    NSDictionary *dictValue = (NSDictionary*)selectedPair.value;
+    NSString *selectedItemID = dictValue[kWOASrvKeyForItemID];
     
-    [self tchrQueryOAList: WOAActionType_TeacherQueryHistoryOA
-                    title: vcTitle
-                ownerNavC: ownerNavC];
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
+    [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: dictValue
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType itemActionType = WOAActionType_TeacherSubmitOAProcess;
+         
+         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
+         NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrProcessOAItem: responseContent.bodyDictionary
+                                                                                tableName: tableName
+                                                                               isReadonly: NO];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"待办工作"
+                                                          contentArray: contentArray
+                                                            actionType: itemActionType
+                                                            actionName: @"提交"
+                                                            isReadonly: NO];
+         
+         NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+         [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
 }
+
+
+#pragma mark -
 
 - (void) tchrNewOATask
 {
@@ -184,7 +219,8 @@
                                                                         pairActionType: WOAActionType_TeacherCreateOAItem];
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                              pairArray: pairArray
-                                                            actionType: WOAActionType_TeacherCreateOAItem];
+                                                            actionType: WOAActionType_TeacherCreateOAItem
+                                                            isReadonly: YES];
          
          WOAFilterListViewController *subVC = [WOAFilterListViewController filterListViewController: contentModel
                                                                                            delegate: self
@@ -192,6 +228,19 @@
          
          [ownerNavC pushViewController: subVC animated: YES];
      }];
+}
+
+#pragma mark -
+
+- (void) tchrQueryHistoryOA
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
+    
+    [self tchrQueryOAList: WOAActionType_TeacherQueryHistoryOA
+                    title: vcTitle
+                ownerNavC: ownerNavC];
 }
 
 #pragma mark - action for Business
@@ -209,6 +258,8 @@
      }];
 }
 
+#pragma mark -
+
 - (void) tchrFillTable
 {
     NSString *funcName = [self simpleFuncName: __func__];
@@ -221,6 +272,8 @@
      {
      }];
 }
+
+#pragma mark -
 
 - (void) tchrQueryContacts
 {
@@ -235,6 +288,8 @@
      }];
 }
 
+#pragma mark -
+
 - (void) tchrApplyTakeover
 {
     NSString *funcName = [self simpleFuncName: __func__];
@@ -248,6 +303,8 @@
      }];
 }
 
+#pragma mark -
+
 - (void) tchrApproveTakeover
 {
     NSString *funcName = [self simpleFuncName: __func__];
@@ -260,6 +317,8 @@
      {
      }];
 }
+
+#pragma mark -
 
 - (void) tchrQueryMyConsume
 {
@@ -284,7 +343,8 @@
                                                                                       pairActionType: WOAActionType_None];
                          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                                              pairArray: pairArray
-                                                                            actionType: WOAActionType_None];
+                                                                            actionType: WOAActionType_None
+                                                                            isReadonly: YES];
                          
                          WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
                                                                                                      delegate: self
@@ -301,6 +361,8 @@
     
     [ownerNavC pushViewController: pickerVC animated: YES];
 }
+
+#pragma mark -
 
 - (void) tchrQueryPayoffSalary
 {
@@ -324,7 +386,8 @@
     
     WOAContentModel *yearContentModel = [WOAContentModel contentModel: @"查询年份"
                                                             pairArray: yearPairArray
-                                                           actionType: actionType];
+                                                           actionType: actionType
+                                                           isReadonly: YES];
     
     WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: yearContentModel
                                                                                 delegate: self
@@ -389,6 +452,8 @@
      }];
 }
 
+#pragma mark -
+
 - (void) thcrCommentStuendt
 {
     NSString *funcName = [self simpleFuncName: __func__];
@@ -401,6 +466,8 @@
      {
      }];
 }
+
+#pragma mark -
 
 - (void) thcrQuantativeEval
 {
@@ -415,17 +482,22 @@
      }];
 }
 
-#pragma mark - delegate for WOAFlowListViewControllerDelegate
+#pragma mark - delegate for WOASinglePickerViewControllerDelegate
 
-- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath
-                                       selectedPair: (WOANameValuePair*)selectedPair
-                                        relatedDict: (NSDictionary*)relatedDict
-                                              navVC: (UINavigationController*)navVC
+- (void) singlePickerViewControllerSelected: (NSIndexPath*)indexPath
+                               selectedPair: (WOANameValuePair*)selectedPair
+                                relatedDict: (NSDictionary*)relatedDict
+                                      navVC: (UINavigationController*)navVC
 {
     switch (selectedPair.actionType)
     {
         case WOAActionType_TeacherProcessOAItem:
+        {
+            [self onTchrProcessOAItem: selectedPair
+                          relatedDict: relatedDict
+                                navVC: navVC];
             break;
+        }
             
         case WOAActionType_TeacherSubmitOAProcess:
             break;
@@ -464,28 +536,14 @@
     }
 }
 
-#pragma mark - WOAFilterListViewControllerDelegate
+#pragma mark - WOAContentViewControllerDelegate
 
-- (void) filterListViewControllerSelectRowAtIndexPath: (NSIndexPath *)indexPath
-                                         selectedPair: (WOANameValuePair *)selectedPair
-                                          relatedDict: (NSDictionary *)relatedDict
-                                                navVC: (UINavigationController *)navVC
+- (void) contentViewController: (WOAContentViewController*)vc
+              rightButtonClick: (WOAContentModel*)contentModel
 {
-    switch (selectedPair.actionType)
+    switch (contentModel.actionType)
     {
         case WOAActionType_TeacherProcessOAItem:
-            break;
-            
-        case WOAActionType_TeacherSubmitOAProcess:
-            break;
-            
-        case WOAActionType_TeacherOAProcessStyle:
-            break;
-            
-        case WOAActionType_TeacherNextAccounts:
-            break;
-            
-        case WOAActionType_TeacherQueryOATableList:
             break;
             
         case WOAActionType_TeacherCreateOAItem:
@@ -494,12 +552,26 @@
         case WOAActionType_TeacherSubmitOACreate:
             break;
             
-        case WOAActionType_TeacherQueryOADetail:
-            break;
-            
         default:
             break;
     }
+}
+
+#pragma mark - WOAMultiPickerViewControllerDelegate
+
+- (void) multiPickerViewController: (WOAMultiPickerViewController*)pickerViewController
+                        actionType: (WOAActionType)actionType
+                 selectedPairArray: (NSArray*)selectedPairArray
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC
+{
+    
+}
+
+- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
+                                      navVC: (UINavigationController*)navVC
+{
+    
 }
 
 #pragma mark - private

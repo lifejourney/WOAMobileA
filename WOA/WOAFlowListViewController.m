@@ -18,7 +18,7 @@
 @interface WOAFlowListViewController () <UITableViewDataSource, UITableViewDelegate,
                                         UISearchBarDelegate>
 
-@property (nonatomic, weak) NSObject<WOAFlowListViewControllerDelegate> *delegate;
+@property (nonatomic, weak) NSObject<WOASinglePickerViewControllerDelegate> *delegate;
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UITableView *tableView;
@@ -39,7 +39,7 @@
 
 
 + (instancetype) flowListViewController: (WOAContentModel*)contentModel
-                               delegate: (NSObject<WOAFlowListViewControllerDelegate> *)delegate
+                               delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
                             relatedDict: (NSDictionary*)relatedDict
 {
     WOAFlowListViewController *vc = [[WOAFlowListViewController alloc] init];
@@ -310,7 +310,7 @@
 {
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
     
-    if (_delegate && [_delegate respondsToSelector: @selector(flowListViewControllerSelectRowAtIndexPath:selectedPair:relatedDict:navVC:)])
+    if (_delegate && [_delegate respondsToSelector: @selector(singlePickerViewControllerSelected:selectedPair:relatedDict:navVC:)])
     {
         WOANameValuePair *selectedPair;
         
@@ -325,10 +325,10 @@
             selectedPair = [self.filteredRootPairArray objectAtIndex: indexPath.row];
         }
         
-        [_delegate flowListViewControllerSelectRowAtIndexPath: indexPath
-                                                 selectedPair: selectedPair
-                                                  relatedDict: self.relatedDict
-                                                        navVC: self.navigationController];
+        [_delegate singlePickerViewControllerSelected: indexPath
+                                         selectedPair: selectedPair
+                                          relatedDict: self.relatedDict
+                                                navVC: self.navigationController];
     }
 }
 

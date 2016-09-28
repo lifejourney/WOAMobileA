@@ -19,7 +19,7 @@
                                             WOAListViewControllerDelegate,
                                             VSPopoverControllerDelegate>
 
-@property (nonatomic, weak) NSObject<WOAFilterListViewControllerDelegate> *delegate;
+@property (nonatomic, weak) NSObject<WOASinglePickerViewControllerDelegate> *delegate;
 
 @property (nonatomic, strong) UITextField *filterTextField;
 @property (nonatomic, strong) UITableView *tableView;
@@ -36,7 +36,7 @@
 @implementation WOAFilterListViewController
 
 + (instancetype) filterListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
-                                 delegate: (NSObject<WOAFilterListViewControllerDelegate> *)delegate
+                                 delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
                               relatedDict: (NSDictionary*)relatedDict
 {
     WOAFilterListViewController *vc = [[WOAFilterListViewController alloc] init];
@@ -179,16 +179,16 @@
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
     
     if (self.delegate &&
-        [self.delegate respondsToSelector: @selector(filterListViewControllerSelectRowAtIndexPath:selectedPair:relatedDict:navVC:)])
+        [self.delegate respondsToSelector: @selector(singlePickerViewControllerSelected:selectedPair:relatedDict:navVC:)])
     {
         WOANameValuePair *groupPair = self.contentModel.pairArray[_selectedCategory];
         WOAContentModel *groupValue =(WOAContentModel*)groupPair.value;
         WOANameValuePair *itemPair = groupValue.pairArray[indexPath.row];
         
-        [self.delegate filterListViewControllerSelectRowAtIndexPath: indexPath
-                                                       selectedPair: itemPair
-                                                        relatedDict: self.relatedDict
-                                                              navVC: self.navigationController];
+        [self.delegate singlePickerViewControllerSelected: indexPath
+                                             selectedPair: itemPair
+                                              relatedDict: self.relatedDict
+                                                    navVC: self.navigationController];
     }
 }
 

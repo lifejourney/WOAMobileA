@@ -15,6 +15,7 @@
 #import "WOALayout.h"
 #import "UIColor+AppTheme.h"
 #import "UIView+IndexPathTag.h"
+#import "NSString+Utility.h"
 
 
 @interface WOAContentViewController () <WOAMultiStyleItemFieldDelegate>
@@ -252,7 +253,21 @@
                                        groupIndex: index
                                 groupContentModel: groupContentModel];
         
-        totalHeight += kWOALayout_DefaultBottomMargin;
+        if (index > 0)
+        {
+            WOAContentModel *previousGroup = self.contentModel.contentArray[index-1];
+            NSString *previousTitle = previousGroup.groupTitle;
+            
+            if ([NSString isNotEmptyString: previousTitle])
+            {
+                totalHeight += kWOALayout_DefaultBottomMargin;
+            }
+        }
+        
+        if ([self.contentModel.contentArray count] == 1)
+        {
+            totalHeight += kWOALayout_DefaultBottomMargin;
+        }
     }
     
     return totalHeight;

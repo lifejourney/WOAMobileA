@@ -34,13 +34,14 @@
 + (instancetype) contentModel: (NSString *)groupTitle
                     pairArray: (NSArray *)pairArray
                    actionType: (WOAActionType)actionType
+                   isReadonly: (BOOL)isReadonly
 {
     return [self contentModel: groupTitle
                     pairArray: pairArray
                  contentArray: nil
                    actionType: actionType
                    actionName: @""
-                   isReadonly: YES
+                   isReadonly: isReadonly
                       subDict: nil];
 }
 
@@ -59,13 +60,14 @@
 + (instancetype) contentModel: (NSString*)groupTitle
                  contentArray: (NSArray*)contentArray
                    actionType: (WOAActionType)actionType
+                   actionName: (NSString*)actionName
                    isReadonly: (BOOL)isReadonly
 {
     return [self contentModel: groupTitle
                     pairArray: nil
                  contentArray: contentArray
                    actionType: actionType
-                   actionName: @""
+                   actionName: actionName
                    isReadonly: isReadonly
                       subDict: nil];
 }

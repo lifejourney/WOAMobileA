@@ -11,11 +11,11 @@
 
 #ifdef WOAMobileTeacher
 
-#define kWOAKeyNameForResultDescription @"description"
+#define kWOASrvKeyForResultDescription @"description"
 
 #else
 
-#define kWOAKeyNameForResultDescription @"prompt"
+#define kWOASrvKeyForResultDescription @"prompt"
 
 #endif
 

@@ -7,17 +7,9 @@
 //
 
 #import "WOAContentModel.h"
+#import "WOASinglePickerViewControllerDelegate.h"
 #import <UIKit/UIKit.h>
 
-
-@protocol WOAFlowListViewControllerDelegate <NSObject>
-
-- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath //Notice: indexPath for filtered Array.
-                                       selectedPair: (WOANameValuePair*)selectedPair
-                                        relatedDict: (NSDictionary*)relatedDict
-                                              navVC: (UINavigationController*)navVC;
-
-@end
 
 @interface WOAFlowListViewController : UIViewController
 
@@ -28,7 +20,7 @@
 //If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
 //Else M(T, [Name, Value])
 + (instancetype) flowListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
-                               delegate: (NSObject<WOAFlowListViewControllerDelegate> *)delegate
+                               delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
                             relatedDict: (NSDictionary*)relatedDict;
 
 @end
