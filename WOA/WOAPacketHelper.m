@@ -227,7 +227,7 @@
 {
     NSDictionary *resultDict = [self resultFromPacketDictionary: dict];
     
-    return [resultDict valueForKey: @"ret_file"];
+    return [resultDict valueForKey: kWOASrvKeyForAttachmentRetUrl];
 }
 
 + (NSArray*) consumListArrayFromPacketDictionary: (NSDictionary*)dict
@@ -339,12 +339,12 @@
 
 + (NSString*) filePathFromDictionary: (NSDictionary*)dict
 {
-    return [dict valueForKey: @"filePath"];
+    return [dict valueForKey: kWOASrvKeyForAttachmentFilePath];
 }
 
 + (NSString*) attTitleFromDictionary: (NSDictionary*)dict
 {
-    return [dict valueForKey: @"att_title"];
+    return [dict valueForKey: kWOASrvKeyForSendAttachmentTitle];
 }
 
 + (NSString*) attachmentTitleFromDictionary: (NSDictionary*)dict

@@ -51,6 +51,7 @@
 
 #pragma mark -
 
++ (NSString*) resultUploadedFileNameFromPacketDictionary: (NSDictionary*)dict;
 
 
 
@@ -85,7 +86,6 @@
 + (NSDictionary*) personListFromPacketDictionary: (NSDictionary *)dict;
 + (NSDictionary*) departmentListFromPacketDictionary: (NSDictionary *)dict;
 
-+ (NSString*) resultUploadedFileNameFromPacketDictionary: (NSDictionary*)dict;
 + (NSString*) workIDFromPacketDictionary: (NSDictionary*)dict;
 + (NSString*) itemIDFromDictionary: (NSDictionary*)dict;
 + (NSArray*) itemsArrayFromPacketDictionary: (NSDictionary*)dict;

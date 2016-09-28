@@ -12,6 +12,17 @@
 
 @class WOAContentViewController;
 
+
+@protocol WOAUploadAttachmentRequestDelegate <NSObject>
+
+- (void) requestUploadAttachment: (WOAActionType)contentActionType
+                   filePathArray: (NSArray*)filePathArray
+                      titleArray: (NSArray*)titleArray
+                  additionalDict: (NSDictionary*)additionalDict
+                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler;
+
+@end
+
 @protocol WOAContentViewControllerDelegate <NSObject>
 
 @optional
@@ -29,7 +40,7 @@
 @interface WOAContentViewController : UIViewController
 
 + (instancetype) contentViewController: (WOAContentModel*)contentModel //WOAContentModel values in contentArray
-                              delegate: (NSObject<WOAContentViewControllerDelegate>*)delegate;
+                              delegate: (NSObject<WOAContentViewControllerDelegate, WOAUploadAttachmentRequestDelegate>*)delegate;
 
 
 #pragma mark -

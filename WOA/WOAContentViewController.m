@@ -17,14 +17,10 @@
 #import "UIView+IndexPathTag.h"
 #import "NSString+Utility.h"
 
-//TO-DO
-#import "WOARequestManager.h"
-#import "WOATeacherPacketHelper.h"
-
 
 @interface WOAContentViewController () <WOAMultiStyleItemFieldDelegate>
 
-@property (nonatomic, weak) NSObject<WOAContentViewControllerDelegate> *delegate;
+@property (nonatomic, weak) NSObject<WOAContentViewControllerDelegate, WOAUploadAttachmentRequestDelegate> *delegate;
 @property (nonatomic, strong) WOAContentModel *contentModel;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -39,7 +35,7 @@
 @implementation WOAContentViewController
 
 + (instancetype) contentViewController: (WOAContentModel*)contentModel
-                              delegate: (NSObject<WOAContentViewControllerDelegate>*)delegate
+                              delegate: (NSObject<WOAContentViewControllerDelegate, WOAUploadAttachmentRequestDelegate>*)delegate
 {
     WOAContentViewController *vc = [[WOAContentViewController alloc] init];
     vc.delegate = delegate;
@@ -113,38 +109,6 @@
     return nil;
 }
 
-- (NSDictionary*) bodyDictForUploadFileFullPath: (NSString*)fileFullPath
-                                          title: (NSString*)title
-                                         itemID: (NSString*)itemID
-{
-    NSDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: self.contentModel.subDict];
-    [addtDict setValue: fileFullPath forKey: @"filePath"];
-    [addtDict setValue: title forKey: @"att_title"];
-    [addtDict setValue: itemID forKey: kWOASrvKeyForItemID];
-    
-    return [WOATeacherPacketHelper packetForSimpleQuery: WOAActionType_UploadAttachment
-                                         additionalDict: addtDict];
-}
-
-- (WOARequestContent*) contentForUploadAttachment: (NSArray*)filePathArray
-                                       titleArray: (NSArray*)titleArray;
-{
-    WOARequestContent *content = [WOARequestContent contentWithActionType: WOAActionType_UploadAttachment];
-    
-    NSMutableArray *multiBodyArray = [NSMutableArray array];
-    
-    for (NSInteger index = 0; index < filePathArray.count; index++)
-    {
-        NSDictionary *body = [self bodyDictForUploadFileFullPath: filePathArray[index]
-                                                           title: titleArray[index]
-                                                          itemID: @"0"];
-        [multiBodyArray addObject: body];
-    }
-    content.multiBodyArray = multiBodyArray;
-    
-    return content;
-}
-
 - (void) sumbitContent
 {
 //    [self updateToContentModel];
@@ -174,18 +138,21 @@
 //    }
     
     self.attachmentField = [self selectedAttachmentField];
-    if (self.attachmentField)
+    if (self.attachmentField
+        && self.delegate
+        && [self.delegate respondsToSelector: @selector(requestUploadAttachment:filePathArray:titleArray:additionalDict:onCompletion:)])
     {
-        WOARequestContent *requestContent = [self contentForUploadAttachment: self.attachmentField.imageFullFileNameArray
-                                                                  titleArray: self.attachmentField.imageTitleArray];
-        
-        [[WOARequestManager sharedInstance] sendRequest: requestContent
-                                             onSuccuess: ^(WOAResponeContent *responseContent)
+        [self.delegate requestUploadAttachment: self.contentModel.actionType
+                                 filePathArray: self.attachmentField.imageFullFileNameArray
+                                    titleArray: self.attachmentField.imageTitleArray
+                                additionalDict: self.contentModel.subDict
+                                  onCompletion: ^(BOOL isSuccess, NSArray *urlArray)
          {
-             [self sumbitContent];
-         }
-                                              onFailure: ^(WOAResponeContent *responseContent)
-         {
+             if (isSuccess && urlArray)
+             {
+                 self.attachmentField.imageURLArray = [NSMutableArray arrayWithArray: urlArray];
+             }
+             
              [self sumbitContent];
          }];
     }

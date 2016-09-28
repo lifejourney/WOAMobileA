@@ -91,7 +91,7 @@
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: kWOASrvKeyForItemID value: itemID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"fieldname" value: @"附件"];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"fieldtype" value: @"attfile"];
-    [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"att_title" value: title];
+    [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: kWOASrvKeyForSendAttachmentTitle value: title];
     
     [bodyData appendString: boundaryWithPrefix];
     contentDis = [NSString stringWithFormat: @"Content-disposition: form-data; name=\"att_file\"; filename=\"%@\"\r\n", fileName];

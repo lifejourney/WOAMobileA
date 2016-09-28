@@ -30,7 +30,8 @@
 
 @interface WOATeacherRootViewController() <WOASinglePickerViewControllerDelegate,
                                             WOAMultiPickerViewControllerDelegate,
-                                            WOAContentViewControllerDelegate>
+                                            WOAContentViewControllerDelegate,
+                                            WOAUploadAttachmentRequestDelegate>
 
 @property (nonatomic, strong) UINavigationController *myOANavC;
 @property (nonatomic, strong) UINavigationController *myBusinessNavC;
@@ -578,6 +579,57 @@
      }];
 }
 
+#pragma mark - WOAUploadAttachmentRequestDelegate
+
+- (void) requestUploadAttachment: (WOAActionType)contentActionType
+                   filePathArray: (NSArray*)filePathArray
+                      titleArray: (NSArray*)titleArray
+                  additionalDict: (NSDictionary*)additionalDict
+                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler
+{
+    WOARequestContent *requestContent = [WOARequestContent contentWithActionType: WOAActionType_UploadAttachment];
+    
+    NSMutableArray *multiBodyArray = [NSMutableArray array];
+    for (NSInteger index = 0; index < filePathArray.count; index++)
+    {
+        NSString *fileFullPath = filePathArray[index];
+        NSString *title = titleArray[index];
+        NSString *itemID = @"0";
+        
+        NSDictionary *itemDict = [NSMutableDictionary dictionaryWithDictionary: additionalDict];
+        [itemDict setValue: fileFullPath forKey:kWOASrvKeyForAttachmentFilePath];
+        [itemDict setValue: title forKey: kWOASrvKeyForSendAttachmentTitle];
+        [itemDict setValue: itemID forKey: kWOASrvKeyForItemID];
+        
+        NSDictionary *bodyDict = [WOATeacherPacketHelper packetForSimpleQuery: WOAActionType_UploadAttachment
+                                                               additionalDict: itemDict];
+        
+        [multiBodyArray addObject: bodyDict];
+    }
+    requestContent.multiBodyArray = multiBodyArray;
+    
+    [[WOARequestManager sharedInstance] sendRequest: requestContent
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSMutableArray *urlArray = [NSMutableArray array];
+         
+         for (NSInteger index = 0; index < responseContent.multiBodyArray.count; index++)
+         {
+             NSDictionary *bodyDictionary = responseContent.multiBodyArray[index];
+             
+             NSString *fileURL = [WOATeacherPacketHelper resultUploadedFileNameFromPacketDictionary: bodyDictionary];
+             
+             [urlArray addObject: fileURL];
+         }
+         
+         completionHandler(YES, urlArray);
+     }
+                                          onFailure: ^(WOAResponeContent *responseContent)
+     {
+         completionHandler(NO, nil);
+     }];
+}
+
 #pragma mark - delegate for WOASinglePickerViewControllerDelegate
 
 - (void) singlePickerViewControllerSelected: (NSIndexPath*)indexPath
@@ -642,7 +694,6 @@
                    relatedDict: (NSDictionary*)relatedDict
 {
     //WOAActionType actionType = contentModel.actionType;
-    
     
     NSMutableDictionary *contentModel = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [contentModel addEntriesFromDictionary: contentDict];

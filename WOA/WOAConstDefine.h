@@ -28,7 +28,10 @@
 #define kWOASrvKeyForTableName @"tableName"
 
 #define kWOASrvKeyForAttachmentTitle @"title"
+#define kWOASrvKeyForSendAttachmentTitle @"att_title"
 #define kWOASrvKeyForAttachmentUrl @"url"
+#define kWOASrvKeyForAttachmentFilePath @"filePath"
+#define kWOASrvKeyForAttachmentRetUrl @"ret_file"
 
 #define kWOASrvKeyForProcessID @"processID"
 
