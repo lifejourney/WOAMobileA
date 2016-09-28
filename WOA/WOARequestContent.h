@@ -27,6 +27,8 @@
 
 #pragma mark -
 
++ (WOARequestContent*) contentWithActionType: (WOAActionType)actionType;
+
 + (WOARequestContent*) contentForLogin: (NSString*)accountID
                               password: (NSString*)password;
 

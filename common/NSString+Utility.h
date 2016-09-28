@@ -25,4 +25,15 @@
 
 - (NSString*) rightPaddingWhitespace: (NSUInteger)fixedLength;
 
+#pragma mark -
+
+- (BOOL) isPureIntegerString;
+- (NSString*) removeNumberOrderPrefixWithDelimeter: (NSString*)delimeter;
+
 @end
+
+
+
+
+
+

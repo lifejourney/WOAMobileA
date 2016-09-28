@@ -15,6 +15,7 @@
 #import "WOALayout.h"
 #import "UIColor+AppTheme.h"
 #import "UIView+IndexPathTag.h"
+#import "NSString+Utility.h"
 #import <QuartzCore/QuartzCore.h>
 
 
@@ -535,36 +536,6 @@
     [[self hostNavigation] pushViewController: _datePickerVC animated: NO];
 }
 
-- (BOOL) isPureIntegerString: (NSString*)src
-{
-    NSScanner *scanner = [NSScanner scannerWithString: src];
-    NSInteger val;
-    
-    return ([scanner scanInteger: &val] && [scanner isAtEnd]);
-}
-
-- (NSString*) removeNumberOrderPrefix: (NSString*)src
-{
-    NSString *retString = src;
-    NSString *delimeter = @".";
-    NSRange range = [src rangeOfString: delimeter];
-    if (range.length > 0)
-    {
-        NSString *prefix = [src substringToIndex: range.location];
-        if (prefix && [prefix length] > 0)
-        {
-            if ([self isPureIntegerString: prefix])
-            {
-                NSUInteger fromIndex = range.location + range.length;
-                
-                retString = [src substringFromIndex: fromIndex];
-            }
-        }
-    }
-    
-    return retString;
-}
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -670,6 +641,61 @@
 - (void) dateTimePickerViewControllerCancelled: (WOADateTimePickerViewController *)dateTimePickerViewController
 {
     _datePickerVC = nil;
+}
+
+#pragma mark -
+
+- (NSDictionary*) toTeacherDataModel
+{
+    BOOL isWritable = self.itemModel.isWritable;
+    WOAPairDataType dataType = self.itemModel.dataType;
+    
+    NSString *itemName = self.titleLabel.text;
+    NSString *itemType = [WOANameValuePair textTypeFromPairType: dataType];
+    id itemValue;
+    
+    if (isWritable && (dataType == WOAPairDataType_SinglePicker))
+    {
+        itemValue = [self.lineTextField.text removeNumberOrderPrefixWithDelimeter: @"."];
+    }
+    else if (!isWritable && (dataType == WOAPairDataType_Normal))
+    {
+        itemValue = self.lineLabel.text;
+    }
+    else if (dataType == WOAPairDataType_AttachFile)
+    {
+        if (isWritable)
+        {
+            NSMutableArray *attachmentArray = [[NSMutableArray alloc] initWithCapacity: _imageURLArray.count];
+            
+            for (NSInteger index = 0; index < _imageURLArray.count; index++)
+            {
+                NSDictionary *attachmentInfo = @{kWOASrvKeyForAttachmentTitle: self.imageTitleArray[index],
+                                                 kWOASrvKeyForAttachmentUrl: self.imageURLArray[index]};
+                
+                [attachmentArray addObject: attachmentInfo];
+            }
+            
+            itemValue = attachmentArray;
+        }
+        else
+        {
+            itemValue = nil;
+            //TO-DO:
+            //itemValue = self.multiLabel.textsArray;
+        }
+    }
+    else
+    {
+        itemValue = self.lineTextField.text;
+    }
+    
+    NSMutableDictionary *itemDict = [NSMutableDictionary dictionary];
+    [itemDict setValue: itemName forKey: kWOASrvKeyForItemName];
+    [itemDict setValue: itemType forKey: kWOASrvKeyForItemType];
+    [itemDict setValue: itemValue forKey: kWOASrvKeyForItemValue];
+    
+    return itemDict;
 }
 
 @end

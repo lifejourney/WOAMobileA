@@ -37,4 +37,10 @@
 
 - (void) selectDefaultValueFromPickerView;
 
+#pragma mark -
+//TO-DO
+
+
+- (NSDictionary*) toTeacherDataModel;
+
 @end

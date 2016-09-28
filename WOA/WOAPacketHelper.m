@@ -176,7 +176,7 @@
 + (NSArray*) itemsArrayFromPacketDictionary: (NSDictionary*)dict
 {
     //TO-DO
-    id value = [dict valueForKey: kWOASrvKeyForItemArray];
+    id value = [dict valueForKey: kWOASrvKeyForItemArrays];
     if (!value) value = [dict valueForKey: @"itmes"];
     
     return (value && [value isKindOfClass: [NSArray class]]) ? value : nil;

@@ -205,8 +205,8 @@
      }];
 }
 
-- (void) onTchrSubmitOAProcess: (WOAContentModel*)contentModel
-                       navVC: (UINavigationController *)navVC
+- (void) onTchrSubmitOAProcess: (NSDictionary*)contentModel
+                         navVC: (UINavigationController *)navVC
 {
     
 }
@@ -284,7 +284,7 @@
      }];
 }
 
-- (void) onTchrSubmitOACreate: (WOAContentModel*)contentModel
+- (void) onTchrSubmitOACreate: (NSDictionary*)contentModel
                         navVC: (UINavigationController *)navVC
 {
     
@@ -636,9 +636,18 @@
 #pragma mark - WOAContentViewControllerDelegate
 
 - (void) contentViewController: (WOAContentViewController*)vc
-              rightButtonClick: (WOAContentModel*)contentModel
+//              rightButtonClick: (WOAContentModel*)contentModel
+                    actionType: (WOAActionType)actionType
+                 submitContent: (NSDictionary*)contentDict
+                   relatedDict: (NSDictionary*)relatedDict
 {
-    switch (contentModel.actionType)
+    //WOAActionType actionType = contentModel.actionType;
+    
+    
+    NSMutableDictionary *contentModel = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [contentModel addEntriesFromDictionary: contentDict];
+    
+    switch (actionType)
     {
         case WOAActionType_TeacherSubmitOAProcess:
         {
@@ -649,8 +658,8 @@
             
         case WOAActionType_TeacherSubmitOACreate:
         {
-            [self onTchrSubmitOAProcess: contentModel
-                                  navVC: vc.navigationController];
+            [self onTchrSubmitOACreate: contentModel
+                                 navVC: vc.navigationController];
             break;
         }
             

@@ -47,6 +47,13 @@ static WOARequestContent *_latestRequestLoginContent = nil;
     return self;
 }
 
++ (WOARequestContent*) contentWithActionType: (WOAActionType)actionType
+{
+    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: actionType];
+    
+    return content;
+}
+
 + (WOARequestContent*) contentForLogin: (NSString*)accountID
                               password: (NSString*)password
 {

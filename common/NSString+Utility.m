@@ -50,4 +50,45 @@
     return [paddingStr substringToIndex: fixedLength];
 }
 
+#pragma mark - - (BOOL) isPureIntegerString: (NSString*)src
+
+- (BOOL) isPureIntegerString
+{
+    NSScanner *scanner = [NSScanner scannerWithString: self];
+    NSInteger val;
+    
+    return ([scanner scanInteger: &val] && [scanner isAtEnd]);
+}
+
+- (NSString*) removeNumberOrderPrefixWithDelimeter: (NSString*)delimeter
+{
+    NSString *retString = self;
+    
+    NSRange range = [self rangeOfString: delimeter];
+    if (range.length > 0)
+    {
+        NSString *prefix = [self substringToIndex: range.location];
+        if (prefix && [prefix length] > 0)
+        {
+            if ([prefix isPureIntegerString])
+            {
+                NSUInteger fromIndex = range.location + range.length;
+                
+                retString = [self substringFromIndex: fromIndex];
+            }
+        }
+    }
+    
+    return retString;
+}
+
+
 @end
+
+
+
+
+
+
+
+

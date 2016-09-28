@@ -17,6 +17,10 @@
 #import "UIView+IndexPathTag.h"
 #import "NSString+Utility.h"
 
+//TO-DO
+#import "WOARequestManager.h"
+#import "WOATeacherPacketHelper.h"
+
 
 @interface WOAContentViewController () <WOAMultiStyleItemFieldDelegate>
 
@@ -25,6 +29,9 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UITextField *latestFirstResponderTextField;
+
+//TO-DO
+@property (nonatomic, strong) WOAMultiStyleItemField *attachmentField;
 
 @end
 
@@ -79,20 +86,112 @@
     [_scrollView addGestureRecognizer: tapGesture];
 }
 
+#pragma mark -
+
 - (void) updateToContentModel
 {
     
 }
 
+#pragma mark -
+
+- (WOAMultiStyleItemField*) selectedAttachmentField
+{
+    for (UIView *subView in self.scrollView.subviews)
+    {
+        if (![subView isKindOfClass: [WOAMultiStyleItemField class]])
+            continue;
+        
+        WOAMultiStyleItemField *subTextField = (WOAMultiStyleItemField*)subView;
+        
+        if (subTextField.imageFullFileNameArray.count > 0)
+        {
+            return subTextField;
+        }
+    }
+    
+    return nil;
+}
+
+- (NSDictionary*) bodyDictForUploadFileFullPath: (NSString*)fileFullPath
+                                          title: (NSString*)title
+                                         itemID: (NSString*)itemID
+{
+    NSDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: self.contentModel.subDict];
+    [addtDict setValue: fileFullPath forKey: @"filePath"];
+    [addtDict setValue: title forKey: @"att_title"];
+    [addtDict setValue: itemID forKey: kWOASrvKeyForItemID];
+    
+    return [WOATeacherPacketHelper packetForSimpleQuery: WOAActionType_UploadAttachment
+                                         additionalDict: addtDict];
+}
+
+- (WOARequestContent*) contentForUploadAttachment: (NSArray*)filePathArray
+                                       titleArray: (NSArray*)titleArray;
+{
+    WOARequestContent *content = [WOARequestContent contentWithActionType: WOAActionType_UploadAttachment];
+    
+    NSMutableArray *multiBodyArray = [NSMutableArray array];
+    
+    for (NSInteger index = 0; index < filePathArray.count; index++)
+    {
+        NSDictionary *body = [self bodyDictForUploadFileFullPath: filePathArray[index]
+                                                           title: titleArray[index]
+                                                          itemID: @"0"];
+        [multiBodyArray addObject: body];
+    }
+    content.multiBodyArray = multiBodyArray;
+    
+    return content;
+}
+
+- (void) sumbitContent
+{
+//    [self updateToContentModel];
+    
+    if (self.delegate
+        && [self.delegate respondsToSelector: @selector(contentViewController:actionType:submitContent:relatedDict:)])
+    {
+        NSDictionary *contentDict = [self toTeacherDataModel];
+        
+        [self.delegate contentViewController: self
+                                  actionType: self.contentModel.actionType
+                               submitContent: contentDict
+                                 relatedDict: self.contentModel.subDict];
+    }
+}
+
 - (void) onRightButtonAction: (id)sender
 {
-    [self updateToContentModel];
+    //TO-DO
+//    [self updateToContentModel];
+//    
+//    if (self.delegate &&
+//        [self.delegate respondsToSelector: @selector(contentViewController:rightButtonClick:)])
+//    {
+//        [self.delegate contentViewController: self
+//                            rightButtonClick: self.contentModel];
+//    }
     
-    if (self.delegate &&
-        [self.delegate respondsToSelector: @selector(contentViewController:rightButtonClick:)])
+    self.attachmentField = [self selectedAttachmentField];
+    if (self.attachmentField)
     {
-        [self.delegate contentViewController: self
-                            rightButtonClick: self.contentModel];
+        WOARequestContent *requestContent = [self contentForUploadAttachment: self.attachmentField.imageFullFileNameArray
+                                                                  titleArray: self.attachmentField.imageTitleArray];
+        
+        [[WOARequestManager sharedInstance] sendRequest: requestContent
+                                             onSuccuess: ^(WOAResponeContent *responseContent)
+         {
+             [self sumbitContent];
+         }
+                                              onFailure: ^(WOAResponeContent *responseContent)
+         {
+             [self sumbitContent];
+         }];
+    }
+    else
+    {
+        [self sumbitContent];
     }
 }
 
@@ -272,6 +371,47 @@
     
     return totalHeight;
 }
+
+#pragma mark -
+
+//TO-DO
+- (NSDictionary*) toTeacherDataModel
+{
+    NSMutableArray *itemArrArray = [NSMutableArray array];
+    
+    for (NSInteger groupIndex = 0; groupIndex < self.contentModel.contentArray.count; groupIndex++)
+    {
+        NSMutableArray *itemArray = [NSMutableArray array];
+        WOAContentModel *groupContent = self.contentModel.contentArray[groupIndex];
+        
+        for (NSInteger rowIndex = 0; rowIndex < groupContent.pairArray.count; rowIndex++)
+        {
+            WOANameValuePair *itemPair = groupContent.pairArray[rowIndex];
+            if (itemPair.dataType == WOAPairDataType_Seperator)
+            {
+                continue;
+            }
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: rowIndex inSection: groupIndex];
+            NSInteger subViewTag = [UIView tagByIndexPathE: indexPath];
+            UIView *subView = [self.view viewWithTag: subViewTag];
+            
+            if ([subView isKindOfClass: [WOAMultiStyleItemField class]])
+            {
+                WOAMultiStyleItemField *contentField = (WOAMultiStyleItemField*)subView;
+                [itemArray addObject: [contentField toTeacherDataModel]];
+            }
+        }
+        
+        if (itemArray.count > 0)
+        {
+            [itemArrArray addObject: itemArray];
+        }
+    }
+    
+    return @{kWOASrvKeyForItemArrays: itemArrArray};
+}
+
 
 //- (NSString*) valueForContentModelSection: (NSInteger)section
 //                                seperator: (NSString*)seperator

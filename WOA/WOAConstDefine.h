@@ -14,7 +14,7 @@
 #define kWOAKeyForSubValue @"subValue"
 
 #define kWOASrvKeyForWorkID @"workID"
-#define kWOASrvKeyForItemArray @"items"
+#define kWOASrvKeyForItemArrays @"items"
 #define kWOASrvKeyForItemID @"itemID"
 #define kWOASrvKeyForItemName @"name"
 #define kWOASrvKeyForItemType @"type"

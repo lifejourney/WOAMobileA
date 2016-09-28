@@ -15,8 +15,12 @@
 @protocol WOAContentViewControllerDelegate <NSObject>
 
 @optional
+//- (void) contentViewController: (WOAContentViewController*)vc
+//              rightButtonClick: (WOAContentModel*)contentModel;
 - (void) contentViewController: (WOAContentViewController*)vc
-              rightButtonClick: (WOAContentModel*)contentModel;
+                    actionType: (WOAActionType)actionType
+                 submitContent: (NSDictionary*)contentDict
+                   relatedDict: (NSDictionary*)relatedDict;
 - (void) textFieldTryBeginEditing: (UITextField *)textField allowEditing: (BOOL)allowEditing;
 - (void) textFieldDidBecameFirstResponder: (UITextField *)textField;
 
@@ -26,6 +30,11 @@
 
 + (instancetype) contentViewController: (WOAContentModel*)contentModel //WOAContentModel values in contentArray
                               delegate: (NSObject<WOAContentViewControllerDelegate>*)delegate;
+
+
+#pragma mark -
+//TO-DO
+- (NSDictionary*) toTeacherDataModel;
 
 @end
 
