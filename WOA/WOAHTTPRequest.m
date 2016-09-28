@@ -87,7 +87,7 @@
 //att_file: "......\test.jpg"
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"sessionID" value: sessionID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: kWOASrvKeyForWorkID value: workID];
-    [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"tableID" value: tableID];
+    [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: kWOASrvKeyForTableID value: tableID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: kWOASrvKeyForItemID value: itemID];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"fieldname" value: @"附件"];
     [self appendToData: bodyData prefixBoundary: boundaryWithPrefix key: @"fieldtype" value: @"attfile"];

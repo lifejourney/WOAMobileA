@@ -191,7 +191,7 @@
 
 + (NSString*) tableIDFromTableDictionary: (NSDictionary*)dict
 {
-    return [dict valueForKey: @"tableID"];
+    return [dict valueForKey: kWOASrvKeyForTableID];
 }
 
 + (NSString*) tableNameFromTableDictionary: (NSDictionary*)dict
@@ -199,7 +199,7 @@
     //TO-DO: should using only one: adjust the protocol
     //return [dict valueForKey: @"tableName"];
     
-    NSString *name = [dict valueForKey: @"tableName"];
+    NSString *name = [dict valueForKey: kWOASrvKeyForTableName];
     if (!name) name = [dict valueForKey: @"name"];
     return name;
 }

@@ -41,7 +41,8 @@
                  contentArray: (NSArray*)contentArray
                    actionType: (WOAActionType)actionType
                    actionName: (NSString*)actionName
-                   isReadonly: (BOOL)isReadonly;
+                   isReadonly: (BOOL)isReadonly
+                      subDict: (NSDictionary*)subDict;
 
 - (void) addPair: (WOANameValuePair*)pair;
 - (WOANameValuePair*) pairForName: (NSString*)name;

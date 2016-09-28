@@ -175,10 +175,11 @@
     [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
     
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: dictValue
+                                                   additionalDict: addtDict
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherSubmitOAProcess;
+         NSString *itemActionName = @"提交";
          
          NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
          NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: responseContent.bodyDictionary];
@@ -186,14 +187,16 @@
          NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrProcessOAItem: responseContent.bodyDictionary
                                                                                 tableName: tableName
                                                                                isReadonly: NO];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: @"待办工作"
-                                                          contentArray: contentArray
-                                                            actionType: itemActionType
-                                                            actionName: @"提交"
-                                                            isReadonly: NO];
          
          NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
          [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"待办工作"
+                                                          contentArray: contentArray
+                                                            actionType: itemActionType
+                                                            actionName: itemActionName
+                                                            isReadonly: NO
+                                                               subDict: contentReleatedDict];
          
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
@@ -202,6 +205,11 @@
      }];
 }
 
+- (void) onTchrSubmitOAProcess: (WOAContentModel*)contentModel
+                       navVC: (UINavigationController *)navVC
+{
+    
+}
 
 #pragma mark -
 
@@ -230,6 +238,58 @@
      }];
 }
 
+- (void) onTchrCreateOAItem: (WOANameValuePair *)selectedPair
+                relatedDict: (NSDictionary *)relatedDict
+                      navVC: (UINavigationController *)navVC
+{
+    NSString *selectedTableID = [selectedPair stringValue];
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
+    [addtDict setValue: selectedTableID forKey: kWOASrvKeyForTableID];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType itemActionType = WOAActionType_TeacherSubmitOACreate;
+         NSString *itemActionName = @"提交";
+         
+         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
+         NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: responseContent.bodyDictionary];
+         NSString *tableID = [WOATeacherPacketHelper tableIDFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrProcessOAItem: responseContent.bodyDictionary
+                                                                                tableName: tableName
+                                                                               isReadonly: NO];
+         
+         NSMutableDictionary *tableStructDict = [NSMutableDictionary dictionary];
+         [tableStructDict setValue: tableID forKey: kWOASrvKeyForTableID];
+         [tableStructDict setValue: tableName forKey: kWOASrvKeyForTableName];
+         
+         NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+         [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+         [contentReleatedDict setValue: tableStructDict forKey: kWOASrvKeyForTableStruct];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"新建工作"
+                                                          contentArray: contentArray
+                                                            actionType: itemActionType
+                                                            actionName: itemActionName
+                                                            isReadonly: NO
+                                                               subDict: contentReleatedDict];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrSubmitOACreate: (WOAContentModel*)contentModel
+                        navVC: (UINavigationController *)navVC
+{
+    
+}
+
 #pragma mark -
 
 - (void) tchrQueryHistoryOA
@@ -241,6 +301,42 @@
     [self tchrQueryOAList: WOAActionType_TeacherQueryHistoryOA
                     title: vcTitle
                 ownerNavC: ownerNavC];
+}
+
+- (void) onTchrQueryOADetail: (WOANameValuePair *)selectedPair
+                 relatedDict: (NSDictionary *)relatedDict
+                       navVC: (UINavigationController *)navVC
+{
+    NSDictionary *dictValue = (NSDictionary*)selectedPair.value;
+    NSString *selectedItemID = dictValue[kWOASrvKeyForItemID];
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
+    [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType itemActionType = WOAActionType_None;
+         NSString *itemActionName = @"";
+         
+         NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrProcessOAItem: responseContent.bodyDictionary
+                                                                                tableName: tableName
+                                                                               isReadonly: YES];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"事务查询"
+                                                          contentArray: contentArray
+                                                            actionType: itemActionType
+                                                            actionName: itemActionName
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
 }
 
 #pragma mark - action for Business
@@ -499,20 +595,21 @@
             break;
         }
             
-        case WOAActionType_TeacherSubmitOAProcess:
-            break;
-            
-        case WOAActionType_TeacherQueryOATableList:
-            break;
-            
         case WOAActionType_TeacherCreateOAItem:
+        {
+            [self onTchrCreateOAItem: selectedPair
+                         relatedDict: relatedDict
+                               navVC: navVC];
             break;
-            
-        case WOAActionType_TeacherSubmitOACreate:
-            break;
+        }
             
         case WOAActionType_TeacherQueryOADetail:
+        {
+            [self onTchrQueryOADetail: selectedPair
+                          relatedDict: relatedDict
+                                navVC: navVC];
             break;
+        }
             
         case WOAActionType_TeacherOAProcessStyle:
             break;
@@ -524,7 +621,7 @@
         case WOAActionType_TeacherSelectPayoffYear:
         {
             [self onSelectPayoffYear: selectedPair
-                         relatedDict: nil
+                         relatedDict: relatedDict
                                navVC: navVC];
             
             break;
@@ -543,14 +640,19 @@
 {
     switch (contentModel.actionType)
     {
-        case WOAActionType_TeacherProcessOAItem:
+        case WOAActionType_TeacherSubmitOAProcess:
+        {
+            [self onTchrSubmitOAProcess: contentModel
+                                  navVC: vc.navigationController];
             break;
-            
-        case WOAActionType_TeacherCreateOAItem:
-            break;
+        }
             
         case WOAActionType_TeacherSubmitOACreate:
+        {
+            [self onTchrSubmitOAProcess: contentModel
+                                  navVC: vc.navigationController];
             break;
+        }
             
         default:
             break;

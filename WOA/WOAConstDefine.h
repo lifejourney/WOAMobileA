@@ -22,6 +22,11 @@
 #define kWOASrvKeyForItemOptionArray @"combo"
 #define kWOASrvKeyForItemWritable @"isWrite"
 
+
+#define kWOASrvKeyForTableStruct @"tableStruct"
+#define kWOASrvKeyForTableID @"tableID"
+#define kWOASrvKeyForTableName @"tableName"
+
 #define kWOASrvKeyForAttachmentTitle @"title"
 #define kWOASrvKeyForAttachmentUrl @"url"
 

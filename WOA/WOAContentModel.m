@@ -62,6 +62,7 @@
                    actionType: (WOAActionType)actionType
                    actionName: (NSString*)actionName
                    isReadonly: (BOOL)isReadonly
+                      subDict: (NSDictionary*)subDict
 {
     return [self contentModel: groupTitle
                     pairArray: nil
@@ -69,7 +70,7 @@
                    actionType: actionType
                    actionName: actionName
                    isReadonly: isReadonly
-                      subDict: nil];
+                      subDict: subDict];
 }
 
 - (void) addPair: (WOANameValuePair*)pair
