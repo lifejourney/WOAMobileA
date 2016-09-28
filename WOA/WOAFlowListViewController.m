@@ -49,7 +49,6 @@
     vc.allRootPairArray = contentModel.pairArray;
     vc.relatedDict = relatedDict;
     
-    vc.shouldShowSearchBar = NO;
     vc.filteredRootPairArray = vc.allRootPairArray;
     
     return vc;
@@ -68,7 +67,8 @@
 {
     if (self = [self initWithNibName: nil bundle: nil])
     {
-        
+        self.shouldShowBackBarItem = YES;
+        self.shouldShowSearchBar = NO;
     }
     
     return self;

@@ -237,6 +237,58 @@
     return pairArray;
 }
 
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrSubmitOADetail: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *processID = itemDict[kWOASrvKeyForProcessID];
+        NSString *tableName = itemDict[kWOASrvKeyForTableName];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: tableName
+                                                          value: processID
+                                                     actionType: pairActionType];
+        
+        [pairArray addObject: pair];
+    }
+    
+    return [WOANameValuePair integerValueSortedPairArray: pairArray
+                                             isAscending: YES];
+}
+
+"workID":"735","items":[
+{"校长":[
+    {"account":"321","name":"教师T"}]},
+{"副校长":[
+    {"account":"54","name":"韦秋哲"}]},
+
++ (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
+    
+    for (NSDictionary *groupDict in itemsArray)
+    {
+        NSArray *groupNameArray = [[groupDict allKeys] sortedArrayUsingSelector: @selector(compare:)];
+        
+        for (NSString *groupName in groupNameArray)
+        {
+            NSMutableArray *groupPairArray = [NSMutableArray array];
+            
+            
+            WOAContentModel *groupContent = [WOAContentModel contentModel: groupName
+                                                                pairArray: groupPairArray];
+        }
+    }
+    return pairArray;
+}
+
 #pragma mark - Business
 
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict

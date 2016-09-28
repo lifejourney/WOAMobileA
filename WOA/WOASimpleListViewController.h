@@ -12,6 +12,8 @@
 
 @interface WOASimpleListViewController : UIViewController
 
+@property (nonatomic, assign) BOOL shouldShowBackBarItem;
+
 + (instancetype) listViewController: (NSString*)title
                          modelArray: (NSArray*)modelArray //array of WOAContentModel
                           cellStyle: (UITableViewCellStyle)cellStyle;

@@ -123,6 +123,88 @@
 
 #pragma mark -
 
++ (NSArray*) nameSortedPairArray: (NSArray*)pairArray
+                     isAscending: (BOOL)isAscending
+{
+    return [pairArray sortedArrayUsingComparator: ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+            {
+                WOANameValuePair *pair1 = (WOANameValuePair*)obj1;
+                WOANameValuePair *pair2 = (WOANameValuePair*)obj2;
+                
+                NSString *value1 = [pair1 name];
+                NSString *value2 = [pair2 name];
+                
+                NSComparisonResult comparisonResult = [value1 compare: value2];
+                if (!isAscending)
+                {
+                    if (comparisonResult == NSOrderedAscending)
+                        comparisonResult = NSOrderedDescending;
+                    else if (comparisonResult == NSOrderedDescending)
+                        comparisonResult = NSOrderedAscending;
+                    
+                }
+                
+                return comparisonResult;
+            }];
+}
+
++ (NSArray*) stringValueSortedPairArray: (NSArray*)pairArray
+                            isAscending: (BOOL)isAscending
+{
+    return [pairArray sortedArrayUsingComparator: ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+            {
+                WOANameValuePair *pair1 = (WOANameValuePair*)obj1;
+                WOANameValuePair *pair2 = (WOANameValuePair*)obj2;
+                
+                NSString *value1 = [pair1 stringValue];
+                NSString *value2 = [pair2 stringValue];
+                
+                NSComparisonResult comparisonResult = [value1 compare: value2];
+                if (!isAscending)
+                {
+                    if (comparisonResult == NSOrderedAscending)
+                        comparisonResult = NSOrderedDescending;
+                    else if (comparisonResult == NSOrderedDescending)
+                        comparisonResult = NSOrderedAscending;
+                        
+                }
+                
+                return comparisonResult;
+            }];
+}
+
++ (NSArray*) integerValueSortedPairArray: (NSArray*)pairArray
+                             isAscending: (BOOL)isAscending
+{
+    return [pairArray sortedArrayUsingComparator: ^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+            {
+                WOANameValuePair *pair1 = (WOANameValuePair*)obj1;
+                WOANameValuePair *pair2 = (WOANameValuePair*)obj2;
+                
+                NSInteger value1 = [[pair1 stringValue] integerValue];
+                NSInteger value2 = [[pair2 stringValue] integerValue];
+                
+                NSComparisonResult comparisonResult;
+                if (value1 < value2)
+                {
+                    comparisonResult = isAscending ? NSOrderedAscending : NSOrderedDescending;
+                }
+                else if (value1 > value2)
+                {
+                    comparisonResult = isAscending ? NSOrderedDescending : NSOrderedAscending;
+                }
+                else
+                {
+                    comparisonResult = NSOrderedSame;
+                }
+                
+                return comparisonResult;
+                
+            }];
+}
+
+#pragma mark -
+
 - (BOOL) isSeperatorPair
 {
     return self.dataType == WOAPairDataType_Seperator;

@@ -27,6 +27,8 @@
 
 @interface WOAMultiPickerViewController : UIViewController
 
+@property (nonatomic, assign) BOOL shouldShowBackBarItem;
+
 //For contentModel.pairArray
 //If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
 //Else M(T, [Name, Value])

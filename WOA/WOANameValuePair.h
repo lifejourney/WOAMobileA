@@ -81,6 +81,15 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 
 #pragma mark -
 
++ (NSArray*) nameSortedPairArray: (NSArray*)pairArray
+                     isAscending: (BOOL)isAscending;
++ (NSArray*) stringValueSortedPairArray: (NSArray*)pairArray
+                            isAscending: (BOOL)isAscending;
++ (NSArray*) integerValueSortedPairArray: (NSArray*)pairArray
+                             isAscending: (BOOL)isAscending;
+
+#pragma mark -
+
 - (BOOL) isSeperatorPair;
 
 - (NSDictionary*) toTextTypeModel;

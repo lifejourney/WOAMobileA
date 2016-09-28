@@ -14,6 +14,7 @@
 @interface WOAFlowListViewController : UIViewController
 
 @property (nonatomic, assign) BOOL shouldShowSearchBar;
+@property (nonatomic, assign) BOOL shouldShowBackBarItem;
 @property (nonatomic, strong) UIFont *textLabelFont;
 
 //For contentModel.pairArray

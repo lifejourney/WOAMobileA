@@ -114,6 +114,14 @@
 }
 
 
+#pragma mark -
+
+- (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
+                                  navVC: (UINavigationController*)navVC
+{
+    [navVC popToRootViewControllerAnimated: YES];
+}
+
 #pragma mark - action for myOA
 
 - (void) tchrQueryOAList: (WOAActionType)actionType
@@ -206,12 +214,6 @@
      }];
 }
 
-- (void) onTchrSubmitOAProcess: (NSDictionary*)contentModel
-                         navVC: (UINavigationController *)navVC
-{
-    
-}
-
 #pragma mark -
 
 - (void) tchrNewOATask
@@ -285,10 +287,109 @@
      }];
 }
 
-- (void) onTchrSubmitOACreate: (NSDictionary*)contentModel
+- (void) onTchrSubmitOADetail: (WOAActionType)actionType
+                 contentModel: (NSDictionary*)contentModel
+                        navVC: (UINavigationController *)navVC
+{
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: contentModel
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType itemActionType = WOAActionType_TeacherOAProcessStyle;
+         
+         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
+         
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrSubmitOADetail: responseContent.bodyDictionary
+                                                                      pairActionType: itemActionType];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                             pairArray: pairArray
+                                                            actionType: itemActionType
+                                                            isReadonly: YES];
+         
+         NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionary];
+         [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: contentReleatedDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrOAProcessStyle: (WOANameValuePair *)selectedPair
+                  relatedDict: (NSDictionary *)relatedDict
+                        navVC: (UINavigationController *)navVC
+{
+    NSString *selectedProcessID = [selectedPair stringValue];
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: selectedProcessID forKey: kWOASrvKeyForProcessID];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType itemActionType = WOAActionType_TeacherNextAccounts;
+         
+         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
+         
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrOAProcessStyle: responseContent.bodyDictionary
+                                                                      pairActionType: itemActionType];
+         
+         if ([pairArray count] > 0)
+         {
+             WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                                 pairArray: pairArray
+                                                                actionType: itemActionType
+                                                                isReadonly: YES];
+             
+             NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionary];
+             [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+             
+             WOAMultiPickerViewController *subVC = [WOAMultiPickerViewController multiPickerViewController: contentModel
+                                                                                    selectedIndexPathArray: nil
+                                                                                                  delegate: self
+                                                                                               relatedDict: contentReleatedDict];
+             
+             [navVC pushViewController: subVC animated: YES];
+             
+         }
+         else
+         {
+             UIAlertController *alertController = [UIAlertController alertControllerWithTitle: nil
+                                                                                      message: @"已完结"
+                                                                               preferredStyle: UIAlertControllerStyleAlert];
+             UIAlertAction *alertAction = [UIAlertAction actionWithTitle: @"确定"
+                                                                   style: UIAlertActionStyleDefault
+                                                                 handler: ^(UIAlertAction * _Nonnull action)
+                                           {
+                                               [self onFlowDoneWithLatestActionType: selectedPair.actionType
+                                                                              navVC: navVC];
+                                           }];
+             
+             [alertController addAction: alertAction];
+             [self presentViewController: alertController
+                                animated: YES
+                              completion: nil];
+         }
+     }];
+}
+
+- (void) onTchrOANextAccounts: (NSArray*)selectedPairArray
+                  relatedDict: (NSDictionary *)relatedDict
                         navVC: (UINavigationController *)navVC
 {
     
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    
+//    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+//                                                   additionalDict: addtDict
+//                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+//     {
+//         WOAActionType itemActionType = WOAActionType_FlowDone;
+//         
+//     }];
 }
 
 #pragma mark -
@@ -664,10 +765,12 @@
         }
             
         case WOAActionType_TeacherOAProcessStyle:
+        {
+            [self onTchrOAProcessStyle: selectedPair
+                           relatedDict: relatedDict
+                                 navVC: navVC];
             break;
-            
-        case WOAActionType_TeacherNextAccounts:
-            break;
+        }
             
         ////////////////////////////////////////
         case WOAActionType_TeacherSelectPayoffYear:
@@ -679,6 +782,12 @@
             break;
         }
         ////////////////////////////////////////
+            
+        case WOAActionType_FlowDone:
+        {
+            [self onFlowDoneWithLatestActionType: selectedPair.actionType
+                                           navVC: navVC];
+        }
             
         default:
             break;
@@ -701,17 +810,18 @@
     switch (actionType)
     {
         case WOAActionType_TeacherSubmitOAProcess:
+        case WOAActionType_TeacherSubmitOACreate:
         {
-            [self onTchrSubmitOAProcess: contentModel
-                                  navVC: vc.navigationController];
+            [self onTchrSubmitOADetail: actionType
+                          contentModel: contentModel
+                                 navVC: vc.navigationController];
             break;
         }
             
-        case WOAActionType_TeacherSubmitOACreate:
+        case WOAActionType_FlowDone:
         {
-            [self onTchrSubmitOACreate: contentModel
-                                 navVC: vc.navigationController];
-            break;
+            [self onFlowDoneWithLatestActionType: actionType
+                                           navVC: vc.navigationController];
         }
             
         default:
@@ -727,13 +837,31 @@
                        relatedDict: (NSDictionary*)relatedDict
                              navVC: (UINavigationController*)navVC
 {
-    
+    switch (actionType)
+    {
+        case WOAActionType_TeacherNextAccounts:
+        {
+            [self onTchrOANextAccounts: selectedPairArray
+                           relatedDict: relatedDict
+                                 navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_FlowDone:
+        {
+            [self onFlowDoneWithLatestActionType: actionType
+                                           navVC: navVC];
+        }
+            
+        default:
+            break;
+    }
 }
 
 - (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
                                       navVC: (UINavigationController*)navVC
 {
-    
+    //[navVC popViewControllerAnimated: YES];
 }
 
 #pragma mark - private

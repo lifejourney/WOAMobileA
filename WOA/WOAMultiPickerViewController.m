@@ -106,6 +106,7 @@
 {
     if (self = [self initWithNibName: nil bundle: nil])
     {
+        self.shouldShowBackBarItem = YES;
     }
     
     return self;
