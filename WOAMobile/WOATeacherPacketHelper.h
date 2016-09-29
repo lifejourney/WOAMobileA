@@ -16,7 +16,7 @@
 + (NSDictionary*) packetDictWithFromTime: (NSString*)fromTimeStr
                                   toTime: (NSString*)endTimeStr;
 
-#pragma mark -
+#pragma mark - OA
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
                           pairActionType: (WOAActionType)pairActionType;
@@ -24,21 +24,37 @@
                                     tableName: (NSString*)tableName
                                    isReadonly: (BOOL)isReadonly;
 
+
 + (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
                                pairActionType: (WOAActionType)pairActionType;
 + (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
                         pairActionType: (WOAActionType)pairActionType;
 
+
 + (NSArray*) itemPairsForTchrSubmitOADetail: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
+
 
 + (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
 
 
-#pragma mark -
+#pragma mark - Business
+
++ (NSArray*) itemPairsForTchrQuerySyllabusConditions: (NSDictionary*)respDict
+                                         actionTypeA: (WOAActionType)actionTypeA
+                                         actionTypeB: (WOAActionType)actionTypeB;
+
+
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+                                   isReadonly: (BOOL)isReadonly;
+
+#pragma mark - Student Manage
+
+
 
 @end
 

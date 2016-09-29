@@ -68,8 +68,10 @@ static NSDictionary *__actionMapDict = nil;
                                                               @"getViewTable"],
       
       //Teacher Business
-      @(WOAActionType_TeacherGetSyllabusConditions):        @[@"TeacherGetSyllabusConditions",
+      @(WOAActionType_TeacherQuerySyllabusConditions):      @[@"TeacherQuerySyllabusConditions",
                                                               @"getMastInfo"],
+      @(WOAActionType_TeacherPickSyllabusQueryTerm):        @[@"TeacherPickSyllabusQueryTerm",
+                                                              @""],
       @(WOAActionType_TeacherQuerySyllabus):                @[@"TeacherQuerySyllabus",
                                                               @"syllabusQuery"],
       

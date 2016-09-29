@@ -69,7 +69,8 @@
     ,@"tchrNewOATask":          @[@(2),     @"新建工作",          @(0), @(NO), @(NO), @"",                      @""]
     ,@"tchrQueryHistoryOA":     @[@(3),     @"查询工作",          @(0), @(NO), @(NO), @"",                      @""]
     
-    ,@"tchrQuerySyllabus":      @[@(1),     @"课表查询",          @(1), @(NO), @(NO), @"",                      @""]
+    ,@"tchrQuerySyllabusConditions":
+                                @[@(1),     @"课表查询",          @(1), @(NO), @(NO), @"",                      @""]
     ,@"tchrFillTable":          @[@(2),     @"表格填写",          @(1), @(NO), @(NO), @"",                      @""]
     ,@"tchrQueryContacts":      @[@(3),     @"电话查询",          @(1), @(NO), @(NO), @"",                      @""]
     ,@"tchrApplyTakeover":      @[@(4),     @"调代课申请",        @(1), @(NO), @(NO), @"",                      @""]
@@ -123,6 +124,15 @@
 {
     [navVC popToRootViewControllerAnimated: YES];
 }
+
+/*
+ actionType
+ requestManager: (actionType)  //The action post to server.
+ {
+    pairArray[itemActionType] //Send this action to server (or local action) when user select the item.
+    contentMode{pairArray, itemActionType} //same to pairArray, send this action to server when user submit with the contentMode.
+ }
+ */
 
 #pragma mark - action for myOA
 
@@ -469,16 +479,85 @@
 
 #pragma mark - action for Business
 
-- (void) tchrQuerySyllabus
+- (void) tchrQuerySyllabusConditions
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetSyllabusConditions
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQuerySyllabusConditions
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType itemActionType = WOAActionType_TeacherPickSyllabusQueryTerm;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQuerySyllabusConditions: responseContent.bodyDictionary
+                                                                                  actionTypeA: itemActionType
+                                                                                  actionTypeB: WOAActionType_TeacherQuerySyllabus];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择年段班级"
+                                                             pairArray: pairArray
+                                                            actionType: itemActionType
+                                                            isReadonly: YES];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrPickSyllabusQueryTerm: (WOANameValuePair *)selectedPair
+                         relatedDict: (NSDictionary *)relatedDict
+                               navVC: (UINavigationController *)navVC
+{
+    NSDictionary *selectedClassInfoDict = (NSDictionary*)selectedPair.value;
+    NSArray *termPairArray = selectedPair.subArray;
+    
+    WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择学期"
+                                                        pairArray: termPairArray
+                                                       actionType: WOAActionType_TeacherQuerySyllabus
+                                                       isReadonly: YES];
+    
+    NSDictionary *contentReleatedDict = selectedClassInfoDict;
+    
+    WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                delegate: self
+                                                                             relatedDict: contentReleatedDict];
+
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onTchrQuerySyllabus: (WOANameValuePair *)selectedPair
+                 relatedDict: (NSDictionary *)relatedDict
+                       navVC: (UINavigationController *)navVC
+{
+    NSString *selectedTermName = [selectedPair stringValue];
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: selectedTermName forKey: kWOASrvKeyForTermName];
+    
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType itemActionType = WOAActionType_None;
+         NSString *itemActionName = @"";
+         
+         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrQuerySyllabus: responseContent.bodyDictionary
+                                                                           pairActionType: itemActionType
+                                                                               isReadonly: YES];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                          contentArray: contentArray
+                                                            actionType: itemActionType
+                                                            actionName: itemActionName
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -799,6 +878,23 @@
         }
             
         ////////////////////////////////////////
+            
+        case WOAActionType_TeacherPickSyllabusQueryTerm:
+        {
+            [self onTchrPickSyllabusQueryTerm: selectedPair
+                                  relatedDict: relatedDict
+                                        navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherQuerySyllabus:
+        {
+            [self onTchrQuerySyllabus: selectedPair
+                          relatedDict: relatedDict
+                                navVC: navVC];
+            break;
+        }
+            
         case WOAActionType_TeacherSelectPayoffYear:
         {
             [self onSelectPayoffYear: selectedPair

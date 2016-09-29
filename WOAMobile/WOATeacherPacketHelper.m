@@ -313,6 +313,113 @@
 
 #pragma mark - Business
 
++ (NSArray*) itemPairsForTchrQuerySyllabusConditions: (NSDictionary*)respDict
+                                         actionTypeA: (WOAActionType)actionTypeA
+                                         actionTypeB: (WOAActionType)actionTypeB
+{
+    NSMutableArray *groupContentPairArray = [NSMutableArray array];
+    NSArray *gradeItemArray = respDict[kWOASrvKeyForGradeArray];
+ 
+    for (NSDictionary *gradeDict in gradeItemArray)
+    {
+        NSString *gradeID = gradeDict[kWOASrvKeyForGradeID_Get];
+        NSString *gradeName = gradeDict[kWOASrvKeyForGradeName];
+        
+        NSArray *gradeClassArray = gradeDict[kWOASrvKeyForClassArray];
+        NSArray *gradeTermArray = gradeDict[kWOASrvKeyForTermArray];
+        
+        NSMutableArray *termPairArray = [NSMutableArray array];
+        for (NSString *termItemName in gradeTermArray)
+        {
+            WOANameValuePair *termPair = [WOANameValuePair pairWithName: termItemName
+                                                                  value: termItemName
+                                                             actionType: actionTypeB];
+            
+            [termPairArray addObject: termPair];
+        }
+        
+        NSMutableArray *classPairArray = [NSMutableArray array];
+        for (NSDictionary *classItemDict in gradeClassArray)
+        {
+            NSString *classID = classItemDict[kWOASrvKeyForClassID_Get];
+            NSString *className = classItemDict[kWOASrvKeyForClassName];
+            
+            NSMutableDictionary *classPairValue = [NSMutableDictionary dictionary];
+            [classPairValue setValue: classID forKey: kWOASrvKeyForClassID_Post];
+            [classPairValue setValue: gradeID forKey: kWOASrvKeyForGradeID_Post];
+            
+            WOANameValuePair *classPair = [WOANameValuePair pairWithName: className
+                                                                   value: classPairValue
+                                                              isWritable: NO
+                                                                subArray: termPairArray
+                                                                 subDict: nil
+                                                                dataType: WOAPairDataType_Dictionary
+                                                              actionType: actionTypeA];
+            
+            [classPairArray addObject: classPair];
+        }
+        
+        WOAContentModel *gradePairValue = [WOAContentModel contentModel: gradeName
+                                                              pairArray: classPairArray
+                                                             actionType: actionTypeA
+                                                             isReadonly: YES];
+        WOANameValuePair *gradePair = [WOANameValuePair pairWithName: gradeName
+                                                               value: gradePairValue
+                                                            dataType: WOAPairDataType_ContentModel];
+        
+        [groupContentPairArray addObject: gradePair];
+    }
+    
+    return groupContentPairArray;
+}
+
++ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+                                   isReadonly: (BOOL)isReadonly
+{
+    NSMutableArray *dayContentArray = [NSMutableArray array];
+    NSArray *sectionItemArray = respDict[kWOASrvKeyForItemArrays];
+    
+    NSArray *dayNameArray = @[@"星期一",@"星期二",@"星期三",@"星期四",@"星期五",@"星期六",@"星期日"];
+    for (NSInteger index = 0; index < dayNameArray.count; index++)
+    {
+        NSString *dayName = dayNameArray[index];
+        NSMutableArray *daySectionArray = [NSMutableArray array];
+        WOAContentModel *dayContentModel = [WOAContentModel contentModel: dayName
+                                                               pairArray: daySectionArray
+                                                              actionType: pairActionType
+                                                              isReadonly: isReadonly];
+        
+        [dayContentArray addObject: dayContentModel];
+    }
+    
+    for (NSInteger sectionIndex = 0; sectionIndex < sectionItemArray.count; sectionIndex++)
+    {
+        NSDictionary *sectionDict = sectionItemArray[sectionIndex];
+        NSString *sectionName = sectionDict[kWOASrvKeyForSyllabusSectionName];
+        NSArray *sectionClassList = sectionDict[kWOASrvKeyForSyllabusClassList];
+        NSInteger sectionClassCount = sectionClassList.count;
+        
+        for (NSInteger dayIndex = 0; dayIndex < dayNameArray.count; dayIndex++)
+        {
+            NSString *className = (dayIndex < sectionClassCount) ? sectionClassList[dayIndex] : @"";
+            
+            WOANameValuePair *sectionPair = [WOANameValuePair pairWithName: sectionName
+                                                                     value: className
+                                                                actionType: pairActionType];
+            
+            WOAContentModel *dayContentModel = dayContentArray[dayIndex];
+            NSMutableArray *daySectionArray = [NSMutableArray arrayWithArray: dayContentModel.pairArray];
+            [daySectionArray addObject: sectionPair];
+            dayContentModel.pairArray = daySectionArray;
+        }
+    }
+    
+    return dayContentArray;
+}
+
+#pragma mark -
+
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {

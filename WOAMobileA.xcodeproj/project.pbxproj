@@ -121,7 +121,6 @@
 		DC2258961D8D56B1006A18E3 /* WOARequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258941D8D56B1006A18E3 /* WOARequestManager.m */; };
 		DC2258991D8D7923006A18E3 /* WOATeacherRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258981D8D7923006A18E3 /* WOATeacherRootViewController.m */; };
 		DC2258A71D8D9424006A18E3 /* WOAStudentRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258A61D8D9424006A18E3 /* WOAStudentRootViewController.m */; };
-		DC2258FE1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2258FD1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m */; };
 		DC2259011D8FF6D2006A18E3 /* WOARequestContent+Student.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2259001D8FF6D2006A18E3 /* WOARequestContent+Student.m */; };
 		DC2259041D917E61006A18E3 /* WOAMultiStyleItemField.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */; };
 		DC2259051D917E6E006A18E3 /* WOAMultiStyleItemField.m in Sources */ = {isa = PBXBuildFile; fileRef = DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */; };
@@ -273,12 +272,11 @@
 		DC22589A1D8D792F006A18E3 /* WOATeacherRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOATeacherRootViewController.h; sourceTree = "<group>"; };
 		DC22589B1D8D7A11006A18E3 /* WOAStudentRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAStudentRootViewController.h; sourceTree = "<group>"; };
 		DC2258A61D8D9424006A18E3 /* WOAStudentRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAStudentRootViewController.m; sourceTree = "<group>"; };
-		DC2258FC1D8FF6B2006A18E3 /* WOARequestContent+Teacher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WOARequestContent+Teacher.h"; sourceTree = "<group>"; };
-		DC2258FD1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WOARequestContent+Teacher.m"; sourceTree = "<group>"; };
 		DC2258FF1D8FF6D2006A18E3 /* WOARequestContent+Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WOARequestContent+Student.h"; sourceTree = "<group>"; };
 		DC2259001D8FF6D2006A18E3 /* WOARequestContent+Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WOARequestContent+Student.m"; sourceTree = "<group>"; };
 		DC2259021D917E61006A18E3 /* WOAMultiStyleItemField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiStyleItemField.h; sourceTree = "<group>"; };
 		DC2259031D917E61006A18E3 /* WOAMultiStyleItemField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMultiStyleItemField.m; sourceTree = "<group>"; };
+		DC2F5D4D1D9D5CBA0034B1E5 /* sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sample.json; sourceTree = "<group>"; };
 		DC5178F31C81ADC800162F92 /* WOAMultiPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiPickerViewController.h; sourceTree = "<group>"; };
 		DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAMultiPickerViewController.m; sourceTree = "<group>"; };
 		DC5178F61C826D2B00162F92 /* WOAMultiItemSelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAMultiItemSelectorView.h; sourceTree = "<group>"; };
@@ -687,10 +685,9 @@
 				DCD5DC6B1D8823C800152071 /* Supporting Files */,
 				DC2257411D8C3F4E006A18E3 /* WOATeacherPacketHelper.h */,
 				DC2257421D8C3F4E006A18E3 /* WOATeacherPacketHelper.m */,
-				DC2258FC1D8FF6B2006A18E3 /* WOARequestContent+Teacher.h */,
-				DC2258FD1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m */,
 				DC22589A1D8D792F006A18E3 /* WOATeacherRootViewController.h */,
 				DC2258981D8D7923006A18E3 /* WOATeacherRootViewController.m */,
+				DC2F5D4D1D9D5CBA0034B1E5 /* sample.json */,
 			);
 			path = WOAMobile;
 			sourceTree = "<group>";
@@ -906,7 +903,6 @@
 				DC2257151D8A4A8E006A18E3 /* WOAAccountCredential.m in Sources */,
 				DC22572F1D8A4A8E006A18E3 /* WOASession.m in Sources */,
 				DCD5DCAF1D88262F00152071 /* VSPopoverView.m in Sources */,
-				DC2258FE1D8FF6B2006A18E3 /* WOARequestContent+Teacher.m in Sources */,
 				DC2257241D8A4A8E006A18E3 /* WOAListDetailViewController.m in Sources */,
 				DC2257311D8A4A8E006A18E3 /* WOASplashViewController.m in Sources */,
 				DC2257301D8A4A8E006A18E3 /* WOASessionTokens.m in Sources */,

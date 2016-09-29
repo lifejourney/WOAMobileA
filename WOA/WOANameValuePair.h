@@ -42,13 +42,19 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 
 @interface WOANameValuePair : NSObject
 
-@property (nonatomic, copy) NSString *name;  //Generally take it as title.
+//Generally take it as title.
+@property (nonatomic, copy) NSString *name;
+
 @property (nonatomic, strong) NSObject *value;
-@property (nonatomic, assign) BOOL isWritable;
-@property (nonatomic, strong) NSArray *subArray; //For selective list, array of string
-@property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
 @property (nonatomic, assign) WOAPairDataType dataType;
-@property (nonatomic, assign) WOAActionType actionType;
+@property (nonatomic, assign) WOAActionType actionType; //What action to do when select or submit.
+@property (nonatomic, assign) BOOL isWritable;
+
+//For selective list, it's array of string.
+//Also use it as a carried item to pass to next step.
+@property (nonatomic, strong) NSArray *subArray;
+
+@property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value

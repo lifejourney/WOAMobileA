@@ -30,6 +30,20 @@
 #define kWOASrvKeyForTableID @"tableID"
 #define kWOASrvKeyForTableName @"tableName"
 
+#define kWOASrvKeyForTermArray @"termItems"
+#define kWOASrvKeyForTermName @"termItem"
+#define kWOASrvKeyForGradeArray @"gradeItems"
+#define kWOASrvKeyForGradeID_Get @"id"
+#define kWOASrvKeyForGradeID_Post @"gradeID"
+#define kWOASrvKeyForGradeName @"name"
+#define kWOASrvKeyForClassArray @"classItems"
+#define kWOASrvKeyForClassID_Get @"id"
+#define kWOASrvKeyForClassID_Post @"classID"
+#define kWOASrvKeyForClassName @"name"
+
+#define kWOASrvKeyForSyllabusSectionName @"name"
+#define kWOASrvKeyForSyllabusClassList @"classList"
+
 #define kWOASrvKeyForAttachmentTitle @"title"
 #define kWOASrvKeyForSendAttachmentTitle @"att_title"
 #define kWOASrvKeyForAttachmentUrl @"url"

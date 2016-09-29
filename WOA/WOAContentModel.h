@@ -16,7 +16,7 @@
 @property (nonatomic, copy) NSString *groupTitle;
 @property (nonatomic, strong) NSArray *pairArray;       //Array of WOANameValuePair
 @property (nonatomic, strong) NSArray *contentArray;    //Array of WOAContentModel, Ex: ContentViewController.
-@property (nonatomic, assign) WOAActionType actionType;
+@property (nonatomic, assign) WOAActionType actionType; //What action to do when select or submit.
 @property (nonatomic, copy) NSString *actionName;
 @property (nonatomic, assign) BOOL isReadonly;
 @property (nonatomic, strong) NSDictionary *subDict; //For reference list
