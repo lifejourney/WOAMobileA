@@ -290,6 +290,11 @@
             itemTextField.delegate = self;
             itemTextField.hostNavigation = hostNavigationController;
             
+            if (!isGroupReadonly && pair.isWritable)
+            {
+                [itemTextField selectDefaultValueFromPickerView];
+            }
+            
             [scrollView addSubview: itemTextField];
             
             itemHeight = itemTextField.frame.size.height;

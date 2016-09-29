@@ -261,32 +261,54 @@
                                              isAscending: YES];
 }
 
-"workID":"735","items":[
-{"校长":[
-    {"account":"321","name":"教师T"}]},
-{"副校长":[
-    {"account":"54","name":"韦秋哲"}]},
+
+
 
 + (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {
-    NSMutableArray *pairArray = [NSMutableArray array];
+    NSMutableArray *groupContentPairArray = [NSMutableArray array];
     NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
+    
+//    [{"校长":[
+//            {"account":"321","name":"教师T"}]},
+//    {"副校长":[
+//            {"account":"54","name":"韦秋哲"}]}]
     
     for (NSDictionary *groupDict in itemsArray)
     {
         NSArray *groupNameArray = [[groupDict allKeys] sortedArrayUsingSelector: @selector(compare:)];
-        
         for (NSString *groupName in groupNameArray)
         {
-            NSMutableArray *groupPairArray = [NSMutableArray array];
+            NSArray *itemDictArray = groupDict[groupName];
             
+            NSMutableArray *itemPairArray = [NSMutableArray array];
             
-            WOAContentModel *groupContent = [WOAContentModel contentModel: groupName
-                                                                pairArray: groupPairArray];
+            for (NSInteger itemIndex = 0; itemIndex < itemDictArray.count; itemIndex++)
+            {
+                NSDictionary *itemDict = [itemDictArray objectAtIndex: itemIndex];
+                
+                WOANameValuePair *itemPair = [WOANameValuePair pairWithName: itemDict[kWOASrvKeyForAccountName]
+                                                                      value: itemDict[kWOASrvKeyForAccountID]
+                                                                 actionType: pairActionType];
+                
+                [itemPairArray addObject: itemPair];
+            }
+            
+            WOAContentModel *groupContentPairValue = [WOAContentModel contentModel: groupName
+                                                                         pairArray: itemPairArray
+                                                                        actionType: pairActionType
+                                                                        isReadonly: YES];
+            WOANameValuePair *groupPair = [WOANameValuePair pairWithName: groupName
+                                                                   value: groupContentPairValue
+                                                                dataType: WOAPairDataType_Normal
+                                                              actionType: pairActionType];
+            
+            [groupContentPairArray addObject: groupPair];
         }
     }
-    return pairArray;
+    
+    return groupContentPairArray;
 }
 
 #pragma mark - Business

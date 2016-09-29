@@ -15,6 +15,8 @@
 #import "WOADateFromToPickerViewController.h"
 #import "WOARequestManager.h"
 #import "WOATeacherPacketHelper.h"
+#import "NSString+Utility.h"
+
 
 /**
  Ver 1.02.02:
@@ -357,18 +359,16 @@
          }
          else
          {
-             UIAlertController *alertController = [UIAlertController alertControllerWithTitle: nil
-                                                                                      message: @"已完结"
-                                                                               preferredStyle: UIAlertControllerStyleAlert];
-             UIAlertAction *alertAction = [UIAlertAction actionWithTitle: @"确定"
-                                                                   style: UIAlertActionStyleDefault
-                                                                 handler: ^(UIAlertAction * _Nonnull action)
-                                           {
-                                               [self onFlowDoneWithLatestActionType: selectedPair.actionType
-                                                                              navVC: navVC];
-                                           }];
+             UIAlertController *alertController;
+             alertController = [self alertControllerWithTitle: nil
+                                                 alertMessage: @"已完结"
+                                                   actionText: @"确定"
+                                                actionHandler: ^(UIAlertAction * _Nonnull action)
+             {
+                 [self onFlowDoneWithLatestActionType: selectedPair.actionType
+                                                navVC: navVC];
+             }];
              
-             [alertController addAction: alertAction];
              [self presentViewController: alertController
                                 animated: YES
                               completion: nil];
@@ -376,20 +376,46 @@
      }];
 }
 
-- (void) onTchrOANextAccounts: (NSArray*)selectedPairArray
+- (void) onTchrOANextAccounts: (WOAActionType)actionType
+            selectedPairArray: (NSArray*)selectedPairArray
                   relatedDict: (NSDictionary *)relatedDict
                         navVC: (UINavigationController *)navVC
 {
+    //TODO
+    NSMutableArray *selectedAccountArray = [NSMutableArray array];
+    for (WOANameValuePair *pair in selectedPairArray)
+    {
+        [selectedAccountArray addObject: [pair stringValue]];
+    }
     
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: selectedPairArray forKey: kWOASrvKeyForAccountArray];
     
-//    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-//                                                   additionalDict: addtDict
-//                                                       onSuccuess: ^(WOAResponeContent *responseContent)
-//     {
-//         WOAActionType itemActionType = WOAActionType_FlowDone;
-//         
-//     }];
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *resultText = responseContent.bodyDictionary[kWOASrvKeyForResultDescription];
+         if ([NSString isEmptyString: resultText])
+         {
+             resultText = @"已转至下一步";
+         }
+         
+         UIAlertController *alertController;
+         alertController = [self alertControllerWithTitle: nil
+                                             alertMessage: resultText
+                                               actionText: @"确定"
+                                            actionHandler: ^(UIAlertAction * _Nonnull action)
+                            {
+                                [self onFlowDoneWithLatestActionType: actionType
+                                                               navVC: navVC];
+                            }];
+         
+         [self presentViewController: alertController
+                            animated: YES
+                          completion: nil];
+         
+     }];
 }
 
 #pragma mark -
@@ -841,7 +867,8 @@
     {
         case WOAActionType_TeacherNextAccounts:
         {
-            [self onTchrOANextAccounts: selectedPairArray
+            [self onTchrOANextAccounts: actionType
+                     selectedPairArray: selectedPairArray
                            relatedDict: relatedDict
                                  navVC: navVC];
             break;
@@ -888,6 +915,23 @@
     return yearArray;
 }
 
+- (UIAlertController*) alertControllerWithTitle: (NSString*)alertTitle
+                                   alertMessage: (NSString*)alertMessage
+                                     actionText: (NSString*)actionText
+                                  actionHandler: (void (^ __nullable)(UIAlertAction *action))actionHandler
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: alertTitle
+                                                                             message: alertMessage
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle: actionText
+                                                          style: UIAlertActionStyleDefault
+                                                        handler: actionHandler];
+
+    [alertController addAction: alertAction];
+    
+    return alertController;
+}
 @end
 
 

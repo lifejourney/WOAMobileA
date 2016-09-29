@@ -30,9 +30,10 @@
         [dict setValue: [WOAPropertyInfo latestSessionID] forKey: @"sessionID"];
     }
     
-    //Redunctant
+#ifdef WOAMobileStudent
     [dict setValue: [WOAPropertyInfo latestAccountID] forKey: @"account"];
     [dict setValue: [WOAPropertyInfo latestAccountPassword] forKey: @"psw"];
+#endif
     
     
     return dict;
@@ -90,12 +91,13 @@
     [dict setValue: accountID forKey: @"account"];
     [dict setValue: password forKey: @"psw"];
     [dict setValue: [self checkSumForLogin: accountID password: password] forKey: @"checkSum"];
-    
-    //Reductant
+
+#ifdef WOAMobileStudent
     NSMutableDictionary *headerDict = [NSMutableDictionary dictionaryWithDictionary: [dict valueForKey: @"head"]];
     [headerDict setValue: accountID forKey: @"account"];
     [headerDict setValue: password forKey: @"psw"];
     [dict setValue: headerDict forKey: @"head"];
+#endif
     
     return dict;
 }

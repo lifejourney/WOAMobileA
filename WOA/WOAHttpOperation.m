@@ -101,7 +101,7 @@
 	{
 		requestResult = WOAHTTPRequestResult_RequestError;
 	}
-	else if(responseStatus == 500)
+	else if(responseStatus >= 500)
 	{
 		requestResult = WOAHTTPRequestResult_ServerError;
 	}
@@ -382,6 +382,15 @@
                 
                 NSLog(@"Request fail during JSON parsing. error: %@\n respone body: %@", [error localizedDescription], tmpString);
             }
+        }
+        else if (requestResult == WOAHTTPRequestResult_ServerError)
+        {
+            resultDescription = [NSString stringWithFormat: @"服务器异常: %ld",
+                                 (long)self.httpResponse.statusCode];
+        }
+        else
+        {
+            //
         }
     }
     else

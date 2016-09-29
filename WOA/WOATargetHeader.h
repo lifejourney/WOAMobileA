@@ -13,7 +13,7 @@
 
 #define kWOASrvKeyForResultDescription @"description"
 
-#else
+#elif defined(WOAMobileStudent)
 
 #define kWOASrvKeyForResultDescription @"prompt"
 

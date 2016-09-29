@@ -22,6 +22,9 @@
 #define kWOASrvKeyForItemOptionArray @"combo"
 #define kWOASrvKeyForItemWritable @"isWrite"
 
+#define kWOASrvKeyForAccountArray @"account"
+#define kWOASrvKeyForAccountID @"account"
+#define kWOASrvKeyForAccountName @"name"
 
 #define kWOASrvKeyForTableStruct @"tableStruct"
 #define kWOASrvKeyForTableID @"tableID"

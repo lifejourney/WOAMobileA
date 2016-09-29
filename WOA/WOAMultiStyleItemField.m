@@ -566,10 +566,11 @@
 - (void) selectDefaultValueFromPickerView
 {
     WOAPairDataType pairDataType = self.itemModel.dataType;
-    NSArray *itemList = self.itemModel.subArray;
     
     if (pairDataType == WOAPairDataType_SinglePicker)
     {
+        NSArray *itemList = self.itemModel.subArray;
+        
         if ([_lineTextField.text length] <= 0)
         {
             _lineTextField.text = [itemList firstObject];
