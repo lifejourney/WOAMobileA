@@ -71,8 +71,12 @@
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
 
-
 #pragma mark -
+
++ (NSArray*) contentArrayForTchrQueryPayoffSalary: (NSDictionary*)respDict
+                                   pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) contentArrayForTchrQueryMeritPay: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType;
 
 #pragma mark - Student Manage
 

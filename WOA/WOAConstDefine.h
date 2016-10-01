@@ -10,8 +10,9 @@
 
 
 #define kWOAKeyForPinyinInitial @"_pinyin"
-#define kWOAKeyForMainValue @"mainValue"
-#define kWOAKeyForSubValue @"subValue"
+#define kWOAKeyForMainValue @"_mainValue"
+#define kWOAKeyForSubValue @"_subValue"
+#define KWOAKeyForActionTitle @"_actionTitle"
 
 #define kWOASrvKeyForWorkID @"workID"
 #define kWOASrvKeyForItemArrays @"items"
@@ -55,6 +56,18 @@
 #define kWOASrvKeyForSyllabusSectionName @"name"
 #define kWOASrvKeyForSyllabusClassList @"classList"
 
+#define kWOASrvKeyForContactName @"name"
+#define kWOASrvKeyForContactPhoneNumber @"telephone"
+
+#define kWOASrvKeyForSalarySumup @"sumPayoff"
+#define kWOASrvKeyForSalaryYear @"year"
+#define kWOASrvKeyForSalaryMonth @"month"
+#define kWOASrvKeyForSalaryItemDate @"itemDate"
+#define kWOASrvKeyForSalaryItemArray @"payoffItems"
+#define kWOASrvKeyForSalaryTitleArray @"titleItems"
+#define kWOASrvKeyForSalaryValueArray @"valueItems"
+#define kWOASrvKeyForSalaryItemName @"itemName"
+
 
 #define kWOASrvKeyForAttachmentTitle @"title"
 #define kWOASrvKeyForSendAttachmentTitle @"att_title"
@@ -65,8 +78,7 @@
 #define kWOASrvKeyForProcessID @"processID"
 
 
-#define kWOASrvKeyForContactName @"name"
-#define kWOASrvKeyForContactPhoneNumber @"telephone"
+
 
 
 

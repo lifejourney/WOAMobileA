@@ -647,6 +647,88 @@
     return pairArray;
 }
 
+#pragma mark -
+
++ (NSArray*) contentArrayForTchrQueryPayoffSalary: (NSDictionary*)respDict
+                                   pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *contentArray = [NSMutableArray array];
+    NSArray *payoffDictArray = respDict[kWOASrvKeyForSalaryItemArray];
+    
+    for (NSDictionary *payoffItem in payoffDictArray)
+    {
+        NSString *itemName = payoffItem[kWOASrvKeyForSalaryItemName];
+        NSArray *titleArray = payoffItem[kWOASrvKeyForSalaryTitleArray];
+        NSArray *valueArray = payoffItem[kWOASrvKeyForSalaryValueArray];
+        
+        NSMutableArray *pairArray = [NSMutableArray array];
+        for (NSInteger index = 0; index < titleArray.count; index++)
+        {
+            NSString *title = titleArray[index];
+            NSString *value = (index < valueArray.count) ? valueArray[index] : @"";
+            
+            WOANameValuePair *pair = [WOANameValuePair pairWithName: title
+                                                              value: value
+                                                         actionType: pairActionType];
+            
+            [pairArray addObject: pair];
+        }
+        
+        WOAContentModel *contentModel = [WOAContentModel contentModel: itemName
+                                                            pairArray: pairArray
+                                                           actionType: pairActionType
+                                                           isReadonly: YES];
+        [contentArray addObject: contentModel];
+    }
+    
+    NSString *sumupYear = respDict[kWOASrvKeyForSalaryYear];
+    NSString *sumupValue = respDict[kWOASrvKeyForSalarySumup];
+    WOANameValuePair *sumupPair = [WOANameValuePair pairWithName: [NSString stringWithFormat: @"%@年", sumupYear]
+                                                           value: sumupValue
+                                                      actionType: pairActionType];
+    WOAContentModel *sumupContent = [WOAContentModel contentModel: @"合计"
+                                                        pairArray: @[sumupPair]
+                                                       actionType: pairActionType
+                                                       isReadonly: YES];
+    [contentArray addObject: sumupContent];
+    
+    return contentArray;
+}
+
++ (NSArray*) contentArrayForTchrQueryMeritPay: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *contentArray = [NSMutableArray array];
+    
+    NSString *meritYear = respDict[kWOASrvKeyForSalaryYear];
+    NSString *meritMonth = respDict[kWOASrvKeyForSalaryMonth];
+    NSArray *titleArray = respDict[kWOASrvKeyForSalaryTitleArray];
+    NSArray *valueArray = respDict[kWOASrvKeyForSalaryValueArray];
+    
+    NSMutableArray *pairArray = [NSMutableArray array];
+    for (NSInteger index = 0; index < titleArray.count; index++)
+    {
+        NSString *title = titleArray[index];
+        NSString *value = (index < valueArray.count) ? valueArray[index] : @"";
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: title
+                                                          value: value
+                                                     actionType: pairActionType];
+        
+        [pairArray addObject: pair];
+    }
+    
+    NSString *contentTitle = [NSString stringWithFormat: @"%@年%@月", meritYear, meritMonth];
+    
+    WOAContentModel *sumupContent = [WOAContentModel contentModel: contentTitle
+                                                        pairArray: pairArray
+                                                       actionType: pairActionType
+                                                       isReadonly: YES];
+    [contentArray addObject: sumupContent];
+    
+    return contentArray;
+}
+
 #pragma mark - Student Manage
 
 

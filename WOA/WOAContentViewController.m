@@ -55,6 +55,10 @@
 {
     [super viewDidLoad];
     
+    if ([NSString isEmptyString: self.title])
+    {
+        self.title = self.contentModel.groupTitle;
+    }
     self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: self.title];
     if (self.contentModel.actionName)
     {

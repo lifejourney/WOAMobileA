@@ -886,9 +886,12 @@
                                                            actionType: actionType
                                                            isReadonly: YES];
     
+    NSMutableDictionary *relatedDict = [NSMutableDictionary dictionary];
+    [relatedDict setValue: vcTitle forKey: KWOAKeyForActionTitle];
+    
     WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: yearContentModel
                                                                                 delegate: self
-                                                                             relatedDict: nil];
+                                                                             relatedDict: relatedDict];
     
     [ownerNavC pushViewController: subVC animated: YES];
 }
@@ -906,17 +909,21 @@
                                                    additionalDict: addtDict
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-//         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOATableList: responseContent.bodyDictionary
-//                                                                        pairActionType: WOAActionType_TeacherCreateOAItem];
-//         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-//                                                             pairArray: pairArray
-//                                                            actionType: WOAActionType_TeacherCreateOAItem];
-//         
-//         WOAFilterListViewController *subVC = [WOAFilterListViewController filterListViewController: contentModel
-//                                                                                           delegate: self
-//                                                                                        relatedDict: nil];
-//         
-//         [navVC pushViewController: subVC animated: YES];
+         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrQueryPayoffSalary: responseContent.bodyDictionary
+                                                                               pairActionType: WOAActionType_None];
+         
+         NSString *contentTitle = relatedDict[KWOAKeyForActionTitle];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: contentTitle
+                                                          contentArray: contentArray
+                                                            actionType: WOAActionType_None
+                                                            actionName: @""
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
      }];
     
 }
@@ -931,6 +938,20 @@
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrQueryMeritPay: responseContent.bodyDictionary
+                                                                           pairActionType: WOAActionType_None];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: contentArray
+                                                            actionType: WOAActionType_None
+                                                            actionName: @""
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
