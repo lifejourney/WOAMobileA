@@ -69,6 +69,8 @@
     {
         self.shouldShowBackBarItem = YES;
         self.shouldShowSearchBar = NO;
+        
+        self.cellStyleForDictValue = UITableViewCellStyleSubtitle;
     }
     
     return self;
@@ -211,7 +213,7 @@
         titleForRow = subPair.name;
         if (subPair.dataType == WOAPairDataType_Dictionary)
         {
-            cellStyle = UITableViewCellStyleSubtitle;
+            cellStyle = self.cellStyleForDictValue;
             
             NSDictionary *pairValue = (NSDictionary*)subPair.value;
             subTitle = pairValue[kWOAKeyForSubValue];
@@ -228,7 +230,7 @@
         titleForRow = rootPair.name;
         if (rootPair.dataType == WOAPairDataType_Dictionary)
         {
-            cellStyle = UITableViewCellStyleSubtitle;
+            cellStyle = self.cellStyleForDictValue;
             
             NSDictionary *pairValue = (NSDictionary*)rootPair.value;
             subTitle = pairValue[kWOAKeyForSubValue];

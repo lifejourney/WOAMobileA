@@ -64,3 +64,10 @@
 
 #define kWOASrvKeyForProcessID @"processID"
 
+
+#define kWOASrvKeyForContactName @"name"
+#define kWOASrvKeyForContactPhoneNumber @"telephone"
+
+
+
+

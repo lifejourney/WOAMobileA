@@ -207,6 +207,18 @@
 
 
 
+{"head":{
+    "msgType":"telephoneQuery","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "items":[
+             {"name":"阮洋洋","telephone":"18960292958"},
+             {"name":"jjj","telephone":"13905061660"},
+             {"name":"快递费到付","telephone":"123213213"},
+             {"name":"王五","telephone":"10086"},
+             {"name":"wwe","telephone":"无电话号码"},
+             {"name":"qew","telephone":"weq"},
+             {"name":"eqweqwe","telephone":"无电话号码"}]}
 
 
 

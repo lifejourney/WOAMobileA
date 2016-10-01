@@ -47,6 +47,15 @@
 + (NSArray*) itemPairsForTchrQuerySyllabusConditions: (NSDictionary*)respDict
                                          actionTypeA: (WOAActionType)actionTypeA
                                          actionTypeB: (WOAActionType)actionTypeB;
++ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+                                   isReadonly: (BOOL)isReadonly;
+
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrQueryBusinessTableList: (NSDictionary*)respDict
+                                        actionTypeA: (WOAActionType)actionTypeA
+                                        actionTypeB: (WOAActionType)actionTypeB;
 + (NSArray*) teacherPairArrayForCreateBusinessItem: (NSDictionary*)respDict
                                           subArray: (NSArray*)subArray
                                     pairActionType: (WOAActionType)pairActionType;
@@ -54,18 +63,16 @@
 
 #pragma mark -
 
-+ (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
-                             pairActionType: (WOAActionType)pairActionType;
-+ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
-                               pairActionType: (WOAActionType)pairActionType
-                                   isReadonly: (BOOL)isReadonly;
-
++ (NSArray*) itemPairsForTchrQueryContacts: (NSDictionary*)respDict
+                            pairActionType: (WOAActionType)pairActionType;
 
 #pragma mark -
 
-+ (NSArray*) itemPairsForTchrQueryBusinessTableList: (NSDictionary*)respDict
-                                        actionTypeA: (WOAActionType)actionTypeA
-                                        actionTypeB: (WOAActionType)actionTypeB;
++ (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType;
+
+
+#pragma mark -
 
 #pragma mark - Student Manage
 

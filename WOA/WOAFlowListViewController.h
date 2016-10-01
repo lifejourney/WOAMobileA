@@ -15,6 +15,8 @@
 
 @property (nonatomic, assign) BOOL shouldShowSearchBar;
 @property (nonatomic, assign) BOOL shouldShowBackBarItem;
+
+@property (nonatomic, assign) UITableViewCellStyle cellStyleForDictValue;
 @property (nonatomic, strong) UIFont *textLabelFont;
 
 //For contentModel.pairArray

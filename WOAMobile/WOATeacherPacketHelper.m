@@ -575,6 +575,39 @@
 
 #pragma mark -
 
++ (NSArray*) itemPairsForTchrQueryContacts: (NSDictionary*)respDict
+                            pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *contactName = itemDict[kWOASrvKeyForContactName];
+        NSString *contactPhoneNumber = itemDict[kWOASrvKeyForContactPhoneNumber];
+        
+        NSString *subValue = [NSString stringWithFormat: @"%@", contactPhoneNumber];
+        NSMutableDictionary *pairValue = [NSMutableDictionary dictionary];
+        [pairValue setValue: subValue forKey: kWOAKeyForSubValue];
+        [pairValue setValue: [contactName pinyinInitials] forKey: @"contactName_Pinyin"];
+        [pairValue setValue: [contactPhoneNumber pinyinInitials] forKey: @"contactPhoneNumber_Pinyin"];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: contactName
+                                                          value: pairValue
+                                                     isWritable: NO
+                                                       subArray: nil
+                                                        subDict: nil
+                                                       dataType: WOAPairDataType_Dictionary
+                                                     actionType: pairActionType];
+        
+        [pairArray addObject: pair];
+    }
+    
+    return pairArray;
+}
+
+#pragma mark -
+
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {

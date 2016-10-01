@@ -134,6 +134,40 @@
     [navVC popToRootViewControllerAnimated: YES];
 }
 
+- (void) onSumbitSuccessAndFlowDone: (NSDictionary*)respDict
+                         actionType: (WOAActionType)actionType
+                     defaultMsgText: (NSString*)defaultMsgText
+                              navVC: (UINavigationController*)navVC
+{
+    NSString *resultText = respDict[kWOASrvKeyForResultDescription];
+    if ([NSString isEmptyString: resultText])
+    {
+        resultText = defaultMsgText;
+    }
+    
+    if ([NSString isEmptyString: resultText])
+    {
+        [self onFlowDoneWithLatestActionType: actionType
+                                       navVC: navVC];
+    }
+    else
+    {
+        UIAlertController *alertController;
+        alertController = [self alertControllerWithTitle: nil
+                                            alertMessage: resultText
+                                              actionText: @"确定"
+                                           actionHandler: ^(UIAlertAction * _Nonnull action)
+                           {
+                               [self onFlowDoneWithLatestActionType: actionType
+                                                              navVC: navVC];
+                           }];
+        
+        [self presentViewController: alertController
+                           animated: YES
+                         completion: nil];
+    }
+}
+
 /*
  actionType
  requestManager: (actionType)  //The action post to server.
@@ -378,19 +412,10 @@
          }
          else
          {
-             UIAlertController *alertController;
-             alertController = [self alertControllerWithTitle: nil
-                                                 alertMessage: @"已完结"
-                                                   actionText: @"确定"
-                                                actionHandler: ^(UIAlertAction * _Nonnull action)
-             {
-                 [self onFlowDoneWithLatestActionType: selectedPair.actionType
-                                                navVC: navVC];
-             }];
-             
-             [self presentViewController: alertController
-                                animated: YES
-                              completion: nil];
+             [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                                   actionType: selectedPair.actionType
+                               defaultMsgText: @"已完结."
+                                        navVC: navVC];
          }
      }];
 }
@@ -414,26 +439,10 @@
                                                    additionalDict: addtDict
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSString *resultText = responseContent.bodyDictionary[kWOASrvKeyForResultDescription];
-         if ([NSString isEmptyString: resultText])
-         {
-             resultText = @"已转至下一步";
-         }
-         
-         UIAlertController *alertController;
-         alertController = [self alertControllerWithTitle: nil
-                                             alertMessage: resultText
-                                               actionText: @"确定"
-                                            actionHandler: ^(UIAlertAction * _Nonnull action)
-                            {
-                                [self onFlowDoneWithLatestActionType: actionType
-                                                               navVC: navVC];
-                            }];
-         
-         [self presentViewController: alertController
-                            animated: YES
-                          completion: nil];
-         
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已转至下一步"
+                                    navVC: navVC];
      }];
 }
 
@@ -739,25 +748,10 @@
                                                    additionalDict: contentModel
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAActionType itemActionType = WOAActionType_TeacherOAProcessStyle;
-         
-         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
-         
-         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrSubmitOADetail: responseContent.bodyDictionary
-                                                                      pairActionType: itemActionType];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
-                                                             pairArray: pairArray
-                                                            actionType: itemActionType
-                                                            isReadonly: YES];
-         
-         NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionary];
-         [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
-         
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
-                                                                                     delegate: self
-                                                                                  relatedDict: contentReleatedDict];
-         
-         [navVC pushViewController: subVC animated: YES];
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
      }];
 }
 
@@ -773,6 +767,21 @@
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryContacts: responseContent.bodyDictionary
+                                                                     pairActionType: WOAActionType_None];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                            actionType: WOAActionType_None
+                                                            isReadonly: YES];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         subVC.shouldShowSearchBar = YES;
+         subVC.cellStyleForDictValue = UITableViewCellStyleValue1;
+         //subVC.textLabelFont = [UIFont fontWithName: @"Arial" size: 12.0F];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
