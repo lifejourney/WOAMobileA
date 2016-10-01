@@ -82,9 +82,128 @@
 
 
 
+{"head":{
+    "msgType":"getTeacherTableList","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "selfItems":[
+                 {"tableID":"1","tableName":"基本情况"},
+                 {"tableID":"14","tableName":"泉州市普通中学 “教坛新秀”候选人呈报表"},
+                 {"tableID":"16","tableName":"泉州五中示范课、观摩课和学术讲座登记表"},
+                 {"tableID":"18","tableName":"泉州五中教室多媒体设施及校园网络设施使用情况记录表"},
+                 {"tableID":"20","tableName":"泉州五中参加教科研课题研究报名表 "},
+                 {"tableID":"24","tableName":"泉州五中教研组教学研讨与经验交流专题会记录表"},
+                 {"tableID":"25","tableName":"课堂教学评价表"},
+                 {"tableID":"35","tableName":"泉州五中学科德育渗透教研培训会记录表"},
+                 {"tableID":"37","tableName":"信息卡"},
+                 {"tableID":"39","tableName":"泉州五中课堂教学评价表"},
+                 {"tableID":"46","tableName":"aaaaa"}],
+    "otherItems":[
+                  {"tableID":"25","tableName":"课堂教学评价表"},
+                  {"tableID":"33","tableName":"教师公开课记录表"},
+                  {"tableID":"34","tableName":"泉州市普通中学 “教坛新秀”候选人呈报 表"},
+                  {"tableID":"37","tableName":"信息卡"}]}
 
 
-
+{"head":{
+    "msgType":"getTeacherTable","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "workID":"781",
+    "tableStyle":"otherItem",
+    "items":[
+             {"总经理":[
+                     {"account":"333","name":"杨志文"}]},
+             {"副总经理":[
+                      {"account":"334","name":"阮洋洋"}]},
+             {"校长室":[
+                     {"account":"321","name":"教师T"}]},
+             {"书记室":[
+                     {"account":"33","name":"邹雄"}]},
+             {"教研组长":[
+                      {"account":"15","name":"许士坚"},
+                      {"account":"141","name":"李丽"},
+                      {"account":"253","name":"柯华菁"},
+                      {"account":"315","name":"test"}]},
+             {"技术中心主任":[
+                        {"account":"67","name":"阮自力"}]},
+             {"未归类的人员":[
+                        {"account":"66","name":"谢志蓉"},
+                        {"account":"82","name":"王志红"},
+                        {"account":"85","name":"吴惠璇"},
+                        {"account":"163","name":"练晓真"},
+                        {"account":"191","name":"王晔茜"},
+                        {"account":"318","name":"xz"},
+                        {"account":"326","name":"try"},
+                        {"account":"327","name":"try1"},
+                        {"account":"328","name":"try2"},
+                        {"account":"330","name":"kkkk"},
+                        {"account":"340","name":"jjj"},
+                        {"account":"341","name":"快递费到付"},
+                        {"account":"342","name":"王五"},
+                        {"account":"343","name":"wwe"},
+                        {"account":"344","name":"qew"},
+                        {"account":"345","name":"eqweqwe"}]}],
+    "tableStruct":{
+        "name":"课堂教学评价表",
+        "tableID":"25",
+        "count":"39"},
+    "dataFields":[
+                  {"name":"年段、班级、学科","type":"text","value":"","readonly":"False"},
+                  {"name":"执教教师","type":"tableAccount","value":"","account":"","readonly":"True"},
+                  {"name":"日期","type":"dateTime","value":"","readonly":"False"},
+                  {"name":"节数","type":"text","value":"","readonly":"False"},
+                  {"name":"课题","type":"text","value":"","readonly":"False"},
+                  {"name":" B1：面向全体","type":"combobox","combo":[
+                                                                "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B2：德育教育","type":"combobox","combo":[
+                                                                "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":"B3：双基要求","type":"combobox","combo":[
+                                                               "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B4：难点突破","type":"combobox","combo":[
+                                                                "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B5：学法指导","type":"combobox","combo":[
+                                                                "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B6：启发式教学","type":"combobox","combo":[
+                                                                 "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B7：讨论式教学","type":"combobox","combo":[
+                                                                 "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B8：知识形成过程","type":"combobox","combo":[
+                                                                  "良好","较好","一般"],
+                  "readonly":"False"},
+                  {"name":" B9：师生互动性","type":"text","value":"","readonly":"False"},
+                  {"name":" a. 课本","type":"text","value":"","readonly":"False"},
+                  {"name":" b. 课堂练习","type":"text","value":"","readonly":"False"},
+                  {"name":" c. 信息技术","type":"text","value":"","readonly":"False"},
+                  {"name":"d. 实验演示","type":"text","value":"","readonly":"False"},
+                  {"name":" e. 教具、挂图","type":"text","value":"","readonly":"False"},
+                  {"name":"B11：尊重学生人格 ","type":"text","value":"","readonly":"False"},
+                  {"name":" B12：鼓励发挥潜能","type":"text","value":"","readonly":"False"},
+                  {"name":" B13：重视情感、意志","type":"text","value":"","readonly":"False"},
+                  {"name":" B14：把握基本要求","type":"text","value":"","readonly":"False"},
+                  {"name":" B15：体现拓展性要求","type":"text","value":"","readonly":"False"},
+                  {"name":" B16：作业的层次性","type":"text","value":"","readonly":"False"},
+                  {"name":" B17：教态","type":"text","value":"","readonly":"False"},
+                  {"name":"B18：板书","type":"text","value":"","readonly":"False"},
+                  {"name":" B19：言语表达","type":"text","value":"","readonly":"False"},
+                  {"name":" B20：课堂节奏","type":"text","value":"","readonly":"False"},
+                  {"name":" B21：上、下课时间","type":"text","value":"","readonly":"False"},
+                  {"name":" B22：教案","type":"imgFile","value":"","readonly":"False"},
+                  {"name":" B23：课程资料选择","type":"text","value":"","readonly":"False"},
+                  {"name":"自我总体评价及改进教学的设想/听课组总体评价及改进教学的建议","type":"text","value":"","readonly":"False"},
+                  {"name":"内容填写","type":"text","value":"","readonly":"False"},
+                  {"name":"执教教师（签名）参加听课教师","type":"text","value":"","readonly":"False"},
+                  {"name":"参加听课教师人数共计","type":"selectAccount","value":"","account":"","readonly":"False"},
+                  {"name":"听课老师代表（签字）","type":"account","value":"阮自力","account":"67","readonly":"True"},
+                  {"name":"教研组长（签字）：","type":"text","value":"","readonly":"False"},
+                  {"name":"日期","type":"dateTime","value":"","readonly":"False"}]}
 
 
 

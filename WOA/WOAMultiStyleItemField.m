@@ -68,6 +68,7 @@
 - (BOOL) couldUserInteractEvenUnWritable: (WOAPairDataType)pairDataType
 {
     return (pairDataType == WOAPairDataType_AttachFile ||
+            pairDataType == WOAPairDataType_ImageAttachFile ||
             pairDataType == WOAPairDataType_MultiPicker);
 }
 
@@ -83,6 +84,7 @@
         case WOAPairDataType_IntString:
             
         case WOAPairDataType_AttachFile:
+        case WOAPairDataType_ImageAttachFile:
         case WOAPairDataType_TextList:
         case WOAPairDataType_CheckUserList:
         
@@ -137,6 +139,7 @@
         case WOAPairDataType_TextList:
         case WOAPairDataType_CheckUserList:
         case WOAPairDataType_AttachFile:
+        case WOAPairDataType_ImageAttachFile:
             
         case WOAPairDataType_TextArea:
         case WOAPairDataType_MultiPicker:
@@ -296,6 +299,7 @@
             shouldShowInputComponent = isWritable;
         }
         else if (pairDataType == WOAPairDataType_AttachFile ||
+                 pairDataType == WOAPairDataType_ImageAttachFile ||
                  pairDataType == WOAPairDataType_MultiPicker)
         {
             shouldShowReadonlyLineList = !isWritable;
@@ -318,7 +322,8 @@
         if (shouldShowReadonlyLineList)
         {
             WOAContentModel *modelForMultiLineLabel;
-            if (pairDataType == WOAPairDataType_AttachFile)
+            if (pairDataType == WOAPairDataType_AttachFile ||
+                pairDataType == WOAPairDataType_ImageAttachFile)
             {
                 modelForMultiLineLabel = [self contentModelWithAttachemntValue: itemModel];
             }
@@ -339,7 +344,8 @@
         
         if (shouldShowInputComponent)
         {
-            if (pairDataType == WOAPairDataType_AttachFile)
+            if (pairDataType == WOAPairDataType_AttachFile ||
+                pairDataType == WOAPairDataType_ImageAttachFile)
             {
                 self.fileSelectorView = [[WOAFileSelectorView alloc] initWithFrame: initiateFrame
                                                                           delegate: self];
@@ -659,11 +665,21 @@
     {
         itemValue = [self.lineTextField.text removeNumberOrderPrefixWithDelimeter: @"."];
     }
+    else if (dataType == WOAPairDataType_TableAccountA
+             || dataType == WOAPairDataType_TableAccountE)
+    {
+        itemValue = self.itemModel.tableAcountID;
+    }
+    else if (dataType == WOAPairDataType_SelectAccount)
+    {
+        itemValue = self.itemModel.tableAcountID; //Todo
+    }
     else if (!isWritable && (dataType == WOAPairDataType_Normal))
     {
         itemValue = self.lineLabel.text;
     }
-    else if (dataType == WOAPairDataType_AttachFile)
+    else if (dataType == WOAPairDataType_AttachFile ||
+             dataType == WOAPairDataType_ImageAttachFile)
     {
         if (isWritable)
         {

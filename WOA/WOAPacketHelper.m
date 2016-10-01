@@ -208,7 +208,7 @@
 
 + (NSDictionary*) tableStructFromPacketDictionary: (NSDictionary*)dict
 {
-    return [dict valueForKey: @"tableStruct"];
+    return [dict valueForKey: kWOASrvKeyForTableStruct];
 }
 
 + (NSString*) tableIDFromPacketDictionary: (NSDictionary*)dict

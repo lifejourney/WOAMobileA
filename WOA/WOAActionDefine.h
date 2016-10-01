@@ -49,8 +49,9 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_TeacherQuerySyllabus,
     
     WOAActionType_TeacherQueryBusinessTableList,
+    WOAContenType_TeacherPickerBusinessTableItem,
     WOAActionType_TeacherCreateBusinessItem,
-    WOAActionType_TeacherSelectOtherTeacher,
+    WOAActionType_TeacherBusinessSelectOtherTeacher,
     WOAActionType_TeacherSubmitBusinessCreate,
     
     WOAActionType_TeacherQueryContacts,

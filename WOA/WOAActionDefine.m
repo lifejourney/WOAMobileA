@@ -77,9 +77,11 @@ static NSDictionary *__actionMapDict = nil;
       
       @(WOAActionType_TeacherQueryBusinessTableList):       @[@"TeacherQueryBusinessTableList",
                                                               @"getTeacherTableList"],
+      @(WOAContenType_TeacherPickerBusinessTableItem):      @[@"TeacherPickerBusinessTableItem",
+                                                              @""],
       @(WOAActionType_TeacherCreateBusinessItem):           @[@"TeacherCreateBusinessItem",
                                                               @"getTeacherTable"],
-      @(WOAActionType_TeacherSelectOtherTeacher):           @[@"TeacherSelectOtherTeacher",
+      @(WOAActionType_TeacherBusinessSelectOtherTeacher):   @[@"TeacherBusinessSelectOtherTeacher",
                                                               @""],
       @(WOAActionType_TeacherSubmitBusinessCreate):         @[@"TeacherSubmitBusinessCreate",
                                                               @"submitTeacherTable"],

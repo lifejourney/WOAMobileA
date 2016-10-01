@@ -31,6 +31,156 @@
     return packetDict;
 }
 
+#pragma mark - Teacher Common
+
++ (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict
+{
+    //NSString *itemID = itemDict[kWOASrvKeyForItemID];
+    NSString *itemName = itemDict[kWOASrvKeyForItemName];
+    NSString *itemType = itemDict[kWOASrvKeyForItemType];
+    NSObject *itemValue= itemDict[kWOASrvKeyForItemValue];
+    NSString *itemWritable = itemDict[kWOASrvKeyForItemWritable];
+    NSString *itemReadonly = itemDict[kWOASrvKeyForItemReadonly];
+    NSArray *itemOptions = [self optionArrayFromDictionary: itemDict];
+    NSString *itemAccountID = itemDict[kWOASrvKeyForItemAccountID];
+    
+    BOOL isWritable;
+    WOANameValuePair *pair;
+    WOAPairDataType dataType = [WOANameValuePair pairTypeFromTextType: itemType];
+    
+    if (itemWritable)
+    {
+        isWritable = [itemWritable boolValue];
+    }
+    else if (itemReadonly)
+    {
+        isWritable = ![itemReadonly boolValue];
+    }
+    else
+    {
+        isWritable = NO;
+    }
+    
+    if (dataType == WOAPairDataType_TableAccountA
+        ||dataType == WOAPairDataType_TableAccountE)
+    {
+        BOOL shouldFillDefault = (dataType == WOAPairDataType_TableAccountE);
+        
+        pair = [WOANameValuePair tableAccountPairWithName: itemName
+                                                    value: itemValue
+                                           tableAccountID: itemAccountID
+                                               isWritable: isWritable
+                                               actionType: WOAActionType_None
+                                        shouldFillDefault: shouldFillDefault];
+    }
+//    else if (dataType == WOAPairDataType_SelectAccount)
+//    {
+//        //TO-DO
+//    }
+    else
+    {
+        pair = [WOANameValuePair pairWithName: itemName
+                                        value: itemValue
+                                   isWritable: isWritable
+                                     subArray: itemOptions
+                                      subDict: nil
+                                     dataType: dataType
+                                   actionType: WOAActionType_None];
+    }
+    
+    return pair;
+}
+
++ (NSArray*) itemPairsForTchrSelectiveTeacherList: (NSDictionary*)respDict
+                                         subArray: (NSArray*)subArray
+                                   pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *groupContentPairArray = [NSMutableArray array];
+    NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
+    
+    //    [{"校长":[
+    //            {"account":"321","name":"教师T"}]},
+    //    {"副校长":[
+    //            {"account":"54","name":"韦秋哲"}]}]
+    
+    for (NSDictionary *groupDict in itemsArray)
+    {
+        NSArray *groupNameArray = [[groupDict allKeys] sortedArrayUsingSelector: @selector(compare:)];
+        for (NSString *groupName in groupNameArray)
+        {
+            NSArray *itemDictArray = groupDict[groupName];
+            
+            NSMutableArray *itemPairArray = [NSMutableArray array];
+            
+            for (NSInteger itemIndex = 0; itemIndex < itemDictArray.count; itemIndex++)
+            {
+                NSDictionary *itemDict = [itemDictArray objectAtIndex: itemIndex];
+                
+                WOANameValuePair *itemPair = [WOANameValuePair pairWithName: itemDict[kWOASrvKeyForAccountName]
+                                                                      value: itemDict[kWOASrvKeyForAccountID]
+                                                                 isWritable: NO
+                                                                   subArray: subArray
+                                                                    subDict: nil
+                                                                   dataType: WOAPairDataType_Normal
+                                                                 actionType: pairActionType];
+                [itemPairArray addObject: itemPair];
+            }
+            
+            WOAContentModel *groupContentPairValue = [WOAContentModel contentModel: groupName
+                                                                         pairArray: itemPairArray
+                                                                        actionType: pairActionType
+                                                                        isReadonly: YES];
+            WOANameValuePair *groupPair = [WOANameValuePair pairWithName: groupName
+                                                                   value: groupContentPairValue
+                                                                dataType: WOAPairDataType_ContentModel
+                                                              actionType: pairActionType];
+            
+            [groupContentPairArray addObject: groupPair];
+        }
+    }
+    
+    return groupContentPairArray;
+}
+
++ (NSArray*) contentArrayForTchrItemDetails: (NSDictionary*)respDict
+                           itemArrayKeyName: (NSString*)itemArrayKeyName
+                                  tableName: (NSString*)tableName
+                                 isReadonly: (BOOL)isReadonly
+{
+    BOOL gotFirstGroup = NO;
+    
+    NSMutableArray *groupArray = [NSMutableArray array];
+    NSArray *itemArrArray = respDict[itemArrayKeyName];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    for (NSArray *itemArray in itemArrArray)
+    {
+        NSMutableArray *pairArray = [NSMutableArray array];
+        
+        for (NSDictionary *itemDict in itemArray)
+        {
+            [pairArray addObject: [self pairFromItemDict: itemDict]];
+            [pairArray addObject: seperatorPair];
+        }
+        
+        if ([pairArray count] > 0)
+        {
+            NSString *groupTitle = gotFirstGroup ? nil : tableName;
+            
+            WOAContentModel *groupContentModel = [WOAContentModel contentModel: groupTitle
+                                                                     pairArray: pairArray
+                                                                    actionType: WOAActionType_None
+                                                                    isReadonly: isReadonly];
+            
+            [groupArray addObject: groupContentModel];
+            
+            gotFirstGroup = YES;
+        }
+    }
+    
+    return groupArray;
+}
+
 #pragma mark - OA
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
@@ -72,62 +222,14 @@
     return pairArray;
 }
 
-+ (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict
-{
-    //NSString *itemID = itemDict[kWOASrvKeyForItemID];
-    NSString *itemName = itemDict[kWOASrvKeyForItemName];
-    NSString *itemType = itemDict[kWOASrvKeyForItemType];
-    NSObject *itemValue= itemDict[kWOASrvKeyForItemValue];
-    NSString *itemWritable= itemDict[kWOASrvKeyForItemWritable];
-    NSArray *itemOptions = [self optionArrayFromDictionary: itemDict];
-    
-    BOOL isWritable = itemWritable && [itemWritable boolValue];
-    WOAPairDataType dataType = [WOANameValuePair pairTypeFromTextType: itemType];
-    
-    return [WOANameValuePair pairWithName: itemName
-                                    value: itemValue
-                               isWritable: isWritable
-                                 subArray: itemOptions
-                                  subDict: nil
-                                 dataType: dataType
-                               actionType: WOAActionType_None];
-}
-
 + (NSArray*) contentArrayForTchrProcessOAItem: (NSDictionary*)respDict
                                     tableName: (NSString*)tableName
                                    isReadonly: (BOOL)isReadonly
 {
-    BOOL gotFirstGroup = NO;
-    
-    NSMutableArray *groupArray = [NSMutableArray array];
-    NSArray *itemArrArray = [self itemsArrayFromPacketDictionary: respDict];
-    
-    for (NSArray *itemArray in itemArrArray)
-    {
-        NSMutableArray *pairArray = [NSMutableArray array];
-        
-        for (NSDictionary *itemDict in itemArray)
-        {
-            [pairArray addObject: [self pairFromItemDict: itemDict]];
-            [pairArray addObject: [WOANameValuePair seperatorPair]];
-        }
-        
-        if ([pairArray count] > 0)
-        {
-            NSString *groupTitle = gotFirstGroup ? nil : tableName;
-            
-            WOAContentModel *groupContentModel = [WOAContentModel contentModel: groupTitle
-                                                                     pairArray: pairArray
-                                                                    actionType: WOAActionType_None
-                                                                    isReadonly: isReadonly];
-            
-            [groupArray addObject: groupContentModel];
-            
-            gotFirstGroup = YES;
-        }
-    }
-    
-    return groupArray;
+    return [self contentArrayForTchrItemDetails: respDict
+                               itemArrayKeyName: kWOASrvKeyForItemArrays
+                                      tableName: tableName
+                                     isReadonly: isReadonly];
 }
 
 #pragma mark -
@@ -261,56 +363,13 @@
                                              isAscending: YES];
 }
 
-
-
-
 + (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {
-    NSMutableArray *groupContentPairArray = [NSMutableArray array];
-    NSArray *itemsArray = [self itemsArrayFromPacketDictionary: respDict];
-    
-//    [{"校长":[
-//            {"account":"321","name":"教师T"}]},
-//    {"副校长":[
-//            {"account":"54","name":"韦秋哲"}]}]
-    
-    for (NSDictionary *groupDict in itemsArray)
-    {
-        NSArray *groupNameArray = [[groupDict allKeys] sortedArrayUsingSelector: @selector(compare:)];
-        for (NSString *groupName in groupNameArray)
-        {
-            NSArray *itemDictArray = groupDict[groupName];
-            
-            NSMutableArray *itemPairArray = [NSMutableArray array];
-            
-            for (NSInteger itemIndex = 0; itemIndex < itemDictArray.count; itemIndex++)
-            {
-                NSDictionary *itemDict = [itemDictArray objectAtIndex: itemIndex];
-                
-                WOANameValuePair *itemPair = [WOANameValuePair pairWithName: itemDict[kWOASrvKeyForAccountName]
-                                                                      value: itemDict[kWOASrvKeyForAccountID]
-                                                                 actionType: pairActionType];
-                
-                [itemPairArray addObject: itemPair];
-            }
-            
-            WOAContentModel *groupContentPairValue = [WOAContentModel contentModel: groupName
-                                                                         pairArray: itemPairArray
-                                                                        actionType: pairActionType
-                                                                        isReadonly: YES];
-            WOANameValuePair *groupPair = [WOANameValuePair pairWithName: groupName
-                                                                   value: groupContentPairValue
-                                                                dataType: WOAPairDataType_Normal
-                                                              actionType: pairActionType];
-            
-            [groupContentPairArray addObject: groupPair];
-        }
-    }
-    
-    return groupContentPairArray;
+    return [self itemPairsForTchrSelectiveTeacherList: respDict
+                                             subArray: nil
+                                       pairActionType: pairActionType];
 }
-
 #pragma mark - Business
 
 + (NSArray*) itemPairsForTchrQuerySyllabusConditions: (NSDictionary*)respDict
@@ -416,6 +475,102 @@
     }
     
     return dayContentArray;
+}
+
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrQueryBusinessTableList: (NSDictionary*)respDict
+                                        actionTypeA: (WOAActionType)actionTypeA
+                                        actionTypeB: (WOAActionType)actionTypeB
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *ownItemDictArray = respDict[kWOASrvKeyForTableOwnTableArray];
+    NSMutableArray *ownItemPairArray = [NSMutableArray array];
+    
+    for (NSDictionary *itemDict in ownItemDictArray)
+    {
+        NSString *itemID = itemDict[kWOASrvKeyForTableID];
+        NSString *itemName = itemDict[kWOASrvKeyForTableName];
+        NSMutableDictionary *itemPairValue = [NSMutableDictionary dictionary];
+        [itemPairValue setValue: itemID forKey: kWOASrvKeyForTableID];
+        [itemPairValue setValue: kWOASrvValueForOwnTableType forKey: kWOASrvKeyForTableStyle];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: itemPairValue
+                                                       dataType: WOAPairDataType_Dictionary
+                                                     actionType: actionTypeB];
+        
+        [ownItemPairArray addObject: pair];
+    }
+    
+    WOANameValuePair *ownPair = [WOANameValuePair pairWithName: kWOAValueForOwnTableTypeTitle
+                                                         value: kWOASrvValueForOwnTableType
+                                                    isWritable: NO
+                                                      subArray: ownItemPairArray
+                                                       subDict: nil
+                                                      dataType: WOAPairDataType_Normal
+                                                    actionType: actionTypeA];
+    [pairArray addObject: ownPair];
+    
+    ////////////////////////////////
+    
+    NSArray *othersItemDictArray = respDict[kWOASrvKeyForTableOthersTableArray];
+    NSMutableArray *othersItemPairArray = [NSMutableArray array];
+    
+    for (NSDictionary *itemDict in othersItemDictArray)
+    {
+        NSString *itemID = itemDict[kWOASrvKeyForTableID];
+        NSString *itemName = itemDict[kWOASrvKeyForTableName];
+        NSMutableDictionary *itemPairValue = [NSMutableDictionary dictionary];
+        [itemPairValue setValue: itemID forKey: kWOASrvKeyForTableID];
+        [itemPairValue setValue: kWOASrvValueForOthersTableType forKey: kWOASrvKeyForTableStyle];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: itemPairValue
+                                                       dataType: WOAPairDataType_Dictionary
+                                                     actionType: actionTypeB];
+        
+        [othersItemPairArray addObject: pair];
+    }
+    
+    WOANameValuePair *othersPair = [WOANameValuePair pairWithName: kWOAValueForOthersTableTypeTitle
+                                                            value: kWOASrvValueForOthersTableType
+                                                       isWritable: NO
+                                                         subArray: othersItemPairArray
+                                                          subDict: nil
+                                                         dataType: WOAPairDataType_Normal
+                                                       actionType: actionTypeA];
+    [pairArray addObject: othersPair];
+    
+    return pairArray;
+}
+
++ (NSArray*) teacherPairArrayForCreateBusinessItem: (NSDictionary*)respDict
+                                          subArray: (NSArray*)subArray
+                                    pairActionType: (WOAActionType)pairActionType
+{
+    return [self itemPairsForTchrSelectiveTeacherList: respDict
+                                             subArray: subArray
+                                       pairActionType: pairActionType];
+}
+
++ (NSArray*) dataPairArrayForCreateBusinessItem: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemDictArray = respDict[kWOASrvKeyForDataFieldArrays];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    for (NSDictionary *itemDict in itemDictArray)
+    {
+        WOANameValuePair *pair = [self pairFromItemDict: itemDict];
+        
+        [pairArray addObject: pair];
+        [pairArray addObject: seperatorPair];
+    }
+    
+    return pairArray;
 }
 
 #pragma mark -

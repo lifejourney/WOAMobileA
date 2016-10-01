@@ -12,6 +12,24 @@
 
 @implementation WOANameValuePair
 
++ (instancetype) pairFromPair: (WOANameValuePair*)fromPair
+{
+    WOANameValuePair *pair = [[WOANameValuePair alloc] init];
+    
+    pair.name = fromPair.name;
+    
+    pair.value = fromPair.value;
+    pair.tableAcountID = fromPair.tableAcountID;
+    pair.dataType = fromPair.dataType;
+    pair.actionType = fromPair.actionType;
+    pair.isWritable = fromPair.isWritable;
+    
+    pair.subArray = fromPair.subArray;
+    pair.subDictionary = fromPair.subDictionary;
+    
+    return pair;
+}
+
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
                    isWritable: (BOOL)isWritable
@@ -23,12 +41,15 @@
     WOANameValuePair *pair = [[WOANameValuePair alloc] init];
     
     pair.name = name;
+    
     pair.value = value;
-    pair.isWritable = isWritable;
-    pair.subArray = subArray;
-    pair.subDictionary = subDict;
+    pair.tableAcountID = nil;
     pair.dataType = dataType;
     pair.actionType = actionType;
+    pair.isWritable = isWritable;
+    
+    pair.subArray = subArray;
+    pair.subDictionary = subDict;
     
     return pair;
 }
@@ -120,6 +141,28 @@
                      dataType: WOAPairDataType_Seperator
                    actionType: WOAActionType_None];
 }
+
++ (instancetype) tableAccountPairWithName: (NSString*)name
+                                    value: (NSObject*)value
+                           tableAccountID: (NSString*)tableAccountID
+                               isWritable: (BOOL)isWritable
+                               actionType: (WOAActionType)actionType
+                        shouldFillDefault: (BOOL)shouldFillDefault
+{
+    WOAPairDataType dataType = shouldFillDefault ? WOAPairDataType_TableAccountE : WOAPairDataType_TableAccountA;
+    
+    WOANameValuePair *pair = [self pairWithName: name
+                                          value: value
+                                     isWritable: isWritable
+                                       subArray: nil
+                                        subDict: nil
+                                       dataType: dataType
+                                     actionType: actionType];
+    pair.tableAcountID = tableAccountID;
+    
+    return pair;
+}
+
 
 #pragma mark -
 
@@ -274,11 +317,15 @@ static NSArray *__typeMapArray = nil;
                        @[@"int",            @(WOAPairDataType_IntString),       @"int"],
                        @[@"date",           @(WOAPairDataType_DatePicker),      @"7"],
                        @[@"time",           @(WOAPairDataType_TimePicker),      @"time"],
-                       @[@"datetime",       @(WOAPairDataType_DateTimePicker),  @"datetime"],
+                       @[@"dateTime",       @(WOAPairDataType_DateTimePicker),  @"dateTime"],
                        @[@"combobox",       @(WOAPairDataType_SinglePicker),    @"5"],
-                       @[@"attfile",        @(WOAPairDataType_AttachFile),      @"8"], //todo
+                       @[@"attFile",        @(WOAPairDataType_AttachFile),      @"8"], //todo
+                       @[@"imgFile",        @(WOAPairDataType_ImageAttachFile), @"8"], //todo
                        @[@"textlist",       @(WOAPairDataType_TextList),        @"textlist"],
                        @[@"checkuserlist",  @(WOAPairDataType_CheckUserList),   @"checkuserlist"],
+                       @[@"account",        @(WOAPairDataType_TableAccountA),   @"account"],
+                       @[@"tableAccount",   @(WOAPairDataType_TableAccountE),   @"tableAccount"],
+                       @[@"selectAccount",  @(WOAPairDataType_SelectAccount),   @"selectAccount"],
                        
                        @[@"2",              @(WOAPairDataType_TextArea),        @"2"], //todo
                        @[@"3",              @(WOAPairDataType_Radio),           @"3"], //todo
@@ -296,7 +343,7 @@ static NSArray *__typeMapArray = nil;
 + (NSArray*) typeMapByTextType: (NSString*)textType
 {
     NSArray *typeMap = nil;
-    NSString *lowerCaseString = [textType lowercaseString];
+    NSString *lowerCaseString = textType;//[textType lowercaseString];
     
     for (NSInteger index = 0; index < [__typeMapArray count]; index++)
     {
@@ -317,7 +364,7 @@ static NSArray *__typeMapArray = nil;
 {
     NSArray *typeMap = nil;
     
-    NSString *lowerCaseString = [digitType lowercaseString];
+    NSString *lowerCaseString = digitType;//[digitType lowercaseString];
     for (NSInteger index = 0; index < [__typeMapArray count]; index++)
     {
         NSArray *arr = [__typeMapArray objectAtIndex: index];

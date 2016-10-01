@@ -30,8 +30,12 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     WOAPairDataType_DateTimePicker,
     WOAPairDataType_SinglePicker, //Value is string, with string array subArray
     WOAPairDataType_AttachFile,  //Value is Array of dictionary. @[@{kWOASrvKeyForAttachmentTitle: xxx, kWOASrvKeyForAttachmentUrl: xxx}, ...]
+    WOAPairDataType_ImageAttachFile, //Same to AttachFile
     WOAPairDataType_TextList,  //Value is Readonly Array of string, not subArray. View should show the string list and provide an input.
     WOAPairDataType_CheckUserList,  //Currently, take as Normal
+    WOAPairDataType_TableAccountA, //Name for title, value for edit, with tableAcountID.
+    WOAPairDataType_TableAccountE, //Same to TableAccountA, should fill default from previous select.
+    WOAPairDataType_SelectAccount, //Name for title, value is array for edit, with tableAcountID. Can select from subArray, whichs type is Normal.
     
     WOAPairDataType_TextArea,
     WOAPairDataType_Radio,
@@ -46,6 +50,7 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 @property (nonatomic, copy) NSString *name;
 
 @property (nonatomic, strong) NSObject *value;
+@property (nonatomic, copy) NSString *tableAcountID;
 @property (nonatomic, assign) WOAPairDataType dataType;
 @property (nonatomic, assign) WOAActionType actionType; //What action to do when select or submit.
 @property (nonatomic, assign) BOOL isWritable;
@@ -55,6 +60,8 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 @property (nonatomic, strong) NSArray *subArray;
 
 @property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
+
++ (instancetype) pairFromPair: (WOANameValuePair*)fromPair;
 
 + (instancetype) pairWithName: (NSString*)name
                         value: (NSObject*)value
@@ -84,6 +91,14 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
                         value: (NSObject*)value;
 + (instancetype) pairOnlyName: (NSString*)name;
 + (instancetype) seperatorPair;
+
++ (instancetype) tableAccountPairWithName: (NSString*)name
+                                    value: (NSObject*)value
+                           tableAccountID: (NSString*)tableAccountID
+                               isWritable: (BOOL)isWritable
+                               actionType: (WOAActionType)actionType
+                        shouldFillDefault: (BOOL)shouldFillDefault;
+
 
 #pragma mark -
 
