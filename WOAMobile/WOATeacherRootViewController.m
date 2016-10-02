@@ -30,6 +30,9 @@
  
  Question:
  调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
+ 调课提交，成功，但是，返回的code = 1.
+ 考勤测试好.
+ 
  */
 
 /**
@@ -961,7 +964,7 @@
     pair.isWritable = YES;
     [pairArray addObject: pair];
     
-    pair = [WOANameValuePair pairWithName: @"原因" value: @"" dataType: WOAPairDataType_Normal];
+    pair = [WOANameValuePair pairWithName: @"原因" value: @"" dataType: WOAPairDataType_TextArea];
     pair.isWritable = YES;
     [pairArray addObject: pair];
     [pairArray addObject: seperatorPair];

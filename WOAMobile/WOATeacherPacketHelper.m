@@ -106,6 +106,32 @@
     return dateStrArray;
 }
 
+- (NSString*) idFromCombinedString: (NSString*)srcString
+{
+    NSString *retStr = @"";
+    
+    NSArray *compArray = [srcString componentsSeparatedByString: @","];
+    if ([compArray count] > 0)
+    {
+        retStr = compArray[0];
+    }
+    
+    return retStr;
+}
+
+- (NSString*) nameFromCombinedString: (NSString*)srcString
+{
+    NSString *retStr = @"";
+    
+    NSArray *compArray = [srcString componentsSeparatedByString: @","];
+    if ([compArray count] > 1)
+    {
+        retStr = compArray[1];
+    }
+    
+    return retStr;
+}
+
 #pragma mark -
 
 + (NSDictionary*) packetDictWithFromTime: (NSString*)fromTimeStr

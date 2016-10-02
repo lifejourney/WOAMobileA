@@ -57,6 +57,8 @@
 {
     if (self = [super initWithFrame:frame])
     {
+        self.minTextAreaHeight = 80.f;
+        
         self.imageFullFileNameArray = [[NSMutableArray alloc] initWithCapacity: 3];
         self.imageTitleArray = [[NSMutableArray alloc] initWithCapacity: 3];
         self.imageURLArray = [[NSMutableArray alloc] initWithCapacity: 3];
@@ -222,7 +224,25 @@
 
 - (WOAContentModel*) contentModelWithStringArrayValue: (WOANameValuePair*)modelPair
 {
-    NSArray *valueArray = (NSArray*)modelPair.value;
+    NSArray *valueArray;
+    if ([modelPair.value isKindOfClass: [NSArray class]])
+    {
+        valueArray = (NSArray*)modelPair.value;
+    }
+    else
+    {
+        NSString *stringValue = [modelPair stringValue];
+        
+        if ([NSString isEmptyString: stringValue])
+        {
+            valueArray = @[];
+        }
+        else
+        {
+            valueArray = @[stringValue];
+        }
+    }
+    
     NSMutableArray *atthPairArray = [NSMutableArray array];
     
     for (NSString *subValue in valueArray)
@@ -375,14 +395,25 @@
                                                        width: textWidth
                                                         font: labelFont];
                 textViewSize.height = MAX(testSize.height, textViewSize.height);
+                textViewSize.height = MAX(textViewSize.height, self.minTextAreaHeight);
                 
                 self.lineTextView = [[UITextView alloc] initWithFrame: CGRectMake(0, 0, textViewSize.width, textViewSize.height)];
                 _lineTextView.font = [_lineTextView.font fontWithSize: kWOALayout_DetailItemFontSize];
                 _lineTextView.delegate = self;
                 _lineTextView.text = defaultValue;
                 _lineTextView.textAlignment = NSTextAlignmentLeft;
-                _lineTextView.userInteractionEnabled = YES;
-                _lineTextView.keyboardType = UIKeyboardTypeDefault;
+                _lineTextView.layer.cornerRadius = 6.0f;
+                if (!_isHostReadonly && isWritable)
+                {
+                    _lineTextView.layer.borderColor = [[UIColor colorWithRed:215.0 / 255.0 green:215.0 / 255.0 blue:215.0 / 255.0 alpha:1] CGColor];
+                    _lineTextView.layer.borderWidth = 0.6f;
+                }
+                else
+                {
+                    _lineTextView.layer.borderWidth = 0.0f;
+                }
+                _lineTextView.userInteractionEnabled = isWritable || [self couldUserInteractEvenUnWritable: pairDataType];
+                _lineTextView.keyboardType = (pairDataType == WOAPairDataType_IntString) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
                 
                 [self addSubview: _lineTextView];
             }
