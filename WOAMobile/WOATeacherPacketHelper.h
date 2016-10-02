@@ -65,7 +65,13 @@
 
 + (NSArray*) itemPairsForTchrQueryContacts: (NSDictionary*)respDict
                             pairActionType: (WOAActionType)pairActionType;
+#pragma mark -
 
++ (NSArray*) itemPairsForTchrQueryMySubject: (NSDictionary*)respDict
+                                actionTypeA: (WOAActionType)actionTypeA
+                                actionTypeB: (WOAActionType)actionTypeB;
++ (NSArray*) itemPairsForTchrQueryAvailableTakeover: (NSDictionary*)respDict
+                                     pairActionType: (WOAActionType)pairActionType;
 #pragma mark -
 
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict

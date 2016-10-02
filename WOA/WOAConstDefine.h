@@ -53,6 +53,28 @@
 #define kWOASrvKeyForClassID_Post @"classID"
 #define kWOASrvKeyForClassName @"name"
 
+#define kWOASrvKeyForSubjectGradeName @"gradeName"
+#define kWOASrvKeyForSubjectTermName @"yearTerm"
+#define kWOASrvKeyForSubjectClassArray @"classSubjects"
+#define kWOASrvKeyForSubjectClassName @"className"
+#define kWOASrvKeyForSubjectClassID @"classID"
+#define kWOASrvKeyForSubjectArray @"mySubjects"
+#define kWOASrvKeyForSubjectWeekday @"week"
+#define kWOASrvKeyForSubjectStep @"step"
+#define kWOASrvKeyForSubjectID @"subjectID"
+#define kWOASrvKeyForSubjectName @"subjectName"
+#define kWOASrvKeyForSubjectDate @"date"
+#define kWOASrvKeyForSubjectAvailableDate @"date"
+#define kWOASrvKeyForSubjectTeacherID @"teacherID"
+#define kWOASrvKeyForSubjectTeacherName @"teacherName"
+#define kWOASrvKeyForSubjectChangeCode @"changeCode"
+#define kWOASrvKeyForSubjectChangeStyle @"changeStyle"
+#define kWOASrvKeyForSubjectChangeReason @"reason"
+#define kWOASrvKeyForSubjectNewSubjectID @"newSubjectID"
+#define kWOASrvKeyForSubjectNewTeacherID @"newTeacherID"
+
+#define kWOASrvValueForSubjectDateFormat @"YYYY/M/d"
+
 #define kWOASrvKeyForSyllabusSectionName @"name"
 #define kWOASrvKeyForSyllabusClassList @"classList"
 

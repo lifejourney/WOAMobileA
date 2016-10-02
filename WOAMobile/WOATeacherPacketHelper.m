@@ -9,6 +9,7 @@
 #import "WOATeacherPacketHelper.h"
 #import "NSString+PinyinInitial.h"
 #import "NSString+Utility.h"
+#import "NSDate+Utility.h"
 
 
 @interface WOATeacherPacketHelper ()
@@ -17,6 +18,93 @@
 
 
 @implementation WOATeacherPacketHelper
+
++ (NSArray*) weekdayNameArray
+{
+    //Weekday start from 1 to 7.
+    return @[@"星期日", @"星期一",@"星期二",@"星期三",@"星期四",@"星期五",@"星期六"];
+}
+
++ (NSString*) nameByWeekday: (NSInteger)weekday
+{
+    NSString *weekname = @"";
+    
+    NSInteger index = weekday - 1;
+    NSArray *dayNameArray = [self weekdayNameArray];
+    if (index >= 0 && index < dayNameArray.count)
+    {
+        weekname = dayNameArray[index];
+    }
+    
+    return weekname;
+}
+
++ (NSArray*) weeknameArrayFrom1to7
+{
+    return @[[self nameByWeekday: 2],
+             [self nameByWeekday: 3],
+             [self nameByWeekday: 4],
+             [self nameByWeekday: 5],
+             [self nameByWeekday: 6],
+             [self nameByWeekday: 7],
+             [self nameByWeekday: 1]
+             ];
+}
+
++ (NSInteger) weekdayByName: (NSString*)name
+{
+    NSInteger defaultDay = 1;
+    
+    NSArray *dayNameArray = [self weekdayNameArray];
+    
+    for (NSInteger index = 0; index < dayNameArray.count; index++)
+    {
+        NSString *dayName = dayNameArray[index];
+        
+        if ([name isEqualToString: dayName])
+        {
+            return index + 1;
+        }
+    }
+    
+    return defaultDay;
+}
+
++ (NSArray*) dateStingArrayForComingWeekdays: (NSInteger)dstWeekday
+                                   itemCount: (NSInteger)itemCount
+{
+    NSMutableArray *dateStrArray = [NSMutableArray array];
+    
+    NSCalendarUnit calendarUnit = (NSCalendarUnitYear |
+                                   NSCalendarUnitMonth |
+                                   NSCalendarUnitDay |
+                                   NSCalendarUnitWeekday);
+    NSInteger oneDayInterval = 60 * 60 * 24;
+    NSInteger weekDayCount = [[self weekdayNameArray] count];
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    for (NSInteger index = 0; index < itemCount; index++)
+    {
+        NSDate *startDate = [[NSDate date] dateByAddingTimeInterval: oneDayInterval * (index * weekDayCount)];
+        NSDateComponents *dateComps = [calendar components: calendarUnit
+                                                  fromDate: startDate];
+        
+        NSInteger startWeekDay = [dateComps weekday];
+        
+        NSInteger distanceToNextWeekday = dstWeekday - startWeekDay;
+        if (distanceToNextWeekday <= 0)
+        {
+            //Today is unavailable.
+            distanceToNextWeekday = distanceToNextWeekday + weekDayCount;
+        }
+        NSDate *dstDate = [startDate dateByAddingTimeInterval: oneDayInterval * distanceToNextWeekday];
+        
+        [dateStrArray addObject: [dstDate dateStringWithFormat: kDefaultDateFormatStr]];
+    }
+    
+    return dateStrArray;
+}
 
 #pragma mark -
 
@@ -439,7 +527,8 @@
     NSMutableArray *dayContentArray = [NSMutableArray array];
     NSArray *sectionItemArray = respDict[kWOASrvKeyForItemArrays];
     
-    NSArray *dayNameArray = @[@"星期一",@"星期二",@"星期三",@"星期四",@"星期五",@"星期六",@"星期日"];
+    NSArray *dayNameArray = [self weeknameArrayFrom1to7];
+    
     for (NSInteger index = 0; index < dayNameArray.count; index++)
     {
         NSString *dayName = dayNameArray[index];
@@ -608,6 +697,138 @@
 
 #pragma mark -
 
++ (NSArray*) itemPairsForTchrQueryMySubject: (NSDictionary*)respDict
+                                actionTypeA: (WOAActionType)actionTypeA
+                                actionTypeB: (WOAActionType)actionTypeB
+{
+    NSMutableArray *termPairArray = [NSMutableArray array];
+    NSArray *termDictArray = respDict[kWOASrvKeyForItemArrays];
+    
+    for (NSDictionary *termDict in termDictArray)
+    {
+        NSString *gradeID = termDict[kWOASrvKeyForGradeID_Post];
+        NSString *termName = termDict[kWOASrvKeyForSubjectTermName];
+        NSArray *classDictArray = termDict[kWOASrvKeyForSubjectClassArray];
+        
+        NSMutableArray *classPairArray = [NSMutableArray array];
+        for (NSDictionary *classDict in classDictArray)
+        {
+            NSString *classID = classDict[kWOASrvKeyForSubjectClassID];
+            NSString *className = classDict[kWOASrvKeyForSubjectClassName];
+            
+            NSMutableDictionary *classInfoDict = [NSMutableDictionary dictionary];
+            [classInfoDict setValue: classID forKey: kWOASrvKeyForSubjectClassID];
+            [classInfoDict setValue: gradeID forKey: kWOASrvKeyForGradeID_Post];
+            [classInfoDict setValue: termName forKey: kWOASrvKeyForSubjectTermName];
+            
+            //Subject
+            NSMutableArray *subjectPairArray = [NSMutableArray array];
+            NSArray *subjectDictArray = classDict[kWOASrvKeyForSubjectArray];
+            for (NSDictionary *subjectDict in subjectDictArray)
+            {
+                NSString *teacherID = subjectDict[kWOASrvKeyForSubjectTeacherID];
+                NSString *subjectID = subjectDict[kWOASrvKeyForSubjectID];
+                NSString *subjectWeek = subjectDict[kWOASrvKeyForSubjectWeekday];
+                NSString *subjectStep = subjectDict[kWOASrvKeyForSubjectStep];
+                NSString *subjectName = subjectDict[kWOASrvKeyForSubjectName];
+                
+                
+                NSString *subjectCombinedTitle = [NSString stringWithFormat: @"%@ %@ %@", subjectWeek, subjectStep, subjectName];
+                NSArray *availableDateArray = [self dateStingArrayForComingWeekdays: [self weekdayByName: subjectWeek] itemCount: 4];
+                
+                NSMutableDictionary *subjectInfoDict = [NSMutableDictionary dictionary];
+                [subjectInfoDict setValue: subjectWeek forKey: kWOASrvKeyForSubjectWeekday];
+                [subjectInfoDict setValue: subjectStep forKey: kWOASrvKeyForSubjectStep];
+                [subjectInfoDict setValue: teacherID forKey: kWOASrvKeyForSubjectTeacherID];
+                [subjectInfoDict setValue: subjectID forKey: kWOASrvKeyForSubjectID];
+                [subjectInfoDict setValue: subjectName forKey: kWOASrvKeyForSubjectName];
+                
+                NSMutableArray *datePairArray = [NSMutableArray array];
+                for (NSString *dateString in availableDateArray)
+                {
+                    WOANameValuePair *datePair = [WOANameValuePair pairWithName: dateString
+                                                                          value: dateString
+                                                                     actionType: actionTypeB];
+                    datePair.subDictionary = subjectInfoDict;
+                    [datePairArray addObject: datePair];
+                }
+                
+                WOAContentModel *subjectPairValue = [WOAContentModel contentModel: subjectCombinedTitle
+                                                                        pairArray: datePairArray];
+                WOANameValuePair *subjectPair = [WOANameValuePair pairWithName: subjectCombinedTitle
+                                                                         value: subjectPairValue
+                                                                      dataType: WOAPairDataType_ContentModel];
+                [subjectPairArray addObject: subjectPair];
+            }
+            
+            //Class
+            WOANameValuePair *classPair = [WOANameValuePair pairWithName: className
+                                                                   value: classID
+                                                              actionType: actionTypeA];
+            classPair.subDictionary = classInfoDict;
+            classPair.subArray = subjectPairArray;
+            
+            [classPairArray addObject: classPair];
+        }
+        
+        WOAContentModel *termPairValue = [WOAContentModel contentModel: termName
+                                                             pairArray: classPairArray];
+        WOANameValuePair *termPair = [WOANameValuePair pairWithName: termName
+                                                              value: termPairValue
+                                                           dataType: WOAPairDataType_ContentModel];
+        [termPairArray addObject: termPair];
+    }
+    
+    return termPairArray;
+}
+
+
++ (NSArray*) itemPairsForTchrQueryAvailableTakeover: (NSDictionary*)respDict
+                                     pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *subjectPairArray = [NSMutableArray array];
+    
+    NSArray *subjectDictArray = respDict[kWOASrvKeyForItemArrays];
+    for (NSDictionary *subjectDict in subjectDictArray)
+    {
+        NSString *teacherID = subjectDict[kWOASrvKeyForSubjectTeacherID];
+        NSString *teacherName = subjectDict[kWOASrvKeyForSubjectTeacherName];
+        NSString *subjectID = subjectDict[kWOASrvKeyForSubjectID];
+        NSString *subjectName = subjectDict[kWOASrvKeyForSubjectName];
+        NSString *subjectDate = subjectDict[kWOASrvKeyForSubjectDate];
+        NSString *subjectWeek = subjectDict[kWOASrvKeyForSubjectWeekday];
+        NSString *subjectStep = subjectDict[kWOASrvKeyForSubjectStep];
+        
+        NSDate *sjDate = [NSDate dateFromString: subjectDate formatString: kWOASrvValueForSubjectDateFormat];
+        subjectDate = [sjDate dateStringWithFormat: kDefaultDateFormatStr];
+        
+        NSString *subjectCombinedTitle = [NSString stringWithFormat: @"%@ %@ %@", subjectDate, subjectWeek, subjectStep];
+        NSString *combinedSubValue = [NSString stringWithFormat: @"%@ %@", subjectName, teacherName];
+        NSMutableDictionary *pairDictValue = [NSMutableDictionary dictionary];
+        [pairDictValue setValue: combinedSubValue forKey: kWOAKeyForSubValue];
+        
+        NSMutableDictionary *subjectInfoDict = [NSMutableDictionary dictionary];
+        [subjectInfoDict setValue: subjectDate forKey: kWOASrvKeyForSubjectDate];
+        [subjectInfoDict setValue: subjectWeek forKey: kWOASrvKeyForSubjectWeekday];
+        [subjectInfoDict setValue: subjectStep forKey: kWOASrvKeyForSubjectStep];
+        [subjectInfoDict setValue: subjectID forKey: kWOASrvKeyForSubjectID];
+        [subjectInfoDict setValue: subjectName forKey: kWOASrvKeyForSubjectName];
+        [subjectInfoDict setValue: teacherID forKey: kWOASrvKeyForSubjectTeacherID];
+        
+        WOANameValuePair *subjectPair = [WOANameValuePair pairWithName: subjectCombinedTitle
+                                                                 value: pairDictValue
+                                                              dataType: WOAPairDataType_Dictionary
+                                                            actionType: pairActionType];
+        subjectPair.subDictionary = subjectInfoDict;
+        
+        [subjectPairArray addObject: subjectPair];
+    }
+    
+    return subjectPairArray;
+}
+
+#pragma mark-
+
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {
@@ -658,10 +879,17 @@
     for (NSDictionary *payoffItem in payoffDictArray)
     {
         NSString *itemName = payoffItem[kWOASrvKeyForSalaryItemName];
+        NSString *itemDate = payoffItem[kWOASrvKeyForSalaryItemDate];
         NSArray *titleArray = payoffItem[kWOASrvKeyForSalaryTitleArray];
         NSArray *valueArray = payoffItem[kWOASrvKeyForSalaryValueArray];
         
         NSMutableArray *pairArray = [NSMutableArray array];
+        
+        WOANameValuePair *datePair = [WOANameValuePair pairWithName: @"发放日期"
+                                                              value: itemDate
+                                                         actionType: pairActionType];
+        [pairArray addObject: datePair];
+        
         for (NSInteger index = 0; index < titleArray.count; index++)
         {
             NSString *title = titleArray[index];

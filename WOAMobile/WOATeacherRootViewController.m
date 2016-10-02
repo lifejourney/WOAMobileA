@@ -15,6 +15,7 @@
 #import "WOADateFromToPickerViewController.h"
 #import "WOARequestManager.h"
 #import "WOATeacherPacketHelper.h"
+#import "WOAPropertyInfo.h"
 #import "NSString+Utility.h"
 
 
@@ -25,6 +26,9 @@
  ToTest:
  OA: process style
  Business: submit fill table.
+ 
+ Question:
+ 调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
  */
 
 /**
@@ -131,7 +135,15 @@
 - (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
                                   navVC: (UINavigationController*)navVC
 {
-    [navVC popToRootViewControllerAnimated: YES];
+    if (actionType == WOAActionType_TeacherSubmitTakeover)
+    {
+        [navVC popViewControllerAnimated: NO];
+        [navVC popViewControllerAnimated: YES];
+    }
+    else
+    {
+        [navVC popToRootViewControllerAnimated: YES];
+    }
 }
 
 - (void) onSumbitSuccessAndFlowDone: (NSDictionary*)respDict
@@ -594,7 +606,7 @@
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAActionType itemActionType = WOAContenType_TeacherPickerBusinessTableItem;
+         WOAActionType itemActionType = WOAContenType_TeacherPickBusinessTableItem;
          
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryBusinessTableList: responseContent.bodyDictionary
                                                                                  actionTypeA: itemActionType
@@ -613,9 +625,9 @@
      }];
 }
 
-- (void) onTchrPickerBusinessTableItem: (WOANameValuePair *)selectedPair
-                           relatedDict: (NSDictionary *)relatedDict
-                                 navVC: (UINavigationController *)navVC
+- (void) onTchrPickBusinessTableItem: (WOANameValuePair *)selectedPair
+                         relatedDict: (NSDictionary *)relatedDict
+                               navVC: (UINavigationController *)navVC
 {
     NSString *selectedTableListType = selectedPair.name;
     NSArray *tablePairArray = selectedPair.subArray;
@@ -797,6 +809,218 @@
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryMySubject: responseContent.bodyDictionary
+                                                                         actionTypeA: WOAActionType_TeacherPickSubjectQueryItem
+                                                                         actionTypeB: WOAActionType_TeacherQueryAvailableTakeover];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择班级"
+                                                             pairArray: pairArray
+                                                            actionType: WOAActionType_TeacherPickSubjectQueryItem
+                                                            isReadonly: YES];
+         
+         NSMutableDictionary *relatedDict = [NSMutableDictionary dictionary];
+         [relatedDict setValue: vcTitle forKey: KWOAKeyForActionTitle];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: relatedDict];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrPickSubjectQueryItem: (WOANameValuePair *)selectedPair
+                        relatedDict: (NSDictionary *)relatedDict
+                              navVC: (UINavigationController *)navVC
+{
+    NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [contentReleatedDict addEntriesFromDictionary: selectedPair.subDictionary];
+    
+    NSArray *subjectPairArray = selectedPair.subArray;
+    
+    WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择课程"
+                                                        pairArray: subjectPairArray
+                                                       actionType: WOAActionType_TeacherQueryAvailableTakeover
+                                                       isReadonly: YES];
+    
+    WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                delegate: self
+                                                                             relatedDict: contentReleatedDict];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onTchrQueryAvailableTakeover: (WOANameValuePair *)selectedPair
+                          relatedDict: (NSDictionary *)relatedDict
+                                navVC: (UINavigationController *)navVC
+{
+    NSString *vcTitle = relatedDict[KWOAKeyForActionTitle];
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict removeObjectForKey: KWOAKeyForActionTitle];
+    [addtDict addEntriesFromDictionary: selectedPair.subDictionary];
+    [addtDict setValue: selectedPair.value forKey: kWOASrvKeyForSubjectAvailableDate];
+    
+    //TO-DO, to be fixed.
+    NSString *teacherID = addtDict[kWOASrvKeyForSubjectTeacherID];
+    if ([NSString isEmptyString: teacherID])
+    {
+        [addtDict setValue: [WOAPropertyInfo latestSessionID] forKey: kWOASrvKeyForSubjectTeacherID];
+    }
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType pairActionType = WOAActionType_TeacherPickTakeoverReason;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryAvailableTakeover: responseContent.bodyDictionary
+                                                                              pairActionType: pairActionType];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择我要调的课"
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         NSMutableDictionary *relatedDict = [NSMutableDictionary dictionaryWithDictionary: addtDict];
+         [relatedDict setValue: vcTitle forKey: KWOAKeyForActionTitle];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: relatedDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+
+- (void) onTchrPickTakeoverReason: (WOANameValuePair *)selectedPair
+                      relatedDict: (NSDictionary *)relatedDict
+                            navVC: (UINavigationController *)navVC
+{
+    WOAActionType pairActionType = selectedPair.actionType;
+    
+    NSString *vcTitle = relatedDict[KWOAKeyForActionTitle];
+    
+    NSMutableDictionary *sectionDictA = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    NSMutableDictionary *sectionDictB = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
+    
+    [sectionDictA removeObjectForKey: KWOAKeyForActionTitle];
+    
+    NSString *teacherIDA = sectionDictA[kWOASrvKeyForSubjectTeacherID];
+    NSString *subjectIDA = sectionDictA[kWOASrvKeyForSubjectID];
+    NSString *subjectNameA = sectionDictA[kWOASrvKeyForSubjectName];
+    NSString *subjectDateA = sectionDictA[kWOASrvKeyForSubjectDate];
+    NSString *subjectWeekA = sectionDictA[kWOASrvKeyForSubjectWeekday];
+    NSString *subjectStepA = sectionDictA[kWOASrvKeyForSubjectStep];
+    
+    NSString *teacherIDB = sectionDictB[kWOASrvKeyForSubjectTeacherID];
+    NSString *subjectIDB = sectionDictB[kWOASrvKeyForSubjectID];
+    NSString *subjectNameB = sectionDictB[kWOASrvKeyForSubjectName];
+    NSString *subjectDateB = sectionDictB[kWOASrvKeyForSubjectDate];
+    NSString *subjectWeekB = sectionDictB[kWOASrvKeyForSubjectWeekday];
+    NSString *subjectStepB = sectionDictB[kWOASrvKeyForSubjectStep];
+    
+    [sectionDictA removeObjectForKey: kWOASrvKeyForSubjectTeacherID];
+    [sectionDictA removeObjectForKey: kWOASrvKeyForSubjectID];
+    [sectionDictA removeObjectForKey: kWOASrvKeyForSubjectName];
+    [sectionDictA setValue: teacherIDB forKey: kWOASrvKeyForSubjectNewTeacherID];
+    [sectionDictA setValue: subjectIDB forKey: kWOASrvKeyForSubjectNewSubjectID];
+    
+    [sectionDictB removeObjectForKey: kWOASrvKeyForSubjectTeacherID];
+    [sectionDictB removeObjectForKey: kWOASrvKeyForSubjectID];
+    [sectionDictB removeObjectForKey: kWOASrvKeyForSubjectName];
+    [sectionDictB setValue: teacherIDA forKey: kWOASrvKeyForSubjectNewTeacherID];
+    [sectionDictB setValue: subjectIDA forKey: kWOASrvKeyForSubjectNewSubjectID];
+    
+    //TO-DO, to be fixed.
+    [sectionDictB setValue: sectionDictA[kWOASrvKeyForGradeID_Post] forKey: kWOASrvKeyForGradeID_Post];
+    [sectionDictB setValue: sectionDictA[kWOASrvKeyForSubjectClassID] forKey: kWOASrvKeyForSubjectClassID];
+    [sectionDictB setValue: sectionDictA[kWOASrvKeyForSubjectTermName] forKey: kWOASrvKeyForSubjectTermName];
+    
+    NSArray *itemsArray = @[sectionDictA, sectionDictB];
+    NSDictionary *contentRelatedDict = @{kWOASrvKeyForItemArrays: itemsArray};
+    
+    
+    NSString *combiedSubjectValueA = [NSString stringWithFormat: @"%@ %@ %@ %@", subjectDateA, subjectWeekA, subjectStepA, subjectNameA];
+    NSString *combiedSubjectValueB = [NSString stringWithFormat: @"%@ %@ %@ %@", subjectDateB, subjectWeekB, subjectStepB, subjectNameB];
+    
+    NSMutableArray *pairArray = [NSMutableArray array];
+    WOANameValuePair *pair;
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    pair = [WOANameValuePair pairWithName: @"我的课程" value: combiedSubjectValueA];
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"调换课程" value: combiedSubjectValueB];
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    pair = [WOANameValuePair pairWithName: @"操作类型" value: @"" dataType: WOAPairDataType_SinglePicker];
+    pair.subArray = @[@"调课", @"代课"];
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    
+    pair = [WOANameValuePair pairWithName: @"原因" value: @"" dataType: WOAPairDataType_Normal];
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    WOAContentModel *sectionModel = [WOAContentModel contentModel: vcTitle
+                                                        pairArray: pairArray
+                                                       actionType: pairActionType
+                                                       isReadonly: NO];
+    
+    WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                     contentArray: @[sectionModel]
+                                                       actionType: pairActionType
+                                                       actionName: @"提交"
+                                                       isReadonly: NO
+                                                          subDict: contentRelatedDict];
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onTchrPickTakeoverReason: (WOAActionType)actionType
+                     contentModel: (NSDictionary*)contentModel
+                      relatedDict: (NSDictionary *)relatedDict
+                            navVC: (UINavigationController *)navVC
+{
+    NSString *changeStyle = @"";
+    NSString *changeReason = @"";
+    
+    NSArray *groupItemArray = contentModel[kWOASrvKeyForItemArrays];
+    for (NSArray *itemDictArray in groupItemArray)
+    {
+        for (NSDictionary *itemDict in itemDictArray)
+        {
+            NSString *itemName = itemDict[kWOASrvKeyForItemName];
+            
+            if ([itemName isEqualToString: @"操作类型"])
+            {
+                changeStyle = itemDict[kWOASrvKeyForItemValue];
+            }
+            else if ([itemName isEqualToString: @"原因"])
+            {
+                changeReason = itemDict[kWOASrvKeyForItemValue];
+            }
+        }
+    }
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: changeStyle forKey: kWOASrvKeyForSubjectChangeStyle];
+    [addtDict setValue: changeReason forKey: kWOASrvKeyForSubjectChangeReason];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
      }];
 }
 
@@ -1121,11 +1345,11 @@
             
             ////////////////////////////////////////
             
-        case WOAContenType_TeacherPickerBusinessTableItem:
+        case WOAContenType_TeacherPickBusinessTableItem:
         {
-            [self onTchrPickerBusinessTableItem: selectedPair
-                                    relatedDict: relatedDict
-                                          navVC: navVC];
+            [self onTchrPickBusinessTableItem: selectedPair
+                                  relatedDict: relatedDict
+                                        navVC: navVC];
             break;
         }
             
@@ -1146,7 +1370,31 @@
         }
             
         ////////////////////////////////////////
+        
+        case WOAActionType_TeacherPickSubjectQueryItem:
+        {
+            [self onTchrPickSubjectQueryItem: selectedPair
+                                 relatedDict: relatedDict
+                                       navVC: navVC];
+            break;
+        }
             
+        case WOAActionType_TeacherQueryAvailableTakeover:
+        {
+            [self onTchrQueryAvailableTakeover: selectedPair
+                                   relatedDict: relatedDict
+                                         navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherPickTakeoverReason:
+        {
+            [self onTchrPickTakeoverReason: selectedPair
+                               relatedDict: relatedDict
+                                     navVC: navVC];
+            break;
+        }
+        ////////////////////////////////////////
         case WOAActionType_FlowDone:
         {
             [self onFlowDoneWithLatestActionType: selectedPair.actionType
@@ -1187,6 +1435,15 @@
             [self onTchrSubmitBusinessCreate: actionType
                                 contentModel: contentModel
                                        navVC: vc.navigationController];
+            break;
+        }
+            
+        case WOAActionType_TeacherPickTakeoverReason:
+        {
+            [self onTchrPickTakeoverReason: actionType
+                              contentModel: contentModel
+                               relatedDict: vc.contentModel.subDict
+                                     navVC: vc.navigationController];
             break;
         }
             

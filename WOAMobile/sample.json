@@ -221,9 +221,69 @@
              {"name":"eqweqwe","telephone":"无电话号码"}]}
 
 
+{"head":{
+    "msgType":"mySubjectQuery","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "items":[
+             {"gradeName":"高三年",
+             "gradeID":"23",
+             "yearTerm":"高三上学期",
+             "classSubjects":[
+                              {"className":"1班",
+                              "classID":"68",
+                              "mySubjects":[
+                                            {"week":"星期一",
+                                            "step":"第6节",
+                                            "subjectID":"56",
+                                            "subjectName":"信息技术"},
+                                            
+                                            {"week":"星期四","step":"第6节","subjectID":"56","subjectName":"信息技术"}]},
+                              {"className":"2班",
+                              "classID":"69",
+                              "mySubjects":[
+                                            {"week":"星期三","step":"第5节","subjectID":"56","subjectName":"信息技术"},
+                                            {"week":"星期四","step":"第7节","subjectID":"56","subjectName":"信息技术"}]},
+                              {"className":"3班",
+                              "classID":"70",
+                              "mySubjects":[
+                                            {"week":"星期三","step":"第6节","subjectID":"56","subjectName":"信息技术"},
+                                            {"week":"星期二","step":"第7节","subjectID":"56","subjectName":"信息技术"}
+                                            ]}
+                              ]}
+             ]
+}
+
+
+{"head":{
+    "msgType":"getAvailableSubject","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "items":[
+             {"date":"2016/10/3","week":"星期一","step":"第1节","subjectID":"1","subjectName":"语文","teacherID":"45","teacherName":"张明榕"},
+             {"date":"2016/10/4","week":"星期二","step":"第1节","subjectID":"1","subjectName":"语文","teacherID":"45","teacherName":"张明榕"},
+             {"date":"2016/10/5","week":"星期三","step":"第1节","subjectID":"3","subjectName":"英语","teacherID":"98","teacherName":"李夷凌"},
+             {"date":"2016/10/5","week":"星期三","step":"第4节","subjectID":"2","subjectName":"数学","teacherID":"84","teacherName":"赵清木"},
+             {"date":"2016/10/7","week":"星期五","step":"第6节","subjectID":"4","subjectName":"物理","teacherID":"41","teacherName":"曾昭胜"},
+             {"date":"2016/10/7","week":"星期五","step":"第7节","subjectID":"45","subjectName":"地理","teacherID":"228","teacherName":"赖祯真"}]}
 
 
 
+
+
+{"head":{
+    "msgType":"changeSubjectQuery","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "items":[
+             {"changeCode":"67_2016926121659",
+             "changeStyle":"临时调课",
+             "reason":"ghh",
+             "content":"高三年1班2016/10/20星期四第6节“信息技术”由“李夷凌上英语”"},
+             
+             {"changeCode":"67_2016926121552",
+             "changeStyle":"临时调课","reason":"fuuu","content":"高三年1班2016/09/29星期四第6节“信息技术”由“李夷凌上英语”,高三年1班2016/10/5星期三第1节“信息技术”由“阮自力上信息技术”"},
+             {"changeCode":"67_2016921163337","changeStyle":"临时调课","reason":"有事调课","content":"高三年1班2016/09/22星期四第6节“信息技术”由“赵清木上数学”,高三年1班2016/9/22星期四第3节“数学”由“阮自力上信息技术”"}]}
 
 
 

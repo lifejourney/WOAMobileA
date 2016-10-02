@@ -77,7 +77,7 @@ static NSDictionary *__actionMapDict = nil;
       
       @(WOAActionType_TeacherQueryBusinessTableList):       @[@"TeacherQueryBusinessTableList",
                                                               @"getTeacherTableList"],
-      @(WOAContenType_TeacherPickerBusinessTableItem):      @[@"TeacherPickerBusinessTableItem",
+      @(WOAContenType_TeacherPickBusinessTableItem):        @[@"TeacherPickBusinessTableItem",
                                                               @""],
       @(WOAActionType_TeacherCreateBusinessItem):           @[@"TeacherCreateBusinessItem",
                                                               @"getTeacherTable"],
@@ -91,8 +91,12 @@ static NSDictionary *__actionMapDict = nil;
       
       @(WOAActionType_TeacherQueryMySubject):               @[@"TeacherQueryMySubject",
                                                               @"mySubjectQuery"],
+      @(WOAActionType_TeacherPickSubjectQueryItem):         @[@"TeacherPickSubjectQueryItem",
+                                                              @""],
       @(WOAActionType_TeacherQueryAvailableTakeover):       @[@"TeacherQueryAvailableTakeover",
                                                               @"getAvailableSubject"],
+      @(WOAActionType_TeacherPickTakeoverReason):           @[@"TeacherPickTakeoverReason",
+                                                              @""],
       @(WOAActionType_TeacherSubmitTakeover):               @[@"TeacherSubmitTakeover",
                                                               @"changeSubject"],
       

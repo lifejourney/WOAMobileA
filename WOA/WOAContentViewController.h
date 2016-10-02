@@ -39,6 +39,8 @@
 
 @interface WOAContentViewController : UIViewController
 
+@property (nonatomic, strong, readonly) WOAContentModel *contentModel;
+
 + (instancetype) contentViewController: (WOAContentModel*)contentModel //WOAContentModel values in contentArray
                               delegate: (NSObject<WOAContentViewControllerDelegate, WOAUploadAttachmentRequestDelegate>*)delegate;
 
