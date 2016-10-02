@@ -705,6 +705,10 @@
     {
         itemValue = self.itemModel.tableAcountID; //Todo
     }
+    else if (dataType == WOAPairDataType_TextArea)
+    {
+        itemValue = self.lineTextView.text;
+    }
     else if (!isWritable && (dataType == WOAPairDataType_Normal))
     {
         itemValue = self.lineLabel.text;

@@ -16,6 +16,7 @@
 #import "WOARequestManager.h"
 #import "WOATeacherPacketHelper.h"
 #import "WOAPropertyInfo.h"
+#import "WOALayout.h"
 #import "NSString+Utility.h"
 
 
@@ -27,6 +28,7 @@
  OA: process style
  Business: submit fill table.
  submit Takeover
+ 删除评语，server没有真正删除.
  
  Question:
  调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
@@ -139,8 +141,17 @@
 - (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
                                   navVC: (UINavigationController*)navVC
 {
-    if (actionType == WOAActionType_TeacherSubmitTakeover)
+    if (actionType == WOAActionType_TeacherSubmitTakeover
+        || actionType == WOAActionType_TeacherSubmitCommentCreate1
+        || actionType == WOAActionType_TeacherSubmitCommentDelete)
     {
+        [navVC popViewControllerAnimated: NO];
+        [navVC popViewControllerAnimated: YES];
+    }
+    else if (actionType == WOAActionType_TeacherSubmitCommentCreate2
+             || actionType == WOAActionType_TeacherSubmitCommentUpdate)
+    {
+        [navVC popViewControllerAnimated: NO];
         [navVC popViewControllerAnimated: NO];
         [navVC popViewControllerAnimated: YES];
     }
@@ -795,7 +806,7 @@
                                                                                   relatedDict: nil];
          subVC.shouldShowSearchBar = YES;
          subVC.cellStyleForDictValue = UITableViewCellStyleValue1;
-         //subVC.textLabelFont = [UIFont fontWithName: @"Arial" size: 12.0F];
+         //subVC.textLabelFont = [WOALayout flowCellTextFont];
          
          [ownerNavC pushViewController: subVC animated: YES];
      }];
@@ -1053,7 +1064,7 @@
          WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
                                                                                      delegate: self
                                                                                   relatedDict: nil];
-         subVC.textLabelFont = [UIFont fontWithName: @"Arial" size: 12.0F];
+         subVC.textLabelFont = [WOALayout flowCellTextFont];
          subVC.rowHeight = 120;
          
          [ownerNavC pushViewController: subVC animated: YES];
@@ -1070,7 +1081,7 @@
     
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
-                                                                             message: @"请选择您要的操作."
+                                                                             message: @"请选择您需要的操作： "
                                                                       preferredStyle: UIAlertControllerStyleAlert];
     
     UIAlertAction *alertActionAccept = [UIAlertAction actionWithTitle: @"审核不通过"
@@ -1097,9 +1108,9 @@
                                                              
                                                          }];
     
+    [alertController addAction: cancelAction];
     [alertController addAction: alertActionAccept];
     [alertController addAction: alertActionReject];
-    [alertController addAction: cancelAction];
     
     [self presentViewController: alertController
                        animated: YES
@@ -1157,7 +1168,7 @@
                                                                                                      delegate: self
                                                                                                   relatedDict: nil];
                          subVC.shouldShowSearchBar = YES;
-                         subVC.textLabelFont = [UIFont fontWithName: @"Arial" size: 12.0F];
+                         subVC.textLabelFont = [WOALayout flowCellTextFont];
                          
                          [ownerNavC pushViewController: subVC animated: YES];
                      }];
@@ -1235,7 +1246,6 @@
          
          [navVC pushViewController: subVC animated: YES];
      }];
-    
 }
 
 - (void) tchrQueryMeritPay
@@ -1292,8 +1302,280 @@
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType pairActionType = WOAActionType_TeacherGetCommentStudents;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrGradeClassInfo: responseContent.bodyDictionary
+                                                                      pairActionType: pairActionType];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择班级"
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionary];
+         [contentRelatedDict setValue: vcTitle forKey: KWOAKeyForActionTitle];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: contentRelatedDict];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
+
+- (void) onTchrGetCommentStudents: (WOANameValuePair *)selectedPair
+                      relatedDict: (NSDictionary *)relatedDict
+                            navVC: (UINavigationController *)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType pairActionType = WOAActionType_TeacherPickCommentStudent;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrGetCommentStudents: responseContent.bodyDictionary
+                                                                             actionTypeA: pairActionType
+                                                                             actionTypeB: WOAActionType_TeacherPickCommentItem];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择学生"
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: relatedDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+         
+     }];
+}
+
+- (void) onTchrPickCommentStudent: (WOANameValuePair *)selectedPair
+                      relatedDict: (NSDictionary *)relatedDict
+                            navVC: (UINavigationController *)navVC
+{
+    NSArray *commentArray = selectedPair.subArray;
+    
+    NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [contentRelatedDict addEntriesFromDictionary: selectedPair.subDictionary];
+    
+    if ([commentArray count] > 0)
+    {
+        NSArray *pairArray = selectedPair.subArray;
+        
+        NSString *contentTitle = relatedDict[KWOAKeyForActionTitle];
+        
+        WOAContentModel *contentModel = [WOAContentModel contentModel: contentTitle
+                                                            pairArray: pairArray
+                                                         contentArray: nil
+                                                           actionType: WOAActionType_TeacherCreateStudentComment2
+                                                           actionName: @"添加评语"
+                                                           isReadonly: YES
+                                                              subDict: contentRelatedDict];
+        
+        WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                    delegate: self
+                                                                                 relatedDict: contentRelatedDict];
+        subVC.textLabelFont = [WOALayout flowCellTextFont];
+        subVC.rowHeight = 60;
+        
+        [navVC pushViewController: subVC animated: YES];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                                 message: @"该学生目前无评价，是否添加一条评价?"
+                                                                          preferredStyle: UIAlertControllerStyleAlert];
+        
+        UIAlertAction *acceptAction = [UIAlertAction actionWithTitle: @"添加"
+                                                               style: UIAlertActionStyleDefault
+                                                             handler: ^(UIAlertAction * _Nonnull action)
+                                            {
+                                                [self onTchrEditStudentComment: WOAActionType_TeacherCreateStudentComment1
+                                                                   relatedDict: contentRelatedDict
+                                                                         navVC: navVC];
+                                            }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                               style: UIAlertActionStyleCancel
+                                                             handler:^(UIAlertAction * _Nonnull action) {
+                                                                 
+                                                             }];
+        
+        [alertController addAction: cancelAction];
+        [alertController addAction: acceptAction];
+        
+        [self presentViewController: alertController
+                           animated: YES
+                         completion: nil];
+    }
+}
+
+- (void) onTchrPickCommentItem: (WOANameValuePair *)selectedPair
+                   relatedDict: (NSDictionary *)relatedDict
+                         navVC: (UINavigationController *)navVC
+{
+    NSDictionary *pairValue = (NSDictionary*)selectedPair.value;
+    NSString *evalItemID = pairValue[kWOASrvKeyForStdEvalItemID_Post];
+    NSString *evalContent = pairValue[kWOASrvKeyForStdEvalItemContent_Post];
+    
+    NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [contentRelatedDict addEntriesFromDictionary: selectedPair.subDictionary];
+    [contentRelatedDict setValue: evalItemID forKey: kWOASrvKeyForStdEvalItemID_Post];
+    [contentRelatedDict setValue: evalContent forKey: kWOASrvKeyForStdEvalItemContent_Post];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                             message: @"请选择您需要的操作： "
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *editAction = [UIAlertAction actionWithTitle: @"编辑评语"
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: ^(UIAlertAction * _Nonnull action)
+                                        {
+                                            [self onTchrEditStudentComment: WOAActionType_TeacherSubmitCommentUpdate
+                                                               relatedDict: contentRelatedDict
+                                                                     navVC: navVC];
+                                        }];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle: @"删除评语"
+                                                           style: UIAlertActionStyleDefault
+                                                         handler: ^(UIAlertAction * _Nonnull action)
+                                        {
+                                            [self onTchrSubmitCommentDelete: selectedPair
+                                                                relatedDict: contentRelatedDict
+                                                                      navVC: navVC];
+                                        }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    [alertController addAction: cancelAction];
+    [alertController addAction: deleteAction];
+    [alertController addAction: editAction];
+    
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
+}
+
+- (void) onTchrEditStudentComment: (WOAActionType)actionType
+                      relatedDict: (NSDictionary *)relatedDict
+                            navVC: (UINavigationController *)navVC
+{
+    NSString *studentName = relatedDict[kWOASrvKeyForStdEvalStudentName];
+    NSString *evalContent = relatedDict[kWOASrvKeyForStdEvalItemContent_Post];
+    
+    WOAActionType pairActionType;
+    NSString *sectionTitle;
+    if (actionType == WOAActionType_TeacherCreateStudentComment1)
+    {
+        pairActionType = WOAActionType_TeacherSubmitCommentCreate1;
+        
+        sectionTitle = @"添加评语";
+    }
+    else if (actionType == WOAActionType_TeacherCreateStudentComment2)
+    {
+        pairActionType = WOAActionType_TeacherSubmitCommentCreate2;
+        
+        sectionTitle = @"添加评语";
+    }
+    else
+    {
+        pairActionType = WOAActionType_TeacherSubmitCommentUpdate;
+        
+        sectionTitle = @"编辑评语";
+    }
+    
+    NSMutableArray *pairArray = [NSMutableArray array];
+    WOANameValuePair *pair;
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    pair = [WOANameValuePair pairWithName: studentName
+                                    value: evalContent
+                                 dataType: WOAPairDataType_TextArea];
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    //NSString *contentTitle = relatedDict[KWOAKeyForActionTitle];
+    
+    WOAContentModel *sectionModel = [WOAContentModel contentModel: sectionTitle
+                                                        pairArray: pairArray
+                                                       actionType: pairActionType
+                                                       isReadonly: NO];
+    
+    WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                     contentArray: @[sectionModel]
+                                                       actionType: pairActionType
+                                                       actionName: @"提交"
+                                                       isReadonly: NO
+                                                          subDict: relatedDict];
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onTchrSubmitCommentEdit: (WOAActionType)actionType
+                    contentModel: (NSDictionary*)contentModel
+                     relatedDict: (NSDictionary *)relatedDict
+                           navVC: (UINavigationController *)navVC
+{
+    NSString *studentComment = @"";
+    NSString *studentName = relatedDict[kWOASrvKeyForStdEvalStudentName];
+    
+    NSArray *groupItemArray = contentModel[kWOASrvKeyForItemArrays];
+    for (NSArray *itemDictArray in groupItemArray)
+    {
+        for (NSDictionary *itemDict in itemDictArray)
+        {
+            NSString *itemName = itemDict[kWOASrvKeyForItemName];
+            
+            if ([itemName isEqualToString: studentName])
+            {
+                studentComment = itemDict[kWOASrvKeyForItemValue];
+            }
+        }
+    }
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: studentComment forKey: kWOASrvKeyForStdEvalItemContent_Post];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
+     }];
+}
+
+
+- (void) onTchrSubmitCommentDelete: (WOANameValuePair *)selectedPair
+                       relatedDict: (NSDictionary *)relatedDict
+                             navVC: (UINavigationController *)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    
+    WOAActionType actionType = WOAActionType_TeacherSubmitCommentDelete;
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已删除."
+                                    navVC: navVC];
+     }];
+}
+
 
 #pragma mark -
 
@@ -1368,7 +1650,9 @@
                                 relatedDict: (NSDictionary*)relatedDict
                                       navVC: (UINavigationController*)navVC
 {
-    switch (selectedPair.actionType)
+    WOAActionType actionType = selectedPair.actionType;
+    
+    switch (actionType)
     {
         case WOAActionType_TeacherProcessOAItem:
         {
@@ -1488,6 +1772,40 @@
                                   navVC: navVC];
             break;
         }
+        
+        ////////////////////////////////////////
+        case WOAActionType_TeacherGetCommentStudents:
+        {
+            [self onTchrGetCommentStudents: selectedPair
+                               relatedDict: relatedDict
+                                     navVC: navVC];
+            break;
+        }
+        
+        case WOAActionType_TeacherPickCommentStudent:
+        {
+            [self onTchrPickCommentStudent: selectedPair
+                               relatedDict: relatedDict
+                                     navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherPickCommentItem:
+        {
+            [self onTchrPickCommentItem: selectedPair
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherCreateStudentComment1:
+        case WOAActionType_TeacherCreateStudentComment2:
+        {
+            [self onTchrEditStudentComment: actionType
+                               relatedDict: relatedDict
+                                     navVC: navVC];
+            break;
+        }
         ////////////////////////////////////////
         case WOAActionType_FlowDone:
         {
@@ -1500,6 +1818,28 @@
     }
 }
 
+- (void) singlePickerViewControllerSubmit: (WOAContentModel*)contentModel
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC
+{
+    WOAActionType actionType = contentModel.actionType;
+    
+    switch (actionType)
+    {
+        case WOAActionType_TeacherCreateStudentComment1:
+        case WOAActionType_TeacherCreateStudentComment2:
+        {
+            [self onTchrEditStudentComment: actionType
+                               relatedDict: relatedDict
+                                     navVC: navVC];
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+}
 #pragma mark - WOAContentViewControllerDelegate
 
 - (void) contentViewController: (WOAContentViewController*)vc
@@ -1538,6 +1878,17 @@
                           contentModel: contentModel
                            relatedDict: vc.contentModel.subDict
                                  navVC: vc.navigationController];
+            break;
+        }
+            
+        case WOAActionType_TeacherSubmitCommentCreate1:
+        case WOAActionType_TeacherSubmitCommentCreate2:
+        case WOAActionType_TeacherSubmitCommentUpdate:
+        {
+            [self onTchrSubmitCommentEdit: actionType
+                             contentModel: contentModel
+                              relatedDict: vc.contentModel.subDict
+                                    navVC: vc.navigationController];
             break;
         }
             

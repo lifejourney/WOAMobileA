@@ -106,7 +106,7 @@
     return dateStrArray;
 }
 
-- (NSString*) idFromCombinedString: (NSString*)srcString
++ (NSString*) idFromCombinedString: (NSString*)srcString
 {
     NSString *retStr = @"";
     
@@ -119,7 +119,7 @@
     return retStr;
 }
 
-- (NSString*) nameFromCombinedString: (NSString*)srcString
++ (NSString*) nameFromCombinedString: (NSString*)srcString
 {
     NSString *retStr = @"";
     
@@ -1014,6 +1014,123 @@
 
 #pragma mark - Student Manage
 
++ (NSArray*) pairArrayForTchrGradeClassInfo: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *gradePairArray = [NSMutableArray array];
+    
+    NSArray *gradeDictArray = respDict[kWOASrvKeyForStdEvalClassItems];
+    for (NSDictionary *gradeDict in gradeDictArray)
+    {
+        NSString *gradeInfo = gradeDict[kWOASrvKeyForStdEvalGradeInfo];
+        //NSString *gradeID = [self idFromCombinedString: gradeInfo];
+        NSString *gradeName = [self nameFromCombinedString: gradeInfo];
+        
+        NSMutableArray *classPairArray = [NSMutableArray array];
+        
+        NSArray *classInforray = gradeDict[kWOASrvKeyForStdEvalClassInfoArray];
+        for (NSString *classInfo in classInforray)
+        {
+            NSString *classID = [self idFromCombinedString: classInfo];
+            NSString *className = [self nameFromCombinedString: classInfo];
+            
+            NSMutableDictionary *classSubInfo = [NSMutableDictionary dictionary];
+            [classSubInfo setValue: classID forKey: kWOASrvKeyForStdEvalClassID];
+            [classSubInfo setValue: className forKey: kWOASrvKeyForStdEvalClassName];
+            
+            WOANameValuePair *classPair = [WOANameValuePair pairWithName: className
+                                                                   value: classID
+                                                              actionType: pairActionType];
+            classPair.subDictionary = classSubInfo;
+            
+            [classPairArray addObject: classPair];
+        }
+        
+        WOAContentModel *gradeContent = [WOAContentModel contentModel: gradeName
+                                                            pairArray: classPairArray
+                                                           actionType: pairActionType
+                                                           isReadonly: YES];
+        
+        WOANameValuePair *gradePair = [WOANameValuePair pairWithName: gradeName
+                                                               value: gradeContent
+                                                            dataType: WOAPairDataType_ContentModel
+                                                          actionType: pairActionType];
+        [gradePairArray addObject: gradePair];
+    }
+    
+    return gradePairArray;
+}
+
++ (NSArray*) pairArrayForTchrGetCommentStudents: (NSDictionary*)respDict
+                                    actionTypeA: (WOAActionType)actionTypeA
+                                    actionTypeB: (WOAActionType)actionTypeB
+{
+    NSMutableArray *studentPairArray = [NSMutableArray array];
+    
+    NSArray *studentDictArray = respDict[kWOASrvKeyForStdEvalStudentList];
+    for (NSDictionary *studentDict in studentDictArray)
+    {
+        NSString *studentID = studentDict[kWOASrvKeyForStdEvalStudentID];
+        NSString *studentName = studentDict[kWOASrvKeyForStdEvalStudentName];
+        
+        NSMutableArray *evalPairArray = [NSMutableArray array];
+        
+        NSArray *evalItemArray = studentDict[kWOASrvKeyForStdEvalStudentEvals];
+        for (NSArray *evalInfoArray in evalItemArray)
+        {
+            NSString *evalItemID = @"";
+            NSString *evalDate = @"";
+            NSString *evalContent = @"";
+            
+            for (NSInteger evalIndex = 0; evalIndex < evalInfoArray.count; evalIndex++)
+            {
+                if (evalIndex == 0)
+                {
+                    evalItemID = evalInfoArray[evalIndex];
+                }
+                else if (evalIndex == 1)
+                {
+                    evalDate = evalInfoArray[evalIndex];
+                }
+                else if (evalIndex == 2)
+                {
+                    evalContent = evalInfoArray[evalIndex];
+                }
+            }
+            
+            NSString *combinedEvalTitle = [NSString stringWithFormat: @"日期: %@", evalDate];
+            NSString *combinedEvalContent = [NSString stringWithFormat: @"评语: %@", evalContent];
+            
+            NSMutableDictionary *evalPairValue = [NSMutableDictionary dictionary];
+            [evalPairValue setValue: combinedEvalContent forKey: kWOAKeyForSubValue];
+            [evalPairValue setValue: evalItemID forKey: kWOASrvKeyForStdEvalItemID_Post];
+            [evalPairValue setValue: evalContent forKey: kWOASrvKeyForStdEvalItemContent_Post];
+            
+            WOANameValuePair *evalPair = [WOANameValuePair pairWithName: combinedEvalTitle
+                                                                  value: evalPairValue
+                                                               dataType: WOAPairDataType_Dictionary
+                                                             actionType: actionTypeB];
+            
+            [evalPairArray addObject: evalPair];
+        }
+        
+        NSMutableDictionary *studentRelatedInfo = [NSMutableDictionary dictionary];
+        [studentRelatedInfo setValue: studentID forKey: kWOASrvKeyForStdEvalStudentID];
+        [studentRelatedInfo setValue: studentName forKey: kWOASrvKeyForStdEvalStudentName];
+        
+        NSString *combinedStudentTitle = [NSString stringWithFormat: @"%@ (%ld)", studentName, (long)[evalItemArray count]];
+        
+        WOANameValuePair *studentPair = [WOANameValuePair pairWithName: combinedStudentTitle
+                                                                 value: studentID
+                                                            actionType: actionTypeA];
+        studentPair.subDictionary = studentRelatedInfo;
+        studentPair.subArray = evalPairArray;
+        
+        [studentPairArray addObject: studentPair];
+    }
+    
+    return studentPairArray;
+}
 
 @end
 

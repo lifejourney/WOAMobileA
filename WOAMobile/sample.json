@@ -369,6 +369,27 @@
                                                "153,11","154,22"]}]}
 
 
+{"head":{
+    "msgType":"evaluationClass","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "gradeName":"初三年",
+    "className":"2班",
+    "studentItems":[
+                    {"seatNo":"1",
+                    "name":"洪咏馨",
+                    "index":"hyx",
+                    "studentID":"11830",
+                    "eval":[
+                            ["103","2016/9/26 18:50:59","u"],
+                            ["99","2016/9/24 20:53:10","assssssssbbbbbbbcccvc"],
+                            ["96","2016/9/24 20:47:41","142356978"]]},
+                    {"seatNo":"3","name":"顾锦楠","index":"gjn","studentID":"11802","eval":[
+                    ]},
+                    {"seatNo":"54","name":"何俊轩","index":"hjh","studentID":"12187","eval":[
+                    ]},
+                    {"seatNo":"56","name":"蔡抒涵","index":"csh","studentID":"12218","eval":[
+                    ]}]}
 
 
 

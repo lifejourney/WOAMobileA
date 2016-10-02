@@ -39,4 +39,6 @@
 + (UILabel*) lableForNavigationTitleView: (NSString*)text;
 + (UIBarButtonItem*) backBarButtonItemWithTarget:(id)target action:(SEL)action;
 
++ (UIFont*) flowCellTextFont;
+
 @end

@@ -91,4 +91,9 @@
     return barButtonItem;
 }
 
++ (UIFont*) flowCellTextFont
+{
+    return [UIFont fontWithName: @"Arial" size: 12.0F];
+}
+
 @end

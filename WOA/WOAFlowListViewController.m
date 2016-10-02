@@ -19,6 +19,7 @@
                                         UISearchBarDelegate>
 
 @property (nonatomic, weak) NSObject<WOASinglePickerViewControllerDelegate> *delegate;
+@property (nonatomic, strong) WOAContentModel *contentModel;
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UITableView *tableView;
@@ -45,6 +46,7 @@
     WOAFlowListViewController *vc = [[WOAFlowListViewController alloc] init];
     
     vc.delegate = delegate;
+    vc.contentModel = contentModel;
     vc.title = contentModel.groupTitle;
     vc.allRootPairArray = contentModel.pairArray;
     vc.relatedDict = relatedDict;
@@ -111,6 +113,18 @@
     [super viewDidLoad];
     
     self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: self.title];
+    
+    if (self.contentModel.actionName)
+    {
+        UIBarButtonItem *rightBarButtonItem;
+        rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: self.contentModel.actionName
+                                                              style: UIBarButtonItemStylePlain
+                                                             target: self
+                                                             action: @selector(onRightButtonAction:)];
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    }
+    
+    
     UITableViewStyle tableViewStyle = (self.isAllContentModePair ? UITableViewStyleGrouped : UITableViewStylePlain);
     
     //TO-DO
@@ -154,6 +168,19 @@
 - (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+}
+
+#pragma mark -
+
+- (void) onRightButtonAction: (id)sender
+{
+    if (self.delegate
+        && [self.delegate respondsToSelector: @selector(singlePickerViewControllerSubmit:relatedDict:navVC:)])
+    {
+        [self.delegate singlePickerViewControllerSubmit: self.contentModel
+                                            relatedDict: self.relatedDict
+                                                  navVC: self.navigationController];
+    }
 }
 
 #pragma mark - table view datasource

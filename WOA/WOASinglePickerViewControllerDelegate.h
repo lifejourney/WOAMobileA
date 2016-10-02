@@ -19,6 +19,10 @@
                                 relatedDict: (NSDictionary*)relatedDict
                                       navVC: (UINavigationController*)navVC;
 
+- (void) singlePickerViewControllerSubmit: (WOAContentModel*)contentModel
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC;
+
 @end
 
 

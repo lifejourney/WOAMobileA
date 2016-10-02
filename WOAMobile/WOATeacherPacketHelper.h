@@ -90,7 +90,11 @@
 
 #pragma mark - Student Manage
 
-
++ (NSArray*) pairArrayForTchrGradeClassInfo: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) pairArrayForTchrGetCommentStudents: (NSDictionary*)respDict
+                                    actionTypeA: (WOAActionType)actionTypeA
+                                    actionTypeB: (WOAActionType)actionTypeB;
 
 @end
 

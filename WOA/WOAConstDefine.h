@@ -111,8 +111,9 @@
 #define kWOASrvKeyForAttdStudentID @"id"
 #define kWOASrvKeyForAttdStudentStatus @"value"
 
+#define kWOASrvKeyForStdEvalClassItems @"classItems"
 #define kWOASrvKeyForStdEvalGradeInfo @"grade"
-#define kWOASrvKeyForStdEvalClassInfo @"class"
+#define kWOASrvKeyForStdEvalClassInfoArray @"class"
 #define kWOASrvKeyForStdEvalClassID @"classID"
 #define kWOASrvKeyForStdEvalClassName @"className"
 #define kWOASrvKeyForStdEvalStudentList @"studentItems"
