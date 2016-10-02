@@ -827,6 +827,35 @@
     return subjectPairArray;
 }
 
++ (NSArray*) itemPairsForTchrQueryTodoTakeover: (NSDictionary*)respDict
+                                pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *takeoverDictArray = respDict[kWOASrvKeyForItemArrays];
+    for (NSDictionary *itemDict in takeoverDictArray)
+    {
+        NSString *itemCode = itemDict[kWOASrvKeyForSubjectChangeCode];
+        NSString *changeStyle = itemDict[kWOASrvKeyForSubjectChangeStyle];
+        NSString *changeReason = itemDict[kWOASrvKeyForSubjectChangeReason];
+        NSString *changeContent = itemDict[kWOASrvKeyForSubjectChangeContent];
+        changeContent = [changeContent stringByReplacingOccurrencesOfString: @"," withString: @",\n"];
+        
+        NSString *combinedSubValue = [NSString stringWithFormat: @"\n%@\n原因: %@", changeStyle, changeReason];
+        NSMutableDictionary *pairDictValue = [NSMutableDictionary dictionary];
+        [pairDictValue setValue: itemCode forKey: kWOASrvKeyForSubjectChangeCode];
+        [pairDictValue setValue: combinedSubValue forKey: kWOAKeyForSubValue];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: changeContent
+                                                          value: pairDictValue
+                                                       dataType: WOAPairDataType_Dictionary
+                                                     actionType: pairActionType];
+        [pairArray addObject: pair];
+    }
+    
+    return pairArray;
+}
+
 #pragma mark-
 
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict

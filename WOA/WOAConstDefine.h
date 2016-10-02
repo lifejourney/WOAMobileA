@@ -70,6 +70,8 @@
 #define kWOASrvKeyForSubjectChangeCode @"changeCode"
 #define kWOASrvKeyForSubjectChangeStyle @"changeStyle"
 #define kWOASrvKeyForSubjectChangeReason @"reason"
+#define kWOASrvKeyForSubjectChangeContent @"content"
+#define kWOASrvKeyForSubjectChangeAdvice @"advice"
 #define kWOASrvKeyForSubjectNewSubjectID @"newSubjectID"
 #define kWOASrvKeyForSubjectNewTeacherID @"newTeacherID"
 

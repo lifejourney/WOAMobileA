@@ -72,6 +72,10 @@
                                 actionTypeB: (WOAActionType)actionTypeB;
 + (NSArray*) itemPairsForTchrQueryAvailableTakeover: (NSDictionary*)respDict
                                      pairActionType: (WOAActionType)pairActionType;
+
++ (NSArray*) itemPairsForTchrQueryTodoTakeover: (NSDictionary*)respDict
+                                pairActionType: (WOAActionType)pairActionType;
+
 #pragma mark -
 
 + (NSArray*) itemPairsForTchrQueryMyConsume: (NSDictionary*)respDict

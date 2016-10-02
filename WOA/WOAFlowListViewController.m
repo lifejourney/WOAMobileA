@@ -71,6 +71,8 @@
         self.shouldShowSearchBar = NO;
         
         self.cellStyleForDictValue = UITableViewCellStyleSubtitle;
+        self.textLabelFont = nil;
+        self.rowHeight = 0;
     }
     
     return self;
@@ -253,6 +255,8 @@
     
     cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.textLabel.numberOfLines = 0;
+    cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.detailTextLabel.numberOfLines = 0;
     
     cell.textLabel.text = titleForRow;
     cell.detailTextLabel.text = subTitle;
@@ -305,7 +309,18 @@
         titleForRow = rootPair.name;
     }
     
-    return (titleForRow && ([titleForRow length] > 0)) ? 44 : 20;
+    CGFloat heightForRow;
+    
+    if (titleForRow && ([titleForRow length] > 0))
+    {
+        heightForRow = (self.rowHeight > 0) ? self.rowHeight : 44;
+    }
+    else
+    {
+        heightForRow = 20;
+    }
+    
+    return heightForRow;
 }
 
 - (void) tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath

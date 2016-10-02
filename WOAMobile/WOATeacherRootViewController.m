@@ -26,6 +26,7 @@
  ToTest:
  OA: process style
  Business: submit fill table.
+ submit Takeover
  
  Question:
  调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
@@ -893,13 +894,10 @@
      }];
 }
 
-
 - (void) onTchrPickTakeoverReason: (WOANameValuePair *)selectedPair
                       relatedDict: (NSDictionary *)relatedDict
                             navVC: (UINavigationController *)navVC
 {
-    WOAActionType pairActionType = selectedPair.actionType;
-    
     NSString *vcTitle = relatedDict[KWOAKeyForActionTitle];
     
     NSMutableDictionary *sectionDictA = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
@@ -945,6 +943,9 @@
     NSString *combiedSubjectValueA = [NSString stringWithFormat: @"%@ %@ %@ %@", subjectDateA, subjectWeekA, subjectStepA, subjectNameA];
     NSString *combiedSubjectValueB = [NSString stringWithFormat: @"%@ %@ %@ %@", subjectDateB, subjectWeekB, subjectStepB, subjectNameB];
     
+    
+    WOAActionType pairActionType = WOAActionType_TeacherSubmitTakeover;
+    
     NSMutableArray *pairArray = [NSMutableArray array];
     WOANameValuePair *pair;
     WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
@@ -983,10 +984,10 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onTchrPickTakeoverReason: (WOAActionType)actionType
-                     contentModel: (NSDictionary*)contentModel
-                      relatedDict: (NSDictionary *)relatedDict
-                            navVC: (UINavigationController *)navVC
+- (void) onTchrSubmitTakeover: (WOAActionType)actionType
+                 contentModel: (NSDictionary*)contentModel
+                  relatedDict: (NSDictionary *)relatedDict
+                        navVC: (UINavigationController *)navVC
 {
     NSString *changeStyle = @"";
     NSString *changeReason = @"";
@@ -1036,6 +1037,88 @@
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType pairActionType = WOAActionType_TeacherApproveTakeover;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryTodoTakeover: responseContent.bodyDictionary
+                                                                         pairActionType: pairActionType];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         subVC.textLabelFont = [UIFont fontWithName: @"Arial" size: 12.0F];
+         subVC.rowHeight = 120;
+         
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrApproveTakeover: (WOANameValuePair *)selectedPair
+                   relatedDict: (NSDictionary *)relatedDict
+                         navVC: (UINavigationController *)navVC
+{
+    NSString *subjectCode = ((NSDictionary*)selectedPair.value)[kWOASrvKeyForSubjectChangeCode];
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: subjectCode forKey: kWOASrvKeyForSubjectChangeCode];
+    
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                             message: @"请选择您要的操作."
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *alertActionAccept = [UIAlertAction actionWithTitle: @"审核不通过"
+                                                                style: UIAlertActionStyleDefault
+                                                              handler: ^(UIAlertAction * _Nonnull action)
+                                        {
+                                            [self tchrApproveTakeover: selectedPair.actionType
+                                                     isApproveAccpept: NO
+                                                       additionalDict: addtDict
+                                                                navVC: navVC];
+                                        }];
+    UIAlertAction *alertActionReject = [UIAlertAction actionWithTitle: @"审核通过"
+                                                                style: UIAlertActionStyleDefault
+                                                              handler: ^(UIAlertAction * _Nonnull action)
+                                        {
+                                            [self tchrApproveTakeover: selectedPair.actionType
+                                                     isApproveAccpept: YES
+                                                       additionalDict: addtDict
+                                                                navVC: navVC];
+                                        }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    [alertController addAction: alertActionAccept];
+    [alertController addAction: alertActionReject];
+    [alertController addAction: cancelAction];
+    
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
+}
+
+- (void) tchrApproveTakeover: (WOAActionType)actionType
+            isApproveAccpept: (BOOL)isApproveAccpept
+              additionalDict: (NSMutableDictionary*)additionalDict
+                       navVC: (UINavigationController *)navVC
+{
+    NSString *adviceString = isApproveAccpept ? @"1" : @"0";
+    [additionalDict setValue: adviceString forKey: kWOASrvKeyForSubjectChangeAdvice];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: additionalDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
      }];
 }
 
@@ -1394,6 +1477,14 @@
                                      navVC: navVC];
             break;
         }
+            
+        case WOAActionType_TeacherApproveTakeover:
+        {
+            [self onTchrApproveTakeover: selectedPair
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+            break;
+        }
         ////////////////////////////////////////
         case WOAActionType_FlowDone:
         {
@@ -1438,12 +1529,12 @@
             break;
         }
             
-        case WOAActionType_TeacherPickTakeoverReason:
+        case WOAActionType_TeacherSubmitTakeover:
         {
-            [self onTchrPickTakeoverReason: actionType
-                              contentModel: contentModel
-                               relatedDict: vc.contentModel.subDict
-                                     navVC: vc.navigationController];
+            [self onTchrSubmitTakeover: actionType
+                          contentModel: contentModel
+                           relatedDict: vc.contentModel.subDict
+                                 navVC: vc.navigationController];
             break;
         }
             
