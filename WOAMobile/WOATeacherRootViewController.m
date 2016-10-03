@@ -22,19 +22,18 @@
 
 /**
  Todo:
- Business: SelectAccount
+ Business: SelectAccount type
  没有选修课的考勤测试
  
  ToTest:
- OA: process style
- Business: submit fill table.
- submit Takeover
+ 服务异常: OA: process style
+ 服务异常: Business: submit fill table.
+ 
  删除评语，server没有真正删除.
  
  Question:
  调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
  调课提交，成功，但是，返回的code = 1.
- 考勤测试好.
  量化评价: 附件上传失败。 附件参数只接受一个。
  */
 
