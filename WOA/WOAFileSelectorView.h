@@ -35,7 +35,9 @@
 @property (nonatomic, weak) id<WOAFileSelectorViewDelegate> delegate;
 
 - (instancetype) initWithFrame: (CGRect)frame
-                      delegate: (id<WOAFileSelectorViewDelegate>)delegate;
+                      delegate: (id<WOAFileSelectorViewDelegate>)delegate
+                 limitMaxCount: (NSUInteger)limitMaxCount
+              displayLineCount: (NSUInteger)displayLineCount;
 
 - (void) fileInfoUpdated;
 

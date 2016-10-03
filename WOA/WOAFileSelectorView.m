@@ -20,6 +20,10 @@
                                     WOAInputTitleViewControllerDelegate,
                                     WOALabelButtonTableViewCellDelegate>
 
+
+@property (nonatomic, assign) NSUInteger displayLineCount;
+@property (nonatomic, assign) NSUInteger limitMaxCount;
+
 @property (nonatomic, strong) UIButton *addButton;
 @property (nonatomic, strong) UITableView *fileList;
 @property (nonatomic, assign) CGFloat itemHeight;
@@ -31,17 +35,22 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame])
+    {
     }
     return self;
 }
 
 - (instancetype) initWithFrame: (CGRect)frame
                       delegate: (id<WOAFileSelectorViewDelegate>)delegate
+                 limitMaxCount: (NSUInteger)limitMaxCount
+              displayLineCount: (NSUInteger)displayLineCount
 {
     if (self = [self initWithFrame: frame])
     {
         self.delegate = delegate;
+        self.limitMaxCount = limitMaxCount;
+        self.displayLineCount = displayLineCount;
         
         UIFont *itemFont = [UIFont systemFontOfSize: kWOALayout_DetailItemFontSize];
         CGSize testSize = [WOALayout sizeForText: @"T" width: 20 font: itemFont];
@@ -66,9 +75,18 @@
         //[_fileList setEditing: YES];
         [self addSubview: _fileList];
         
+        NSUInteger cellCount;
+        if (self.limitMaxCount > 0)
+        {
+            cellCount = MIN(self.displayLineCount, self.limitMaxCount);
+        }
+        else
+        {
+            cellCount = self.displayLineCount;
+        }
         CGFloat addButtonHeight = _itemHeight;
         CGFloat seperatorHeight = 1;
-        CGFloat fileListHeight = _cellHeight  * (3 + 0.5); //half list for prompt that there're more items.
+        CGFloat fileListHeight = _cellHeight  * (cellCount + 0.5); //half list for prompt that there're more items.
         
         CGRect buttonRect = CGRectMake(0, 0, 80, addButtonHeight);
         CGRect fileListRect = CGRectMake(0, addButtonHeight + seperatorHeight, frame.size.width, fileListHeight);
@@ -148,6 +166,25 @@
 
 - (void) onAddButtonClick: (id)sender
 {
+    NSInteger existItemCount = [[self.delegate fileInfoArray] count];
+    if (self.limitMaxCount > 0 && existItemCount >= self.limitMaxCount)
+    {
+        UIViewController *rootVC = [[self.delegate hostNavigation] parentViewController];
+        NSString *alertMessage = [NSString stringWithFormat: @"最多只能 %ld 个附件.", self.limitMaxCount];
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                                 message: alertMessage
+                                                                          preferredStyle: UIAlertControllerStyleAlert];
+        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle: @"确定"
+                                                                style: UIAlertActionStyleDefault
+                                                              handler: nil];
+        [alertController addAction: confirmAction];
+        
+        [rootVC presentViewController: alertController animated: YES completion: nil];
+        
+        return;
+    }
+    
     UIImagePickerControllerSourceType sourceType;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeSavedPhotosAlbum])
         sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;

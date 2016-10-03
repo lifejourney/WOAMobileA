@@ -154,6 +154,20 @@
     [userDefaults synchronize];
 }
 
++ (NSString*) latestWorkID
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [userDefaults stringForKey: @"latestWorkID"];
+}
+
++ (void) saveLatestWorkID: (NSString*)workID
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setValue: workID forKey: @"latestWorkID"];
+    [userDefaults synchronize];
+}
+
 @end
 
 

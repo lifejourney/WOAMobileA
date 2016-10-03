@@ -398,6 +398,7 @@
 - (void) logout
 {
     [WOAPropertyInfo saveLatestSessionID: nil];
+    [WOAPropertyInfo saveLatestWorkID: nil];
     
     [WOAPropertyInfo saveLatestLoginAccountID: nil
                                      password: nil];

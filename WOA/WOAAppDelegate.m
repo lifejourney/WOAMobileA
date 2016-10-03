@@ -41,6 +41,7 @@
         [WOAActionDefine initActionMapDict];
         
         [WOAPropertyInfo saveLatestSessionID: nil];
+        [WOAPropertyInfo saveLatestWorkID: nil];
     }
     
     return self;

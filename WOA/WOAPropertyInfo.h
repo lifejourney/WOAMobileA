@@ -32,4 +32,7 @@
 + (NSString*) latestSessionID;
 + (void) saveLatestSessionID: (NSString*)sessionID;
 
++ (NSString*) latestWorkID;
++ (void) saveLatestWorkID: (NSString*)WorkID;
+
 @end

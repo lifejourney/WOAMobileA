@@ -880,7 +880,6 @@
     [addtDict addEntriesFromDictionary: selectedPair.subDictionary];
     [addtDict setValue: selectedPair.value forKey: kWOASrvKeyForSubjectAvailableDate];
     
-    //TO-DO, to be fixed.
     NSString *teacherID = addtDict[kWOASrvKeyForSubjectTeacherID];
     if ([NSString isEmptyString: teacherID])
     {
@@ -949,7 +948,6 @@
     [sectionDictB setValue: teacherIDA forKey: kWOASrvKeyForSubjectNewTeacherID];
     [sectionDictB setValue: subjectIDA forKey: kWOASrvKeyForSubjectNewSubjectID];
     
-    //TO-DO, to be fixed.
     [sectionDictB setValue: sectionDictA[kWOASrvKeyForGradeID_Post] forKey: kWOASrvKeyForGradeID_Post];
     [sectionDictB setValue: sectionDictA[kWOASrvKeyForSubjectClassID] forKey: kWOASrvKeyForSubjectClassID];
     [sectionDictB setValue: sectionDictA[kWOASrvKeyForSubjectTermName] forKey: kWOASrvKeyForSubjectTermName];
@@ -1028,9 +1026,23 @@
         }
     }
     
-    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-    [addtDict setValue: changeStyle forKey: kWOASrvKeyForSubjectChangeStyle];
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
     [addtDict setValue: changeReason forKey: kWOASrvKeyForSubjectChangeReason];
+    
+    if ([changeStyle isEqualToString: @"代课"])
+    {
+        NSArray *itemArray = relatedDict[kWOASrvKeyForItemArrays];
+        
+        NSMutableArray *newItemArray = [NSMutableArray array];
+        [newItemArray addObject: [itemArray firstObject]];
+        
+        [addtDict setValue: newItemArray forKey: kWOASrvKeyForItemArrays];
+    }
+    else
+    {
+        [addtDict addEntriesFromDictionary: relatedDict];
+    }
+    
     
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
                                                    additionalDict: addtDict
@@ -1920,6 +1932,7 @@
     [pairArray addObject: pair];
     pair = [WOANameValuePair pairWithName: @"附件" value: @"" dataType: WOAPairDataType_AttachFile];
     pair.isWritable = YES;
+    pair.listMaxCount = 1;
     [pairArray addObject: pair];
     [pairArray addObject: seperatorPair];
     
@@ -2028,6 +2041,13 @@
             }
         }
     }
+    NSString *attFileUrl = @"";
+    if ([evalAttfile count] > 0)
+    {
+        NSDictionary *attFileInfo = [evalAttfile firstObject];
+        
+        attFileUrl = attFileInfo[kWOASrvKeyForAttachmentUrl];
+    }
     
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict removeObjectForKey: kWOASrvKeyForQutEvalStudentID];
@@ -2043,7 +2063,7 @@
     [studentInfoDict setValue: studentID forKey: kWOASrvKeyForQutEvalStudentID];
     [studentInfoDict setValue: evalScore forKey: kWOASrvKeyForQutEvalItemScore_Post];
     [studentInfoDict setValue: evalComment forKey: kWOASrvKeyForQutEvalComment];
-    [studentInfoDict setValue: evalAttfile forKey: kWOASrvKeyForQutEvalAttfile];
+    [studentInfoDict setValue: attFileUrl forKey: kWOASrvKeyForQutEvalAttfile];
     NSArray *studentInfoArray = @[studentInfoDict];
     [addtDict setValue: studentInfoArray forKey: @"scoreItems"];
     
@@ -2079,6 +2099,7 @@
         [itemDict setValue: fileFullPath forKey:kWOASrvKeyForAttachmentFilePath];
         [itemDict setValue: title forKey: kWOASrvKeyForSendAttachmentTitle];
         [itemDict setValue: itemID forKey: kWOASrvKeyForItemID];
+        [itemDict setValue: [WOAPropertyInfo latestWorkID] forKey: kWOASrvKeyForWorkID];
         
         NSDictionary *bodyDict = [WOATeacherPacketHelper packetForSimpleQuery: WOAActionType_UploadAttachment
                                                                additionalDict: itemDict];

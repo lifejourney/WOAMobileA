@@ -414,7 +414,9 @@
             {
                 
                 NSString *sessionID = [WOAPacketHelper sessionIDFromPacketDictionary: bodyDictionary];
+                NSString *workID = [WOAPacketHelper workIDFromPacketDictionary: bodyDictionary];
                 [WOAPropertyInfo saveLatestSessionID: sessionID];
+                [WOAPropertyInfo saveLatestWorkID: workID];
                 
                 [WOARequestContent setLatestRequestLoginContent: self.initialRequestContent];
             }
@@ -447,6 +449,7 @@
     else if (requestResult == WOAHTTPRequestResult_InvalidSession)
     {
         [WOAPropertyInfo saveLatestSessionID: nil];
+        [WOAPropertyInfo saveLatestWorkID: nil];
         
         if (self.currentActionType == self.finalResponseContent.actionType)
         {

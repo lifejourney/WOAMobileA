@@ -24,6 +24,7 @@
 @property (nonatomic, strong) UINavigationController *hostNavigation;
 
 @property (nonatomic, assign) CGFloat minTextAreaHeight;
+@property (nonatomic, assign) NSUInteger limitListMaxCount;
 
 @property (nonatomic, strong) NSMutableArray *imageFullFileNameArray;
 @property (nonatomic, strong) NSMutableArray *imageTitleArray;

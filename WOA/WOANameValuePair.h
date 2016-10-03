@@ -58,8 +58,11 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 //For selective list, it's array of string.
 //Also use it as a carried item to pass to next step.
 @property (nonatomic, strong) NSArray *subArray;
+//For reference list
+@property (nonatomic, strong) NSDictionary *subDictionary;
 
-@property (nonatomic, strong) NSDictionary *subDictionary; //For reference list
+//Special for some data type
+@property (nonatomic, assign) NSInteger listMaxCount;
 
 + (instancetype) pairFromPair: (WOANameValuePair*)fromPair;
 

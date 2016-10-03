@@ -58,6 +58,7 @@
     if (self = [super initWithFrame:frame])
     {
         self.minTextAreaHeight = 80.f;
+        self.limitListMaxCount = 0;
         
         self.imageFullFileNameArray = [[NSMutableArray alloc] initWithCapacity: 3];
         self.imageTitleArray = [[NSMutableArray alloc] initWithCapacity: 3];
@@ -270,6 +271,7 @@
         self.indexPath = indexPath;
         self.itemModel = itemModel;
         self.isHostReadonly = isHostReadonly;
+        self.limitListMaxCount = itemModel.listMaxCount;
         
         WOAPairDataType pairDataType = itemModel.dataType;
         NSString *itemTitle = itemModel.name;
@@ -368,7 +370,9 @@
                 pairDataType == WOAPairDataType_ImageAttachFile)
             {
                 self.fileSelectorView = [[WOAFileSelectorView alloc] initWithFrame: initiateFrame
-                                                                          delegate: self];
+                                                                          delegate: self
+                                                                     limitMaxCount: self.itemModel.listMaxCount
+                                                                  displayLineCount: 3];
                 
                 [self addSubview: _fileSelectorView];
             }
