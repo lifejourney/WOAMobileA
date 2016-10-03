@@ -94,17 +94,9 @@
 
 #pragma mark -
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-    }
-    return self;
-}
-
 - (instancetype) init
 {
-    if (self = [self initWithNibName: nil bundle: nil])
+    if (self = [super init])
     {
         self.shouldShowBackBarItem = YES;
     }

@@ -19,10 +19,7 @@
                                             WOAListViewControllerDelegate,
                                             VSPopoverControllerDelegate>
 
-@property (nonatomic, weak) NSObject<WOASinglePickerViewControllerDelegate> *delegate;
-
 @property (nonatomic, strong) UITextField *filterTextField;
-@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) VSPopoverController *filterPopoperVC;
 
 @property (nonatomic, assign) NSInteger selectedCategory;
@@ -36,7 +33,7 @@
 @implementation WOAFilterListViewController
 
 + (instancetype) filterListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
-                                 delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
+                                 delegate: (NSObject<WOASinglePickViewControllerDelegate> *)delegate
                               relatedDict: (NSDictionary*)relatedDict
 {
     WOAFilterListViewController *vc = [[WOAFilterListViewController alloc] init];
@@ -47,17 +44,9 @@
     return vc;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-    }
-    return self;
-}
-
 - (instancetype) init
 {
-    if (self = [self initWithNibName: nil bundle: nil])
+    if (self = [super init])
     {
         self.shouldShowBackBarItem = YES;
         
@@ -104,10 +93,10 @@
     [self.view addSubview: _filterTextField];
     
     self.tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview: _tableView];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview: self.tableView];
     
     CGRect selfRect = self.view.frame;
     CGRect navRect = self.navigationController.navigationBar.frame;
@@ -124,7 +113,7 @@
                                         contentTopMargin + buttonTopMargin,
                                         selfRect.size.width - kWOALayout_DefaultLeftMargin - kWOALayout_DefaultRightMargin,
                                         buttonHeight);
-    _tableView.frame = CGRectMake(0, listOriginY, selfRect.size.width, selfRect.size.height - listOriginY - tabbarHeight);
+    self.tableView.frame = CGRectMake(0, listOriginY, selfRect.size.width, selfRect.size.height - listOriginY - tabbarHeight);
     
     [self.tableView reloadData];
 }
@@ -181,16 +170,17 @@
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
     
     if (self.delegate &&
-        [self.delegate respondsToSelector: @selector(singlePickerViewControllerSelected:selectedPair:relatedDict:navVC:)])
+        [self.delegate respondsToSelector: @selector(singlePickViewControllerSelected:indexPath:selectedPair:relatedDict:navVC:)])
     {
         WOANameValuePair *groupPair = self.contentModel.pairArray[_selectedCategory];
         WOAContentModel *groupValue =(WOAContentModel*)groupPair.value;
         WOANameValuePair *itemPair = groupValue.pairArray[indexPath.row];
         
-        [self.delegate singlePickerViewControllerSelected: indexPath
-                                             selectedPair: itemPair
-                                              relatedDict: self.relatedDict
-                                                    navVC: self.navigationController];
+        [self.delegate singlePickViewControllerSelected: self
+                                              indexPath: indexPath
+                                           selectedPair: itemPair
+                                            relatedDict: self.relatedDict
+                                                  navVC: self.navigationController];
     }
 }
 
@@ -224,11 +214,11 @@
 {
     [self.filterPopoperVC dismissPopoverAnimated: YES];
     
-    _tableView.delegate = nil;
+    self.tableView.delegate = nil;
     self.selectedCategory = row;
-    _tableView.delegate = self;
+    self.tableView.delegate = self;
     
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void) popoverControllerDidDismissPopover: (VSPopoverController *)popoverController

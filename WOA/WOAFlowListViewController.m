@@ -18,11 +18,9 @@
 @interface WOAFlowListViewController () <UITableViewDataSource, UITableViewDelegate,
                                         UISearchBarDelegate>
 
-@property (nonatomic, weak) NSObject<WOASinglePickerViewControllerDelegate> *delegate;
 @property (nonatomic, strong) WOAContentModel *contentModel;
 
 @property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *filteredRootPairArray;
 @property (nonatomic, strong) NSArray *allRootPairArray;
@@ -40,7 +38,7 @@
 
 
 + (instancetype) flowListViewController: (WOAContentModel*)contentModel
-                               delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
+                               delegate: (NSObject<WOASinglePickViewControllerDelegate> *)delegate
                             relatedDict: (NSDictionary*)relatedDict
 {
     WOAFlowListViewController *vc = [[WOAFlowListViewController alloc] init];
@@ -56,18 +54,9 @@
     return vc;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (instancetype) init
 {
-    if (self = [self initWithNibName: nil bundle: nil])
+    if (self = [super init])
     {
         self.shouldShowBackBarItem = YES;
         self.shouldShowSearchBar = NO;
@@ -156,11 +145,11 @@
     [self.view addSubview: _searchBar];
     
     self.tableView = [[UITableView alloc] initWithFrame: tableViewRect style: tableViewStyle];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    [self.view addSubview: _tableView];
+    [self.view addSubview: self.tableView];
     
     [self.tableView reloadData];
 }
@@ -175,11 +164,12 @@
 - (void) onRightButtonAction: (id)sender
 {
     if (self.delegate
-        && [self.delegate respondsToSelector: @selector(singlePickerViewControllerSubmit:relatedDict:navVC:)])
+        && [self.delegate respondsToSelector: @selector(singlePickViewControllerSubmit:contentModel:relatedDict:navVC:)])
     {
-        [self.delegate singlePickerViewControllerSubmit: self.contentModel
-                                            relatedDict: self.relatedDict
-                                                  navVC: self.navigationController];
+        [self.delegate singlePickViewControllerSubmit: self
+                                         contentModel: self.contentModel
+                                          relatedDict: self.relatedDict
+                                                navVC: self.navigationController];
     }
 }
 
@@ -354,7 +344,7 @@
 {
     [tableView deselectRowAtIndexPath: indexPath animated: NO];
     
-    if (_delegate && [_delegate respondsToSelector: @selector(singlePickerViewControllerSelected:selectedPair:relatedDict:navVC:)])
+    if (self.delegate && [self.delegate respondsToSelector: @selector(singlePickViewControllerSelected:indexPath:selectedPair:relatedDict:navVC:)])
     {
         WOANameValuePair *selectedPair;
         
@@ -371,10 +361,11 @@
         
         if (![selectedPair isSeperatorPair])
         {
-            [_delegate singlePickerViewControllerSelected: indexPath
-                                             selectedPair: selectedPair
-                                              relatedDict: self.relatedDict
-                                                    navVC: self.navigationController];
+            [self.delegate singlePickViewControllerSelected: self
+                                                  indexPath: indexPath
+                                               selectedPair: selectedPair
+                                                relatedDict: self.relatedDict
+                                                      navVC: self.navigationController];
         }
     }
 }
@@ -386,9 +377,9 @@
     if (!searchText || [searchText length] == 0)
     {
         //TO-DO, could be cancelld? by block.
-        _tableView.delegate = nil;
+        self.tableView.delegate = nil;
         self.filteredRootPairArray = self.allRootPairArray;
-        _tableView.delegate = self;
+        self.tableView.delegate = self;
     }
     else
     {
@@ -426,12 +417,12 @@
         }];
         
         //TO-DO, could be cancelld? by block.
-        _tableView.delegate = nil;
+        self.tableView.delegate = nil;
         self.filteredRootPairArray = [self.allRootPairArray filteredArrayUsingPredicate: predicate];
-        _tableView.delegate = self;
+        self.tableView.delegate = self;
     }
     
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void) searchBarCancelButtonClicked: (UISearchBar *)searchBar

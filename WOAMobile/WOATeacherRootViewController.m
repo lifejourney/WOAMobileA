@@ -49,7 +49,7 @@
  5. Add server setting entry in the login view.
  */
 
-@interface WOATeacherRootViewController() <WOASinglePickerViewControllerDelegate,
+@interface WOATeacherRootViewController() <WOASinglePickViewControllerDelegate,
                                             WOAMultiPickerViewControllerDelegate,
                                             WOAContentViewControllerDelegate,
                                             WOAUploadAttachmentRequestDelegate>
@@ -1952,12 +1952,13 @@
      }];
 }
 
-#pragma mark - delegate for WOASinglePickerViewControllerDelegate
+#pragma mark - delegate for WOASinglePickViewControllerDelegate
 
-- (void) singlePickerViewControllerSelected: (NSIndexPath*)indexPath
-                               selectedPair: (WOANameValuePair*)selectedPair
-                                relatedDict: (NSDictionary*)relatedDict
-                                      navVC: (UINavigationController*)navVC
+- (void) singlePickViewControllerSelected: (WOASinglePickViewController*)vc
+                                indexPath: (NSIndexPath*)indexPath
+                             selectedPair: (WOANameValuePair*)selectedPair
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC
 {
     WOAActionType actionType = selectedPair.actionType;
     
@@ -2160,9 +2161,10 @@
     }
 }
 
-- (void) singlePickerViewControllerSubmit: (WOAContentModel*)contentModel
-                              relatedDict: (NSDictionary*)relatedDict
-                                    navVC: (UINavigationController*)navVC
+- (void) singlePickViewControllerSubmit: (WOASinglePickViewController*)vc
+                           contentModel: (WOAContentModel*)contentModel
+                            relatedDict: (NSDictionary*)relatedDict
+                                  navVC: (UINavigationController*)navVC
 {
     WOAActionType actionType = contentModel.actionType;
     

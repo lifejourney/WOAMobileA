@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		DC1584821C688E6800DF5E7E /* WOAExclusiveSelectListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1584811C688E6800DF5E7E /* WOAExclusiveSelectListViewController.m */; };
 		DC1584851C6EFD1400DF5E7E /* UIView+IndexPathTag.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1584841C6EFD1400DF5E7E /* UIView+IndexPathTag.m */; };
+		DC1E68B41DA203AB00E1FDA3 /* WOASinglePickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1E68B31DA203AB00E1FDA3 /* WOASinglePickViewController.m */; };
+		DC1E68B51DA208CF00E1FDA3 /* WOASinglePickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC1E68B31DA203AB00E1FDA3 /* WOASinglePickViewController.m */; };
 		DC2256F31D8A3CCF006A18E3 /* TabBarBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DC2256E21D8A3CCF006A18E3 /* TabBarBg@2x.png */; };
 		DC2256F41D8A3CCF006A18E3 /* NewWorkFlowSelectedIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DC2256E31D8A3CCF006A18E3 /* NewWorkFlowSelectedIcon@2x.png */; };
 		DC2256F51D8A3CCF006A18E3 /* TodoWorkFlowSelectedIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DC2256E41D8A3CCF006A18E3 /* TodoWorkFlowSelectedIcon@2x.png */; };
@@ -214,6 +216,8 @@
 		DC1584811C688E6800DF5E7E /* WOAExclusiveSelectListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAExclusiveSelectListViewController.m; sourceTree = "<group>"; };
 		DC1584831C6EFD1400DF5E7E /* UIView+IndexPathTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+IndexPathTag.h"; sourceTree = "<group>"; };
 		DC1584841C6EFD1400DF5E7E /* UIView+IndexPathTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+IndexPathTag.m"; sourceTree = "<group>"; };
+		DC1E68B21DA203AB00E1FDA3 /* WOASinglePickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOASinglePickViewController.h; sourceTree = "<group>"; };
+		DC1E68B31DA203AB00E1FDA3 /* WOASinglePickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOASinglePickViewController.m; sourceTree = "<group>"; };
 		DC2256E21D8A3CCF006A18E3 /* TabBarBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TabBarBg@2x.png"; sourceTree = "<group>"; };
 		DC2256E31D8A3CCF006A18E3 /* NewWorkFlowSelectedIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "NewWorkFlowSelectedIcon@2x.png"; sourceTree = "<group>"; };
 		DC2256E41D8A3CCF006A18E3 /* TodoWorkFlowSelectedIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TodoWorkFlowSelectedIcon@2x.png"; sourceTree = "<group>"; };
@@ -300,7 +304,6 @@
 		DC83480D1D97BCE80055B031 /* UITableView+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Utility.m"; sourceTree = "<group>"; };
 		DC8348171D982ACD0055B031 /* WOAFilterListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAFilterListViewController.m; sourceTree = "<group>"; };
 		DC8348181D982ACD0055B031 /* WOAFilterListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WOAFilterListViewController.h; sourceTree = "<group>"; };
-		DC83486C1D9AC1090055B031 /* WOASinglePickerViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOASinglePickerViewControllerDelegate.h; sourceTree = "<group>"; };
 		DC8E9C851C4B481500B66527 /* NSData+HexadecimalRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+HexadecimalRepresentation.h"; sourceTree = "<group>"; };
 		DC8E9C861C4B481500B66527 /* NSData+HexadecimalRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+HexadecimalRepresentation.m"; sourceTree = "<group>"; };
 		DC8E9C871C4B481500B66527 /* NSFileManager+AppFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+AppFolder.h"; sourceTree = "<group>"; };
@@ -597,7 +600,8 @@
 				DC5178F41C81ADC800162F92 /* WOAMultiPickerViewController.m */,
 				DCF0492C1C532AEA00928C08 /* WOASimpleListViewController.h */,
 				DCF0492D1C532B0200928C08 /* WOASimpleListViewController.m */,
-				DC83486C1D9AC1090055B031 /* WOASinglePickerViewControllerDelegate.h */,
+				DC1E68B21DA203AB00E1FDA3 /* WOASinglePickViewController.h */,
+				DC1E68B31DA203AB00E1FDA3 /* WOASinglePickViewController.m */,
 			);
 			name = FunctionViewController;
 			sourceTree = "<group>";
@@ -933,6 +937,7 @@
 				DC2F5D501D9FE7BD0034B1E5 /* NSDate+Utility.m in Sources */,
 				DC22572A1D8A4A8E006A18E3 /* WOAMultiLineLabel.m in Sources */,
 				DC2258951D8D56B1006A18E3 /* WOARequestManager.m in Sources */,
+				DC1E68B41DA203AB00E1FDA3 /* WOASinglePickViewController.m in Sources */,
 				DC22576E1D8CBCBE006A18E3 /* WOAAppDelegate.m in Sources */,
 				DCD5DCAD1D88262F00152071 /* VSPopoverController.m in Sources */,
 				DCD5DCAB1D88262F00152071 /* VSActionSheetPickerView.m in Sources */,
@@ -1012,6 +1017,7 @@
 				DC2F5D511D9FE7BD0034B1E5 /* NSDate+Utility.m in Sources */,
 				DC8E9CE61C4B4FE300B66527 /* WOADateTimePickerViewController.m in Sources */,
 				DC2258961D8D56B1006A18E3 /* WOARequestManager.m in Sources */,
+				DC1E68B51DA208CF00E1FDA3 /* WOASinglePickViewController.m in Sources */,
 				DC8E9CEF1C4B4FE300B66527 /* WOAMultiLineLabel.m in Sources */,
 				DC8E9C981C4B498B00B66527 /* WOALoadingViewController.m in Sources */,
 				DC8E9CEC1C4B4FE300B66527 /* WOALayout.m in Sources */,

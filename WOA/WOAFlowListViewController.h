@@ -7,24 +7,22 @@
 //
 
 #import "WOAContentModel.h"
-#import "WOASinglePickerViewControllerDelegate.h"
+#import "WOASinglePickViewController.h"
 #import <UIKit/UIKit.h>
 
 
-@interface WOAFlowListViewController : UIViewController
+@interface WOAFlowListViewController : WOASinglePickViewController
 
 @property (nonatomic, assign) BOOL shouldShowSearchBar;
-@property (nonatomic, assign) BOOL shouldShowBackBarItem;
 
 @property (nonatomic, assign) UITableViewCellStyle cellStyleForDictValue;
-@property (nonatomic, strong) UIFont *textLabelFont;
 @property (nonatomic, assign) CGFloat rowHeight;
 
 //For contentModel.pairArray
 //If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
 //Else M(T, [Name, Value])
 + (instancetype) flowListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
-                               delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
+                               delegate: (NSObject<WOASinglePickViewControllerDelegate> *)delegate
                             relatedDict: (NSDictionary*)relatedDict;
 
 @end

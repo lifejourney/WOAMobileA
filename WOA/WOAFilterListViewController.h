@@ -7,19 +7,16 @@
 //
 
 #import "WOAContentModel.h"
-#import "WOASinglePickerViewControllerDelegate.h"
+#import "WOASinglePickViewController.h"
 #import <UIKit/UIKit.h>
 
 
-@interface WOAFilterListViewController : UIViewController
-
-@property (nonatomic, assign) BOOL shouldShowBackBarItem;
-@property (nonatomic, strong) UIFont *textLabelFont;
+@interface WOAFilterListViewController : WOASinglePickViewController
 
 //For contentModel.pairArray
 //pairArray[].value is a ContentModel type, it is a grounped list. M(T, [(Name, M(T, [Name, Value]))])
 + (instancetype) filterListViewController: (WOAContentModel*)contentModel //M(T, [M(T, [M(T, S])])
-                                 delegate: (NSObject<WOASinglePickerViewControllerDelegate> *)delegate
+                                 delegate: (NSObject<WOASinglePickViewControllerDelegate> *)delegate
                               relatedDict: (NSDictionary*)relatedDict;
 
 @end
