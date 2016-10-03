@@ -7,18 +7,24 @@
 //
 
 #import "WOAHostNavigationDelegate.h"
+#import "WOAContentModel.h"
 #import <UIKit/UIKit.h>
 
 
 @interface WOAMultiItemSelectorView : UIView
 
-@property (nonatomic, weak) id<WOAHostNavigationDelegate> delegate;
-
+@property (nonatomic, weak) NSObject<WOAHostNavigationDelegate> *delegate;
 @property (nonatomic, strong) NSArray *selectedValueArray;
 
-- (instancetype) initWithFrame: (CGRect)frame
-                      delegate: (id<WOAHostNavigationDelegate>)delegate
-                     itemArray: (NSArray*)itemArray
-                  defaultArray: (NSArray*)defaultArray;
+/* For contentModel.pairArray
+ See WOAMultiPickerViewController
+ If pairArray[].value is a ContentModel type, it would be a grounped list. M(T, [(Name, M(T, [Name, Value]))])
+ Else M(T, [Name, Value])
+ */
+
++ (instancetype) viewWithDelegate: (NSObject<WOAHostNavigationDelegate>*)delegate
+                            frame: (CGRect)frame
+                     contentModel: (WOAContentModel*)contentModel
+                     defaultArray: (NSArray*)defaultArray;
 
 @end

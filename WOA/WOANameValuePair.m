@@ -163,6 +163,47 @@
     return pair;
 }
 
+#pragma mark -
+
++ (BOOL) isAllContentModelTyepValue: (NSArray*)pairArray
+{
+    BOOL foundNoContentModelType = NO;
+    
+    for (WOANameValuePair *rootPair in pairArray)
+    {
+        if (WOAPairDataType_ContentModel != rootPair.dataType)
+        {
+            foundNoContentModelType = YES;
+            
+            break;
+        }
+    }
+    
+    return (!foundNoContentModelType);
+}
+
++ (NSArray*) pairArrayWithPlainTextArray: (NSArray*)textArray
+{
+    return [self pairArrayWithPlainTextArray: textArray
+                                  actionType: WOAActionType_None];
+}
+
++ (NSArray*) pairArrayWithPlainTextArray: (NSArray*)textArray
+                              actionType: (WOAActionType)actionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    for (NSString *textStr in textArray)
+    {
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: textStr
+                                                          value: textStr
+                                                     actionType: actionType];
+        
+        [pairArray addObject: pair];
+    }
+    
+    return pairArray;
+}
 
 #pragma mark -
 

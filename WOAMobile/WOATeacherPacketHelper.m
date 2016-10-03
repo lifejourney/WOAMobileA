@@ -206,7 +206,6 @@
 }
 
 + (NSArray*) itemPairsForTchrSelectiveTeacherList: (NSDictionary*)respDict
-                                         subArray: (NSArray*)subArray
                                    pairActionType: (WOAActionType)pairActionType
 {
     NSMutableArray *groupContentPairArray = [NSMutableArray array];
@@ -232,9 +231,6 @@
                 
                 WOANameValuePair *itemPair = [WOANameValuePair pairWithName: itemDict[kWOASrvKeyForAccountName]
                                                                       value: itemDict[kWOASrvKeyForAccountID]
-                                                                 isWritable: NO
-                                                                   subArray: subArray
-                                                                    subDict: nil
                                                                    dataType: WOAPairDataType_Normal
                                                                  actionType: pairActionType];
                 [itemPairArray addObject: itemPair];
@@ -481,7 +477,6 @@
                              pairActionType: (WOAActionType)pairActionType
 {
     return [self itemPairsForTchrSelectiveTeacherList: respDict
-                                             subArray: nil
                                        pairActionType: pairActionType];
 }
 #pragma mark - Business
@@ -662,15 +657,14 @@
 }
 
 + (NSArray*) teacherPairArrayForCreateBusinessItem: (NSDictionary*)respDict
-                                          subArray: (NSArray*)subArray
                                     pairActionType: (WOAActionType)pairActionType
 {
     return [self itemPairsForTchrSelectiveTeacherList: respDict
-                                             subArray: subArray
                                        pairActionType: pairActionType];
 }
 
-+ (NSArray*) dataPairArrayForCreateBusinessItem: (NSDictionary*)respDict
++ (NSArray*) dataFieldPairArrayForCreateBusinessItem: (NSDictionary*)respDict
+                                    teacherPairArray: (NSArray*)teacherPairArray
 {
     NSMutableArray *pairArray = [NSMutableArray array];
     NSArray *itemDictArray = respDict[kWOASrvKeyForDataFieldArrays];
@@ -680,6 +674,10 @@
     for (NSDictionary *itemDict in itemDictArray)
     {
         WOANameValuePair *pair = [self pairFromItemDict: itemDict];
+        if (pair.dataType == WOAPairDataType_SelectAccount)
+        {
+            pair.subArray = teacherPairArray;
+        }
         
         [pairArray addObject: pair];
         [pairArray addObject: seperatorPair];

@@ -70,9 +70,10 @@
 
 - (BOOL) couldUserInteractEvenUnWritable: (WOAPairDataType)pairDataType
 {
-    return (pairDataType == WOAPairDataType_AttachFile ||
-            pairDataType == WOAPairDataType_ImageAttachFile ||
-            pairDataType == WOAPairDataType_MultiPicker);
+    return (pairDataType == WOAPairDataType_AttachFile
+            || pairDataType == WOAPairDataType_ImageAttachFile
+            || pairDataType == WOAPairDataType_MultiPicker
+            || pairDataType == WOAPairDataType_SelectAccount);
 }
 
 //- (UIView*) rightViewWithpairDataType: (WOAPairDataType)pairDataType isWritable: (BOOL)isWritable viewHeight: (CGFloat)viewHeight
@@ -91,8 +92,12 @@
         case WOAPairDataType_TextList:
         case WOAPairDataType_CheckUserList:
         
+        case WOAPairDataType_TableAccountA:
+        case WOAPairDataType_TableAccountE:
+            
         case WOAPairDataType_TextArea:
         case WOAPairDataType_MultiPicker:
+        case WOAPairDataType_SelectAccount:
         case WOAPairDataType_FixedText:
         case WOAPairDataType_FlowText:
             
@@ -144,8 +149,12 @@
         case WOAPairDataType_AttachFile:
         case WOAPairDataType_ImageAttachFile:
             
+        case WOAPairDataType_TableAccountA:
+        case WOAPairDataType_TableAccountE:
+            
         case WOAPairDataType_TextArea:
         case WOAPairDataType_MultiPicker:
+        case WOAPairDataType_SelectAccount:
         case WOAPairDataType_FixedText:
         case WOAPairDataType_FlowText:
             
@@ -320,9 +329,10 @@
             shouldShowReadonlyLineList = YES;
             shouldShowInputComponent = isWritable;
         }
-        else if (pairDataType == WOAPairDataType_AttachFile ||
-                 pairDataType == WOAPairDataType_ImageAttachFile ||
-                 pairDataType == WOAPairDataType_MultiPicker)
+        else if (pairDataType == WOAPairDataType_AttachFile
+                 || pairDataType == WOAPairDataType_ImageAttachFile
+                 || pairDataType == WOAPairDataType_MultiPicker
+                 || pairDataType == WOAPairDataType_SelectAccount)
         {
             shouldShowReadonlyLineList = !isWritable;
             shouldShowInputComponent = isWritable;
@@ -376,15 +386,36 @@
                 
                 [self addSubview: _fileSelectorView];
             }
-            else if (pairDataType == WOAPairDataType_MultiPicker)
+            else if (pairDataType == WOAPairDataType_MultiPicker
+                     || pairDataType == WOAPairDataType_SelectAccount)
             {
-                NSArray *defaultValue = (NSArray*)itemModel.value;
-                NSArray *itemList = itemModel.subArray;
+                NSArray *defaultValue;
+                if ([itemModel.value isKindOfClass: [NSArray class]])
+                {
+                    defaultValue = (NSArray*)itemModel.value;
+                }
+                else
+                {
+                    defaultValue = @[];
+                }
                 
-                self.multiSelectorView = [[WOAMultiItemSelectorView alloc] initWithFrame: initiateFrame
-                                                                                delegate: self
-                                                                               itemArray: itemList
-                                                                            defaultArray: defaultValue];
+                NSArray *optionList;
+                if (pairDataType == WOAPairDataType_SelectAccount)
+                {
+                    optionList = itemModel.subArray;
+                }
+                else
+                {
+                    optionList = [WOANameValuePair pairArrayWithPlainTextArray: itemModel.subArray];
+                }
+                
+                WOAContentModel *multiSelectorModel = [WOAContentModel contentModel: itemModel.name
+                                                                          pairArray: optionList];
+                
+                self.multiSelectorView = [WOAMultiItemSelectorView viewWithDelegate: self
+                                                                              frame: initiateFrame
+                                                                       contentModel: multiSelectorModel
+                                                                       defaultArray: defaultValue];
                 [self addSubview: _multiSelectorView];
             }
             else if (pairDataType == WOAPairDataType_TextArea)
@@ -707,7 +738,11 @@
     }
     else if (dataType == WOAPairDataType_SelectAccount)
     {
-        itemValue = self.itemModel.tableAcountID; //Todo
+        itemValue = self.multiSelectorView.selectedValueArray;
+    }
+    else if (dataType == WOAPairDataType_MultiPicker)
+    {
+        itemValue = self.multiSelectorView.selectedValueArray; //Todo
     }
     else if (dataType == WOAPairDataType_TextArea)
     {

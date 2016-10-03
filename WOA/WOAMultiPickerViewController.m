@@ -108,19 +108,7 @@
 {
     _rootPairArray = rootPairArray;
     
-    BOOL foundNoContentModeType = NO;
-    
-    for (WOANameValuePair *rootPair in rootPairArray)
-    {
-        if (WOAPairDataType_ContentModel != rootPair.dataType)
-        {
-            foundNoContentModeType = YES;
-            
-            break;
-        }
-    }
-    
-    self.isAllContentModePair = !foundNoContentModeType;
+    self.isAllContentModePair = [WOANameValuePair isAllContentModelTyepValue: rootPairArray];
 }
 
 #pragma mark -

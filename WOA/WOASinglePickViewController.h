@@ -34,6 +34,8 @@
 @property (nonatomic, weak) NSObject<WOASinglePickViewControllerDelegate> *delegate;
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, strong) WOAContentModel *contentModel;
+
 @property (nonatomic, assign) BOOL shouldShowBackBarItem;
 @property (nonatomic, strong) UIFont *textLabelFont;
 

@@ -23,7 +23,6 @@
 @property (nonatomic, strong) VSPopoverController *filterPopoperVC;
 
 @property (nonatomic, assign) NSInteger selectedCategory;
-@property (nonatomic, strong) WOAContentModel *contentModel;
 @property (nonatomic, strong) NSDictionary *relatedDict;
 
 - (void) onFilterCategoryButtonAction: (id) sender;

@@ -19,7 +19,11 @@
 @property (nonatomic, assign) WOAActionType actionType; //What action to do when select or submit.
 @property (nonatomic, copy) NSString *actionName;
 @property (nonatomic, assign) BOOL isReadonly;
-@property (nonatomic, strong) NSDictionary *subDict; //For reference list
+
+//For reference list
+@property (nonatomic, strong) NSDictionary *subDict;
+//For reference list
+@property (nonatomic, strong) NSArray *subArray;
 
 
 + (instancetype) contentModel: (NSString*)groupTitle
@@ -44,9 +48,18 @@
                    isReadonly: (BOOL)isReadonly
                       subDict: (NSDictionary*)subDict;
 
+#pragma mark -
+
 - (void) addPair: (WOANameValuePair*)pair;
+
+#pragma mark -
+
 - (WOANameValuePair*) pairForName: (NSString*)name;
+- (WOANameValuePair*) pairForStringValue: (NSString*)value;
 - (NSString*) stringValueForName: (NSString*)name;
+- (NSString*) nameForStringValue: (NSString*)value;
+
+#pragma mark -
 
 - (WOANameValuePair*) toNameValuePair;
 

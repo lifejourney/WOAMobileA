@@ -73,6 +73,8 @@
                       subDict: subDict];
 }
 
+#pragma mark -
+
 - (void) addPair: (WOANameValuePair*)pair
 {
     NSMutableArray *newArray = [NSMutableArray arrayWithArray: self.pairArray];
@@ -84,6 +86,8 @@
     
     self.pairArray = newArray;
 }
+
+#pragma mark -
 
 - (WOANameValuePair*) pairForName: (NSString*)name;
 {
@@ -105,12 +109,41 @@
     return firstPair;
 }
 
+- (WOANameValuePair*) pairForStringValue: (NSString *)value
+{
+    WOANameValuePair *firstPair = nil;
+    
+    if (value)
+    {
+        for (WOANameValuePair *pair in _pairArray)
+        {
+            if ([[pair stringValue] isEqualToString: value])
+            {
+                firstPair = pair;
+                
+                break;
+            }
+        }
+    }
+    
+    return firstPair;
+}
+
 - (NSString*) stringValueForName: (NSString*)name
 {
     WOANameValuePair *pair = [self pairForName: name];
     
     return [pair stringValue];
 }
+
+- (NSString*) nameForStringValue: (NSString *)value
+{
+    WOANameValuePair *pair = [self pairForStringValue: value];
+    
+    return [pair name];
+}
+
+#pragma mark -
 
 - (WOANameValuePair*) toNameValuePair
 {

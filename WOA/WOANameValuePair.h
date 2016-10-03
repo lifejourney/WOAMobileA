@@ -35,11 +35,15 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     WOAPairDataType_CheckUserList,  //Currently, take as Normal
     WOAPairDataType_TableAccountA, //Name for title, value for edit, with tableAcountID.
     WOAPairDataType_TableAccountE, //Same to TableAccountA, should fill default from previous select.
+    
+    //pairName for title;
+    //value is array type, could be found in subArray[pairIndex].value.
+    //subArray for pair array for option list. pair.value could be normal type or contentModel type.
     WOAPairDataType_SelectAccount, //Name for title, value is array for edit, with tableAcountID. Can select from subArray, whichs type is Normal.
     
     WOAPairDataType_TextArea,
     WOAPairDataType_Radio,
-    WOAPairDataType_MultiPicker,  //Value is Array, subArray ?
+    WOAPairDataType_MultiPicker,  //value and subArray is plain text array.
     WOAPairDataType_FixedText,
     WOAPairDataType_FlowText,
 };
@@ -101,7 +105,13 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
                                isWritable: (BOOL)isWritable
                                actionType: (WOAActionType)actionType
                         shouldFillDefault: (BOOL)shouldFillDefault;
+#pragma mark -
 
++ (BOOL) isAllContentModelTyepValue: (NSArray*)pairArray;
+
++ (NSArray*) pairArrayWithPlainTextArray: (NSArray*)textArray;
++ (NSArray*) pairArrayWithPlainTextArray: (NSArray*)textArray
+                              actionType: (WOAActionType)actionType;
 
 #pragma mark -
 

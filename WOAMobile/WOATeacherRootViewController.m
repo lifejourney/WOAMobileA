@@ -22,7 +22,6 @@
 
 /**
  Todo:
- Business: SelectAccount type
  没有选修课的考勤测试
  
  ToTest:
@@ -32,9 +31,7 @@
  删除评语，server没有真正删除.
  
  Question:
- 调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
  调课提交，成功，但是，返回的code = 1.
- 量化评价: 附件上传失败。 附件参数只接受一个。
  */
 
 /**
@@ -663,13 +660,79 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) presentTchrBusinessItemDetail: (NSArray*)dataPairArray
+- (void) onTchrCreateBusinessItem: (WOANameValuePair*)selectedPair
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
+{
+    NSDictionary *selectedTableInfoDict = (NSDictionary*)selectedPair.value;
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: selectedTableInfoDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *tableStyle = selectedTableInfoDict[kWOASrvKeyForTableStyle];
+         BOOL isOtherTeacherStyle = (tableStyle && [tableStyle isEqualToString: kWOASrvValueForOthersTableType]);
+         
+         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
+         NSDictionary *tableStruct = responseContent.bodyDictionary[kWOASrvKeyForTableStruct];
+         NSString *tableName = tableStruct[kWOASrvKeyForTableName];
+         
+         NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+         [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+         [contentReleatedDict setValue: tableStruct forKey: kWOASrvKeyForTableStruct];
+         
+         NSArray *teacherPairArray = [WOATeacherPacketHelper teacherPairArrayForCreateBusinessItem: responseContent.bodyDictionary
+                                                                                    pairActionType: WOAActionType_TeacherBusinessSelectOtherTeacher];
+         NSArray *dataFieldPairArray = [WOATeacherPacketHelper dataFieldPairArrayForCreateBusinessItem: responseContent.bodyDictionary
+                                                                                      teacherPairArray: teacherPairArray];
+         
+         if (isOtherTeacherStyle)
+         {
+             WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择人员"
+                                                                 pairArray: teacherPairArray
+                                                                actionType: WOAActionType_TeacherBusinessSelectOtherTeacher
+                                                                isReadonly: YES];
+             contentModel.subArray = dataFieldPairArray;
+             
+             WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                         delegate: self
+                                                                                      relatedDict: contentReleatedDict];
+             subVC.shouldShowSearchBar = YES;
+             
+             [navVC pushViewController: subVC animated: YES];
+         }
+         else
+         {
+             [self presentTchrBusinessItemDetail: dataFieldPairArray
+                                       tableName: tableName
+                         defaultTableAccountPair: nil
+                                     relatedDict: contentReleatedDict
+                                           navVC: navVC];
+         }
+     }];
+}
+
+- (void) onTchrBusinessSelectOtherTeacher: (NSArray*)dataFieldPairArray
+                             selectedPair: (WOANameValuePair*)selectedPair
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC
+{
+    NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: relatedDict];
+    
+    [self presentTchrBusinessItemDetail: dataFieldPairArray
+                              tableName: tableName
+                defaultTableAccountPair: selectedPair
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+}
+
+- (void) presentTchrBusinessItemDetail: (NSArray*)dataFieldPairArray
                              tableName: (NSString*)tableName
                defaultTableAccountPair: (WOANameValuePair*)defaultTableAccountPair
                            relatedDict: (NSDictionary*)relatedDict
                                  navVC: (UINavigationController*)navVC
 {
-    NSMutableArray *pairArray = [NSMutableArray arrayWithArray: dataPairArray];
+    NSMutableArray *pairArray = [NSMutableArray arrayWithArray: dataFieldPairArray];
     if (defaultTableAccountPair)
     {
         for (NSInteger pairIndex = 0; pairIndex < pairArray.count; pairIndex++)
@@ -705,70 +768,6 @@
                                                                              delegate: self];
     
     [navVC pushViewController: subVC animated: YES];
-}
-
-- (void) onTchrCreateBusinessItem: (WOANameValuePair*)selectedPair
-                      relatedDict: (NSDictionary*)relatedDict
-                            navVC: (UINavigationController*)navVC
-{
-    NSDictionary *selectedTableInfoDict = (NSDictionary*)selectedPair.value;
-    
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: selectedTableInfoDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSString *tableStyle = selectedTableInfoDict[kWOASrvKeyForTableStyle];
-         BOOL isOtherTeacherStyle = (tableStyle && [tableStyle isEqualToString: kWOASrvValueForOthersTableType]);
-         
-         NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
-         NSDictionary *tableStruct = responseContent.bodyDictionary[kWOASrvKeyForTableStruct];
-         NSString *tableName = tableStruct[kWOASrvKeyForTableName];
-         
-         NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-         [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
-         [contentReleatedDict setValue: tableStruct forKey: kWOASrvKeyForTableStruct];
-         
-         NSArray *dataPairArray = [WOATeacherPacketHelper dataPairArrayForCreateBusinessItem: responseContent.bodyDictionary];
-         NSArray *teacherPairArray = [WOATeacherPacketHelper teacherPairArrayForCreateBusinessItem: responseContent.bodyDictionary
-                                                                                          subArray: dataPairArray
-                                                                                    pairActionType: WOAActionType_TeacherBusinessSelectOtherTeacher];
-         
-         if (isOtherTeacherStyle)
-         {
-             WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择人员"
-                                                                 pairArray: teacherPairArray
-                                                                actionType: WOAActionType_TeacherBusinessSelectOtherTeacher
-                                                                isReadonly: YES];
-             
-             WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
-                                                                                         delegate: self
-                                                                                      relatedDict: contentReleatedDict];
-             subVC.shouldShowSearchBar = YES;
-             
-             [navVC pushViewController: subVC animated: YES];
-         }
-         else
-         {
-             [self presentTchrBusinessItemDetail: dataPairArray
-                                       tableName: tableName
-                         defaultTableAccountPair: nil
-                                     relatedDict: contentReleatedDict
-                                           navVC: navVC];
-         }
-     }];
-}
-
-- (void) onTchrBusinessSelectOtherTeacher: (WOANameValuePair*)selectedPair
-                              relatedDict: (NSDictionary*)relatedDict
-                                    navVC: (UINavigationController*)navVC
-{
-    NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: relatedDict];
-    
-    [self presentTchrBusinessItemDetail: selectedPair.subArray
-                              tableName: tableName
-                defaultTableAccountPair: selectedPair
-                            relatedDict: relatedDict
-                                  navVC: navVC];
 }
 
 - (void) onTchrSubmitBusinessCreate: (WOAActionType)actionType
@@ -2221,7 +2220,8 @@
             
         case WOAActionType_TeacherBusinessSelectOtherTeacher:
         {
-            [self onTchrBusinessSelectOtherTeacher: selectedPair
+            [self onTchrBusinessSelectOtherTeacher: vc.contentModel.subArray
+                                      selectedPair: selectedPair
                                        relatedDict: relatedDict
                                              navVC: navVC];
             break;

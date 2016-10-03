@@ -57,9 +57,9 @@
                                         actionTypeA: (WOAActionType)actionTypeA
                                         actionTypeB: (WOAActionType)actionTypeB;
 + (NSArray*) teacherPairArrayForCreateBusinessItem: (NSDictionary*)respDict
-                                          subArray: (NSArray*)subArray
                                     pairActionType: (WOAActionType)pairActionType;
-+ (NSArray*) dataPairArrayForCreateBusinessItem: (NSDictionary*)respDict;
++ (NSArray*) dataFieldPairArrayForCreateBusinessItem: (NSDictionary*)respDict
+                                    teacherPairArray: (NSArray*)teacherPairArray;
 
 #pragma mark -
 

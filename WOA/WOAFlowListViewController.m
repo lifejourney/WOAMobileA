@@ -18,8 +18,6 @@
 @interface WOAFlowListViewController () <UITableViewDataSource, UITableViewDelegate,
                                         UISearchBarDelegate>
 
-@property (nonatomic, strong) WOAContentModel *contentModel;
-
 @property (nonatomic, strong) UISearchBar *searchBar;
 
 @property (nonatomic, strong) NSArray *filteredRootPairArray;
@@ -73,19 +71,7 @@
 {
     _allRootPairArray = allRootPairArray;
     
-    BOOL foundNoContentModeType = NO;
-    
-    for (WOANameValuePair *rootPair in allRootPairArray)
-    {
-        if (WOAPairDataType_ContentModel != rootPair.dataType)
-        {
-            foundNoContentModeType = YES;
-            
-            break;
-        }
-    }
-    
-    self.isAllContentModePair = !foundNoContentModeType;
+    self.isAllContentModePair = [WOANameValuePair isAllContentModelTyepValue: allRootPairArray];
 }
 
 #pragma mark - private

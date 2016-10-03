@@ -24,12 +24,34 @@
 @property (nonatomic, assign) CGFloat itemHeight;
 @property (nonatomic, assign) CGFloat cellHeight;
 
-@property (nonatomic, strong) NSArray *modelArray; //Array of WOAContentModel;
+@property (nonatomic, strong) WOAContentModel *contentModel;
 @property (nonatomic, strong) NSDictionary *valueIndexPathDictionary;
+
+@property (nonatomic, assign) BOOL isAllContentModePair;
 
 @end
 
 @implementation WOAMultiItemSelectorView
+
+@synthesize contentModel = _contentModel;
+
++ (instancetype) viewWithDelegate: (NSObject<WOAHostNavigationDelegate>*)delegate
+                            frame: (CGRect)frame
+                     contentModel: (WOAContentModel*)contentModel
+                     defaultArray: (NSArray*)defaultArray
+{
+    return [[self alloc] initWithDelegate: delegate
+                                    frame: frame
+                             contentModel: contentModel
+                             defaultArray: defaultArray];
+}
+
+- (void) setContentModel: (WOAContentModel*)contentModel
+{
+    _contentModel = contentModel;
+    
+    self.isAllContentModePair = [WOANameValuePair isAllContentModelTyepValue: contentModel.pairArray];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -38,29 +60,16 @@
     return self;
 }
 
-- (instancetype) initWithFrame: (CGRect)frame
-                      delegate: (id<WOAHostNavigationDelegate>)delegate
-                     itemArray: (NSArray*)itemArray
-                  defaultArray: (NSArray*)defaultArray
+- (instancetype) initWithDelegate: (NSObject<WOAHostNavigationDelegate>*)delegate
+                            frame: (CGRect)frame
+                     contentModel: (WOAContentModel*)contentModel
+                     defaultArray: (NSArray*)defaultArray
 {
     if (self = [self initWithFrame: frame])
     {
         self.delegate = delegate;
+        self.contentModel = contentModel;
         
-        NSMutableArray *pairArray = [NSMutableArray array];
-        for (NSUInteger row = 0; row < [itemArray count]; row++)
-        {
-            NSString *itemText = [itemArray objectAtIndex: row];
-            WOANameValuePair *nameValuePair = [WOANameValuePair pairWithName: itemText value: itemText];
-            
-            [pairArray addObject: nameValuePair];
-        }
-        WOAContentModel *groupContent = [WOAContentModel contentModel: @""
-                                                            pairArray: pairArray
-                                                           actionType: WOAActionType_None
-                                                           isReadonly: YES];
-        
-        self.modelArray = @[groupContent];
         self.valueIndexPathDictionary = [self generateValueIndexPathDictionary];
         self.selectedValueArray = defaultArray;
         
@@ -103,27 +112,55 @@
     return self;
 }
 
+- (void) addOptionValueFromPair: (WOANameValuePair*)pair
+                         toDict: (NSMutableDictionary*)toDict
+                            row: (NSInteger)row
+                        section: (NSInteger)section
+{
+    NSString *textValue = [pair stringValue];
+    
+    if (!textValue)
+        return;
+    
+    if ([toDict valueForKey: textValue])
+        return;
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: section];
+    [toDict setValue: indexPath forKey: textValue];
+}
+
 - (NSDictionary*) generateValueIndexPathDictionary
 {
     NSMutableDictionary *valueIndexPathDict = [NSMutableDictionary dictionary];
-    for (NSUInteger groupIndex = 0; groupIndex < [self.modelArray count]; groupIndex++)
+    
+    NSArray *rootPairArray = self.contentModel.pairArray;
+    BOOL isGroupList = self.isAllContentModePair;
+    
+    for (NSInteger groupIndex = 0; groupIndex < rootPairArray.count; groupIndex++)
     {
-        WOAContentModel *groupContent = [self.modelArray objectAtIndex: groupIndex];
-        NSArray *pairArray = groupContent.pairArray;
+        WOANameValuePair *rootPair = rootPairArray[groupIndex];
         
-        for (NSUInteger row = 0; row < [pairArray count]; row++)
+        if (isGroupList)
         {
-            WOANameValuePair *nameValuePair = [pairArray objectAtIndex: row];
-            NSString *textValue = nameValuePair.stringValue;
+            WOAContentModel *pairContentValue = (WOAContentModel*)rootPair.value;
+            NSArray *subPairArray = pairContentValue.pairArray;
             
-            if (!textValue)
-                continue;
-            
-            if ([valueIndexPathDict valueForKey: textValue])
-                continue;
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: groupIndex];
-            [valueIndexPathDict setValue: indexPath forKey: textValue];
+            for (NSInteger row = 0; row < [subPairArray count]; row++)
+            {
+                WOANameValuePair *subPair = subPairArray[row];
+                
+                [self addOptionValueFromPair: subPair
+                                      toDict: valueIndexPathDict
+                                         row: row
+                                     section: groupIndex];
+            }
+        }
+        else
+        {
+            [self addOptionValueFromPair: rootPair
+                                  toDict: valueIndexPathDict
+                                     row: groupIndex
+                                 section: 0];
         }
     }
     
@@ -134,9 +171,9 @@
 {
     NSMutableArray *indexPathArray = [NSMutableArray array];
     
-    for (NSUInteger index = 0; index < [valueArray count]; index++)
+    for (NSUInteger index = 0; index < valueArray.count; index++)
     {
-        NSString *textValue = [valueArray objectAtIndex: index];
+        NSString *textValue = valueArray[index];
         
         NSIndexPath *indexPath = [self.valueIndexPathDictionary valueForKey: textValue];
         
@@ -170,7 +207,28 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *itemTitle = [self.selectedValueArray objectAtIndex: indexPath.row];
+    NSString *itemValue = [self.selectedValueArray objectAtIndex: indexPath.row];
+    
+    NSString *itemTitle;
+    if (self.isAllContentModePair)
+    {
+        for (WOANameValuePair *rootPair in self.contentModel.pairArray)
+        {
+            WOAContentModel *rootPairValue = (WOAContentModel*)rootPair.value;
+            
+            itemTitle = [rootPairValue nameForStringValue: itemValue];
+            
+            if (itemTitle != nil)
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        itemTitle = [self.contentModel nameForStringValue: itemValue];
+    }
+    
     WOALabelButtonTableViewCell *cell = [[WOALabelButtonTableViewCell alloc] initWithDelegate: self
                                                                                       section: indexPath.section
                                                                                           row: indexPath.row
@@ -197,7 +255,7 @@
     NSArray *indexPathArray = [self indexPathArrayWithValueArray: self.selectedValueArray];
     
     WOAMultiPickerViewController *pickerVC;
-    pickerVC = [WOAMultiPickerViewController multiPickerViewController: [self.modelArray objectAtIndex: 0]
+    pickerVC = [WOAMultiPickerViewController multiPickerViewController: self.contentModel
                                                 selectedIndexPathArray: indexPathArray
                                                               delegate: self
                                                            relatedDict: nil];
@@ -218,9 +276,14 @@
     NSMutableArray *selectedValueArray = [NSMutableArray array];
     for (NSInteger index = 0; index < selectedPairArray.count; index++)
     {
-        WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
+        WOANameValuePair *pair = selectedPairArray[index];
+        NSString *pairValue = [pair stringValue];
         
-        [selectedValueArray addObject: pair.value];
+        //Remove duplicated
+        if ([selectedValueArray indexOfObject: pairValue] == NSNotFound)
+        {
+            [selectedValueArray addObject: pair.value];
+        }
     }
     
     self.selectedValueArray = selectedValueArray;
@@ -246,6 +309,7 @@
         [selectedArray removeObjectAtIndex: row];
         
         self.selectedValueArray = selectedArray;
+        
         [self selectedInfoUpdated];
     }
 }
