@@ -90,6 +90,13 @@
 
 #pragma mark - Student Manage
 
++ (NSArray*) pairArrayForTchrQueryAttdCourses: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) pairArrayForTchrStartAttdEval: (NSDictionary*)respDict
+                            pairActionType: (WOAActionType)pairActionType;
+
+#pragma mark -
+
 + (NSArray*) pairArrayForTchrGradeClassInfo: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
 + (NSArray*) pairArrayForTchrQueryCommentStudents: (NSDictionary*)respDict

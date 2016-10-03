@@ -23,6 +23,7 @@
 /**
  Todo:
  Business: SelectAccount
+ 没有选修课的考勤测试
  
  ToTest:
  OA: process style
@@ -1287,10 +1288,167 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryAttdConditions
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryAttdCourses
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType pairActionType = WOAActionType_TeacherStartAttdEval;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrQueryAttdCourses: responseContent.bodyDictionary
+                                                                        pairActionType: pairActionType];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrStartAttdEval: (WOANameValuePair*)selectedPair
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrStartAttdEval: responseContent.bodyDictionary
+                                                                     pairActionType: WOAActionType_TeacherPickAttdStudent];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"学生考勤操作"
+                                                             pairArray: pairArray
+                                                          contentArray: nil
+                                                            actionType: WOAActionType_TeacherSubmitAttdEval
+                                                            actionName: @"提交"
+                                                            isReadonly: YES
+                                                               subDict: addtDict];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: addtDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+         
+     }];
+}
+
+- (void) updateStudentAttStatus: (WOANameValuePair*)pair
+                         status: (NSString*)status
+                      refreshVC: (WOASinglePickViewController*)pickVC
+{
+    NSDictionary *relatedInfo = [NSMutableDictionary dictionaryWithDictionary: pair.subDictionary];
+    NSString *stepFullName = relatedInfo[kWOAKeyForAttdStepFullName];
+    NSString *statusFullName = [NSString stringWithFormat: @"%@   %@", stepFullName, status];
+    
+    [relatedInfo setValue: stepFullName forKey: kWOAKeyForAttdStepFullName];
+    [relatedInfo setValue: status forKey: kWOASrvKeyForAttdStudentStatus];
+    
+    pair.name = statusFullName;
+    pair.value = status;
+    pair.subDictionary = relatedInfo;
+    
+    [pickVC refreshTableList];
+}
+
+- (void) onTchrPickAttdStudent: (WOASinglePickViewController*)pickVC
+                  selectedPair: (WOANameValuePair*)selectedPair
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    NSString *currentStatus = [selectedPair stringValue];
+    
+    NSArray *opTypeArray = selectedPair.subArray;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                             message: @"请选择:"
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    for (NSString *opTypeName in opTypeArray)
+    {
+        if ([currentStatus isEqualToString: opTypeName])
+        {
+            continue;
+        }
+        
+        UIAlertAction *opAction = [UIAlertAction actionWithTitle: opTypeName
+                                                           style: UIAlertActionStyleDefault
+                                                         handler: ^(UIAlertAction * _Nonnull action)
+                                   {
+                                       [self updateStudentAttStatus: selectedPair
+                                                             status: opTypeName
+                                                          refreshVC: pickVC];
+                                   }];
+        
+        [alertController addAction: opAction];
+    }
+    
+    if ([NSString isNotEmptyString: currentStatus])
+    {
+        UIAlertAction *opAction = [UIAlertAction actionWithTitle: @"清除"
+                                                           style: UIAlertActionStyleDefault
+                                                         handler: ^(UIAlertAction * _Nonnull action)
+                                   {
+                                       [self updateStudentAttStatus: selectedPair
+                                                             status: @""
+                                                          refreshVC: pickVC];
+                                   }];
+        
+        [alertController addAction: opAction];
+    }
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    [alertController addAction: cancelAction];
+    
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
+}
+
+- (void) onTchrSubmitAttdEval: (WOAContentModel*)contentModel
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
+{
+    NSMutableArray *studentInfoArray = [NSMutableArray array];
+    
+    for (WOANameValuePair *pair in contentModel.pairArray)
+    {
+        NSDictionary *pairRelatedInfo = pair.subDictionary;
+        NSString *studentID = pairRelatedInfo[kWOASrvKeyForAttdStudentID];
+        NSString *attdStatus = [pair stringValue];
+        
+        NSMutableDictionary *pairDict = [NSMutableDictionary dictionary];
+        [pairDict setValue: studentID forKey: kWOASrvKeyForAttdStudentID];
+        [pairDict setValue: attdStatus forKey: kWOASrvKeyForAttdStudentStatus];
+        
+        [studentInfoArray addObject: pairDict];
+    }
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: studentInfoArray forKey: kWOASrvKeyForAttdStudentList];
+    
+    WOAActionType actionType = contentModel.actionType;
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
      }];
 }
 
@@ -2082,6 +2240,24 @@
                                   navVC: navVC];
             break;
         }
+            
+        ////////////////////////////////////////
+        case WOAActionType_TeacherStartAttdEval:
+        {
+            [self onTchrStartAttdEval: selectedPair
+                          relatedDict: relatedDict
+                                navVC: navVC];
+            break;
+        }
+        
+        case WOAActionType_TeacherPickAttdStudent:
+        {
+            [self onTchrPickAttdStudent: vc
+                           selectedPair: selectedPair
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+            break;
+        }
         
         ////////////////////////////////////////
         case WOAActionType_TeacherQueryCommentStudents:
@@ -2176,6 +2352,14 @@
             [self onTchrEditStudentComment: actionType
                                relatedDict: relatedDict
                                      navVC: navVC];
+            break;
+        }
+        
+        case WOAActionType_TeacherSubmitAttdEval:
+        {
+            [self onTchrSubmitAttdEval: contentModel
+                           relatedDict: relatedDict
+                                 navVC: navVC];
             break;
         }
             

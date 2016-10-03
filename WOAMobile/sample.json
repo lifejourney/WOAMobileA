@@ -340,9 +340,34 @@
 
 
 
+{"head":{
+    "msgType":"studentAttendance","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "compulsoryItems":[
+                       {"name":"高三上学期1班信息技术",
+                       "bjid":"68",
+                       "zxmc":"第6节",
+                       "kcmc":"信息技术",
+                       "xqmc":"高三上学期"}]}
 
 
-
+{"head":{
+    "msgType":"toAttendance","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "attItems":[
+                "迟到","早退","旷课","请假"],
+    "zxmcList":[
+                "第6节"],
+    "studentList":[
+                   {"name":"1班00号杨若彤","id":"11104","index":"yrt","zxmc":"第6节","value":""},
+                   {"name":"1班01号王钰滢","id":"11110","index":"wyy","zxmc":"第6节","value":""},
+                   {"name":"1班01号林志阳","id":"11079","index":"lzy","zxmc":"第6节","value":"早退"},
+                   {"name":"1班01号曾锦林","id":"11084","index":"zjl","zxmc":"第6节","value":"早退"},
+                   {"name":"1班02号陈海月","id":"11123","index":"chy","zxmc":"第6节","value":"请假"},
+                   {"name":"1班52号庄煌铭","id":"11081","index":"zhm","zxmc":"第6节","value":""},
+                   {"name":"1班55号林美鑫","id":"11121","index":"lmx","zxmc":"第6节","value":""}]}
 
 
 

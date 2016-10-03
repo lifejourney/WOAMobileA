@@ -117,10 +117,12 @@ static NSDictionary *__actionMapDict = nil;
       
       //Teacher Student
       
-      @(WOAActionType_TeacherQueryAttdConditions):          @[@"TeacherQueryAttdConditions",
+      @(WOAActionType_TeacherQueryAttdCourses):             @[@"TeacherQueryAttdCourses",
                                                               @"studentAttendance"],
-      @(WOAActionType_TeacherCreateAttdEval):               @[@"TeacherCreateAttdEval",
+      @(WOAActionType_TeacherStartAttdEval):                @[@"TeacherStartAttdEval",
                                                               @"toAttendance"],
+      @(WOAActionType_TeacherPickAttdStudent):              @[@"TeacherPickAttdStudent",
+                                                              @""],
       @(WOAActionType_TeacherSubmitAttdEval):               @[@"TeacherSubmitAttdEval",
                                                               @"postAttendance"],
       

@@ -1014,6 +1014,107 @@
 
 #pragma mark - Student Manage
 
++ (NSArray*) pairArrayForTchrQueryAttdCourses: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *groupPairArray = [NSMutableArray array];
+    
+    NSArray *mandatoryDictArray = respDict[kWOASrvKeyForAttdCompulsoryArray];
+    NSMutableArray *mandatoryPairArray = [NSMutableArray array];
+    
+    for (NSDictionary *itemDict in mandatoryDictArray)
+    {
+        NSString *itemName = itemDict[kWOASrvKeyForAttdItemName];
+        NSMutableDictionary *itemRelatedInfo = [NSMutableDictionary dictionaryWithDictionary: itemDict];
+        [itemRelatedInfo setValue: kWOASrvValueForAttdStyleCompulsory forKey: kWOASrvKeyForAttdStyle];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: itemName
+                                                     actionType: pairActionType];
+        pair.subDictionary = itemRelatedInfo;
+        
+        [mandatoryPairArray addObject: pair];
+    }
+    
+    NSArray *optionDictArray = respDict[kWOASrvKeyForAttdOptionalArray];
+    NSMutableArray *optionPairArray = [NSMutableArray array];
+    
+    for (NSDictionary *itemDict in optionDictArray)
+    {
+        NSString *itemName = itemDict[kWOASrvKeyForAttdItemName];
+        NSMutableDictionary *itemRelatedInfo = [NSMutableDictionary dictionaryWithDictionary: itemDict];
+        [itemRelatedInfo setValue: kWOASrvValueForAttdStyleOptional forKey: kWOASrvKeyForAttdStyle];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: itemName
+                                                     actionType: pairActionType];
+        pair.subDictionary = itemRelatedInfo;
+        
+        [optionPairArray addObject: pair];
+    }
+    
+    if ([mandatoryPairArray count] > 0)
+    {
+        WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                            pairArray: mandatoryPairArray];
+        WOANameValuePair *groupPair = [WOANameValuePair pairWithName: @"必修课"
+                                                               value: contentModel
+                                                            dataType: WOAPairDataType_ContentModel];
+        
+        [groupPairArray addObject: groupPair];
+    }
+    
+    if ([optionPairArray count] > 0)
+    {
+        WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                            pairArray: optionPairArray];
+        WOANameValuePair *groupPair = [WOANameValuePair pairWithName: @"选项课"
+                                                               value: contentModel
+                                                            dataType: WOAPairDataType_ContentModel];
+        
+        [groupPairArray addObject: groupPair];
+    }
+    
+    return groupPairArray;
+}
+
++ (NSArray*) pairArrayForTchrStartAttdEval: (NSDictionary*)respDict
+                            pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *attOpArray = respDict[kWOASrvKeyForAttdOpItemsArray];
+    NSArray *studentDictArray = respDict[kWOASrvKeyForAttdStudentList];
+    
+    for (NSDictionary *studentDict in studentDictArray)
+    {
+        NSString *studentID = studentDict[kWOASrvKeyForAttdStudentID];
+        NSString *studentName = studentDict[kWOASrvKeyForAttdStudentName];
+        NSString *stepName = studentDict[kWOASrvKeyForAttdItemStepName];
+        NSString *studentStatus = studentDict[kWOASrvKeyForAttdStudentStatus];
+        
+        NSString *stepFullName = [NSString stringWithFormat: @"%@ %@", studentName, stepName];
+        NSString *stepFullStatus = [NSString stringWithFormat: @"%@   %@", stepFullName, studentStatus];
+        
+        NSMutableDictionary *pairRelatedInfo = [NSMutableDictionary dictionary];
+        [pairRelatedInfo setValue: stepFullName forKey: kWOAKeyForAttdStepFullName];
+        [pairRelatedInfo setValue: studentID forKey: kWOASrvKeyForAttdStudentID];
+        [pairRelatedInfo setValue: studentStatus forKey: kWOASrvKeyForAttdStudentStatus];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: stepFullStatus
+                                                          value: studentStatus
+                                                     actionType: pairActionType];
+        pair.subDictionary = pairRelatedInfo;
+        pair.subArray = attOpArray;
+        
+        [pairArray addObject: pair];
+    }
+    
+    return pairArray;
+}
+
+#pragma mark -
+
 + (NSArray*) pairArrayForTchrGradeClassInfo: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {

@@ -75,8 +75,9 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     
     //Teacher Student
     
-    WOAActionType_TeacherQueryAttdConditions,
-    WOAActionType_TeacherCreateAttdEval,
+    WOAActionType_TeacherQueryAttdCourses,
+    WOAActionType_TeacherStartAttdEval,
+    WOAActionType_TeacherPickAttdStudent,
     WOAActionType_TeacherSubmitAttdEval,
     
     WOAActionType_TeacherQueryCommentConditions,
