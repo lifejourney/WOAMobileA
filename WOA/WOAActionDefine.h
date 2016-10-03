@@ -75,15 +75,15 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     
     //Teacher Student
     
-    WOAActionType_TeacherGetAttdConditions,
+    WOAActionType_TeacherQueryAttdConditions,
     WOAActionType_TeacherCreateAttdEval,
     WOAActionType_TeacherSubmitAttdEval,
     
-    WOAActionType_TeacherGetCommentConditions,
-    WOAActionType_TeacherGetCommentStudents,
+    WOAActionType_TeacherQueryCommentConditions,
+    WOAActionType_TeacherQueryCommentStudents,
     WOAActionType_TeacherPickCommentStudent,
     WOAActionType_TeacherPickCommentItem,
-    WOAActionType_TeacherGetCommentByID,
+    WOAActionType_TeacherQueryCommentByID,
     WOAActionType_TeacherCreateStudentComment1,
     WOAActionType_TeacherCreateStudentComment2,
     WOAActionType_TeacherSubmitCommentCreate1,
@@ -92,10 +92,11 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_TeacherSubmitCommentUpdate,
     WOAActionType_TeacherSubmitCommentDelete,
     
-    WOAActionType_TeacherGetQuatEvalItems,
-    WOAActionType_TeacherGetQuatEvalClasses,
-    WOAActionType_TeacherGetQuatEvalStudents,
-    WOAActionType_TeacherSelectQuatEvalStudent,
+    WOAActionType_TeacherQueryQuatEvalItems,
+    WOAActionType_TeacherPickQuatEvalItem,
+    WOAActionType_TeacherQueryQuatEvalClasses,
+    WOAActionType_TeacherQueryQuatEvalStudents,
+    WOAActionType_TeacherPickQuatEvalStudent,
     WOAActionType_TeacherSubmitStudentQuatEval,
     
     //Student

@@ -34,7 +34,7 @@
  调代课申请，调课／代课的选项字段是什么?  两节课，第一节NewTeacherID那里来？ 第二节的gradeID, classID, term?
  调课提交，成功，但是，返回的code = 1.
  考勤测试好.
- 
+ 量化评价: 附件上传失败。 附件参数只接受一个。
  */
 
 /**
@@ -141,7 +141,11 @@
 - (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
                                   navVC: (UINavigationController*)navVC
 {
-    if (actionType == WOAActionType_TeacherSubmitTakeover
+    if (actionType == WOAActionType_TeacherSubmitStudentQuatEval)
+    {
+        [navVC popViewControllerAnimated: YES];
+    }
+    else if (actionType == WOAActionType_TeacherSubmitTakeover
         || actionType == WOAActionType_TeacherSubmitCommentCreate1
         || actionType == WOAActionType_TeacherSubmitCommentDelete)
     {
@@ -255,9 +259,9 @@
                 ownerNavC: ownerNavC];
 }
 
-- (void) onTchrProcessOAItem: (WOANameValuePair *)selectedPair
-                 relatedDict: (NSDictionary *)relatedDict
-                       navVC: (UINavigationController *)navVC
+- (void) onTchrProcessOAItem: (WOANameValuePair*)selectedPair
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
 {
     NSDictionary *dictValue = (NSDictionary*)selectedPair.value;
     NSString *selectedItemID = dictValue[kWOASrvKeyForItemID];
@@ -323,9 +327,9 @@
      }];
 }
 
-- (void) onTchrCreateOAItem: (WOANameValuePair *)selectedPair
-                relatedDict: (NSDictionary *)relatedDict
-                      navVC: (UINavigationController *)navVC
+- (void) onTchrCreateOAItem: (WOANameValuePair*)selectedPair
+                relatedDict: (NSDictionary*)relatedDict
+                      navVC: (UINavigationController*)navVC
 {
     NSString *selectedTableID = [selectedPair stringValue];
     
@@ -371,7 +375,7 @@
 
 - (void) onTchrSubmitOADetail: (WOAActionType)actionType
                  contentModel: (NSDictionary*)contentModel
-                        navVC: (UINavigationController *)navVC
+                        navVC: (UINavigationController*)navVC
 {
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
                                                    additionalDict: contentModel
@@ -399,9 +403,9 @@
      }];
 }
 
-- (void) onTchrOAProcessStyle: (WOANameValuePair *)selectedPair
-                  relatedDict: (NSDictionary *)relatedDict
-                        navVC: (UINavigationController *)navVC
+- (void) onTchrOAProcessStyle: (WOANameValuePair*)selectedPair
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
 {
     NSString *selectedProcessID = [selectedPair stringValue];
     
@@ -449,8 +453,8 @@
 
 - (void) onTchrOANextAccounts: (WOAActionType)actionType
             selectedPairArray: (NSArray*)selectedPairArray
-                  relatedDict: (NSDictionary *)relatedDict
-                        navVC: (UINavigationController *)navVC
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
 {
     //TODO
     NSMutableArray *selectedAccountArray = [NSMutableArray array];
@@ -486,9 +490,9 @@
                 ownerNavC: ownerNavC];
 }
 
-- (void) onTchrQueryOADetail: (WOANameValuePair *)selectedPair
-                 relatedDict: (NSDictionary *)relatedDict
-                       navVC: (UINavigationController *)navVC
+- (void) onTchrQueryOADetail: (WOANameValuePair*)selectedPair
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
 {
     NSDictionary *dictValue = (NSDictionary*)selectedPair.value;
     NSString *selectedItemID = dictValue[kWOASrvKeyForItemID];
@@ -555,9 +559,9 @@
      }];
 }
 
-- (void) onTchrPickSyllabusQueryTerm: (WOANameValuePair *)selectedPair
-                         relatedDict: (NSDictionary *)relatedDict
-                               navVC: (UINavigationController *)navVC
+- (void) onTchrPickSyllabusQueryTerm: (WOANameValuePair*)selectedPair
+                         relatedDict: (NSDictionary*)relatedDict
+                               navVC: (UINavigationController*)navVC
 {
     NSDictionary *selectedClassInfoDict = (NSDictionary*)selectedPair.value;
     NSArray *termPairArray = selectedPair.subArray;
@@ -576,9 +580,9 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onTchrQuerySyllabus: (WOANameValuePair *)selectedPair
-                 relatedDict: (NSDictionary *)relatedDict
-                       navVC: (UINavigationController *)navVC
+- (void) onTchrQuerySyllabus: (WOANameValuePair*)selectedPair
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
 {
     NSString *selectedTermName = [selectedPair stringValue];
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
@@ -640,9 +644,9 @@
      }];
 }
 
-- (void) onTchrPickBusinessTableItem: (WOANameValuePair *)selectedPair
-                         relatedDict: (NSDictionary *)relatedDict
-                               navVC: (UINavigationController *)navVC
+- (void) onTchrPickBusinessTableItem: (WOANameValuePair*)selectedPair
+                         relatedDict: (NSDictionary*)relatedDict
+                               navVC: (UINavigationController*)navVC
 {
     NSString *selectedTableListType = selectedPair.name;
     NSArray *tablePairArray = selectedPair.subArray;
@@ -662,8 +666,8 @@
 - (void) presentTchrBusinessItemDetail: (NSArray*)dataPairArray
                              tableName: (NSString*)tableName
                defaultTableAccountPair: (WOANameValuePair*)defaultTableAccountPair
-                           relatedDict: (NSDictionary *)relatedDict
-                                 navVC: (UINavigationController *)navVC
+                           relatedDict: (NSDictionary*)relatedDict
+                                 navVC: (UINavigationController*)navVC
 {
     NSMutableArray *pairArray = [NSMutableArray arrayWithArray: dataPairArray];
     if (defaultTableAccountPair)
@@ -703,9 +707,9 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onTchrCreateBusinessItem: (WOANameValuePair *)selectedPair
-                      relatedDict: (NSDictionary *)relatedDict
-                            navVC: (UINavigationController *)navVC
+- (void) onTchrCreateBusinessItem: (WOANameValuePair*)selectedPair
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
 {
     NSDictionary *selectedTableInfoDict = (NSDictionary*)selectedPair.value;
     
@@ -754,9 +758,9 @@
      }];
 }
 
-- (void) onTchrBusinessSelectOtherTeacher: (WOANameValuePair *)selectedPair
-                              relatedDict: (NSDictionary *)relatedDict
-                                    navVC: (UINavigationController *)navVC
+- (void) onTchrBusinessSelectOtherTeacher: (WOANameValuePair*)selectedPair
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC
 {
     NSString *tableName = [WOATeacherPacketHelper tableNameFromPacketDictionary: relatedDict];
     
@@ -769,7 +773,7 @@
 
 - (void) onTchrSubmitBusinessCreate: (WOAActionType)actionType
                        contentModel: (NSDictionary*)contentModel
-                              navVC: (UINavigationController *)navVC
+                              navVC: (UINavigationController*)navVC
 {
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
                                                    additionalDict: contentModel
@@ -844,9 +848,9 @@
      }];
 }
 
-- (void) onTchrPickSubjectQueryItem: (WOANameValuePair *)selectedPair
-                        relatedDict: (NSDictionary *)relatedDict
-                              navVC: (UINavigationController *)navVC
+- (void) onTchrPickSubjectQueryItem: (WOANameValuePair*)selectedPair
+                        relatedDict: (NSDictionary*)relatedDict
+                              navVC: (UINavigationController*)navVC
 {
     NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [contentReleatedDict addEntriesFromDictionary: selectedPair.subDictionary];
@@ -865,9 +869,9 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onTchrQueryAvailableTakeover: (WOANameValuePair *)selectedPair
-                          relatedDict: (NSDictionary *)relatedDict
-                                navVC: (UINavigationController *)navVC
+- (void) onTchrQueryAvailableTakeover: (WOANameValuePair*)selectedPair
+                          relatedDict: (NSDictionary*)relatedDict
+                                navVC: (UINavigationController*)navVC
 {
     NSString *vcTitle = relatedDict[KWOAKeyForActionTitle];
     
@@ -908,9 +912,9 @@
      }];
 }
 
-- (void) onTchrPickTakeoverReason: (WOANameValuePair *)selectedPair
-                      relatedDict: (NSDictionary *)relatedDict
-                            navVC: (UINavigationController *)navVC
+- (void) onTchrPickTakeoverReason: (WOANameValuePair*)selectedPair
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
 {
     NSString *vcTitle = relatedDict[KWOAKeyForActionTitle];
     
@@ -1000,8 +1004,8 @@
 
 - (void) onTchrSubmitTakeover: (WOAActionType)actionType
                  contentModel: (NSDictionary*)contentModel
-                  relatedDict: (NSDictionary *)relatedDict
-                        navVC: (UINavigationController *)navVC
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
 {
     NSString *changeStyle = @"";
     NSString *changeReason = @"";
@@ -1071,9 +1075,9 @@
      }];
 }
 
-- (void) onTchrApproveTakeover: (WOANameValuePair *)selectedPair
-                   relatedDict: (NSDictionary *)relatedDict
-                         navVC: (UINavigationController *)navVC
+- (void) onTchrApproveTakeover: (WOANameValuePair*)selectedPair
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
 {
     NSString *subjectCode = ((NSDictionary*)selectedPair.value)[kWOASrvKeyForSubjectChangeCode];
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
@@ -1120,7 +1124,7 @@
 - (void) tchrApproveTakeover: (WOAActionType)actionType
             isApproveAccpept: (BOOL)isApproveAccpept
               additionalDict: (NSMutableDictionary*)additionalDict
-                       navVC: (UINavigationController *)navVC
+                       navVC: (UINavigationController*)navVC
 {
     NSString *adviceString = isApproveAccpept ? @"1" : @"0";
     [additionalDict setValue: adviceString forKey: kWOASrvKeyForSubjectChangeAdvice];
@@ -1217,9 +1221,9 @@
     [ownerNavC pushViewController: subVC animated: YES];
 }
 
-- (void) onSelectPayoffYear: (WOANameValuePair *)selectedPair
-                relatedDict: (NSDictionary *)relatedDict
-                      navVC: (UINavigationController *)navVC
+- (void) onSelectPayoffYear: (WOANameValuePair*)selectedPair
+                relatedDict: (NSDictionary*)relatedDict
+                      navVC: (UINavigationController*)navVC
 {
     NSString *selectedYear = [selectedPair name];
     NSString *pageSize = @"20";
@@ -1283,7 +1287,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetAttdConditions
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryAttdConditions
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1298,11 +1302,11 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetCommentConditions
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryCommentConditions
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAActionType pairActionType = WOAActionType_TeacherGetCommentStudents;
+         WOAActionType pairActionType = WOAActionType_TeacherQueryCommentStudents;
          
          NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrGradeClassInfo: responseContent.bodyDictionary
                                                                       pairActionType: pairActionType];
@@ -1323,9 +1327,9 @@
      }];
 }
 
-- (void) onTchrGetCommentStudents: (WOANameValuePair *)selectedPair
-                      relatedDict: (NSDictionary *)relatedDict
-                            navVC: (UINavigationController *)navVC
+- (void) onTchrQueryCommentStudents: (WOANameValuePair*)selectedPair
+                        relatedDict: (NSDictionary*)relatedDict
+                              navVC: (UINavigationController*)navVC
 {
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
     
@@ -1335,9 +1339,9 @@
      {
          WOAActionType pairActionType = WOAActionType_TeacherPickCommentStudent;
          
-         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrGetCommentStudents: responseContent.bodyDictionary
-                                                                             actionTypeA: pairActionType
-                                                                             actionTypeB: WOAActionType_TeacherPickCommentItem];
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrQueryCommentStudents: responseContent.bodyDictionary
+                                                                               actionTypeA: pairActionType
+                                                                               actionTypeB: WOAActionType_TeacherPickCommentItem];
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择学生"
                                                              pairArray: pairArray
@@ -1353,9 +1357,9 @@
      }];
 }
 
-- (void) onTchrPickCommentStudent: (WOANameValuePair *)selectedPair
-                      relatedDict: (NSDictionary *)relatedDict
-                            navVC: (UINavigationController *)navVC
+- (void) onTchrPickCommentStudent: (WOANameValuePair*)selectedPair
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
 {
     NSArray *commentArray = selectedPair.subArray;
     
@@ -1413,9 +1417,9 @@
     }
 }
 
-- (void) onTchrPickCommentItem: (WOANameValuePair *)selectedPair
-                   relatedDict: (NSDictionary *)relatedDict
-                         navVC: (UINavigationController *)navVC
+- (void) onTchrPickCommentItem: (WOANameValuePair*)selectedPair
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
 {
     NSDictionary *pairValue = (NSDictionary*)selectedPair.value;
     NSString *evalItemID = pairValue[kWOASrvKeyForStdEvalItemID_Post];
@@ -1462,8 +1466,8 @@
 }
 
 - (void) onTchrEditStudentComment: (WOAActionType)actionType
-                      relatedDict: (NSDictionary *)relatedDict
-                            navVC: (UINavigationController *)navVC
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
 {
     NSString *studentName = relatedDict[kWOASrvKeyForStdEvalStudentName];
     NSString *evalContent = relatedDict[kWOASrvKeyForStdEvalItemContent_Post];
@@ -1522,8 +1526,8 @@
 
 - (void) onTchrSubmitCommentEdit: (WOAActionType)actionType
                     contentModel: (NSDictionary*)contentModel
-                     relatedDict: (NSDictionary *)relatedDict
-                           navVC: (UINavigationController *)navVC
+                     relatedDict: (NSDictionary*)relatedDict
+                           navVC: (UINavigationController*)navVC
 {
     NSString *studentComment = @"";
     NSString *studentName = relatedDict[kWOASrvKeyForStdEvalStudentName];
@@ -1557,9 +1561,9 @@
 }
 
 
-- (void) onTchrSubmitCommentDelete: (WOANameValuePair *)selectedPair
-                       relatedDict: (NSDictionary *)relatedDict
-                             navVC: (UINavigationController *)navVC
+- (void) onTchrSubmitCommentDelete: (WOANameValuePair*)selectedPair
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC
 {
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     
@@ -1585,10 +1589,315 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherGetQuatEvalItems
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryQuatEvalItems
                                                    additionalDict: nil
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType pairActionType = WOAActionType_TeacherPickQuatEvalItem;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrQueryQuatEvalItemso: responseContent.bodyDictionary
+                                                                              actionTypeA: pairActionType
+                                                                              actionTypeB: WOAActionType_TeacherQueryQuatEvalClasses];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"评价的学期"
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionary];
+         [contentRelatedDict setValue: vcTitle forKey: KWOAKeyForActionTitle];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: contentRelatedDict];
+         
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrPickQuatEvalItem: (WOANameValuePair*)selectedPair
+                    relatedDict: (NSDictionary*)relatedDict
+                          navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [contentRelatedDict addEntriesFromDictionary: selectedPair.subDictionary];
+    
+    WOAContentModel *contentModel = [WOAContentModel contentModel: @"评价的项目"
+                                                        pairArray: selectedPair.subArray
+                                                       actionType: WOAActionType_TeacherQueryQuatEvalClasses
+                                                       isReadonly: YES];
+    
+    WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                delegate: self
+                                                                             relatedDict: contentRelatedDict];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onTchrQueryQuatEvalClasses: (WOANameValuePair*)selectedPair
+                        relatedDict: (NSDictionary*)relatedDict
+                              navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: [selectedPair stringValue] forKey: kWOASrvKeyForQutEvalEvalItemID];
+
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    {
+        WOAActionType pairActionType = WOAActionType_TeacherQueryQuatEvalStudents;
+        
+        NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrQueryQuatEvalClasses: responseContent.bodyDictionary
+                                                                           pairActionType: pairActionType];
+        
+        NSString *contentTitle;
+        NSString *classType = responseContent.bodyDictionary[kWOASrvKeyForQutEvalClassType];
+        NSArray *evalStyle = responseContent.bodyDictionary[kWOASrvKeyForQutEvalStyle];
+        NSString *evalScore = responseContent.bodyDictionary[kWOASrvKeyForQutEvalItemScore];
+        
+        if ([classType isEqualToString: kWOASrvValueForQutEvalClassType_Society])
+        {
+            contentTitle = @"选择社团";
+        }
+        else
+        {
+            contentTitle = @"选择班级";
+        }
+
+        WOAContentModel *contentModel = [WOAContentModel contentModel: contentTitle
+                                                            pairArray: pairArray
+                                                           actionType: pairActionType
+                                                           isReadonly: YES];
+        
+        NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: addtDict];
+        [contentRelatedDict setValue: classType forKey: kWOASrvKeyForQutEvalClassType];
+        [contentRelatedDict setValue: evalStyle forKey: kWOASrvKeyForQutEvalStyle];
+        [contentRelatedDict setValue: evalScore forKey: kWOASrvKeyForQutEvalItemScore];
+        
+        WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                    delegate: self
+                                                                                 relatedDict: contentRelatedDict];
+
+        [navVC pushViewController: subVC animated: YES];
+    }];
+}
+
+- (void) onTchrQueryQuatEvalStudents: (WOANameValuePair*)selectedPair
+                         relatedDict: (NSDictionary*)relatedDict
+                               navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: [selectedPair stringValue] forKey: kWOASrvKeyForQutEvalClassItemID];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         WOAActionType pairActionType = WOAActionType_TeacherPickQuatEvalStudent;
+         
+         NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrQueryQuatEvalStudents: responseContent.bodyDictionary
+                                                                             pairActionType: pairActionType];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"评价的学生"
+                                                             pairArray: pairArray
+                                                            actionType: pairActionType
+                                                            isReadonly: YES];
+         
+         NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: addtDict];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: contentRelatedDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrPickQuatEvalStudent: (WOANameValuePair*)selectedPair
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC
+{
+    NSDictionary *selectStudentInfo = selectedPair.subDictionary;
+    
+    NSString *studentID = selectStudentInfo[kWOASrvKeyForQutEvalStudentID];
+    NSString *studentName = selectStudentInfo[kWOASrvKeyForQutEvalStudentName];
+    NSString *studentSeatNum = selectStudentInfo[kWOASrvKeyForStdEvalStudentSeatNo];
+    NSString *gradeClass = selectStudentInfo[kWOASrvKeyForQutEvalGradeClass];
+    
+    NSString *vcTitle = relatedDict[KWOAKeyForActionTitle];
+    NSArray *evalStyle = relatedDict[kWOASrvKeyForQutEvalStyle];
+    NSString *evalScore = relatedDict[kWOASrvKeyForQutEvalItemScore_Get];
+    
+    NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionary];
+    [contentRelatedDict setValue: relatedDict[kWOASrvKeyForQutEvalSchoolYear] forKey: kWOASrvKeyForQutEvalSchoolYear];
+    [contentRelatedDict setValue: relatedDict[kWOASrvKeyForQutEvalTerm] forKey: kWOASrvKeyForQutEvalTerm];
+    [contentRelatedDict setValue: relatedDict[kWOASrvKeyForQutEvalEvalItemID] forKey: kWOASrvKeyForQutEvalEvalItemID];
+    [contentRelatedDict setValue: studentID forKey: kWOASrvKeyForQutEvalStudentID];
+    
+    
+    WOAActionType pairActionType = WOAActionType_TeacherSubmitStudentQuatEval;
+    
+    NSMutableArray *pairArray = [NSMutableArray array];
+    WOANameValuePair *pair;
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    pair = [WOANameValuePair pairWithName: @"班级" value: gradeClass];
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"座号" value: studentSeatNum];
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"姓名" value: studentName];
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    pair = [WOANameValuePair pairWithName: @"类型" value: @"" dataType: WOAPairDataType_SinglePicker];
+    pair.subArray = evalStyle;
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"分数" value: evalScore];
+    pair.isWritable = ([evalScore integerValue] == 0);
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    pair = [WOANameValuePair pairWithName: @"备注" value: @"" dataType: WOAPairDataType_TextArea];
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"附件" value: @"" dataType: WOAPairDataType_AttachFile];
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    WOAContentModel *sectionModel = [WOAContentModel contentModel: vcTitle
+                                                        pairArray: pairArray
+                                                       actionType: pairActionType
+                                                       isReadonly: NO];
+    
+    pairArray = [NSMutableArray array];
+    NSArray *notifyOptionArray = @[@"不发送", @"发送"];
+    pair = [WOANameValuePair pairWithName: @"通知学生本人" value: @"不发送" dataType: WOAPairDataType_SinglePicker];
+    pair.subArray = notifyOptionArray;
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"通知家长" value: @"发送" dataType: WOAPairDataType_SinglePicker];
+    pair.subArray = notifyOptionArray;
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"通知班主任" value: @"发送" dataType: WOAPairDataType_SinglePicker];
+    pair.subArray = notifyOptionArray;
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    pair = [WOANameValuePair pairWithName: @"通知段长" value: @"不发送" dataType: WOAPairDataType_SinglePicker];
+    pair.subArray = notifyOptionArray;
+    pair.isWritable = YES;
+    [pairArray addObject: pair];
+    [pairArray addObject: seperatorPair];
+    
+    WOAContentModel *notifyModel = [WOAContentModel contentModel: @"短信通知"
+                                                       pairArray: pairArray
+                                                      actionType: pairActionType
+                                                      isReadonly: NO];
+    
+    WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                     contentArray: @[sectionModel, notifyModel]
+                                                       actionType: pairActionType
+                                                       actionName: @"提交"
+                                                       isReadonly: NO
+                                                          subDict: contentRelatedDict];
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onTchrSubmitStudentQuatEval: (WOAActionType)actionType
+                        contentModel: (NSDictionary*)contentModel
+                         relatedDict: (NSDictionary*)relatedDict
+                               navVC: (UINavigationController*)navVC
+{
+    NSString *studentID = relatedDict[kWOASrvKeyForQutEvalStudentID];
+    
+    NSString *evalStyle = @"";
+    NSString *evalScore = @"";
+    NSString *evalComment = @"";
+    NSArray *evalAttfile = @[];
+    
+    NSString *smsStudent = @"";
+    NSString *smsParents = @"";
+    NSString *smsHeadmaster = @"";
+    NSString *smsPrefect = @"";
+    
+    NSArray *groupItemArray = contentModel[kWOASrvKeyForItemArrays];
+    for (NSArray *itemDictArray in groupItemArray)
+    {
+        for (NSDictionary *itemDict in itemDictArray)
+        {
+            NSString *itemName = itemDict[kWOASrvKeyForItemName];
+            
+            if ([itemName isEqualToString: @"类型"])
+            {
+                evalStyle = itemDict[kWOASrvKeyForItemValue];
+            }
+            else if ([itemName isEqualToString: @"分数"])
+            {
+                evalScore = itemDict[kWOASrvKeyForItemValue];
+            }
+            else if ([itemName isEqualToString: @"备注"])
+            {
+                evalComment = itemDict[kWOASrvKeyForItemValue];
+            }
+            else if ([itemName isEqualToString: @"附件"])
+            {
+                evalAttfile = itemDict[kWOASrvKeyForItemValue];
+            }
+            else if ([itemName isEqualToString: @"通知学生本人"])
+            {
+                smsStudent = itemDict[kWOASrvKeyForItemValue];
+                smsStudent = [smsStudent isEqualToString: @"发送"] ? @"1" : @"0";
+            }
+            else if ([itemName isEqualToString: @"通知家长"])
+            {
+                smsParents = itemDict[kWOASrvKeyForItemValue];
+                smsParents = [smsParents isEqualToString: @"发送"] ? @"1" : @"0";
+            }
+            else if ([itemName isEqualToString: @"通知班主任"])
+            {
+                smsHeadmaster = itemDict[kWOASrvKeyForItemValue];
+                smsHeadmaster = [smsHeadmaster isEqualToString: @"发送"] ? @"1" : @"0";
+            }
+            else if ([itemName isEqualToString: @"通知段长"])
+            {
+                smsPrefect = itemDict[kWOASrvKeyForItemValue];
+                smsPrefect = [smsPrefect isEqualToString: @"发送"] ? @"1" : @"0";
+            }
+        }
+    }
+    
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict removeObjectForKey: kWOASrvKeyForQutEvalStudentID];
+    
+    [addtDict setValue: evalStyle forKey: kWOASrvKeyForQutEvalStyle];
+    
+    [addtDict setValue: smsStudent forKey: @"smsStudent"];
+    [addtDict setValue: smsParents forKey: @"smsParents"];
+    [addtDict setValue: smsHeadmaster forKey: @"smsHeadmaster"];
+    [addtDict setValue: smsPrefect forKey: @"smsPrefect"];
+    
+    NSMutableDictionary *studentInfoDict = [NSMutableDictionary dictionary];
+    [studentInfoDict setValue: studentID forKey: kWOASrvKeyForQutEvalStudentID];
+    [studentInfoDict setValue: evalScore forKey: kWOASrvKeyForQutEvalItemScore_Post];
+    [studentInfoDict setValue: evalComment forKey: kWOASrvKeyForQutEvalComment];
+    [studentInfoDict setValue: evalAttfile forKey: kWOASrvKeyForQutEvalAttfile];
+    NSArray *studentInfoArray = @[studentInfoDict];
+    [addtDict setValue: studentInfoArray forKey: @"scoreItems"];
+    
+    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
+                                                   additionalDict: addtDict
+                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
      }];
 }
 
@@ -1774,11 +2083,11 @@
         }
         
         ////////////////////////////////////////
-        case WOAActionType_TeacherGetCommentStudents:
+        case WOAActionType_TeacherQueryCommentStudents:
         {
-            [self onTchrGetCommentStudents: selectedPair
-                               relatedDict: relatedDict
-                                     navVC: navVC];
+            [self onTchrQueryCommentStudents: selectedPair
+                                 relatedDict: relatedDict
+                                       navVC: navVC];
             break;
         }
         
@@ -1804,6 +2113,39 @@
             [self onTchrEditStudentComment: actionType
                                relatedDict: relatedDict
                                      navVC: navVC];
+            break;
+        }
+        ////////////////////////////////////////
+        
+        case WOAActionType_TeacherPickQuatEvalItem:
+        {
+            [self onTchrPickQuatEvalItem: selectedPair
+                             relatedDict: relatedDict
+                                   navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherQueryQuatEvalClasses:
+        {
+            [self onTchrQueryQuatEvalClasses: selectedPair
+                                 relatedDict: relatedDict
+                                       navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherQueryQuatEvalStudents:
+        {
+            [self onTchrQueryQuatEvalStudents: selectedPair
+                                  relatedDict: relatedDict
+                                        navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_TeacherPickQuatEvalStudent:
+        {
+            [self onTchrPickQuatEvalStudent: selectedPair
+                                relatedDict: relatedDict
+                                      navVC: navVC];
             break;
         }
         ////////////////////////////////////////
@@ -1889,6 +2231,15 @@
                              contentModel: contentModel
                               relatedDict: vc.contentModel.subDict
                                     navVC: vc.navigationController];
+            break;
+        }
+            
+        case WOAActionType_TeacherSubmitStudentQuatEval:
+        {
+            [self onTchrSubmitStudentQuatEval: actionType
+                                 contentModel: contentModel
+                                  relatedDict: vc.contentModel.subDict
+                                        navVC: vc.navigationController];
             break;
         }
             

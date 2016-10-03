@@ -369,10 +369,13 @@
             selectedPair = [self.filteredRootPairArray objectAtIndex: indexPath.row];
         }
         
-        [_delegate singlePickerViewControllerSelected: indexPath
-                                         selectedPair: selectedPair
-                                          relatedDict: self.relatedDict
-                                                navVC: self.navigationController];
+        if (![selectedPair isSeperatorPair])
+        {
+            [_delegate singlePickerViewControllerSelected: indexPath
+                                             selectedPair: selectedPair
+                                              relatedDict: self.relatedDict
+                                                    navVC: self.navigationController];
+        }
     }
 }
 

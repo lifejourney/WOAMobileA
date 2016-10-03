@@ -393,23 +393,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {"head":{
     "msgType":"quantitativeEval","sessionID":"67"},
     "result":{
@@ -431,6 +414,42 @@
                                                       "49,国家级一等奖","50,国家级二等奖","51,国家级三等奖","52,国家级优胜奖","53,省级一等奖","54,省级二等奖","55,省级三等奖","56,省级优胜奖","57,市级一等奖","58,市级二等奖","59,市级三等奖","60,市级优胜奖","61,校级一等奖","62,校级二等奖","63,校级三等奖","64,年段一等奖","65,年段二等奖","66,年段三等奖"]},
                  {"itemName":"67,扣分项目","subItems":[
                                                    "68,违反考试纪律","69,违反宿舍管理规定","70,违反日常行为规范"]}]}
+
+
+
+{"head":{
+    "msgType":"evalStudentList","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "schoolYear":"2016-2017","term":"下学期","evalItemID":"13","evalItem":"骨干会员",
+    "evalScore":"20","evalStyle":[
+                                  "加分"],
+    "classIfication":"2","classItems":[
+                                       {"itemID":"3","name":"fghfgh ert eter t"},
+                                       {"itemID":"4","name":"123abc"},
+                                       {"itemID":"5","name":"wwwwww"},
+                                       {"itemID":"6","name":"篮球社"},
+                                       {"itemID":"7","name":"台球社"},
+                                       {"itemID":"8","name":"sdfsdf"}]}
+
+{"head":{
+    "msgType":"loadStudentList","sessionID":"67"},
+    "result":{
+        "code":"0"},
+    "studentItems":[
+                    {"gradeClass":"高三年10班","seatNo":"5","name":"蔡雅玲","index":"cyl","studentID":"11299"},
+                    {"gradeClass":"初三年1班","seatNo":"17","name":"陈思容","index":"csr","studentID":"11833"},
+                    {"gradeClass":"初三年5班","seatNo":"14","name":"毛子健","index":"mzj","studentID":"11951"},
+                    {"gradeClass":"初三年5班","seatNo":"16","name":"林小雅","index":"lxy","studentID":"11982"},
+                    {"gradeClass":"初三年4班","seatNo":"16","name":"王希冉","index":"wxd","studentID":"12155"}]}
+
+
+
+
+
+
+
+
 
 
 

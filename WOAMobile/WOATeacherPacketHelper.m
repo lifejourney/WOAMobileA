@@ -1061,9 +1061,9 @@
     return gradePairArray;
 }
 
-+ (NSArray*) pairArrayForTchrGetCommentStudents: (NSDictionary*)respDict
-                                    actionTypeA: (WOAActionType)actionTypeA
-                                    actionTypeB: (WOAActionType)actionTypeB
++ (NSArray*) pairArrayForTchrQueryCommentStudents: (NSDictionary*)respDict
+                                      actionTypeA: (WOAActionType)actionTypeA
+                                      actionTypeB: (WOAActionType)actionTypeB
 {
     NSMutableArray *studentPairArray = [NSMutableArray array];
     
@@ -1130,6 +1130,159 @@
     }
     
     return studentPairArray;
+}
+
+#pragma mark -
+
++ (NSArray*) pairArrayForTchrQueryQuatEvalItemso: (NSDictionary*)respDict
+                                     actionTypeA: (WOAActionType)actionTypeA
+                                     actionTypeB: (WOAActionType)actionTypeB
+{
+    NSMutableArray *evalItemPairArray = [NSMutableArray array];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    NSArray *evalDictArray = respDict[kWOASrvKeyForQutEvalEvalItems];
+    for (NSDictionary *evalItemDict in evalDictArray)
+    {
+        NSString *itemNameInfo = evalItemDict[kWOASrvKeyForQutEvalItemInfo];
+        NSString *itemName = [self nameFromCombinedString: itemNameInfo];
+        
+        NSMutableArray *subItemPairArray = [NSMutableArray array];
+        
+        NSArray *subItemInfoArray = evalItemDict[kWOASrvKeyForQutEvalSubItems];
+        for (NSString *subItemInfo in subItemInfoArray)
+        {
+            NSString *subItemID = [self idFromCombinedString: subItemInfo];
+            NSString *subItemName = [self nameFromCombinedString: subItemInfo];
+            
+            WOANameValuePair *subPair = [WOANameValuePair pairWithName: subItemName
+                                                                 value: subItemID
+                                                            actionType: actionTypeB];
+            
+            [subItemPairArray addObject: subPair];
+        }
+        
+        WOAContentModel *subItemContent = [WOAContentModel contentModel: itemName
+                                                              pairArray: subItemPairArray
+                                                             actionType: actionTypeB
+                                                             isReadonly: YES];
+        WOANameValuePair *evalItemPair = [WOANameValuePair pairWithName: itemName
+                                                                  value: subItemContent
+                                                               dataType: WOAPairDataType_ContentModel
+                                                             actionType: actionTypeB];
+        [evalItemPairArray addObject: evalItemPair];
+    }
+    
+    
+    NSMutableArray *termPairArray = [NSMutableArray array];
+    
+    NSArray *schoolYearArray = respDict[kWOASrvKeyForQutEvalSchoolYearArray];
+    NSArray *termArray = respDict[kWOASrvKeyForQutEvalTermArray];
+    
+    for (NSString *schoolYear in schoolYearArray)
+    {
+        for (NSString *termItem in termArray)
+        {
+            NSString *combinedTermText = [NSString stringWithFormat: @"%@ %@", schoolYear, termItem];
+            
+            NSMutableDictionary *itemRelatedInfo = [NSMutableDictionary dictionary];
+            [itemRelatedInfo setValue: schoolYear forKey: kWOASrvKeyForQutEvalSchoolYear];
+            [itemRelatedInfo setValue: termItem forKey: kWOASrvKeyForQutEvalTerm];
+            
+            WOANameValuePair *termPair = [WOANameValuePair pairWithName: combinedTermText
+                                                                  value: combinedTermText
+                                                             actionType: actionTypeA];
+            termPair.subDictionary = itemRelatedInfo;
+            termPair.subArray = evalItemPairArray;
+            
+            [termPairArray addObject: termPair];
+        }
+        
+        [termPairArray addObject: seperatorPair];
+    }
+    
+    return termPairArray;
+}
+
++ (NSArray*) pairArrayForTchrQueryQuatEvalClasses: (NSDictionary*)respDict
+                                   pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *level1PairArray = [NSMutableArray array];
+    
+    NSString *classType = respDict[kWOASrvKeyForQutEvalClassType];
+    BOOL isSocietyType = [classType isEqualToString: kWOASrvValueForQutEvalClassType_Society];
+    
+    NSArray *classDictArray = respDict[kWOASrvKeyForQutEvalClassItems];
+    
+    for (NSDictionary *classDict in classDictArray)
+    {
+        if (isSocietyType)
+        {
+            NSString *classID = classDict[kWOASrvKeyForQutEvalSocietyID];
+            NSString *className = classDict[kWOASrvKeyForQutEvalSocietyName];
+            
+            WOANameValuePair *classPair = [WOANameValuePair pairWithName: className
+                                                                   value: classID
+                                                              actionType: pairActionType];
+            
+            [level1PairArray addObject: classPair];
+        }
+        else
+        {
+            NSString *gradeInfo = classDict[kWOASrvKeyForQutEvalGradeInfo];
+            NSString *gradeName = [self nameFromCombinedString: gradeInfo];
+            
+            NSArray *classInfoArray = classDict[kWOASrvKeyForQutEvalClassInfo];
+            
+            NSMutableArray *level2PairArray = [NSMutableArray array];
+            for (NSString *classInfo in classInfoArray)
+            {
+                NSString *classID = [self idFromCombinedString: classInfo];
+                NSString *className = [self nameFromCombinedString: classInfo];
+                
+                WOANameValuePair *classPair = [WOANameValuePair pairWithName: className
+                                                                       value: classID
+                                                                  actionType: pairActionType];
+                
+                [level2PairArray addObject: classPair];
+            }
+            
+            WOAContentModel *gradePairValue = [WOAContentModel contentModel: gradeName
+                                                                   pairArray: level2PairArray];
+            WOANameValuePair *gradePair = [WOANameValuePair pairWithName: gradeName
+                                                                   value: gradePairValue
+                                                                dataType: WOAPairDataType_ContentModel
+                                                              actionType: pairActionType];
+            
+            [level1PairArray addObject: gradePair];
+        }
+    }
+    
+    return level1PairArray;
+}
+
++ (NSArray*) pairArrayForTchrQueryQuatEvalStudents: (NSDictionary*)respDict
+                                    pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *studentDictArray = respDict[kWOASrvKeyForQutEvalStudentList];
+    
+    for (NSDictionary *studentDict in studentDictArray)
+    {
+        NSString *studentID = studentDict[kWOASrvKeyForQutEvalStudentID];
+        NSString *studentName = studentDict[kWOASrvKeyForQutEvalStudentName];
+        
+        WOANameValuePair *classPair = [WOANameValuePair pairWithName: studentName
+                                                               value: studentID
+                                                          actionType: pairActionType];
+        classPair.subDictionary = studentDict;
+        
+        [pairArray addObject: classPair];
+    }
+    
+    return pairArray;
 }
 
 @end

@@ -92,10 +92,18 @@
 
 + (NSArray*) pairArrayForTchrGradeClassInfo: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
-+ (NSArray*) pairArrayForTchrGetCommentStudents: (NSDictionary*)respDict
-                                    actionTypeA: (WOAActionType)actionTypeA
-                                    actionTypeB: (WOAActionType)actionTypeB;
++ (NSArray*) pairArrayForTchrQueryCommentStudents: (NSDictionary*)respDict
+                                      actionTypeA: (WOAActionType)actionTypeA
+                                      actionTypeB: (WOAActionType)actionTypeB;
+#pragma mark -
 
++ (NSArray*) pairArrayForTchrQueryQuatEvalItemso: (NSDictionary*)respDict
+                                     actionTypeA: (WOAActionType)actionTypeA
+                                     actionTypeB: (WOAActionType)actionTypeB;
++ (NSArray*) pairArrayForTchrQueryQuatEvalClasses: (NSDictionary*)respDict
+                                   pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) pairArrayForTchrQueryQuatEvalStudents: (NSDictionary*)respDict
+                                    pairActionType: (WOAActionType)pairActionType;
 @end
 
 
