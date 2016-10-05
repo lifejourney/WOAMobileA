@@ -243,6 +243,7 @@
                                                                                      delegate: self
                                                                                   relatedDict: nil];
          subVC.shouldShowSearchBar = YES;
+         subVC.rowHeight = 80;
          
          [ownerNavC pushViewController: subVC animated: YES];
      }];
