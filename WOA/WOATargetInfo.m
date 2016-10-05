@@ -17,9 +17,27 @@
 
 + (NSDictionary*) targetInfoDict
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    
+//    return [userDefaults dictionaryForKey: kRootKey];
     
-    return [userDefaults dictionaryForKey: kRootKey];
+#ifdef WOAMobileTeacher
+    
+    return @{@"AppStoreID": @"908853362",
+             @"DefaultServerAddress": @{@"Production": @"http://www.qz5z.com",
+                                        @"Test": @"http://220.162.12.167:8080"},
+             @"DefaultTabID": @(0),
+             @"RootViewControllerClass": @"WOATeacherRootViewController"};
+    
+#elif defined(WOAMobileStudent)
+    
+    return @{@"AppStoreID": @"908853362",
+             @"DefaultServerAddress": @{@"Production": @"http://www.qz5z.com",
+                                        @"Test": @"http://220.162.12.166:8080/jsonS.php"},
+             @"DefaultTabID": @(0),
+             @"RootViewControllerClass": @"WOAStudentRootViewController"};
+    
+#endif
 }
 
 #pragma mark -

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "WOAActionDefine.h"
 #import "WOAConstDefine.h"
-#import "WOATargetHeader.h"
+#import "WOATargetInfo.h"
 
 
 typedef NS_ENUM(NSUInteger, WOAPairDataType)

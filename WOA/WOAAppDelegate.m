@@ -40,7 +40,7 @@
         [WOANameValuePair initTypeMapArray];
         [WOAActionDefine initActionMapDict];
         
-        [WOAPropertyInfo saveLatestSessionID: nil];
+        //[WOAPropertyInfo saveLatestSessionID: nil];
         [WOAPropertyInfo saveLatestWorkID: nil];
     }
     
@@ -78,9 +78,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSString *infoPlistPath = [NSString stringWithFormat: @"%@/info.plist", [[NSBundle mainBundle] bundlePath]];
-    NSDictionary *infoPlistDict = [NSDictionary dictionaryWithContentsOfFile: infoPlistPath];
-    [[NSUserDefaults standardUserDefaults] registerDefaults: infoPlistDict];
+//    NSString *infoPlistPath = [NSString stringWithFormat: @"%@/info.plist", [[NSBundle mainBundle] bundlePath]];
+//    NSDictionary *infoPlistDict = [NSDictionary dictionaryWithContentsOfFile: infoPlistPath];
+//    [[NSUserDefaults standardUserDefaults] registerDefaults: infoPlistDict];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     

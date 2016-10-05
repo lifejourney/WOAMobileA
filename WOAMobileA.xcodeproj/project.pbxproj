@@ -271,7 +271,6 @@
 		DC2257CD1D8CC262006A18E3 /* WOAHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOAHTTPRequest.m; sourceTree = "<group>"; };
 		DC2257D61D8CD6DA006A18E3 /* WOATargetInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOATargetInfo.m; sourceTree = "<group>"; };
 		DC2257D91D8CD6EF006A18E3 /* WOATargetInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOATargetInfo.h; sourceTree = "<group>"; };
-		DC2257DA1D8CE1FB006A18E3 /* WOATargetHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOATargetHeader.h; sourceTree = "<group>"; };
 		DC2258931D8D56A0006A18E3 /* WOARequestManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WOARequestManager.h; sourceTree = "<group>"; };
 		DC2258941D8D56B1006A18E3 /* WOARequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOARequestManager.m; sourceTree = "<group>"; };
 		DC2258981D8D7923006A18E3 /* WOATeacherRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WOATeacherRootViewController.m; sourceTree = "<group>"; };
@@ -672,7 +671,6 @@
 				DC2257C51D8CC071006A18E3 /* WOARootViewController.h */,
 				DC2257C61D8CC071006A18E3 /* WOARootViewController.m */,
 				DC2257CB1D8CC198006A18E3 /* WOAStartWorkflowActionReqeust.h */,
-				DC2257DA1D8CE1FB006A18E3 /* WOATargetHeader.h */,
 			);
 			path = WOA;
 			sourceTree = "<group>";

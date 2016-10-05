@@ -2,22 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>WOATargetInfo</key>
-	<dict>
-		<key>RootViewControllerClass</key>
-		<string>WOAStudentRootViewController</string>
-		<key>DefaultTabID</key>
-		<integer>0</integer>
-		<key>DefaultServerAddress</key>
-		<dict>
-			<key>Production</key>
-			<string>http://www.qz5z.com</string>
-			<key>Test</key>
-			<string>http://220.162.12.166:8080/jsonS.php</string>
-		</dict>
-		<key>AppStoreID</key>
-		<string>1090667418</string>
-	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>CFBundleDisplayName</key>

@@ -53,8 +53,11 @@
 
 + (NSString*) defaultServerAddress
 {
+#ifdef DEBUG
     return [WOATargetInfo defaultServerAddrForTest];
-//    return [WOATargetInfo defaultServerAddrForProduction];
+#else
+    return [WOATargetInfo defaultServerAddrForProduction];
+#endif
 }
 
 + (NSString*) serverAddress

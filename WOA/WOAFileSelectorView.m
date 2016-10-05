@@ -170,7 +170,7 @@
     if (self.limitMaxCount > 0 && existItemCount >= self.limitMaxCount)
     {
         UIViewController *rootVC = [[self.delegate hostNavigation] parentViewController];
-        NSString *alertMessage = [NSString stringWithFormat: @"最多只能 %ld 个附件.", self.limitMaxCount];
+        NSString *alertMessage = [NSString stringWithFormat: @"最多只能 %ld 个附件.", (unsigned long)self.limitMaxCount];
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
                                                                                  message: alertMessage

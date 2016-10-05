@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "WOATargetHeader.h"
+#import "WOATargetInfo.h"
 
 
 #define kWOAValue_MsgType_Login @"login"
