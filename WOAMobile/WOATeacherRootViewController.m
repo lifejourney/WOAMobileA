@@ -44,6 +44,11 @@
  3. View the attachment in app.
  4. Support show content in multiple lines.
  5. Add server setting entry in the login view.
+ 
+ Ver 2.01.02
+ 增加新功能:
+ 1. 业务管理：表格填写，调课，课表查询，工资查询。
+ 2. 学生管理：学生考勤，学生评语与评价。
  */
 
 @interface WOATeacherRootViewController() <WOASinglePickViewControllerDelegate,
