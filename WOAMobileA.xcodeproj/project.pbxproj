@@ -498,7 +498,7 @@
 			name = MultiStyleItemField;
 			sourceTree = "<group>";
 		};
-		DC8348121D97F0AB0055B031 /* ViewController */ = {
+		DC8348121D97F0AB0055B031 /* FeatureViewController */ = {
 			isa = PBXGroup;
 			children = (
 				DC2257481D8CBBC3006A18E3 /* WOAAboutViewController.h */,
@@ -521,7 +521,7 @@
 				DC2257561D8CBBC3006A18E3 /* WOAVersionInfoViewController.m */,
 				DC2257571D8CBBC3006A18E3 /* WOAVersionInfoViewController.xib */,
 			);
-			name = ViewController;
+			name = FeatureViewController;
 			sourceTree = "<group>";
 		};
 		DC8348131D97F1930055B031 /* Model */ = {
@@ -666,13 +666,13 @@
 			isa = PBXGroup;
 			children = (
 				DC8348151D97F2B20055B031 /* Connection */,
+				DC8348121D97F0AB0055B031 /* FeatureViewController */,
 				DC8348161D9829970055B031 /* FunctionViewController */,
 				DC2257C01D8CBF0E006A18E3 /* main.m */,
 				DC8348131D97F1930055B031 /* Model */,
 				DC8348111D97EF920055B031 /* MultiStyleItemField */,
 				DC8348101D97EEB20055B031 /* Obsolete */,
 				DC8348141D97F2850055B031 /* View */,
-				DC8348121D97F0AB0055B031 /* ViewController */,
 				DC22576C1D8CBCBE006A18E3 /* WOAAppDelegate.h */,
 				DC22576D1D8CBCBE006A18E3 /* WOAAppDelegate.m */,
 				DC2257C51D8CC071006A18E3 /* WOARootViewController.h */,
