@@ -7,17 +7,18 @@
 //
 
 #import "WOAStudentRootViewController.h"
-#import "WOARequestManager.h"
-#import "WOATeacherPacketHelper.h"
 #import "WOAMenuListViewController.h"
-#import "WOADateFromToPickerViewController.h"
+#import "WOAFlowListViewController.h"
+#import "WOAMultiPickerViewController.h"
+#import "WOAContentViewController.h"
 #import "WOASimpleListViewController.h"
 #import "WOAListDetailViewController.h"
-#import "WOAContentViewController.h"
-#import "WOAFlowListViewController.h"
+#import "WOADateFromToPickerViewController.h"
+#import "WOARequestManager+Student.h"
+#import "WOAStudentPacketHelper.h"
 #import "WOAPropertyInfo.h"
-#import "UIImage+Utility.h"
-#import "WOANameValuePair.h"
+#import "WOALayout.h"
+#import "NSString+Utility.h"
 
 
 /* 确认:
@@ -56,7 +57,10 @@
 
 
 
-@interface WOAStudentRootViewController() <WOAFlowListViewControllerDelegate>
+@interface WOAStudentRootViewController() <WOASinglePickViewControllerDelegate,
+                                            WOAMultiPickerViewControllerDelegate,
+                                            WOAContentViewControllerDelegate,
+                                            WOAUploadAttachmentRequestDelegate>
 
 @property (nonatomic, strong) UINavigationController *myProfileNavC;
 @property (nonatomic, strong) UINavigationController *myStudyNavC;
@@ -73,108 +77,78 @@
 {
     if (self = [super init])
     {
-        self.funcDictionary = @{@"mySchoolInfo":            @[@"学籍信息",  @(0), @(NO)]
-                                ,@"myConsumeInfo":          @[@"消费信息",  @(0), @(NO)]
-                                ,@"myAttendanceInfo":       @[@"考勤记录",  @(0), @(NO)]
-                                ,@"myStudyAchievement":     @[@"学业成绩",  @(0), @(NO)]
-                                ,@"mySociety":              @[@"社团情况",  @(0), @(NO)]
-                                ,@"selfEvaluation":         @[@"自我评价",  @(0), @(YES)]
-                                ,@"quantitativeEvaluation": @[@"量化评价",  @(0), @(NO)]
-                                ,@"summativeEvaluation":    @[@"总结性评价", @(0), @(NO)]
-                                ,@"teacherEvaluation":      @[@"教师评价",  @(0), @(YES)]
-                                ,@"fromCourseTeacher":      @[@"课任评价",  @(0), @(NO)]
-                                ,@"fromClassTeacher":       @[@"班主任评价", @(0), @(NO)]
-                                ,@"parentWishes":           @[@"父母寄语",  @(0), @(NO)]
-                                ,@"developmentEvaluation":  @[@"发展性评价", @(0), @(NO)]
-                                ,@"mySyllabus":             @[@"我的课表",  @(1), @(YES)]
-                                ,@"siginSelectiveCourse":   @[@"选修报名",  @(1), @(NO)]
-                                ,@"courseList":             @[@"课程资源",  @(1), @(NO)]
-                                ,@"mySelectiveCourses":     @[@"我的选修课", @(1), @(NO)]
-                                ,@"homeworkBoard":          @[@"作业区",    @(1), @(NO)]
-                                ,@"discussionBoard":        @[@"讨论区",    @(1), @(NO)]
-                                ,@"selectiveSyllabus":      @[@"选修课程",  @(1), @(YES)]
-                                ,@"myFillFormTask":         @[@"填表任务",  @(1), @(YES)]
-                                ,@"createTransaction":      @[@"新建事项",  @(1), @(YES)]
-                                ,@"todoTransaction":        @[@"待办事项",  @(1), @(NO)]
-                                ,@"transactionList":        @[@"事项查询",  @(1), @(NO)]
-                                ,@"joinSociety":            @[@"加入社团",  @(2), @(NO)]
-                                ,@"manageSociety":          @[@"管理社团",  @(2), @(YES)]
-                                ,@"societyInfo":            @[@"社团信息",  @(2), @(NO)]
-                                ,@"applyForActivity":       @[@"活动申请",  @(2), @(NO)]
-                                ,@"activityRecord":         @[@"活动记录",  @(2), @(NO)]
-                                ,@"checkForUpdate":         @[@"版本",     @(3), @(NO)]
-                                ,@"aboutManufactor":        @[@"关于我们",  @(3), @(NO)]
-                                ,@"logout":                 @[@"退出登录",  @(3), @(NO)]
-                                };
+        /*
+         key:    funcName
+         value:  order,
+         title,
+         tabIndex
+         showAccesory
+         hasChild
+         parentItemName
+         imageName
+         */
+    self.funcDictionary =
+    @{@"checkForUpdate":        @[@(1),     @"版本",           @(3), @(NO), @(NO), @"",                      @""]
+    ,@"aboutManufactor":        @[@(2),     @"关于我们",        @(3), @(NO), @(NO), @"",                      @""]
+    ,@"_31":                    @[@(3),     @"-",              @(3), @(NO), @(NO), @"",                      @""]
+    ,@"logout":                 @[@(4),     @"退出登录",        @(3), @(NO), @(NO), @"",                      @""]
+          
+    ,@"mySchoolInfo":           @[@(1),     @"学籍信息",        @(0), @(NO), @(NO), @"",                      @""]
+    ,@"myConsumeInfo":          @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"myAttendanceInfo":       @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"myStudyAchievement":     @[@(4),     @"学业成绩",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"mySociety":              @[@(5),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"selfEvaluation":         @[@(6),     @"自我评价",        @(0), @(YES),@(YES), @"",                      @""]
+    ,@"quantitativeEvaluation": @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"selfEvaluation",          @""]
+    ,@"summativeEvaluation":    @[@(8),     @"总结性评价",       @(0), @(NO),@(NO),  @"selfEvaluation",         @""]
+    ,@"teacherEvaluation":      @[@(9),     @"教师评价",        @(0), @(YES),@(YES), @"",                      @""]
+    ,@"fromCourseTeacher":      @[@(10),     @"课任评价",       @(0), @(NO),@(NO),  @"teacherEvaluation",       @""]
+    ,@"fromClassTeacher":       @[@(11),     @"班主任评价",      @(0), @(NO),@(NO), @"teacherEvaluation",       @""]
+    ,@"parentWishes":           @[@(12),     @"父母寄语",       @(0), @(NO),@(NO), @"",                      @""]
+    ,@"developmentEvaluation":  @[@(13),     @"发展性评价",      @(0), @(NO),@(NO), @"",                      @""]
+    ,@"mySyllabus":             @[@(1),     @"我的课表",        @(1), @(NO),@(NO), @"",                      @""]
+    ,@"selectiveSyllabus":      @[@(2),     @"选修课程",        @(1), @(YES),@(YES), @"",                      @""]
+    ,@"siginSelectiveCourse":   @[@(3),     @"选修报名",        @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
+    ,@"courseList":             @[@(4),     @"课程资源",        @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
+    ,@"mySelectiveCourses":     @[@(5),     @"我的选修课",       @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
+    ,@"homeworkBoard":          @[@(6),     @"作业区",         @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
+    ,@"discussionBoard":        @[@(7),     @"讨论区",         @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
+    ,@"myFillFormTask":         @[@(8),     @"填表任务",        @(1), @(NO),@(NO), @"",                      @""]
+    ,@"createTransaction":      @[@(9),     @"新建事项",        @(1), @(NO),@(NO), @"",                      @""]
+    ,@"todoTransaction":        @[@(10),     @"待办事项",       @(1), @(NO),@(NO), @"",                      @""]
+    ,@"transactionList":        @[@(11),     @"事项查询",       @(1), @(NO),@(NO), @"",                      @""]
+    ,@"joinSociety":            @[@(1),     @"加入社团",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"manageSociety":          @[@(2),     @"管理社团",        @(2), @(YES),@(YES), @"",                      @""]
+    ,@"societyInfo":            @[@(3),     @"社团信息",        @(2), @(NO),@(NO), @"manageSociety",        @""]
+    ,@"applyForActivity":       @[@(4),     @"活动申请",        @(2), @(NO),@(NO), @"manageSociety",        @""]
+    ,@"activityRecord":         @[@(5),     @"活动记录",        @(2), @(NO),@(NO), @"manageSociety",        @""]
+    };
+        
+        NSArray *rootLevelMenuArray = [self rootLevelMenuListArray: 4];
+        NSArray *myProfileMenuList  = rootLevelMenuArray[0];
+        NSArray *myStudyList        = rootLevelMenuArray[1];
+        NSArray *mySocietyList      = rootLevelMenuArray[2];
+        NSArray *moreFeatureList    = rootLevelMenuArray[3];
         
         
-        NSArray *myProfileItemArray = @[[self itemWithFunc: @"mySchoolInfo"]
-                                        ,[self itemWithFunc: @"myConsumeInfo"]
-                                        ,[self itemWithFunc: @"myAttendanceInfo"]
-                                        ,[self itemWithFunc: @"myStudyAchievement"]
-                                        ,[self itemWithFunc: @"mySociety"]
-                                        ,[self itemWithFunc: @"selfEvaluation"]
-                                        ,[self itemWithFunc: @"teacherEvaluation"]
-                                        ,[self itemWithFunc: @"parentWishes"]
-                                        ,[self itemWithFunc: @"developmentEvaluation"]];
-        NSArray *myStudyItemArray = @[[self itemWithFunc: @"mySyllabus"]
-                                      ,[self itemWithFunc: @"selectiveSyllabus"]
-                                      ,[self itemWithFunc: @"myFillFormTask"]
-                                      ,[self itemWithFunc: @"createTransaction"]
-                                      ,[self itemWithFunc: @"todoTransaction"]
-                                      ,[self itemWithFunc: @"transactionList"]];
-        NSArray *mySocietyItemArray = @[[self itemWithFunc: @"joinSociety"]
-                                        ,[self itemWithFunc: @"manageSociety"]];
-        NSArray *moreFeatureItemArray = @[[self itemWithFunc: @"checkForUpdate"]
-                                          ,[self itemWithFunc: @"aboutManufactor"]
-                                          ,[WOAMenuItemModel seperatorItemModel]
-                                          ,[self itemWithFunc: @"logout"]];
+        self.myProfileNavC      = [self navigationControllerWithTitle: @"我的档案"
+                                                             menuList: myProfileMenuList
+                                                      normalImageName: @"TodoWorkFlowIcon"
+                                                    selectedImageName: @"TodoWorkFlowSelectedIcon"];
+        self.myStudyNavC        = [self navigationControllerWithTitle: @"学业管理"
+                                                             menuList: myStudyList
+                                                      normalImageName: @"NewWorkFlowIcon"
+                                                    selectedImageName: @"NewWorkFlowSelectedIcon"];
+        self.mySocietyNavC      = [self navigationControllerWithTitle: @"社团管理"
+                                                             menuList: mySocietyList
+                                                      normalImageName: @"SearchWorkFlowIcon"
+                                                    selectedImageName: @"SearchWorkFlowSelectedIcon"];
+        self.moreFeatureNavC    = [self navigationControllerWithTitle: @"更多"
+                                                             menuList: moreFeatureList
+                                                      normalImageName: @"MoreFeatureIcon"
+                                                    selectedImageName: @"MoreFeatureSelectedIcon"];
         
-        
-        UITabBarItem *myProfileItem = [[UITabBarItem alloc] initWithTitle: @"我的档案"
-                                                                    image: [UIImage originalImageWithName: @"TodoWorkFlowIcon"]
-                                                            selectedImage: [UIImage originalImageWithName: @"TodoWorkFlowSelectedIcon"]];
-        
-        UITabBarItem *myStudyItem = [[UITabBarItem alloc] initWithTitle: @"学业管理"
-                                                                  image: [UIImage originalImageWithName: @"NewWorkFlowIcon"]
-                                                          selectedImage: [UIImage originalImageWithName: @"NewWorkFlowSelectedIcon"]];
-        
-        UITabBarItem *mySocietyItem = [[UITabBarItem alloc] initWithTitle: @"社团管理"
-                                                                    image: [UIImage originalImageWithName: @"SearchWorkFlowIcon"]
-                                                            selectedImage: [UIImage originalImageWithName: @"SearchWorkFlowSelectedIcon"]];
-        
-        UITabBarItem *moreFeatureItem = [[UITabBarItem alloc] initWithTitle: @"更多"
-                                                                      image: [UIImage originalImageWithName: @"MoreFeatureIcon"]
-                                                              selectedImage: [UIImage originalImageWithName: @"MoreFeatureSelectedIcon"]];
-        
-        WOAMenuListViewController *myProfileVC = [WOAMenuListViewController menuListViewController: @"我的档案"
-                                                                                         itemArray: myProfileItemArray];
-        _myProfileNavC = [[UINavigationController alloc] initWithRootViewController: myProfileVC];
-        _myProfileNavC.tabBarItem = myProfileItem;
-        
-        WOAMenuListViewController *myStudyVC = [WOAMenuListViewController menuListViewController: @"学业管理"
-                                                                                       itemArray: myStudyItemArray];
-        _myStudyNavC = [[UINavigationController alloc] initWithRootViewController: myStudyVC];
-        _myStudyNavC.tabBarItem = myStudyItem;
-        
-        WOAMenuListViewController *mySocietyVC = [WOAMenuListViewController menuListViewController: @"社团管理"
-                                                                                         itemArray: mySocietyItemArray];
-        _mySocietyNavC = [[UINavigationController alloc] initWithRootViewController: mySocietyVC];
-        _mySocietyNavC.tabBarItem = mySocietyItem;
-        
-        WOAMenuListViewController *moreFeatureVC = [WOAMenuListViewController menuListViewController: @"更多"
-                                                                                           itemArray: moreFeatureItemArray];
-        _moreFeatureNavC = [[UINavigationController alloc] initWithRootViewController: moreFeatureVC];
-        _moreFeatureNavC.tabBarItem = moreFeatureItem;
-        
-        NSMutableArray *vcArray = [[NSMutableArray alloc] init];
-        [vcArray addObject: _myProfileNavC];
-        [vcArray addObject: _myStudyNavC];
-        [vcArray addObject: _mySocietyNavC];
-        [vcArray addObject: _moreFeatureNavC];
-        
-        self.vcArray = vcArray;
-        
+        self.vcArray = @[self.myProfileNavC, self.myStudyNavC, self.mySocietyNavC, self.moreFeatureNavC];
         self.viewControllers = self.vcArray;
     }
     
@@ -194,12 +168,15 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         WOAContentModel *contentModel = [WOAPacketHelper modelForSchoolInfo: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: @[contentModel]];
+         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForSchoolInfo: retList];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: @[sectionModel]];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -222,13 +199,14 @@
                                                              toDate: toDateString
                                                          onSuccuess: ^(WOAResponeContent *responseContent)
                      {
-                         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+                         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
                          
-                         WOAContentModel *contentModel = [WOAPacketHelper modelForConsumeInfo: retList];
+                         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForConsumeInfo: retList];
+                         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                                          contentArray: @[sectionModel]];
                          
                          WOASimpleListViewController *subVC;
-                         subVC = [WOASimpleListViewController listViewController: vcTitle
-                                                                      modelArray: @[contentModel]
+                         subVC = [WOASimpleListViewController listViewController: contentModel
                                                                        cellStyle: UITableViewCellStyleValue1];
                          
                          [ownerNav pushViewController: subVC animated: YES];
@@ -258,13 +236,14 @@
                                                              toDate: toDateString
                                                          onSuccuess: ^(WOAResponeContent *responseContent)
                      {
-                         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+                         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
                          
-                         WOAContentModel *contentModel = [WOAPacketHelper modelForAttendanceInfo: retList];
+                         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForAttendanceInfo: retList];
+                         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                                          contentArray: @[sectionModel]];
                          
-                         WOASimpleListViewController *subVC
-                         subVC = [WOASimpleListViewController listViewController: vcTitle
-                                                                      modelArray: @[contentModel]
+                         WOASimpleListViewController *subVC;
+                         subVC = [WOASimpleListViewController listViewController: contentModel
                                                                        cellStyle: UITableViewCellStyleDefault];
                          
                          [ownerNav pushViewController: subVC animated: YES];
@@ -287,12 +266,13 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForStudyAchievement: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForStudyAchievement: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -308,12 +288,12 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         //         NSArray *modelArray = [WOAPacketHelper modelForAssociationInfo: retList];
-         //         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-         //                                                                                modelArray: modelArray];
-         NSArray *modelArray = [WOAPacketHelper modelForActivityRecord: retList];
+//          NSArray *modelArray = [WOAStudentPacketHelper modelForAssociationInfo: retList];
+//          WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
+//                                                                                 modelArray: modelArray];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForActivityRecord: retList];
          WOAListDetailViewController *subVC = [WOAListDetailViewController listViewController: vcTitle
                                                                                     pairArray: modelArray
                                                                                   detailStyle: WOAListDetailStyleContent];
@@ -321,21 +301,6 @@
          [ownerNav pushViewController: subVC animated: YES];
          
      }];
-}
-
-- (void) selfEvaluation
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    NSArray *itemArray = @[[self itemWithFunc: @"quantitativeEvaluation"]
-                           ,[self itemWithFunc: @"summativeEvaluation"]];
-    
-    WOAMenuListViewController *subVC = [WOAMenuListViewController menuListViewController: vcTitle
-                                                                               itemArray: itemArray];
-    
-    [ownerNav pushViewController: subVC animated: YES];
 }
 
 - (void) quantitativeEvaluation
@@ -348,13 +313,15 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForEvaluationInfo: retList
-                                                             byTeacher: NO];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
+                                                                      byTeacher: NO];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -362,21 +329,6 @@
 
 - (void) summativeEvaluation
 {
-}
-
-- (void) teacherEvaluation
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    NSArray *itemArray = @[[self itemWithFunc: @"fromCourseTeacher"]
-                           ,[self itemWithFunc: @"fromClassTeacher"]];
-    
-    WOAMenuListViewController *subVC = [WOAMenuListViewController menuListViewController: vcTitle
-                                                                               itemArray: itemArray];
-    
-    [ownerNav pushViewController: subVC animated: YES];
 }
 
 - (void) fromCourseTeacher
@@ -389,13 +341,15 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForEvaluationInfo: retList
-                                                             byTeacher: YES];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
+                                                                      byTeacher: YES];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -411,18 +365,20 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          //         retList = @{@"grade":@"初二下学期|初二下学期",
          //                     @"date":@"2015-10-10|2015-11-11",
          //                     @"cont":@"评价内容1|内容2",
          //                     @"file":@"附件地址1|地址2",
          //                     @"teach":@"评价教师1|教师2"};
          
-         NSArray *modelArray = [WOAPacketHelper modelForEvaluationInfo: retList
-                                                             byTeacher: YES];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
+                                                                      byTeacher: YES];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -438,13 +394,15 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForEvaluationInfo: retList
-                                                             byTeacher: NO];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
+                                                                      byTeacher: NO];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -460,12 +418,14 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForDevelopmentEvaluation: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForDevelopmentEvaluation: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -483,33 +443,15 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForMySyllabus: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForMySyllabus: retList];
          WOAListDetailViewController *subVC = [WOAListDetailViewController listViewController: vcTitle
                                                                                     pairArray: modelArray
                                                                                   detailStyle: WOAListDetailStyleContent];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
-}
-
-- (void) selectiveSyllabus
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    NSArray *itemArray = @[[self itemWithFunc: @"siginSelectiveCourse"]
-                           ,[self itemWithFunc: @"courseList"]
-                           ,[self itemWithFunc: @"mySelectiveCourses"]
-                           ,[self itemWithFunc: @"homeworkBoard"]
-                           ,[self itemWithFunc: @"discussionBoard"]];
-    
-    WOAMenuListViewController *subVC = [WOAMenuListViewController menuListViewController: vcTitle
-                                                                               itemArray: itemArray];
-    
-    [ownerNav pushViewController: subVC animated: YES];
 }
 
 - (void) siginSelectiveCourse
@@ -526,12 +468,14 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForCourseList: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForCourseList: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -547,12 +491,14 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForMySelectiveCourses: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForMySelectiveCourses: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -576,9 +522,9 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForMyFillFormTask: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForMyFillFormTask: retList];
          WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
                                                                  pairArray: modelArray];
          
@@ -600,9 +546,9 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForCreateTransaction: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForCreateTransaction: retList];
          WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
                                                                  pairArray: modelArray];
          
@@ -624,12 +570,14 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForTodoTransaction: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForTodoTransaction: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -645,12 +593,14 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForTransactionList: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForTransactionList: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -668,22 +618,6 @@
                      navVC: ownerNav];
 }
 
-- (void) manageSociety
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    NSArray *itemArray = @[[self itemWithFunc: @"societyInfo"]
-                           ,[self itemWithFunc: @"applyForActivity"]
-                           ,[self itemWithFunc: @"activityRecord"]];
-    
-    WOAMenuListViewController *subVC = [WOAMenuListViewController menuListViewController: vcTitle
-                                                                               itemArray: itemArray];
-    
-    [ownerNav pushViewController: subVC animated: YES];
-}
-
 - (void) societyInfo
 {
     NSString *funcName = [self simpleFuncName: __func__];
@@ -694,12 +628,14 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForSocietyInfo: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-                                                                                isEditable: NO
-                                                                                modelArray: modelArray];
+         NSArray *sectionArray = [WOAStudentPacketHelper modelForSocietyInfo: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: sectionArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
@@ -719,9 +655,9 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForActivityRecord: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForActivityRecord: retList];
          WOAListDetailViewController *subVC = [WOAListDetailViewController listViewController: vcTitle
                                                                                     pairArray: modelArray
                                                                                   detailStyle: WOAListDetailStyleContent];
@@ -731,12 +667,23 @@
 }
 
 
-#pragma mark - WOAFlowListViewControllerDelegate
+#pragma mark - WOAUploadAttachmentRequestDelegate
 
-- (void) flowListViewControllerSelectRowAtIndexPath: (NSIndexPath*)indexPath
-                                       selectedPair: (WOANameValuePair*)selectedPair
-                                        relatedDict: (NSDictionary*)relatedDict
-                                              navVC: (UINavigationController *)navVC
+- (void) requestUploadAttachment: (WOAActionType)contentActionType
+                   filePathArray: (NSArray*)filePathArray
+                      titleArray: (NSArray*)titleArray
+                  additionalDict: (NSDictionary*)additionalDict
+                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler
+{
+}
+
+#pragma mark - WOASinglePickViewControllerDelegate
+
+- (void) singlePickViewControllerSelected: (WOASinglePickViewController*)vc
+                                indexPath: (NSIndexPath*)indexPath //Notice: indexPath for filtered Array.
+                             selectedPair: (WOANameValuePair*)selectedPair
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC
 {
     switch (selectedPair.actionType)
     {
@@ -781,6 +728,91 @@
     }
 }
 
+- (void) singlePickViewControllerSubmit: (WOASinglePickViewController*)vc
+                           contentModel: (WOAContentModel*)contentModel
+                            relatedDict: (NSDictionary*)relatedDict
+                                  navVC: (UINavigationController*)navVC
+{
+    
+}
+
+#pragma mark - WOAContentViewControllerDelegate
+
+- (void) contentViewController: (WOAContentViewController*)vc
+//              rightButtonClick: (WOAContentModel*)contentModel
+                    actionType: (WOAActionType)actionType
+                 submitContent: (NSDictionary*)contentDict
+                   relatedDict: (NSDictionary*)relatedDict
+{
+    //WOAActionType actionType = contentModel.actionType;
+    
+    NSMutableDictionary *combinedCntDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [combinedCntDict addEntriesFromDictionary: contentDict];
+    
+    switch (actionType)
+    {
+        case WOAActionType_FlowDone:
+        {
+            [self onFlowDoneWithLatestActionType: actionType
+                                           navVC: vc.navigationController];
+        }
+            
+        default:
+            break;
+    }
+}
+
+#pragma mark - WOAMultiPickerViewControllerDelegate
+
+- (void) multiPickerViewController: (WOAMultiPickerViewController*)pickerViewController
+                        actionType: (WOAActionType)actionType
+                 selectedPairArray: (NSArray*)selectedPairArray
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC
+{
+    switch (actionType)
+    {
+        case WOAActionType_AddOAPerson:
+        {
+            NSMutableArray *idArray = [NSMutableArray array];
+            for (NSInteger index = 0; index < selectedPairArray.count; index++)
+            {
+                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
+                [idArray addObject: [pair stringValue]];
+            }
+            
+            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
+            
+            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+            [optionDict setValue: paraValue forKey: @"para_value"];
+            
+            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
+                                                 optionDict: optionDict
+                                                 onSuccuess: ^(WOAResponeContent *responseContent)
+             {
+                 [navVC popToRootViewControllerAnimated: YES];
+             }];
+            
+            break;
+        }
+            
+        case WOAActionType_FlowDone:
+        {
+            [self onFlowDoneWithLatestActionType: actionType
+                                           navVC: navVC];
+        }
+            
+        default:
+            break;
+    }
+}
+
+- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
+                                      navVC: (UINavigationController*)navVC
+{
+    [navVC popViewControllerAnimated: YES];
+}
+
 #pragma mark -
 
 - (void) getTransPerson: (NSString*)transID
@@ -795,10 +827,10 @@
                                          optionDict: optionDict
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *personList = [WOAPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-         NSDictionary *departmentList = [WOAPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAPacketHelper modelForGetTransPerson: personList
+         NSArray *modelArray = [WOAStudentPacketHelper modelForGetTransPerson: personList
                                                         departmentDict: departmentList
                                                                 needXq: [transType isEqualToString: @"1"]
                                                             actionType: WOAActionType_GetTransTable];
@@ -831,24 +863,24 @@
                                          optionDict: optionDict
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         //TODO: tid没有返回
-         if (!tid) tid = @"0";
-         
-         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-         
-         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAPacketHelper modelForGetOATable: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
-                                                                                isEditable: YES
-                                                                                modelArray: modelArray];
-         subVC.baseRequestDict = baseDict;
-         subVC.rightButtonAction = WOAActionType_AddAssoc;
-         subVC.rightButtonTitle = @"提交";
-         
-         [navVC pushViewController: subVC animated: YES];
+//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+//         //TODO: tid没有返回
+//         if (!tid) tid = @"0";
+//         
+//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+//         
+//         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+//         
+//         NSArray *modelArray = [WOAStudentPacketHelper modelForGetOATable: retList];
+//         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
+//                                                                                isEditable: YES
+//                                                                                modelArray: modelArray];
+//         subVC.baseRequestDict = baseDict;
+//         subVC.rightButtonAction = WOAActionType_AddAssoc;
+//         subVC.rightButtonTitle = @"提交";
+//         
+//         [navVC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -859,21 +891,21 @@
                                          optionDict: optionDict
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-         
-         NSDictionary *retList = [WOAPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAPacketHelper modelForTransactionTable: retList];
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
-                                                                                isEditable: YES
-                                                                                modelArray: modelArray];
-         subVC.baseRequestDict = baseDict;
-         subVC.rightButtonAction = WOAActionType_SubmitTransTable;
-         subVC.rightButtonTitle = @"提交";
-         
-         [navVC pushViewController: subVC animated: YES];
+//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+//         
+//         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+//         
+//         NSArray *modelArray = [WOAStudentPacketHelper modelForTransactionTable: retList];
+//         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
+//                                                                                isEditable: YES
+//                                                                                modelArray: modelArray];
+//         subVC.baseRequestDict = baseDict;
+//         subVC.rightButtonAction = WOAActionType_SubmitTransTable;
+//         subVC.rightButtonTitle = @"提交";
+//         
+//         [navVC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -915,7 +947,7 @@
 //                                         optionDict: optionDict
 //                                         onSuccuess: ^(WOAResponeContent *responseContent)
 //     {
-//         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
 //         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
 //         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
 //         [baseDict removeObjectForKey: @"para_value"];
@@ -930,14 +962,14 @@
 //                                         optionDict: optionDict
 //                                         onSuccuess: ^(WOAResponeContent *responseContent)
 //     {
-//         NSString *tid = [WOAPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
 //         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
 //         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
 //         
-//         NSDictionary *personList = [WOAPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-//         NSDictionary *departmentList = [WOAPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
+//         NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
+//         NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
 //         
-//         NSArray *modelArray = [WOAPacketHelper modelForAddAssoc: personList
+//         NSArray *modelArray = [WOAStudentPacketHelper modelForAddAssoc: personList
 //                                                  departmentDict: departmentList
 //                                                      actionType: WOAActionType_None];
 //         
@@ -963,51 +995,6 @@
 //     }];
 //}
 
-
-
-//#pragma mark - WOAMultiPickerViewControllerDelegate
-//
-//- (void) multiPickerViewController: (WOAMultiPickerViewController *)pickerViewController
-//                        actionType: (WOAActionType)actionType
-//                 selectedPairArray: (NSArray *)selectedPairArray
-//                       relatedDict: (NSDictionary *)relatedDict
-//                             navVC: (UINavigationController *)navVC
-//{
-//    switch (actionType)
-//    {
-//        case WOAActionType_AddOAPerson:
-//        {
-//            NSMutableArray *idArray = [NSMutableArray array];
-//            for (NSInteger index = 0; index < selectedPairArray.count; index++)
-//            {
-//                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
-//                [idArray addObject: [pair stringValue]];
-//            }
-//            
-//            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
-//            
-//            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-//            [optionDict setValue: paraValue forKey: @"para_value"];
-//            
-//            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
-//                                                 optionDict: optionDict
-//                                                 onSuccuess: ^(WOAResponeContent *responseContent)
-//             {
-//                 [navVC popToRootViewControllerAnimated: YES];
-//             }];
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//}
-//
-//- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController *)pickerViewController
-//                                      navVC: (UINavigationController *)navVC
-//{
-//    [navVC popViewControllerAnimated: YES];
-//}
 
 @end
 

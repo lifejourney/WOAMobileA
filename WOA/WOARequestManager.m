@@ -131,53 +131,6 @@ static WOARequestManager *requestManager = nil;
      }];
 }
 
-//- (void) simpleQuery: (NSString*)msgType
-//          optionDict: (NSDictionary*)optionDict
-//          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-//{
-//    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-//                                                                      optionDict: optionDict];
-//    
-//    [self sendRequest: requestContent
-//           onSuccuess: successHandler
-//            onFailure: ^(WOAResponeContent *responseContent)
-//     {
-//         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
-//     }];
-//}
-//
-//- (void) simpleQuery: (NSString*)msgType
-//            paraDict: (NSDictionary*)paraDict
-//          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-//{
-//    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-//                                                                        paraDict: paraDict];
-//    
-//    [self sendRequest: requestContent
-//           onSuccuess: successHandler
-//            onFailure: ^(WOAResponeContent *responseContent)
-//     {
-//         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
-//     }];
-//}
-//
-//- (void) simpleQuery: (NSString*)msgType
-//            fromDate: (NSString*)fromDate
-//              toDate: (NSString*)toDate
-//          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-//{
-//    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-//                                                                        fromDate: fromDate
-//                                                                          toDate: toDate];
-//    
-//    [self sendRequest: requestContent
-//           onSuccuess: successHandler
-//            onFailure: ^(WOAResponeContent *responseContent)
-//     {
-//         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
-//     }];
-//}
-
 #pragma mark -
 
 @end

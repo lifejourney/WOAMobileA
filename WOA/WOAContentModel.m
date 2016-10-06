@@ -73,6 +73,18 @@
                       subDict: subDict];
 }
 
++ (instancetype) contentModel: (NSString*)groupTitle
+                 contentArray: (NSArray*)contentArray
+{
+    return [self contentModel: groupTitle
+                    pairArray: nil
+                 contentArray: contentArray
+                   actionType: WOAActionType_None
+                   actionName: @""
+                   isReadonly: YES
+                      subDict: nil];
+}
+
 #pragma mark -
 
 - (void) addPair: (WOANameValuePair*)pair

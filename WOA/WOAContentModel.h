@@ -47,6 +47,8 @@
                    actionName: (NSString*)actionName
                    isReadonly: (BOOL)isReadonly
                       subDict: (NSDictionary*)subDict;
++ (instancetype) contentModel: (NSString*)groupTitle
+                 contentArray: (NSArray*)contentArray;
 
 #pragma mark -
 

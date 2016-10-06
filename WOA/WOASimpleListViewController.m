@@ -16,7 +16,7 @@
 
 @interface WOASimpleListViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) NSArray *modelArray;
+@property (nonatomic, strong) WOAContentModel *contentModel;
 @property (nonatomic, assign) UITableViewCellStyle cellStyle;
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -27,13 +27,11 @@
 
 #pragma mark - lifecycle
 
-+ (instancetype) listViewController: (NSString*)title
-                         modelArray: (NSArray*)modelArray
++ (instancetype) listViewController: (WOAContentModel*)contentModel
                           cellStyle: (UITableViewCellStyle)cellStyle
 {
     WOASimpleListViewController *vc = [[WOASimpleListViewController alloc] init];
-    vc.title = title;
-    vc.modelArray = modelArray;
+    vc.contentModel = contentModel;
     vc.cellStyle = cellStyle;
     
     return vc;
@@ -62,7 +60,10 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: self.title];
+    if (self.contentModel.groupTitle)
+    {
+        self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: self.contentModel.groupTitle];
+    }
     
     self.tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStylePlain];
     _tableView.delegate = self;
@@ -95,12 +96,12 @@
 
 - (NSInteger) numberOfSectionsInTableView: (UITableView *)tableView
 {
-    return [self.modelArray count];
+    return [self.contentModel.contentArray count];
 }
 
 - (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection: (NSInteger)section;
 {
-    WOAContentModel *contentModel = self.modelArray[section];
+    WOAContentModel *contentModel = self.contentModel.contentArray[section];
     
     return contentModel.pairArray ? [contentModel.pairArray count] : 0;
 }
@@ -110,7 +111,7 @@
     UITableViewCell *cell = [tableView cellWithIdentifier: @"detailTableViewCellIdentifier"
                                                 cellStyle: self.cellStyle];
     
-    WOAContentModel *contentModel = self.modelArray[indexPath.section];
+    WOAContentModel *contentModel = self.contentModel.contentArray[indexPath.section];
     WOANameValuePair *pair = contentModel.pairArray[indexPath.row];
     NSInteger columnCount = 2;
     

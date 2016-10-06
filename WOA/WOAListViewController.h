@@ -16,7 +16,8 @@
 
 @interface WOAListViewController : UIViewController
 
-- (id) initWithItemArray: (NSArray*)itemArray delegate: (NSObject<WOAListViewControllerDelegate>*)delegate;
+- (id) initWithItemArray: (NSArray*)itemArray
+                delegate: (NSObject<WOAListViewControllerDelegate>*)delegate;
 - (void) selectRow: (NSInteger)row;
 
 @end

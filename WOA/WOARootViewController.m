@@ -16,6 +16,8 @@
 #import "WOAPropertyInfo.h"
 #import "WOATargetInfo.h"
 #import "UIImage+Utility.h"
+#import "NSString+Utility.h"
+#import "UIAlertController+Utility.h"
 
 
 
@@ -316,6 +318,68 @@
     }
     
     return self;
+}
+
+#pragma mark -
+
+- (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
+                                  navVC: (UINavigationController*)navVC
+{
+    if (actionType == WOAActionType_TeacherSubmitStudentQuatEval)
+    {
+        [navVC popViewControllerAnimated: YES];
+    }
+    else if (actionType == WOAActionType_TeacherSubmitTakeover
+             || actionType == WOAActionType_TeacherSubmitCommentCreate1
+             || actionType == WOAActionType_TeacherSubmitCommentDelete)
+    {
+        [navVC popViewControllerAnimated: NO];
+        [navVC popViewControllerAnimated: YES];
+    }
+    else if (actionType == WOAActionType_TeacherSubmitCommentCreate2
+             || actionType == WOAActionType_TeacherSubmitCommentUpdate)
+    {
+        [navVC popViewControllerAnimated: NO];
+        [navVC popViewControllerAnimated: NO];
+        [navVC popViewControllerAnimated: YES];
+    }
+    else
+    {
+        [navVC popToRootViewControllerAnimated: YES];
+    }
+}
+
+- (void) onSumbitSuccessAndFlowDone: (NSDictionary*)respDict
+                         actionType: (WOAActionType)actionType
+                     defaultMsgText: (NSString*)defaultMsgText
+                              navVC: (UINavigationController*)navVC
+{
+    NSString *resultText = respDict[kWOASrvKeyForResultDescription];
+    if ([NSString isEmptyString: resultText])
+    {
+        resultText = defaultMsgText;
+    }
+    
+    if ([NSString isEmptyString: resultText])
+    {
+        [self onFlowDoneWithLatestActionType: actionType
+                                       navVC: navVC];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: nil
+                                                                            alertMessage: resultText
+                                                                              actionText: @"确定"
+                                                                           actionHandler: ^(UIAlertAction * _Nonnull action)
+                                              {
+                                                  [self onFlowDoneWithLatestActionType: actionType
+                                                                                 navVC: navVC];
+                                              }];
+        
+        [self presentViewController: alertController
+                           animated: YES
+                         completion: nil];
+    }
 }
 
 #pragma mark - public

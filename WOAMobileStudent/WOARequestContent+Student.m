@@ -7,16 +7,17 @@
 //
 
 #import "WOARequestContent+Student.h"
+#import "WOAStudentPacketHelper.h"
 
 @implementation WOARequestContent (Student)
 
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
                                   optionDict: (NSDictionary*)optionDict
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_SimpleQuery];
+    WOARequestContent *content = [WOARequestContent contentWithActionType: WOAActionType_SimpleQuery];
     
-    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
-                                                        optionDict: optionDict];
+    content.bodyDictionary = [WOAStudentPacketHelper packetForSimpleQuery: msgType
+                                                               optionDict: optionDict];
     
     return content;
 }
@@ -24,10 +25,10 @@
 + (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
                                     paraDict: (NSDictionary*)paraDict
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_SimpleQuery];
+    WOARequestContent *content = [WOARequestContent contentWithActionType: WOAActionType_SimpleQuery];
     
-    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
-                                                          paraDict: paraDict];
+    content.bodyDictionary = [WOAStudentPacketHelper packetForSimpleQuery: msgType
+                                                                 paraDict: paraDict];
     
     return content;
 }
@@ -36,11 +37,11 @@
                                     fromDate: (NSString*)fromDate
                                       toDate: (NSString*)toDate
 {
-    WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: WOAActionType_SimpleQuery];
+    WOARequestContent *content = [WOARequestContent contentWithActionType: WOAActionType_SimpleQuery];
     
-    content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: msgType
-                                                          fromDate: fromDate
-                                                            toDate: toDate];
+    content.bodyDictionary = [WOAStudentPacketHelper packetForSimpleQuery: msgType
+                                                                 fromDate: fromDate
+                                                                   toDate: toDate];
     
     return content;
 }

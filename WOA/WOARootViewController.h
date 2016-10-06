@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WOAMenuItemModel.h"
+#import "WOAActionDefine.h"
 
 
 @interface WOARootViewController : UITabBarController
@@ -49,6 +50,14 @@
                                                  menuList: (NSArray*)menuList
                                           normalImageName: (NSString*)normalImageName
                                         selectedImageName: (NSString*)selectedImageName;
+#pragma mark -
+
+- (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
+                                  navVC: (UINavigationController*)navVC;
+- (void) onSumbitSuccessAndFlowDone: (NSDictionary*)respDict
+                         actionType: (WOAActionType)actionType
+                     defaultMsgText: (NSString*)defaultMsgText
+                              navVC: (UINavigationController*)navVC;
 
 #pragma mark -
 

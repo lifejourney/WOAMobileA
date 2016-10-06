@@ -18,7 +18,9 @@
 #import "NSString+Utility.h"
 
 
-@interface WOAListDetailViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface WOAListDetailViewController () <UITableViewDataSource, UITableViewDelegate,
+                                            WOAContentViewControllerDelegate,
+                                            WOAUploadAttachmentRequestDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -148,29 +150,28 @@
     {
         UIViewController *detailVC = nil;
         
+        WOAContentModel *contentModel = [WOAContentModel contentModel: rowTitle
+                                                         contentArray: modelArray];
+        
         if (_detailStyle == WOAListDetailStyleSimple)
         {
-            detailVC = [WOASimpleListViewController listViewController: rowTitle
-                                                            modelArray: modelArray
+            detailVC = [WOASimpleListViewController listViewController: contentModel
                                                              cellStyle: UITableViewCellStyleDefault];
         }
         else if (_detailStyle == WOAListDetailStyleSettings)
         {
-            detailVC = [WOASimpleListViewController listViewController: rowTitle
-                                                            modelArray: modelArray
+            detailVC = [WOASimpleListViewController listViewController: contentModel
                                                              cellStyle: UITableViewCellStyleValue1];
         }
         else if (_detailStyle == WOAListDetailStyleSubtitle)
         {
-            detailVC = [WOASimpleListViewController listViewController: rowTitle
-                                                            modelArray: modelArray
+            detailVC = [WOASimpleListViewController listViewController: contentModel
                                                              cellStyle: UITableViewCellStyleSubtitle];
         }
         else if (_detailStyle == WOAListDetailStyleContent)
         {
-//            detailVC = [WOAContentViewController contentViewController: rowTitle
-//                                                            isEditable: NO
-//                                                            modelArray: modelArray];
+            detailVC = [WOAContentViewController contentViewController: contentModel
+                                                              delegate: self];
         }
         
         if (detailVC)
@@ -178,6 +179,27 @@
             [self.navigationController pushViewController: detailVC animated: YES];
         }
     }
+}
+
+
+#pragma mark - WOAUploadAttachmentRequestDelegate
+
+- (void) requestUploadAttachment: (WOAActionType)contentActionType
+                   filePathArray: (NSArray*)filePathArray
+                      titleArray: (NSArray*)titleArray
+                  additionalDict: (NSDictionary*)additionalDict
+                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler
+{
+}
+
+#pragma mark - WOAContentViewControllerDelegate
+
+- (void) contentViewController: (WOAContentViewController*)vc
+//              rightButtonClick: (WOAContentModel*)contentModel
+                    actionType: (WOAActionType)actionType
+                 submitContent: (NSDictionary*)contentDict
+                   relatedDict: (NSDictionary*)relatedDict
+{
 }
 
 #pragma mark - public

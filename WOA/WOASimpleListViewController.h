@@ -14,8 +14,7 @@
 
 @property (nonatomic, assign) BOOL shouldShowBackBarItem;
 
-+ (instancetype) listViewController: (NSString*)title
-                         modelArray: (NSArray*)modelArray //array of WOAContentModel
++ (instancetype) listViewController: (WOAContentModel*)contentModel //WOAContentModel values in contentArray
                           cellStyle: (UITableViewCellStyle)cellStyle;
 
 @end

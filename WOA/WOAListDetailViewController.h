@@ -20,8 +20,12 @@ typedef NS_ENUM(NSUInteger, WOAListDetailStyle)
 
 @property (nonatomic, strong) NSArray *pairArray;
 
+/* pairArray: array of WOANameValuePair, value of pair is array of WOAContentModel
+ Firstly show a list by the name if pairArray.
+ When user select one ,then show pair value (array of WOAContentModel) in another view controller.
+ */
 + (instancetype) listViewController: (NSString*)title
-                          pairArray: (NSArray*)pairArray //array of WOANameValuePair, value of pair is array of WOAContentModel
+                          pairArray: (NSArray*)pairArray
                         detailStyle: (WOAListDetailStyle)detailStyle;
 
 @end

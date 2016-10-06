@@ -17,6 +17,7 @@
 #import "WOATeacherPacketHelper.h"
 #import "WOAPropertyInfo.h"
 #import "WOALayout.h"
+#import "UIAlertController+Utility.h"
 #import "NSString+Utility.h"
 
 
@@ -135,70 +136,6 @@
     }
     
     return self;
-}
-
-
-#pragma mark -
-
-- (void) onFlowDoneWithLatestActionType: (WOAActionType)actionType
-                                  navVC: (UINavigationController*)navVC
-{
-    if (actionType == WOAActionType_TeacherSubmitStudentQuatEval)
-    {
-        [navVC popViewControllerAnimated: YES];
-    }
-    else if (actionType == WOAActionType_TeacherSubmitTakeover
-        || actionType == WOAActionType_TeacherSubmitCommentCreate1
-        || actionType == WOAActionType_TeacherSubmitCommentDelete)
-    {
-        [navVC popViewControllerAnimated: NO];
-        [navVC popViewControllerAnimated: YES];
-    }
-    else if (actionType == WOAActionType_TeacherSubmitCommentCreate2
-             || actionType == WOAActionType_TeacherSubmitCommentUpdate)
-    {
-        [navVC popViewControllerAnimated: NO];
-        [navVC popViewControllerAnimated: NO];
-        [navVC popViewControllerAnimated: YES];
-    }
-    else
-    {
-        [navVC popToRootViewControllerAnimated: YES];
-    }
-}
-
-- (void) onSumbitSuccessAndFlowDone: (NSDictionary*)respDict
-                         actionType: (WOAActionType)actionType
-                     defaultMsgText: (NSString*)defaultMsgText
-                              navVC: (UINavigationController*)navVC
-{
-    NSString *resultText = respDict[kWOASrvKeyForResultDescription];
-    if ([NSString isEmptyString: resultText])
-    {
-        resultText = defaultMsgText;
-    }
-    
-    if ([NSString isEmptyString: resultText])
-    {
-        [self onFlowDoneWithLatestActionType: actionType
-                                       navVC: navVC];
-    }
-    else
-    {
-        UIAlertController *alertController;
-        alertController = [self alertControllerWithTitle: nil
-                                            alertMessage: resultText
-                                              actionText: @"确定"
-                                           actionHandler: ^(UIAlertAction * _Nonnull action)
-                           {
-                               [self onFlowDoneWithLatestActionType: actionType
-                                                              navVC: navVC];
-                           }];
-        
-        [self presentViewController: alertController
-                           animated: YES
-                         completion: nil];
-    }
 }
 
 /*
@@ -377,11 +314,11 @@
 }
 
 - (void) onTchrSubmitOADetail: (WOAActionType)actionType
-                 contentModel: (NSDictionary*)contentModel
+                  contentDict: (NSDictionary*)contentDict
                         navVC: (UINavigationController*)navVC
 {
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: contentModel
+                                                   additionalDict: contentDict
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherOAProcessStyle;
@@ -777,11 +714,11 @@
 }
 
 - (void) onTchrSubmitBusinessCreate: (WOAActionType)actionType
-                       contentModel: (NSDictionary*)contentModel
+                        contentDict: (NSDictionary*)contentDict
                               navVC: (UINavigationController*)navVC
 {
     [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: contentModel
+                                                   additionalDict: contentDict
                                                        onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
@@ -1006,14 +943,14 @@
 }
 
 - (void) onTchrSubmitTakeover: (WOAActionType)actionType
-                 contentModel: (NSDictionary*)contentModel
+                  contentDict: (NSDictionary*)contentDict
                   relatedDict: (NSDictionary*)relatedDict
                         navVC: (UINavigationController*)navVC
 {
     NSString *changeStyle = @"";
     NSString *changeReason = @"";
     
-    NSArray *groupItemArray = contentModel[kWOASrvKeyForItemArrays];
+    NSArray *groupItemArray = contentDict[kWOASrvKeyForItemArrays];
     for (NSArray *itemDictArray in groupItemArray)
     {
         for (NSDictionary *itemDict in itemDictArray)
@@ -1256,11 +1193,7 @@
          
          NSString *contentTitle = relatedDict[KWOAKeyForActionTitle];
          WOAContentModel *contentModel = [WOAContentModel contentModel: contentTitle
-                                                          contentArray: contentArray
-                                                            actionType: WOAActionType_None
-                                                            actionName: @""
-                                                            isReadonly: YES
-                                                               subDict: nil];
+                                                          contentArray: contentArray];
          
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
@@ -1283,11 +1216,7 @@
                                                                            pairActionType: WOAActionType_None];
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: contentArray
-                                                            actionType: WOAActionType_None
-                                                            actionName: @""
-                                                            isReadonly: YES
-                                                               subDict: nil];
+                                                          contentArray: contentArray];
          
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
@@ -1699,14 +1628,14 @@
 }
 
 - (void) onTchrSubmitCommentEdit: (WOAActionType)actionType
-                    contentModel: (NSDictionary*)contentModel
+                     contentDict: (NSDictionary*)contentDict
                      relatedDict: (NSDictionary*)relatedDict
                            navVC: (UINavigationController*)navVC
 {
     NSString *studentComment = @"";
     NSString *studentName = relatedDict[kWOASrvKeyForStdEvalStudentName];
     
-    NSArray *groupItemArray = contentModel[kWOASrvKeyForItemArrays];
+    NSArray *groupItemArray = contentDict[kWOASrvKeyForItemArrays];
     for (NSArray *itemDictArray in groupItemArray)
     {
         for (NSDictionary *itemDict in itemDictArray)
@@ -1985,7 +1914,7 @@
 }
 
 - (void) onTchrSubmitStudentQuatEval: (WOAActionType)actionType
-                        contentModel: (NSDictionary*)contentModel
+                         contentDict: (NSDictionary*)contentDict
                          relatedDict: (NSDictionary*)relatedDict
                                navVC: (UINavigationController*)navVC
 {
@@ -2001,7 +1930,7 @@
     NSString *smsHeadmaster = @"";
     NSString *smsPrefect = @"";
     
-    NSArray *groupItemArray = contentModel[kWOASrvKeyForItemArrays];
+    NSArray *groupItemArray = contentDict[kWOASrvKeyForItemArrays];
     for (NSArray *itemDictArray in groupItemArray)
     {
         for (NSDictionary *itemDict in itemDictArray)
@@ -2394,6 +2323,7 @@
     }
     
 }
+
 #pragma mark - WOAContentViewControllerDelegate
 
 - (void) contentViewController: (WOAContentViewController*)vc
@@ -2404,8 +2334,8 @@
 {
     //WOAActionType actionType = contentModel.actionType;
     
-    NSMutableDictionary *contentModel = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-    [contentModel addEntriesFromDictionary: contentDict];
+    NSMutableDictionary *combinedCntDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [combinedCntDict addEntriesFromDictionary: contentDict];
     
     switch (actionType)
     {
@@ -2413,7 +2343,7 @@
         case WOAActionType_TeacherSubmitOACreate:
         {
             [self onTchrSubmitOADetail: actionType
-                          contentModel: contentModel
+                           contentDict: combinedCntDict
                                  navVC: vc.navigationController];
             break;
         }
@@ -2421,7 +2351,7 @@
         case WOAActionType_TeacherSubmitBusinessCreate:
         {
             [self onTchrSubmitBusinessCreate: actionType
-                                contentModel: contentModel
+                                 contentDict: combinedCntDict
                                        navVC: vc.navigationController];
             break;
         }
@@ -2429,7 +2359,7 @@
         case WOAActionType_TeacherSubmitTakeover:
         {
             [self onTchrSubmitTakeover: actionType
-                          contentModel: contentModel
+                           contentDict: combinedCntDict
                            relatedDict: vc.contentModel.subDict
                                  navVC: vc.navigationController];
             break;
@@ -2440,7 +2370,7 @@
         case WOAActionType_TeacherSubmitCommentUpdate:
         {
             [self onTchrSubmitCommentEdit: actionType
-                             contentModel: contentModel
+                              contentDict: combinedCntDict
                               relatedDict: vc.contentModel.subDict
                                     navVC: vc.navigationController];
             break;
@@ -2449,7 +2379,7 @@
         case WOAActionType_TeacherSubmitStudentQuatEval:
         {
             [self onTchrSubmitStudentQuatEval: actionType
-                                 contentModel: contentModel
+                                  contentDict: combinedCntDict
                                   relatedDict: vc.contentModel.subDict
                                         navVC: vc.navigationController];
             break;
@@ -2526,23 +2456,6 @@
     return yearArray;
 }
 
-- (UIAlertController*) alertControllerWithTitle: (NSString*)alertTitle
-                                   alertMessage: (NSString*)alertMessage
-                                     actionText: (NSString*)actionText
-                                  actionHandler: (void (^ __nullable)(UIAlertAction *action))actionHandler
-{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: alertTitle
-                                                                             message: alertMessage
-                                                                      preferredStyle: UIAlertControllerStyleAlert];
-    
-    UIAlertAction *alertAction = [UIAlertAction actionWithTitle: actionText
-                                                          style: UIAlertActionStyleDefault
-                                                        handler: actionHandler];
-
-    [alertController addAction: alertAction];
-    
-    return alertController;
-}
 @end
 
 
