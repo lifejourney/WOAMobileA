@@ -153,9 +153,9 @@
                    title: (NSString*)title
                ownerNavC: (UINavigationController*)ownerNavC
 {
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType;
          
@@ -209,9 +209,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
     [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherSubmitOAProcess;
          NSString *itemActionName = @"提交";
@@ -248,9 +248,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryOATableList
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryOATableList
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryOATableList: responseContent.bodyDictionary
                                                                         pairActionType: WOAActionType_TeacherCreateOAItem];
@@ -276,9 +276,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
     [addtDict setValue: selectedTableID forKey: kWOASrvKeyForTableID];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherSubmitOACreate;
          NSString *itemActionName = @"提交";
@@ -317,9 +317,9 @@
                   contentDict: (NSDictionary*)contentDict
                         navVC: (UINavigationController*)navVC
 {
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: contentDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: contentDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherOAProcessStyle;
          
@@ -352,9 +352,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict setValue: selectedProcessID forKey: kWOASrvKeyForProcessID];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherNextAccounts;
          
@@ -406,9 +406,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict setValue: selectedPairArray forKey: kWOASrvKeyForAccountArray];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -440,9 +440,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
     [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_None;
          NSString *itemActionName = @"";
@@ -474,9 +474,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQuerySyllabusConditions
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQuerySyllabusConditions
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_TeacherPickSyllabusQueryTerm;
          
@@ -529,9 +529,9 @@
     [addtDict setValue: selectedTermName forKey: kWOASrvKeyForTermName];
     
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAActionType_None;
          NSString *itemActionName = @"";
@@ -561,9 +561,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryBusinessTableList
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryBusinessTableList
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType itemActionType = WOAContenType_TeacherPickBusinessTableItem;
          
@@ -609,9 +609,9 @@
 {
     NSDictionary *selectedTableInfoDict = (NSDictionary*)selectedPair.value;
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: selectedTableInfoDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: selectedTableInfoDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSString *tableStyle = selectedTableInfoDict[kWOASrvKeyForTableStyle];
          BOOL isOtherTeacherStyle = (tableStyle && [tableStyle isEqualToString: kWOASrvValueForOthersTableType]);
@@ -717,9 +717,9 @@
                         contentDict: (NSDictionary*)contentDict
                               navVC: (UINavigationController*)navVC
 {
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: contentDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: contentDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -736,9 +736,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryContacts
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryContacts
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryContacts: responseContent.bodyDictionary
                                                                      pairActionType: WOAActionType_None];
@@ -766,9 +766,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryMySubject
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryMySubject
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryMySubject: responseContent.bodyDictionary
                                                                          actionTypeA: WOAActionType_TeacherPickSubjectQueryItem
@@ -828,9 +828,9 @@
         [addtDict setValue: [WOAPropertyInfo latestSessionID] forKey: kWOASrvKeyForSubjectTeacherID];
     }
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherPickTakeoverReason;
          
@@ -986,9 +986,9 @@
     }
     
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -1005,9 +1005,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryTodoTakeover
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryTodoTakeover
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherApproveTakeover;
          
@@ -1083,9 +1083,9 @@
     NSString *adviceString = isApproveAccpept ? @"1" : @"0";
     [additionalDict setValue: adviceString forKey: kWOASrvKeyForSubjectChangeAdvice];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: additionalDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: additionalDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -1111,9 +1111,9 @@
                     NSDictionary *addtDict = [WOATeacherPacketHelper packetDictWithFromTime: fromDateString
                                                                                      toTime: toDateString];
                     
-                    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryMyConsume
-                                                                   additionalDict: addtDict
-                                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+                    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryMyConsume
+                                                               additionalDict: addtDict
+                                                                   onSuccuess: ^(WOAResponeContent *responseContent)
                      {
                          NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrQueryMyConsume: responseContent.bodyDictionary
                                                                                       pairActionType: WOAActionType_None];
@@ -1184,9 +1184,9 @@
     NSDictionary *addtDict = @{@"year": selectedYear,
                                @"pageSize": pageSize};
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryPayoffSalary
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryPayoffSalary
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrQueryPayoffSalary: responseContent.bodyDictionary
                                                                                pairActionType: WOAActionType_None];
@@ -1208,9 +1208,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryMeritPay
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryMeritPay
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrQueryMeritPay: responseContent.bodyDictionary
                                                                            pairActionType: WOAActionType_None];
@@ -1233,9 +1233,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryAttdCourses
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryAttdCourses
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherStartAttdEval;
          
@@ -1261,9 +1261,9 @@
 {
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          NSArray *pairArray = [WOATeacherPacketHelper pairArrayForTchrStartAttdEval: responseContent.bodyDictionary
                                                                      pairActionType: WOAActionType_TeacherPickAttdStudent];
@@ -1386,9 +1386,9 @@
     
     WOAActionType actionType = contentModel.actionType;
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -1405,9 +1405,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryCommentConditions
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryCommentConditions
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherQueryCommentStudents;
          
@@ -1436,9 +1436,9 @@
 {
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherPickCommentStudent;
          
@@ -1652,9 +1652,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict setValue: studentComment forKey: kWOASrvKeyForStdEvalItemContent_Post];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -1672,9 +1672,9 @@
     
     WOAActionType actionType = WOAActionType_TeacherSubmitCommentDelete;
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
@@ -1692,9 +1692,9 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: WOAActionType_TeacherQueryQuatEvalItems
-                                                   additionalDict: nil
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryQuatEvalItems
+                                               additionalDict: nil
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherPickQuatEvalItem;
          
@@ -1744,9 +1744,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict setValue: [selectedPair stringValue] forKey: kWOASrvKeyForQutEvalEvalItemID];
 
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
     {
         WOAActionType pairActionType = WOAActionType_TeacherQueryQuatEvalStudents;
         
@@ -1792,9 +1792,9 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict setValue: [selectedPair stringValue] forKey: kWOASrvKeyForQutEvalClassItemID];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: selectedPair.actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          WOAActionType pairActionType = WOAActionType_TeacherPickQuatEvalStudent;
          
@@ -2001,9 +2001,9 @@
     NSArray *studentInfoArray = @[studentInfoDict];
     [addtDict setValue: studentInfoArray forKey: @"scoreItems"];
     
-    [[WOARequestManager sharedInstance] simpleQueryFlowActionType: actionType
-                                                   additionalDict: addtDict
-                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType

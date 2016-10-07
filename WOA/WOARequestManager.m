@@ -114,9 +114,9 @@ static WOARequestManager *requestManager = nil;
 
 #pragma mark -
 
-- (void) simpleQueryFlowActionType: (WOAActionType)actionType
-                    additionalDict: (NSDictionary*)additionalDict
-                        onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
+- (void) simpleQueryActionType: (WOAActionType)actionType
+                additionalDict: (NSDictionary*)additionalDict
+                    onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
 {
     WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: actionType
                                                                   additionalDict: additionalDict];

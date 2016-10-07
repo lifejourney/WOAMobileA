@@ -93,35 +93,43 @@
     ,@"_31":                    @[@(3),     @"-",              @(3), @(NO), @(NO), @"",                      @""]
     ,@"logout":                 @[@(4),     @"退出登录",        @(3), @(NO), @(NO), @"",                      @""]
           
-    ,@"mySchoolInfo":           @[@(1),     @"学籍信息",        @(0), @(NO), @(NO), @"",                      @""]
-    ,@"myConsumeInfo":          @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
-    ,@"myAttendanceInfo":       @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
-    ,@"myStudyAchievement":     @[@(4),     @"学业成绩",        @(0), @(NO),@(NO),  @"",                      @""]
-    ,@"mySociety":              @[@(5),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
-    ,@"selfEvaluation":         @[@(6),     @"自我评价",        @(0), @(YES),@(YES), @"",                      @""]
-    ,@"quantitativeEvaluation": @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"selfEvaluation",          @""]
-    ,@"summativeEvaluation":    @[@(8),     @"总结性评价",       @(0), @(NO),@(NO),  @"selfEvaluation",         @""]
-    ,@"teacherEvaluation":      @[@(9),     @"教师评价",        @(0), @(YES),@(YES), @"",                      @""]
-    ,@"fromCourseTeacher":      @[@(10),     @"课任评价",       @(0), @(NO),@(NO),  @"teacherEvaluation",       @""]
-    ,@"fromClassTeacher":       @[@(11),     @"班主任评价",      @(0), @(NO),@(NO), @"teacherEvaluation",       @""]
-    ,@"parentWishes":           @[@(12),     @"父母寄语",       @(0), @(NO),@(NO), @"",                      @""]
-    ,@"developmentEvaluation":  @[@(13),     @"发展性评价",      @(0), @(NO),@(NO), @"",                      @""]
-    ,@"mySyllabus":             @[@(1),     @"我的课表",        @(1), @(NO),@(NO), @"",                      @""]
-    ,@"selectiveSyllabus":      @[@(2),     @"选修课程",        @(1), @(YES),@(YES), @"",                      @""]
-    ,@"siginSelectiveCourse":   @[@(3),     @"选修报名",        @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
-    ,@"courseList":             @[@(4),     @"课程资源",        @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
-    ,@"mySelectiveCourses":     @[@(5),     @"我的选修课",       @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
-    ,@"homeworkBoard":          @[@(6),     @"作业区",         @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
-    ,@"discussionBoard":        @[@(7),     @"讨论区",         @(1), @(NO),@(NO), @"selectiveSyllabus",        @""]
-    ,@"myFillFormTask":         @[@(8),     @"填表任务",        @(1), @(NO),@(NO), @"",                      @""]
-    ,@"createTransaction":      @[@(9),     @"新建事项",        @(1), @(NO),@(NO), @"",                      @""]
-    ,@"todoTransaction":        @[@(10),     @"待办事项",       @(1), @(NO),@(NO), @"",                      @""]
-    ,@"transactionList":        @[@(11),     @"事项查询",       @(1), @(NO),@(NO), @"",                      @""]
-    ,@"joinSociety":            @[@(1),     @"加入社团",        @(2), @(NO),@(NO), @"",                      @""]
-    ,@"manageSociety":          @[@(2),     @"管理社团",        @(2), @(YES),@(YES), @"",                      @""]
-    ,@"societyInfo":            @[@(3),     @"社团信息",        @(2), @(NO),@(NO), @"manageSociety",        @""]
-    ,@"applyForActivity":       @[@(4),     @"活动申请",        @(2), @(NO),@(NO), @"manageSociety",        @""]
-    ,@"activityRecord":         @[@(5),     @"活动记录",        @(2), @(NO),@(NO), @"manageSociety",        @""]
+    ,@"studQuerySchoolInfo":    @[@(1),     @"学籍信息",        @(0), @(NO), @(NO), @"",                      @""]
+    ,@"studQueryConsumeInfo":   @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studQueryAttendInfo":    @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studQueryStudyAchievement":
+                                @[@(4),     @"学业成绩",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studQueryMySociety":     @[@(5),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studSelfEvaluation":     @[@(6),     @"自我评价",        @(0), @(YES),@(YES), @"",                     @""]
+    ,@"studQueryQuantitativeEvaluation":
+                                @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"studSelfEvaluation",    @""]
+    ,@"studQuerySummativeEvaluation":
+                                @[@(8),     @"总结性评价",       @(0), @(NO),@(NO),  @"studSelfEvaluation",   @""]
+    ,@"studTeacherEvaluation":  @[@(9),     @"教师评价",        @(0), @(YES),@(YES), @"",                     @""]
+    ,@"studQueryEvalFromCourseTeacher":
+                                @[@(10),    @"课任评价",       @(0), @(NO),@(NO),  @"studTeacherEvaluation", @""]
+    ,@"studQueryEvalFromClassTeacher":
+                                @[@(11),    @"班主任评价",      @(0), @(NO),@(NO), @"studTeacherEvaluation",  @""]
+    ,@"studQueryParentWishes":  @[@(12),    @"父母寄语",       @(0), @(NO),@(NO), @"",                        @""]
+    ,@"studQueryDevelopmentEvaluation":
+                                @[@(13),    @"发展性评价",      @(0), @(NO),@(NO), @"",                       @""]
+    ,@"studQueryMySyllabus":    @[@(1),     @"我的课表",        @(1), @(NO),@(NO), @"",                       @""]
+    ,@"studSelectiveSyllabus":  @[@(2),     @"选修课程",        @(1), @(YES),@(YES), @"",                      @""]
+    ,@"studSiginSelectiveCourse":
+                                @[@(3),     @"选修报名",        @(1), @(NO),@(NO), @"studSelectiveSyllabus",   @""]
+    ,@"studQueryCourseList":    @[@(4),     @"课程资源",        @(1), @(NO),@(NO), @"studSelectiveSyllabus",   @""]
+    ,@"studQueryMySelectiveCourses":
+                                @[@(5),     @"我的选修课",       @(1), @(NO),@(NO), @"studSelectiveSyllabus",   @""]
+    ,@"studHomeworkBoard":      @[@(6),     @"作业区",         @(1), @(NO),@(NO), @"studSelectiveSyllabus",    @""]
+    ,@"studDiscussionBoard":    @[@(7),     @"讨论区",         @(1), @(NO),@(NO), @"studSelectiveSyllabus",    @""]
+    ,@"studFillFormTask":       @[@(8),     @"填表任务",        @(1), @(NO),@(NO), @"",                      @""]
+    ,@"studCreateTransaction":  @[@(9),     @"新建事项",        @(1), @(NO),@(NO), @"",                      @""]
+    ,@"studTodoTransaction":    @[@(10),     @"待办事项",       @(1), @(NO),@(NO), @"",                      @""]
+    ,@"studTransactionList":    @[@(11),     @"事项查询",       @(1), @(NO),@(NO), @"",                      @""]
+    ,@"studJoinSociety":        @[@(1),     @"加入社团",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"studManageSociety":      @[@(2),     @"管理社团",        @(2), @(YES),@(YES), @"",                      @""]
+    ,@"studQuerySocietyInfo":   @[@(3),     @"社团信息",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
+    ,@"studApplyForActivity":   @[@(4),     @"活动申请",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
+    ,@"studQueryActivityRecord":@[@(5),     @"活动记录",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
     };
         
         NSArray *rootLevelMenuArray = [self rootLevelMenuListArray: 4];
@@ -158,7 +166,7 @@
 
 #pragma mark - action for myProfile
 
-- (void) mySchoolInfo
+- (void) studQuerySchoolInfo
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -182,7 +190,7 @@
      }];
 }
 
-- (void) myConsumeInfo
+- (void) studQueryConsumeInfo
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -219,7 +227,7 @@
     [ownerNav pushViewController: pickerVC animated: YES];
 }
 
-- (void) myAttendanceInfo
+- (void) studQueryAttendInfo
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -256,7 +264,7 @@
     [ownerNav pushViewController: pickerVC animated: YES];
 }
 
-- (void) myStudyAchievement
+- (void) studQueryStudyAchievement
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -278,7 +286,7 @@
      }];
 }
 
-- (void) mySociety
+- (void) studQueryMySociety
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -303,7 +311,7 @@
      }];
 }
 
-- (void) quantitativeEvaluation
+- (void) studQueryQuantitativeEvaluation
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -327,11 +335,11 @@
      }];
 }
 
-- (void) summativeEvaluation
+- (void) studQuerySummativeEvaluation
 {
 }
 
-- (void) fromCourseTeacher
+- (void) studQueryEvalFromCourseTeacher
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -355,7 +363,7 @@
      }];
 }
 
-- (void) fromClassTeacher
+- (void) studQueryEvalFromClassTeacher
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -384,7 +392,7 @@
      }];
 }
 
-- (void) parentWishes
+- (void) studQueryParentWishes
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -408,7 +416,7 @@
      }];
 }
 
-- (void) developmentEvaluation
+- (void) studQueryDevelopmentEvaluation
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -433,7 +441,7 @@
 
 #pragma mark - action for myStudy
 
-- (void) mySyllabus
+- (void) studQueryMySyllabus
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -454,11 +462,11 @@
      }];
 }
 
-- (void) siginSelectiveCourse
+- (void) studSiginSelectiveCourse
 {
 }
 
-- (void) courseList
+- (void) studQueryCourseList
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -481,7 +489,7 @@
      }];
 }
 
-- (void) mySelectiveCourses
+- (void) studQueryMySelectiveCourses
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -504,15 +512,15 @@
      }];
 }
 
-- (void) homeworkBoard
+- (void) studHomeworkBoard
 {
 }
 
-- (void) discussionBoard
+- (void) studDiscussionBoard
 {
 }
 
-- (void) myFillFormTask
+- (void) studFillFormTask
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -536,7 +544,7 @@
      }];
 }
 
-- (void) createTransaction
+- (void) studCreateTransaction
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -560,7 +568,7 @@
      }];
 }
 
-- (void) todoTransaction
+- (void) studTodoTransaction
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -583,7 +591,7 @@
      }];
 }
 
-- (void) transactionList
+- (void) studTransactionList
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -608,7 +616,7 @@
 
 #pragma mark - action for mySociety
 
-- (void) joinSociety
+- (void) studJoinSociety
 {
     NSString *funcName = [self simpleFuncName: __func__];
     //NSString *vcTitle = [self titleForFuncName: funcName];
@@ -618,7 +626,7 @@
                      navVC: ownerNav];
 }
 
-- (void) societyInfo
+- (void) studQuerySocietyInfo
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
@@ -641,11 +649,11 @@
      }];
 }
 
-- (void) applyForActivity
+- (void) studApplyForActivity
 {
 }
 
-- (void) activityRecord
+- (void) studQueryActivityRecord
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
