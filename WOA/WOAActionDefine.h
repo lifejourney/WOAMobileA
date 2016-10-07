@@ -100,19 +100,48 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_TeacherPickQuatEvalStudent,
     WOAActionType_TeacherSubmitStudentQuatEval,
     
+    ////////////////////////////////////////
     //Student
     
-    WOAActionType_SimpleQuery,
+    WOAActionType_StudentQuerySchoolInfo,
+    WOAActionType_StudentQueryConsumeInfo,
+    WOAActionType_StudentQueryAttendInfo,
+    WOAActionType_StudentQueryStudyAchievement,
+    WOAActionType_StudentQueryMySociety,
+    WOAActionType_StudentQueryQuantitativeEvaluation,
+    WOAActionType_StudentQuerySummativeEvaluation,
+    WOAActionType_StudentQueryEvalFromCourseTeacher,
+    WOAActionType_StudentQueryEvalFromClassTeacher,
+    WOAActionType_StudentQueryParentWishes,
+    WOAActionType_StudentQueryDevelopmentEvaluation,
+    
+    WOAActionType_StudentQueryMySyllabus,
+    WOAActionType_StudentSiginSelectiveCourse,
+    WOAActionType_StudentQueryCourseList,
+    WOAActionType_StudentQueryMySelectiveCourses,
+    WOAActionType_StudentHomeworkBoard,
+    WOAActionType_StudentDiscussionBoard,
+    
+    WOAActionType_StudentQueryFormList,
+    WOAActionType_StudentQueryFormTransPerson,
+    WOAActionType_StudentQueryFormTransTable,
+    WOAActionType_StudentSubmitFormTransTable,
+    
+    WOAActionType_StudentQueryOATableList,
+    
+    WOAActionType_StudentQueryTodoOA,
+    WOAActionType_StudentQueryHistoryOA,
+    
+    WOAActionType_StudentQuerySocietyInfo,
+    WOAActionType_StudentApplyForActivity,
+    WOAActionType_StudentQueryActivityRecord,
     WOAActionType_Others,
     
     //WOA bussiness action
     
-    WOAActionType_GetTransPerson,
-    WOAActionType_GetTransTable,
-    WOAActionType_SubmitTransTable,
     WOAActionType_GetOATable,
     WOAActionType_AddAssoc,
-    WOAActionType_AddOAPerson,
+    WOAActionType_StudentPickOAPerson,
 };
 
 @interface WOAActionDefine : NSObject

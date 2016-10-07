@@ -29,15 +29,11 @@
 
 #pragma mark -
 
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                            optionDict: (NSDictionary*)optionDict;
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              paraDict: (NSDictionary*)paraDict;
-+ (NSDictionary*) paraDictWithFromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate;
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              fromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate;
++ (NSDictionary*) studPacketForActionType: (WOAActionType)actionType
+                                 paraDict: (NSDictionary*)paraDict;
++ (NSDictionary*) studPacketForActionType: (WOAActionType)actionType
+                                 fromDate: (NSString*)fromDate
+                                   toDate: (NSString*)toDate;
 
 
 #pragma mark - Packet to model
@@ -55,8 +51,10 @@
 + (NSArray*) modelForMySelectiveCourses: (NSDictionary*)retDict;
 + (NSArray*) modelForSocietyInfo: (NSDictionary*)retDict;
 + (NSArray*) modelForActivityRecord: (NSDictionary*)retDict;
-+ (NSArray*) modelForMyFillFormTask: (NSDictionary*)retDict;
-+ (NSArray*) modelForCreateTransaction: (NSDictionary*)retDict;
++ (NSArray*) pairArrayForStudQueryFormList: (NSDictionary*)retDict
+                                actionType: (WOAActionType)actionType;
++ (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict
+                                   actionType: (WOAActionType)actionType;
 + (NSArray*) modelForTodoTransaction: (NSDictionary*)retDict;
 + (NSArray*) modelForTransactionList: (NSDictionary*)retDict;
 
@@ -64,8 +62,8 @@
                      departmentDict: (NSDictionary*)departmentDict
                              needXq: (BOOL)needXq
                          actionType: (WOAActionType)actionType;
-+ (NSArray*) modelForTransactionTable: (NSDictionary*)retDict;
-+ (NSArray*) modelForGetOATable: (NSDictionary*)retDict;
++ (WOAContentModel*) modelForTransactionTable: (NSDictionary*)retDict;
++ (WOAContentModel*) modelForGetOATable: (NSDictionary*)retDict;
 + (NSArray*) modelForAddAssoc: (NSDictionary*)personDict
                departmentDict: (NSDictionary*)departmentDict
                    actionType: (WOAActionType)actionType;

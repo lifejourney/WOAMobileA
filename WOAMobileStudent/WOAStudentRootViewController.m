@@ -172,7 +172,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getSchoolInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQuerySchoolInfo
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -202,7 +202,7 @@
                 {
                     [pickerVC.navigationController popViewControllerAnimated: YES];
                     
-                    [[WOARequestManager sharedInstance] simpleQuery: @"getConsumeInfo"
+                    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryConsumeInfo
                                                            fromDate: fromDateString
                                                              toDate: toDateString
                                                          onSuccuess: ^(WOAResponeContent *responseContent)
@@ -239,7 +239,7 @@
                 {
                     [pickerVC.navigationController popViewControllerAnimated: YES];
                     
-                    [[WOARequestManager sharedInstance] simpleQuery: @"getAttendInfo"
+                    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryAttendInfo
                                                            fromDate: fromDateString
                                                              toDate: toDateString
                                                          onSuccuess: ^(WOAResponeContent *responseContent)
@@ -270,7 +270,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getResultInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryStudyAchievement
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -292,7 +292,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getAssocInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySociety
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -317,7 +317,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEvalMyInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryQuantitativeEvaluation
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -345,7 +345,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEvalTchInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryEvalFromCourseTeacher
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -369,7 +369,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEvalMTchInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryEvalFromClassTeacher
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -398,7 +398,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEvalPtInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryParentWishes
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -422,7 +422,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEvalGrowpInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryDevelopmentEvaluation
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -447,7 +447,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getCourseInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySyllabus
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -472,7 +472,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getElectInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryCourseList
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -495,7 +495,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getElectMy"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySelectiveCourses
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -526,13 +526,17 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getMissionList"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryFormList
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType pairActionType = WOAActionType_StudentQueryFormTransPerson;
+         
          NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAStudentPacketHelper modelForMyFillFormTask: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper pairArrayForStudQueryFormList: retList
+                                                                          actionType: pairActionType]
+         ;
          WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
                                                                  pairArray: modelArray];
          
@@ -544,19 +548,114 @@
      }];
 }
 
+- (void) onStudQueryFormTransPerson: (WOANameValuePair*)selectedPair
+                        relatedDict: (NSDictionary*)relatedDict
+                              navVC: (UINavigationController*)navVC
+{
+    NSDictionary *itemSubDict = selectedPair.subDictionary;
+    
+    NSString *transID = itemSubDict[kWOAStudSrvKeyForItemID];
+    NSString *transType = itemSubDict[kWOAStudSrvKeyForItemType];
+    
+    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
+    [optionDict setValue: transID forKey: @"OpID"];
+    [optionDict setValue: transType forKey: @"type"];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: optionDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
+         NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
+         
+         NSArray *contentArray = [WOAStudentPacketHelper modelForGetTransPerson: personList
+                                                                 departmentDict: departmentList
+                                                                         needXq: [transType isEqualToString: @"1"]
+                                                                     actionType: WOAActionType_StudentQueryFormTransTable];
+         NSMutableArray *pairArray = [NSMutableArray array];
+         for (NSInteger index = 0; index < contentArray.count; index++)
+         {
+             WOAContentModel *contentModel = (WOAContentModel*)contentArray[index];
+             
+             [pairArray addObject: [contentModel toNameValuePair]];
+         }
+         
+         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
+                                                                 pairArray: pairArray];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: optionDict];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudQueryFormTransTable: (WOANameValuePair*)selectedPair
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict addEntriesFromDictionary: selectedPair.subDictionary];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+         NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: addtDict];
+         [contentRelatedDict setValue: tid forKey: kWOAKey_TableRecordID];
+         
+         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+         
+         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForTransactionTable: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                          contentArray: @[sectionModel]
+                                                            actionType: WOAActionType_StudentSubmitFormTransTable
+                                                            actionName: @"提交"
+                                                            isReadonly: NO
+                                                               subDict: contentRelatedDict];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudSubmitFormTransTable: (WOAActionType)actionType
+                        contentDict: (NSDictionary*)contentDict
+                        relatedDict: (NSDictionary*)relatedDict
+                              navVC: (UINavigationController*)navVC
+{
+    NSDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: contentDict forKey: @"para_value"];
+
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [navVC popToRootViewControllerAnimated: YES];
+     }];
+    
+}
+
 - (void) studCreateTransaction
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getOp"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryOATableList
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
+         WOAActionType pairActionType = WOAActionType_GetOATable;
+         
          NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
          
-         NSArray *modelArray = [WOAStudentPacketHelper modelForCreateTransaction: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper pairArrayForStudQueryOATableList: retList
+                                                                             actionType: pairActionType];
          WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
                                                                  pairArray: modelArray];
          
@@ -574,7 +673,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEventMyInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryTodoOA
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -582,7 +681,7 @@
          
          NSArray *sectionArray = [WOAStudentPacketHelper modelForTodoTransaction: retList];
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                             pairArray: sectionArray];
+                                                          contentArray: sectionArray];
          
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
@@ -597,7 +696,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getEventInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryHistoryOA
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -605,7 +704,7 @@
          
          NSArray *sectionArray = [WOAStudentPacketHelper modelForTransactionList: retList];
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                             pairArray: sectionArray];
+                                                          contentArray: sectionArray];
          
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
@@ -622,8 +721,8 @@
     //NSString *vcTitle = [self titleForFuncName: funcName];
     UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [self getOATableWithID: kWOAValue_OATableID_JoinSociety
-                     navVC: ownerNav];
+//    [self getOATableWithID: kWOAValue_OATableID_JoinSociety
+//                     navVC: ownerNav];
 }
 
 - (void) studQuerySocietyInfo
@@ -632,7 +731,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getAssocMy"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQuerySocietyInfo
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -659,7 +758,7 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: @"getAssocInfo"
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryActivityRecord
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -695,41 +794,35 @@
 {
     switch (selectedPair.actionType)
     {
-        case WOAActionType_GetTransPerson:
+        case WOAActionType_StudentQueryFormTransPerson:
         {
-            NSArray *modelArray = (NSArray*)selectedPair.value;
-            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
+            [self onStudQueryFormTransPerson: selectedPair
+                                 relatedDict: relatedDict
+                                       navVC: navVC];
             
-            NSString *transID = [contentModel stringValueForName: @"id"];
-            NSString *transType = [contentModel stringValueForName: @"type"];
-            
-            [self getTransPerson: transID
-                       transType: transType
-                           navVC: navVC];
-        }
             break;
+        }
             
-        case WOAActionType_GetOATable:
+        case WOAActionType_StudentQueryFormTransTable:
         {
-            NSArray *modelArray = (NSArray*)selectedPair.value;
-            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
+            [self onStudQueryFormTransTable: selectedPair
+                                 relatedDict: relatedDict
+                                       navVC: navVC];
             
-            NSString *transID = [contentModel stringValueForName: @"id"];
-            
-            [self getOATableWithID: transID
-                             navVC: navVC];
-        }
             break;
-            
-        case WOAActionType_GetTransTable:
-        {
-            NSMutableDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-            [optionDict addEntriesFromDictionary: selectedPair.subDictionary];
-            
-            [self getTransTable: optionDict
-                          navVC: navVC];
         }
-            break;
+//
+//        case WOAActionType_GetOATable:
+//        {
+//            NSArray *modelArray = (NSArray*)selectedPair.value;
+//            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
+//            
+//            NSString *transID = [contentModel stringValueForName: @"id"];
+//            
+//            [self getOATableWithID: transID
+//                             navVC: navVC];
+//        }
+//            break;
             
         default:
             break;
@@ -759,6 +852,15 @@
     
     switch (actionType)
     {
+        case WOAActionType_StudentSubmitFormTransTable:
+        {
+            [self onStudSubmitFormTransTable: actionType
+                                 contentDict: contentDict
+                                 relatedDict: relatedDict
+                                       navVC: vc.navigationController];
+            break;
+        }
+            
         case WOAActionType_FlowDone:
         {
             [self onFlowDoneWithLatestActionType: actionType
@@ -780,29 +882,29 @@
 {
     switch (actionType)
     {
-        case WOAActionType_AddOAPerson:
-        {
-            NSMutableArray *idArray = [NSMutableArray array];
-            for (NSInteger index = 0; index < selectedPairArray.count; index++)
-            {
-                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
-                [idArray addObject: [pair stringValue]];
-            }
-            
-            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
-            
-            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-            [optionDict setValue: paraValue forKey: @"para_value"];
-            
-            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
-                                                 optionDict: optionDict
-                                                 onSuccuess: ^(WOAResponeContent *responseContent)
-             {
-                 [navVC popToRootViewControllerAnimated: YES];
-             }];
-            
-            break;
-        }
+//        case WOAActionType_AddOAPerson:
+//        {
+//            NSMutableArray *idArray = [NSMutableArray array];
+//            for (NSInteger index = 0; index < selectedPairArray.count; index++)
+//            {
+//                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
+//                [idArray addObject: [pair stringValue]];
+//            }
+//            
+//            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
+//            
+//            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+//            [optionDict setValue: paraValue forKey: @"para_value"];
+//            
+//            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
+//                                                 optionDict: optionDict
+//                                                 onSuccuess: ^(WOAResponeContent *responseContent)
+//             {
+//                 [navVC popToRootViewControllerAnimated: YES];
+//             }];
+//            
+//            break;
+//        }
             
         case WOAActionType_FlowDone:
         {
@@ -822,55 +924,17 @@
 }
 
 #pragma mark -
-
-- (void) getTransPerson: (NSString*)transID
-              transType: (NSString*)transType
-                  navVC: (UINavigationController *)navVC
-{
-    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setValue: transID forKey: @"OpID"];
-    [optionDict setValue: transType forKey: @"type"];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: @"getMissionPerson"
-                                         optionDict: optionDict
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-         NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAStudentPacketHelper modelForGetTransPerson: personList
-                                                        departmentDict: departmentList
-                                                                needXq: [transType isEqualToString: @"1"]
-                                                            actionType: WOAActionType_GetTransTable];
-         NSMutableArray *pairArray = [NSMutableArray array];
-         for (NSInteger index = 0; index < modelArray.count; index++)
-         {
-             WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
-             
-             [pairArray addObject: [contentModel toNameValuePair]];
-         }
-         
-         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
-                                                                 pairArray: pairArray];
-         
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
-                                                                                     delegate: self
-                                                                                  relatedDict: optionDict];
-         
-         [navVC pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) getOATableWithID: (NSString*)transID
-                    navVC: (UINavigationController*)navVC
-{
-    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setValue: transID forKey: @"OpID"];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: @"getOATable"
-                                         optionDict: optionDict
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
+//
+//- (void) getOATableWithID: (NSString*)transID
+//                    navVC: (UINavigationController*)navVC
+//{
+//    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
+//    [optionDict setValue: transID forKey: @"OpID"];
+//    
+//    [[WOARequestManager sharedInstance] simpleQuery: @"getOATable"
+//                                         optionDict: optionDict
+//                                         onSuccuess: ^(WOAResponeContent *responseContent)
+//     {
 //         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
 //         //TODO: tid没有返回
 //         if (!tid) tid = @"0";
@@ -889,40 +953,13 @@
 //         subVC.rightButtonTitle = @"提交";
 //         
 //         [navVC pushViewController: subVC animated: YES];
-     }];
-}
+//     }];
+//}
 
-- (void) getTransTable: (NSDictionary*)optionDict
-                 navVC: (UINavigationController *)navVC
-{
-    [[WOARequestManager sharedInstance] simpleQuery: @"getMissionTable"
-                                         optionDict: optionDict
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-//         
-//         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-//         
-//         NSArray *modelArray = [WOAStudentPacketHelper modelForTransactionTable: retList];
-//         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
-//                                                                                isEditable: YES
-//                                                                                modelArray: modelArray];
-//         subVC.baseRequestDict = baseDict;
-//         subVC.rightButtonAction = WOAActionType_SubmitTransTable;
-//         subVC.rightButtonTitle = @"提交";
-//         
-//         [navVC pushViewController: subVC animated: YES];
-     }];
-}
-
+//
 //- (void) onRightButtonAction: (id)sender
 //{
 //    switch (self.rightButtonAction) {
-//        case WOAActionType_SubmitTransTable:
-//            [self onSubmitTransTable];
-//            break;
 //            
 //        case WOAActionType_AddAssoc:
 //            [self onAddAssoc];
@@ -931,19 +968,6 @@
 //        default:
 //            break;
 //    }
-//}
-//
-//- (void) onSubmitTransTable
-//{
-//    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
-//    [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
-//    
-//    [[WOARequestManager sharedInstance] simpleQuery: @"AddMissionTable"
-//                                         optionDict: optionDict
-//                                         onSuccuess: ^(WOAResponeContent *responseContent)
-//     {
-//         [self.navigationController popToRootViewControllerAnimated: YES];
-//     }];
 //}
 //
 //- (void) onAddAssoc

@@ -32,23 +32,10 @@
 
 #pragma mark -
 
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                            optionDict: (NSDictionary*)optionDict
++ (NSDictionary*) studPacketForActionType: (WOAActionType)actionType
+                                 paraDict: (NSDictionary*)paraDict
 {
-    NSMutableDictionary *dict = [self baseRequestPacketForMsgType: msgType];
-    
-    if (optionDict)
-    {
-        [dict setValuesForKeysWithDictionary: optionDict];
-    }
-    
-    return dict;
-}
-
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              paraDict: (NSDictionary*)paraDict
-{
-    NSMutableDictionary *dict = [self baseRequestPacketForMsgType: msgType];
+    NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType];
     
     if (paraDict)
     {
@@ -58,8 +45,9 @@
     return dict;
 }
 
-+ (NSDictionary*) paraDictWithFromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate
++ (NSDictionary*) studPacketForActionType: (WOAActionType)actionType
+                                 fromDate: (NSString*)fromDate
+                                   toDate: (NSString*)toDate
 {
     NSMutableDictionary *paraDict;
     if (fromDate || toDate)
@@ -79,16 +67,8 @@
         paraDict = nil;
     }
     
-    return paraDict;
-}
-
-+ (NSDictionary*) packetForSimpleQuery: (NSString*)msgType
-                              fromDate: (NSString*)fromDate
-                                toDate: (NSString*)toDate
-{
-    return [self packetForSimpleQuery: msgType
-                             paraDict: [self paraDictWithFromDate: fromDate
-                                                           toDate: toDate]];
+    return [self studPacketForActionType: actionType
+                                paraDict: paraDict];
 }
 
 
@@ -704,9 +684,10 @@
     return groupArray;
 }
 
-+ (NSArray*) modelForMyFillFormTask: (NSDictionary*)retDict
++ (NSArray*) pairArrayForStudQueryFormList: (NSDictionary*)retDict
+                                actionType: (WOAActionType)actionType
 {
-    NSMutableArray *groupArray = [[NSMutableArray alloc] init];
+    NSMutableArray *pairArray = [NSMutableArray array];
     
     NSArray *nameArray = [self toLevel1Array: retDict[@"name"]];
     NSArray *itemIDArray = [self toLevel1Array: retDict[@"id"]];
@@ -718,21 +699,23 @@
         NSString *itemID = [self trimedValue: itemIDArray atIndex: index defVal: @""];
         NSString *type = [self trimedValue: typeArray atIndex: index defVal: @""];
         
-        NSMutableArray *pairArray = [[NSMutableArray alloc] init];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"id" value: itemID]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"type" value: type]];
+        NSMutableDictionary *subDict = [NSMutableDictionary dictionary];
+        [subDict setValue: itemID forKey: kWOAStudSrvKeyForItemID];
+        [subDict setValue: type forKey: kWOAStudSrvKeyForItemType];
         
-        NSArray *modelArray = @[[WOAContentModel contentModel: name pairArray: pairArray]];
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: name
+                                                          value: itemID
+                                                     actionType: actionType];
+        pair.subDictionary = subDict;
         
-        [groupArray addObject: [WOANameValuePair pairWithName: name
-                                                        value: modelArray
-                                                   actionType: WOAActionType_GetTransPerson]];
+        [pairArray addObject: pair];
     }
     
-    return groupArray;
+    return pairArray;
 }
 
-+ (NSArray*) modelForCreateTransaction: (NSDictionary*)retDict
++ (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict
+                                   actionType: (WOAActionType)actionType
 {
     NSMutableArray *groupArray = [[NSMutableArray alloc] init];
     
@@ -751,7 +734,7 @@
         
         [groupArray addObject: [WOANameValuePair pairWithName: name
                                                         value: modelArray
-                                                   actionType: WOAActionType_GetOATable]];
+                                                   actionType: actionType]];
     }
     
     return groupArray;
@@ -924,10 +907,8 @@
     return groupArray;
 }
 
-+ (NSArray*) modelForTransactionTable: (NSDictionary *)retDict
++ (WOAContentModel*) modelForTransactionTable: (NSDictionary *)retDict
 {
-    NSMutableArray *groupArray = [[NSMutableArray alloc] init];
-    
     NSArray *writeArray = [self toLevel1Array: retDict[@"write"]];
     NSArray *nameArray = [self toLevel1Array: retDict[@"nm"]];
     NSArray *tpArray = [self toLevel1Array: retDict[@"tp"]];
@@ -990,13 +971,14 @@
     }
     
     WOAContentModel *contentModel = [WOAContentModel contentModel: @""
-                                                        pairArray: pairArray];
-    [groupArray addObject: contentModel];
+                                                        pairArray: pairArray
+                                                       actionType:WOAActionType_None
+                                                       isReadonly: NO];
     
-    return groupArray;
+    return contentModel;
 }
 
-+ (NSArray*) modelForGetOATable: (NSDictionary*)retDict
++ (WOAContentModel*) modelForGetOATable: (NSDictionary*)retDict
 {
     return [self modelForTransactionTable: retDict];
 }

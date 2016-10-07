@@ -10,12 +10,10 @@
 
 @interface WOARequestContent (Student)
 
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                  optionDict: (NSDictionary*)optionDict;
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                    paraDict: (NSDictionary*)paraDict;
-+ (WOARequestContent*) contentForSimpleQuery: (NSString*)msgType
-                                    fromDate: (NSString*)fromDate
-                                      toDate: (NSString*)toDate;
++ (WOARequestContent*) studContentForSimpleQuery: (WOAActionType)actionType
+                                        paraDict: (NSDictionary*)paraDict;
++ (WOARequestContent*) studCententForSimpleQuery: (WOAActionType)actionType
+                                        fromDate: (NSString*)fromDate
+                                          toDate: (NSString*)toDate;
 
 @end

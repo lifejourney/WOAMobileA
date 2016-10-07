@@ -41,7 +41,7 @@ static NSDictionary *__actionMapDict = nil;
                                                               @""],
       @(WOAActionType_OpenUrl):                             @[@"OpenUrl",
                                                               @""],
-      
+      ////////////////////////////////////////
       //Teacher OA
       @(WOAActionType_TeacherQueryTodoOA):                  @[@"TeacherQueryTodoOA",
                                                               @"getWorkList"],
@@ -164,6 +164,67 @@ static NSDictionary *__actionMapDict = nil;
       @(WOAActionType_TeacherSubmitStudentQuatEval):        @[@"TeacherSubmitStudentQuatEval",
                                                               @"postEvalData"],
       
+      ////////////////////////////////////////
+      //Student
+      @(WOAActionType_StudentQuerySchoolInfo):              @[@"StudentQuerySchoolInfo",
+                                                              @"getSchoolInfo"],
+      @(WOAActionType_StudentQueryConsumeInfo):             @[@"StudentQueryConsumeInfo",
+                                                              @"getConsumeInfo"],
+      @(WOAActionType_StudentQueryAttendInfo):              @[@"StudentQueryAttendInfo",
+                                                              @"getAttendInfo"],
+      @(WOAActionType_StudentQueryStudyAchievement):        @[@"StudentQueryStudyAchievement",
+                                                              @"getResultInfo"],
+      @(WOAActionType_StudentQueryMySociety):               @[@"StudentQueryMySociety",
+                                                              @"getAssocInfo"],
+      @(WOAActionType_StudentQueryQuantitativeEvaluation):  @[@"StudentQueryQuantitativeEvaluation",
+                                                              @"getEvalMyInfo"],
+      @(WOAActionType_StudentQuerySummativeEvaluation):     @[@"StudentQuerySummativeEvaluation",
+                                                              @""],
+      @(WOAActionType_StudentQueryEvalFromCourseTeacher):   @[@"StudentQueryEvalFromCourseTeacher",
+                                                              @"getEvalTchInfo"],
+      @(WOAActionType_StudentQueryEvalFromClassTeacher):    @[@"StudentQueryEvalFromClassTeacher",
+                                                              @"getEvalMTchInfo"],
+      @(WOAActionType_StudentQueryParentWishes):            @[@"StudentQueryParentWishes",
+                                                              @"getEvalPtInfo"],
+      @(WOAActionType_StudentQueryDevelopmentEvaluation):   @[@"StudentQueryDevelopmentEvaluation",
+                                                              
+                                                              @"getEvalGrowpInfo"],
+      @(WOAActionType_StudentQueryMySyllabus):              @[@"StudentQueryMySyllabus",
+                                                              @"getCourseInfo"],
+      @(WOAActionType_StudentSiginSelectiveCourse):         @[@"StudentSiginSelectiveCourse",
+                                                              @""],
+      @(WOAActionType_StudentQueryCourseList):              @[@"StudentQueryCourseList",
+                                                              @"getElectInfo"],
+      @(WOAActionType_StudentQueryMySelectiveCourses):      @[@"StudentQueryMySelectiveCourses",
+                                                              @"getElectMy"],
+      @(WOAActionType_StudentHomeworkBoard):                @[@"StudentHomeworkBoard",
+                                                              @""],
+      @(WOAActionType_StudentDiscussionBoard):              @[@"StudentDiscussionBoard",
+                                                              @""],
+      
+      @(WOAActionType_StudentQueryFormList):                @[@"StudentQueryFormList",
+                                                              @"getMissionList"],
+      @(WOAActionType_StudentQueryFormTransPerson):         @[@"StudentQueryFormTransPerson",
+                                                              @"getMissionPerson"],
+      @(WOAActionType_StudentQueryFormTransTable):          @[@"StudentQueryFormTransTable",
+                                                              @"getMissionTable"],
+      @(WOAActionType_StudentSubmitFormTransTable):         @[@"StudentSubmitFormTransTable",
+                                                              @"AddMissionTable"],
+      
+      @(WOAActionType_StudentQueryOATableList):             @[@"StudentQueryOATableList",
+                                                              @"getOp"],
+      
+      @(WOAActionType_StudentQueryTodoOA):                  @[@"StudentQueryTodoOA",
+                                                              @"getEventMyInfo"],
+      @(WOAActionType_StudentQueryHistoryOA):               @[@"StudentQueryHistoryOA",
+                                                              @"getEventInfo"],
+      
+      @(WOAActionType_StudentQuerySocietyInfo):             @[@"StudentQuerySocietyInfo",
+                                                              @"getAssocMy"],
+      @(WOAActionType_StudentApplyForActivity):             @[@"StudentApplyForActivity",
+                                                              @""],
+      @(WOAActionType_StudentQueryActivityRecord):          @[@"StudentQueryActivityRecord",
+                                                              @"getAssocInfo"],
       };
     
     

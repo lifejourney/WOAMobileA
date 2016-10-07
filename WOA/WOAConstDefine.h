@@ -168,7 +168,10 @@
 #define kWOASrvKeyForProcessID @"processID"
 
 
-
+////////////////////////////////////////
+//Student
+#define kWOAStudSrvKeyForItemID @"id"
+#define kWOAStudSrvKeyForItemType @"type"
 
 
 

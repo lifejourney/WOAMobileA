@@ -10,13 +10,10 @@
 
 @interface WOARequestManager (Student)
 
-- (void) simpleQuery: (NSString*)msgType
-          optionDict: (NSDictionary*)optionDict
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
-- (void) simpleQuery: (NSString*)msgType
+- (void) simpleQuery: (WOAActionType)actionType
             paraDict: (NSDictionary*)paraDict
           onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
-- (void) simpleQuery: (NSString*)msgType
+- (void) simpleQuery: (WOAActionType)actionType
             fromDate: (NSString*)fromDate
               toDate: (NSString*)toDate
           onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;

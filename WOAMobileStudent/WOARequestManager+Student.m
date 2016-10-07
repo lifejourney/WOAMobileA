@@ -12,51 +12,49 @@
 
 @implementation WOARequestManager (Student)
 
-- (void) simpleQuery: (NSString*)msgType
-          optionDict: (NSDictionary*)optionDict
-          onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
-{
-    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-                                                                      optionDict: optionDict];
 
-    [self sendRequest: requestContent
-           onSuccuess: successHandler
-            onFailure: ^(WOAResponeContent *responseContent)
-     {
-         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
-     }];
-}
-
-- (void) simpleQuery: (NSString*)msgType
+- (void) simpleQuery: (WOAActionType)actionType
             paraDict: (NSDictionary*)paraDict
           onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
 {
-    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-                                                                        paraDict: paraDict];
+    WOARequestContent *requestContent = [WOARequestContent studContentForSimpleQuery: actionType
+                                                                            paraDict: paraDict];
 
     [self sendRequest: requestContent
            onSuccuess: successHandler
             onFailure: ^(WOAResponeContent *responseContent)
      {
-         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
+         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld",
+               [WOAActionDefine msgTypeByActionType: actionType],
+               (unsigned long)responseContent.requestResult,
+               (long)responseContent.HTTPStatus);
      }];
 }
 
-- (void) simpleQuery: (NSString*)msgType
+- (void) simpleQuery: (WOAActionType)actionType
             fromDate: (NSString*)fromDate
               toDate: (NSString*)toDate
           onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
 {
-    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: msgType
-                                                                        fromDate: fromDate
-                                                                          toDate: toDate];
+    WOARequestContent *requestContent = [WOARequestContent studCententForSimpleQuery: actionType
+                                                                            fromDate: fromDate
+                                                                              toDate: toDate];
 
     [self sendRequest: requestContent
            onSuccuess: successHandler
             onFailure: ^(WOAResponeContent *responseContent)
      {
-         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
+         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld",
+               [WOAActionDefine msgTypeByActionType: actionType],
+               (unsigned long)responseContent.requestResult,
+               (long)responseContent.HTTPStatus);
      }];
 }
 
 @end
+
+
+
+
+
+
