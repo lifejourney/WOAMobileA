@@ -404,7 +404,7 @@
     }
     
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-    [addtDict setValue: selectedPairArray forKey: kWOASrvKeyForAccountArray];
+    [addtDict setValue: selectedAccountArray forKey: kWOASrvKeyForAccountArray];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
                                                additionalDict: addtDict

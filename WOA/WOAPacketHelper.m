@@ -28,6 +28,7 @@
     if (![msgType isEqualToString: kWOAValue_MsgType_Login])
     {
         [dict setValue: [WOAPropertyInfo latestSessionID] forKey: @"sessionID"];
+        [dict setValue: [WOAPropertyInfo latestWorkID] forKey: kWOASrvKeyForWorkID];
     }
     
 #ifdef WOAMobileStudent
