@@ -120,7 +120,11 @@
     if (self.delegate
         && [self.delegate respondsToSelector: @selector(contentViewController:actionType:submitContent:relatedDict:)])
     {
+#ifdef WOAMobileTeacher
         NSDictionary *contentDict = [self toTeacherDataModel];
+#else
+        NSDictionary *contentDict = [self toStudentDataModel];
+#endif
         
         [self.delegate contentViewController: self
                                   actionType: self.contentModel.actionType
@@ -350,14 +354,16 @@
 
 #pragma mark -
 
-//TO-DO
-- (NSDictionary*) toTeacherDataModel
+- (NSArray*) toItemValueArray
 {
     NSMutableArray *itemArrArray = [NSMutableArray array];
     
     for (NSInteger groupIndex = 0; groupIndex < self.contentModel.contentArray.count; groupIndex++)
     {
+#ifdef WOAMobileTeacher
         NSMutableArray *itemArray = [NSMutableArray array];
+#else
+#endif
         WOAContentModel *groupContent = self.contentModel.contentArray[groupIndex];
         
         for (NSInteger rowIndex = 0; rowIndex < groupContent.pairArray.count; rowIndex++)
@@ -375,87 +381,49 @@
             if ([subView isKindOfClass: [WOAMultiStyleItemField class]])
             {
                 WOAMultiStyleItemField *contentField = (WOAMultiStyleItemField*)subView;
+#ifdef WOAMobileTeacher
                 [itemArray addObject: [contentField toTeacherDataModel]];
+#else
+                [itemArrArray addObject: [contentField toStudentDataModel]];
+#endif
             }
         }
-        
+      
+#ifdef WOAMobileTeacher
         if (itemArray.count > 0)
         {
             [itemArrArray addObject: itemArray];
         }
+#else
+#endif
     }
+    
+    return itemArrArray;
+}
+
+- (NSDictionary*) toTeacherDataModel
+{
+    NSArray *itemArrArray = [self toItemValueArray];
     
     return @{kWOASrvKeyForItemArrays: itemArrArray};
 }
 
-
-//- (NSString*) valueForContentModelSection: (NSInteger)section
-//                                seperator: (NSString*)seperator
-//{
-//    WOAContentModel *contentModel = [self.modelArray objectAtIndex: section];
-//    NSInteger rowCount = contentModel.pairArray.count;
-//    
-//    NSMutableArray *rowArray = [[NSMutableArray alloc] init];
-//    for (NSInteger row = 0; row < rowCount; row++)
-//    {
-//        WOANameValuePair *pair = [contentModel.pairArray objectAtIndex: row];
-//        if ([pair isSeperatorPair])
-//            continue;
-//        
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow: row inSection: section];
-//        NSInteger tag = [UIView tagByIndexPathE: indexPath];
-//        UIView *subView = [self.view viewWithTag: tag];
-//        
-//        NSString *itemValue = nil;
-//        if (subView && [subView isKindOfClass: [WOAMultiStyleItemField class]])
-//        {
-//            WOAMultiStyleItemField *subField = (WOAMultiStyleItemField*)subView;
-//            itemValue = [subField toSimpleDataModelValue];
-//        }
-//        
-//        if (!itemValue)
-//        {
-//            itemValue = @"";
-//        }
-//        
-//        [rowArray addObject: itemValue];
-//    }
-//    
-//    NSString *contentValue = [rowArray componentsJoinedByString: seperator];
-//    
-//    return contentValue;
-//}
-//
-//- (NSString*) toSimpleDataModelValue
-//{
-//    NSString *contentValue;
-//    NSInteger sectionCount = self.modelArray.count;
-//    
-//    if (sectionCount == 1)
-//    {
-//        contentValue = [self valueForContentModelSection: 0
-//                                               seperator: kWOA_Level_1_Seperator];
-//    }
-//    else if (sectionCount > 1)
-//    {
-//        NSMutableArray *sectionArray = [[NSMutableArray alloc] init];
-//        
-//        for (NSInteger section = 0; section < sectionCount; section++)
-//        {
-//            NSString *sectionValue = [self valueForContentModelSection: section
-//                                                             seperator: kWOA_Level_2_Seperator];
-//            
-//            [sectionArray addObject: sectionValue];
-//        }
-//        
-//        contentValue = [sectionArray componentsJoinedByString: kWOA_Level_1_Seperator];
-//    }
-//    else
-//    {
-//        contentValue = @"";
-//    }
-//    
-//    return contentValue;
-//}
+- (NSDictionary*) toStudentDataModel;
+{
+    NSArray *itemArrArray = [self toItemValueArray];
+    
+    NSString *contentString = [itemArrArray componentsJoinedByString: kWOA_Level_1_Seperator];
+    
+    NSDictionary *paraDict = [NSMutableDictionary dictionary];
+    [paraDict setValue: contentString forKey: kWOAStudContentParaValue];
+    
+    return paraDict;
+}
 
 @end
+
+
+
+
+
+

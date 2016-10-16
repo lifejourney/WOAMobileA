@@ -718,14 +718,11 @@
 
 #pragma mark -
 
-- (NSDictionary*) toTeacherDataModel
+- (id) toItemValue
 {
+    id itemValue;
     BOOL isWritable = self.itemModel.isWritable;
     WOAPairDataType dataType = self.itemModel.dataType;
-    
-    NSString *itemName = self.titleLabel.text;
-    NSString *itemType = [WOANameValuePair textTypeFromPairType: dataType];
-    id itemValue;
     
     if (isWritable && (dataType == WOAPairDataType_SinglePicker))
     {
@@ -761,10 +758,14 @@
             
             for (NSInteger index = 0; index < _imageURLArray.count; index++)
             {
+#ifdef WOAMobileTeacher
                 NSDictionary *attachmentInfo = @{kWOASrvKeyForAttachmentTitle: self.imageTitleArray[index],
                                                  kWOASrvKeyForAttachmentUrl: self.imageURLArray[index]};
                 
                 [attachmentArray addObject: attachmentInfo];
+#else
+                [attachmentArray addObject: self.imageURLArray[index]];
+#endif
             }
             
             itemValue = attachmentArray;
@@ -778,8 +779,38 @@
     }
     else
     {
-        itemValue = self.lineTextField.text;
+        if (self.lineLabel)
+        {
+            itemValue = self.lineLabel.text;
+        }
+        else if (_lineTextField)
+        {
+            itemValue = self.lineTextField.text;
+        }
+        else if (_lineTextView)
+        {
+            itemValue = self.lineTextView.text;
+        }
+        else
+        {
+            NSLog(@"!!! Unexpected data type [%@] for [%@]",
+                  [WOANameValuePair textTypeFromPairType: dataType],
+                  self.titleLabel.text);
+            
+            itemValue = nil;
+        }
     }
+    
+    return itemValue;
+}
+
+- (NSDictionary*) toTeacherDataModel
+{
+    WOAPairDataType dataType = self.itemModel.dataType;
+    
+    NSString *itemName = self.titleLabel.text;
+    NSString *itemType = [WOANameValuePair textTypeFromPairType: dataType];
+    id itemValue = [self toItemValue];
     
     NSMutableDictionary *itemDict = [NSMutableDictionary dictionary];
     [itemDict setValue: itemName forKey: kWOASrvKeyForItemName];
@@ -787,6 +818,28 @@
     [itemDict setValue: itemValue forKey: kWOASrvKeyForItemValue];
     
     return itemDict;
+}
+
+- (NSString*) toStudentDataModel
+{
+    NSString *stringValue;
+    
+    id itemValue = [self toItemValue];
+    
+    if ([itemValue isKindOfClass: [NSArray class]])
+    {
+        stringValue = [(NSArray*)itemValue componentsJoinedByString: kWOA_Level_2_Seperator];
+    }
+    else if ([itemValue isKindOfClass: [NSString class ]])
+    {
+        stringValue = (NSString*)itemValue;
+    }
+    else
+    {
+        stringValue = @"";
+    }
+    
+    return stringValue;
 }
 
 @end

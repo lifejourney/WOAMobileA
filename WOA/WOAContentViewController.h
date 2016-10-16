@@ -48,6 +48,7 @@
 #pragma mark -
 //TO-DO
 - (NSDictionary*) toTeacherDataModel;
+- (NSDictionary*) toStudentDataModel;
 
 @end
 

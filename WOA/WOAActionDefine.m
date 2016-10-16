@@ -213,6 +213,14 @@ static NSDictionary *__actionMapDict = nil;
       
       @(WOAActionType_StudentQueryOATableList):             @[@"StudentQueryOATableList",
                                                               @"getOp"],
+      @(WOAActionType_StudentCreateOATable):                @[@"StudentCreateOATable",
+                                                              @"getOATable"],
+      @(WOAActionType_StudentSubmitOATable):                @[@"StudentSubmitOATable",
+                                                              @"addAssoc"],
+      @(WOAActionType_StudentPickOAPerson):                 @[@"StudentPickOAPerson",
+                                                              @"getOAPerson"],
+      @(WOAActionType_StudentSubmitOAPerson):               @[@"StudentSubmitOAPerson",
+                                                              @"addOAPerson"],
       
       @(WOAActionType_StudentQueryTodoOA):                  @[@"StudentQueryTodoOA",
                                                               @"getEventMyInfo"],

@@ -128,6 +128,10 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentSubmitFormTransTable,
     
     WOAActionType_StudentQueryOATableList,
+    WOAActionType_StudentCreateOATable,
+    WOAActionType_StudentSubmitOATable,
+    WOAActionType_StudentPickOAPerson,
+    WOAActionType_StudentSubmitOAPerson,
     
     WOAActionType_StudentQueryTodoOA,
     WOAActionType_StudentQueryHistoryOA,
@@ -137,11 +141,6 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentQueryActivityRecord,
     WOAActionType_Others,
     
-    //WOA bussiness action
-    
-    WOAActionType_GetOATable,
-    WOAActionType_AddAssoc,
-    WOAActionType_StudentPickOAPerson,
 };
 
 @interface WOAActionDefine : NSObject

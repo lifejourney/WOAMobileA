@@ -13,9 +13,6 @@
 #define kWOAItemIndexPath_RowKey @"_row"
 #define kWOAKey_CreateTime @"createTime"
 
-#define kWOA_Level_1_Seperator @"|"
-#define kWOA_Level_2_Seperator @","
-
 #define kWOAKey_TableRecordID @"tid"
 
 #define kWOAValue_OATableID_JoinSociety @"23"

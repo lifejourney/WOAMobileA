@@ -717,7 +717,7 @@
 + (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict
                                    actionType: (WOAActionType)actionType
 {
-    NSMutableArray *groupArray = [[NSMutableArray alloc] init];
+    NSMutableArray *pairArray = [NSMutableArray array];
     
     NSArray *nameArray = [self toLevel1Array: retDict[@"nm"]];
     NSArray *itemIDArray = [self toLevel1Array: retDict[@"id"]];
@@ -727,17 +727,12 @@
         NSString *name = [self trimedValue: nameArray atIndex: index defVal: @""];
         NSString *itemID = [self trimedValue: itemIDArray atIndex: index defVal: @""];
         
-        NSMutableArray *pairArray = [[NSMutableArray alloc] init];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"id" value: itemID]];
-        
-        NSArray *modelArray = @[[WOAContentModel contentModel: name pairArray: pairArray]];
-        
-        [groupArray addObject: [WOANameValuePair pairWithName: name
-                                                        value: modelArray
-                                                   actionType: actionType]];
+        [pairArray addObject: [WOANameValuePair pairWithName: name
+                                                       value: itemID
+                                                  actionType: actionType]];
     }
     
-    return groupArray;
+    return pairArray;
 }
 
 + (NSArray*) modelForTodoTransaction: (NSDictionary*)retDict
@@ -844,12 +839,12 @@
         NSDictionary *subDict;
         if (needXq)
         {
-            subDict = @{@"para_value": itemID,
+            subDict = @{kWOAStudContentParaValue: itemID,
                         @"xq": xq};
         }
         else
         {
-            subDict = @{@"para_value": itemID};
+            subDict = @{kWOAStudContentParaValue: itemID};
         }
         WOANameValuePair *pair = [WOANameValuePair pairWithName: name
                                                           value: itemID
@@ -933,12 +928,6 @@
         isWrite = isWrite && (dataType != WOAPairDataType_FixedText &&
                               dataType != WOAPairDataType_FlowText);
         
-        //TO-DO: temporarily
-        if (dataType == WOAPairDataType_AttachFile)
-        {
-            isWrite = NO;
-        }
-        
         NSObject *value;
         NSArray *optionArray;
         if (dataType == WOAPairDataType_Radio ||
@@ -951,6 +940,20 @@
         {
             value = [self trimedStringArray: [self toLevel2Array: dva]];
             optionArray = [self trimedStringArray: [self toLevel2Array: va]];
+        }
+        else if (dataType == WOAPairDataType_AttachFile
+                 || dataType == WOAPairDataType_ImageAttachFile)
+        {
+            //TO-DO
+            isWrite = NO;
+            
+            //TO-DO, conform teacher project's rule.
+            NSMutableDictionary *itemDict = [NSMutableDictionary dictionary];
+            [itemDict setValue: va forKey: kWOASrvKeyForAttachmentTitle];
+            [itemDict setValue: va forKey: kWOASrvKeyForAttachmentUrl];
+            
+            value = @[itemDict];
+            optionArray = nil;
         }
         else
         {
@@ -1129,71 +1132,7 @@
 //    
 //    return nil;
 //}
-//
-//- (NSString*) toSimpleDataModelValue
-//{
-//    NSString *textValue;
-//    
-//    if (_lineLabel)
-//    {
-//        textValue = _lineLabel.text;
-//    }
-//    else if (_lineTextField)
-//    {
-//        textValue = _lineTextField.text;
-//    }
-//    else if (_lineTextView)
-//    {
-//        textValue = _lineTextView.text;
-//    }
-//    else if (_fileSelectorView)
-//    {
-//        //TODO
-//        textValue = nil;
-//    }
-//    else if (_multiSelectorView)
-//    {
-//        NSArray *valueArray = [_multiSelectorView selectedValueArray];
-//        
-//        textValue = [valueArray componentsJoinedByString: kWOA_Level_2_Seperator];
-//    }
-//    else
-//    {
-//        textValue = nil;
-//    }
-//    
-//    if (_pairType == WOAPairDataType_TextList ||
-//        _pairType == WOAPairDataType_CheckUserList ||
-//        _pairType == WOAPairDataType_AttachFile ||
-//        _pairType == WOAPairDataType_MultiPicker)
-//    {
-//        if (_multiLabel)
-//        {
-//            //NSArray *valueArray = [_multiLabel textsArray];
-//            NSMutableArray *valueArray = [NSMutableArray array];
-//            for (WOANameValuePair *pair in _multiLabel.contentModel.pairArray)
-//            {
-//                [valueArray addObject: [pair stringValue]];
-//            }
-//            
-//            NSString *fixedValue = [valueArray componentsJoinedByString: kWOA_Level_2_Seperator];
-//            
-//            NSMutableArray *combinedArray = [NSMutableArray array];
-//            if (fixedValue && [fixedValue length] > 0)
-//            {
-//                [combinedArray addObject: fixedValue];
-//            }
-//            if (textValue && [textValue length] > 0)
-//            {
-//                [combinedArray addObject: textValue];
-//            }
-//            
-//            textValue = [combinedArray componentsJoinedByString: kWOA_Level_2_Seperator];
-//        }
-//    }
-//    
-//    return textValue;
-//}
+
 
 
 

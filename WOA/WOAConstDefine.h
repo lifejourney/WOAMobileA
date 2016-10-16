@@ -170,6 +170,11 @@
 
 ////////////////////////////////////////
 //Student
+#define kWOA_Level_1_Seperator @"|"
+#define kWOA_Level_2_Seperator @","
+
+#define kWOAStudContentParaValue @"para_value"
+
 #define kWOAStudSrvKeyForItemID @"id"
 #define kWOAStudSrvKeyForItemType @"type"
 

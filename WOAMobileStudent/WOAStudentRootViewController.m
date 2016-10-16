@@ -21,42 +21,6 @@
 #import "NSString+Utility.h"
 
 
-/* 确认:
- 1. getAssocInfo: 是用 memb 还是numb ? 什么意思?
- "retList":{
- "count":2,"titl":"123abc | 123abc","fzr":"徐子贤 | 徐子贤","numb":"17 | 17","counthd":0,"hdjj":"","hdsj":"","countcj":0,"cjjj":"无","cjsj":"无"}
- 
- 2. 总结性评价的接口是什么?
- 3. 量化评价是 用这个接口吗: 自我评价getEvalMyInfo ?
- 4. //自我评价getEvalMyInfo  //课任教师评价getEvalTchInfo //班主任评价getEvalMTchInfo   //父母寄语getEvalPtInfo
- 这些返回的格式都一样吗?
- 5. 发展性评价, 这里返回的内容是要怎么组织表现? 只有一次的记录?
- 6. 选修报名，作业区，讨论区的接口是什么?
- 7. 加入社团的接口是什么?
- 8. 活动申请的接口是什么?
- 
- 1. 我的档案-->社团情况，社团管理-->管理社团-->活动记录。 这两个入口进去的数据看起来是一样的。一样的显示方式?
- 2. 自我评价里的"附件"，是怎样的数据？是链接吗，有需要特殊的展示?
- 
- 1. 填表任务 --> 选人: 没有组的要显示么?
- 2. 2textarea 与 1 text有什么不一样
- 3. 3radio 4checkbox 5select有什么不一样
- 4. 7填写时间, 是日期，还是时间
- 5. 这些类型，跟1期的类型，有没有什么对应关系
- 6. addAssoc 里的 tid哪里来，上一步没有返回.
- 7. addAssoc 的返回: "如果只有一个返回人员组，gList->count=1且组ID=0，则表示该步审批人员为固定的一个或几个人中选." 什么意思?
- 
- 1. getOATable并没有返回tid, 先默认成"0"
- 2. "Va填表项目的初始值或选项, 如果是checkbox/select 选项的多个值，用逗号隔开. Dva 默认值"
- 这个定义够乱的，我现在的理解与处理是:
- 1) 如果是3, 4, 5: "dva"就是默认的值, va是可以选择的列表选项.
- 2) 其他类型: "va"就是默认的值.
- 3. 应用名称是什么: "智慧云学生版"?
- 4. 文档里：addAssoc的位置，应该是少了点信息。 addAssoc成功后，用返回的tid发getOAPerson.
- */
-
-
-
 @interface WOAStudentRootViewController() <WOASinglePickViewControllerDelegate,
                                             WOAMultiPickerViewControllerDelegate,
                                             WOAContentViewControllerDelegate,
@@ -580,7 +544,7 @@
              [pairArray addObject: [contentModel toNameValuePair]];
          }
          
-         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
+         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @"表单对象"
                                                                  pairArray: pairArray];
          
          WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
@@ -628,14 +592,17 @@
                         relatedDict: (NSDictionary*)relatedDict
                               navVC: (UINavigationController*)navVC
 {
-    NSDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-    [addtDict setValue: contentDict forKey: @"para_value"];
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict addEntriesFromDictionary: contentDict];
 
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         [navVC popToRootViewControllerAnimated: YES];
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交."
+                                    navVC: navVC];
      }];
     
 }
@@ -650,7 +617,7 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAActionType pairActionType = WOAActionType_GetOATable;
+         WOAActionType pairActionType = WOAActionType_StudentCreateOATable;
          
          NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
          
@@ -664,6 +631,125 @@
                                                                                   relatedDict: nil];
          
          [ownerNav pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudCreateOATable: (WOANameValuePair*)selectedPair
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
+{
+    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
+    [optionDict setValue: [selectedPair stringValue] forKey: @"OpID"];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                               additionalDict: optionDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+         //TODO: tid没有返回
+         if (!tid) tid = @"0";
+         
+         NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
+         [contentRelatedDict setValue: tid forKey: kWOAKey_TableRecordID];
+         
+         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
+         
+         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForTransactionTable: retList];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                          contentArray: @[sectionModel]
+                                                            actionType: WOAActionType_StudentSubmitOATable
+                                                            actionName: @"提交"
+                                                            isReadonly: NO
+                                                               subDict: contentRelatedDict];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudSubmitOATable: (WOAActionType)actionType
+                 contentDict: (NSDictionary*)contentDict
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict addEntriesFromDictionary: contentDict];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: addtDict];
+         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
+         [baseDict removeObjectForKey: kWOAStudContentParaValue];
+         
+         [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentPickOAPerson
+                                                    additionalDict: baseDict
+                                                        onSuccuess: ^(WOAResponeContent *responseContent)
+          {
+              NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
+              NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: baseDict];
+              [contentRelatedDict setValue: tid forKey: kWOAKey_TableRecordID];
+              
+              NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
+              NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
+              
+              NSArray *modelArray = [WOAStudentPacketHelper modelForAddAssoc: personList
+                                                              departmentDict: departmentList
+                                                                  actionType: WOAActionType_StudentSubmitOAPerson];
+              
+              NSMutableArray *pairArray = [NSMutableArray array];
+              for (NSInteger index = 0; index < modelArray.count; index++)
+              {
+                  WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
+                  
+                  [pairArray addObject: [contentModel toNameValuePair]];
+              }
+              
+              WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
+                                                                      pairArray: pairArray
+                                                                     actionType: WOAActionType_StudentSubmitOAPerson
+                                                                     isReadonly: YES];
+              
+              WOAMultiPickerViewController *subVC;
+              subVC = [WOAMultiPickerViewController multiPickerViewController: flowContentModel
+                                                       selectedIndexPathArray: nil
+                                                                     delegate: self
+                                                                  relatedDict: contentRelatedDict];
+              
+              [navVC pushViewController: subVC animated: YES];
+          }];
+     }];
+    
+}
+
+- (void) onStudSubmitOAPerson: (WOAActionType)actionType
+            selectedPairArray: (NSArray*)selectedPairArray
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
+{
+    NSMutableArray *selectedAccountArray = [NSMutableArray array];
+    for (WOANameValuePair *pair in selectedPairArray)
+    {
+        [selectedAccountArray addObject: [pair stringValue]];
+    }
+    
+    NSString *paraValue = [selectedAccountArray componentsJoinedByString: kWOA_Level_1_Seperator];
+    
+    NSDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: paraValue forKey: kWOAStudContentParaValue];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentSubmitOAPerson
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已提交"
+                                    navVC: navVC];
      }];
 }
 
@@ -721,8 +807,13 @@
     //NSString *vcTitle = [self titleForFuncName: funcName];
     UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-//    [self getOATableWithID: kWOAValue_OATableID_JoinSociety
-//                     navVC: ownerNav];
+    WOANameValuePair *pair = [WOANameValuePair pairWithName: @"学生申请加入社团申报表"
+                                                      value: kWOAValue_OATableID_JoinSociety
+                                                 actionType: WOAActionType_StudentCreateOATable];
+    
+    [self onStudCreateOATable: pair
+                  relatedDict: nil
+                        navVC: ownerNav];
 }
 
 - (void) studQuerySocietyInfo
@@ -811,18 +902,15 @@
             
             break;
         }
-//
-//        case WOAActionType_GetOATable:
-//        {
-//            NSArray *modelArray = (NSArray*)selectedPair.value;
-//            WOAContentModel *contentModel = [modelArray objectAtIndex: 0];
-//            
-//            NSString *transID = [contentModel stringValueForName: @"id"];
-//            
-//            [self getOATableWithID: transID
-//                             navVC: navVC];
-//        }
-//            break;
+
+        case WOAActionType_StudentCreateOATable:
+        {
+            [self onStudCreateOATable: selectedPair
+                          relatedDict: relatedDict
+                                navVC: navVC];
+            
+            break;
+        }
             
         default:
             break;
@@ -861,6 +949,15 @@
             break;
         }
             
+        case WOAActionType_StudentSubmitOATable:
+        {
+            [self onStudSubmitOATable: actionType
+                          contentDict: contentDict
+                          relatedDict: relatedDict
+                                navVC: vc.navigationController];
+            break;
+        }
+            
         case WOAActionType_FlowDone:
         {
             [self onFlowDoneWithLatestActionType: actionType
@@ -882,29 +979,15 @@
 {
     switch (actionType)
     {
-//        case WOAActionType_AddOAPerson:
-//        {
-//            NSMutableArray *idArray = [NSMutableArray array];
-//            for (NSInteger index = 0; index < selectedPairArray.count; index++)
-//            {
-//                WOANameValuePair *pair = [selectedPairArray objectAtIndex: index];
-//                [idArray addObject: [pair stringValue]];
-//            }
-//            
-//            NSString *paraValue = [idArray componentsJoinedByString: kWOA_Level_1_Seperator];
-//            
-//            NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-//            [optionDict setValue: paraValue forKey: @"para_value"];
-//            
-//            [[WOARequestManager sharedInstance] simpleQuery: @"addOAPerson"
-//                                                 optionDict: optionDict
-//                                                 onSuccuess: ^(WOAResponeContent *responseContent)
-//             {
-//                 [navVC popToRootViewControllerAnimated: YES];
-//             }];
-//            
-//            break;
-//        }
+        case WOAActionType_StudentSubmitOAPerson:
+        {
+            [self onStudSubmitOAPerson: actionType
+                     selectedPairArray: selectedPairArray
+                           relatedDict: relatedDict
+                                 navVC: navVC];
+            
+            break;
+        }
             
         case WOAActionType_FlowDone:
         {
@@ -922,110 +1005,6 @@
 {
     [navVC popViewControllerAnimated: YES];
 }
-
-#pragma mark -
-//
-//- (void) getOATableWithID: (NSString*)transID
-//                    navVC: (UINavigationController*)navVC
-//{
-//    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
-//    [optionDict setValue: transID forKey: @"OpID"];
-//    
-//    [[WOARequestManager sharedInstance] simpleQuery: @"getOATable"
-//                                         optionDict: optionDict
-//                                         onSuccuess: ^(WOAResponeContent *responseContent)
-//     {
-//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-//         //TODO: tid没有返回
-//         if (!tid) tid = @"0";
-//         
-//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-//         
-//         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-//         
-//         NSArray *modelArray = [WOAStudentPacketHelper modelForGetOATable: retList];
-//         WOAContentViewController *subVC = [WOAContentViewController contentViewController: @""
-//                                                                                isEditable: YES
-//                                                                                modelArray: modelArray];
-//         subVC.baseRequestDict = baseDict;
-//         subVC.rightButtonAction = WOAActionType_AddAssoc;
-//         subVC.rightButtonTitle = @"提交";
-//         
-//         [navVC pushViewController: subVC animated: YES];
-//     }];
-//}
-
-//
-//- (void) onRightButtonAction: (id)sender
-//{
-//    switch (self.rightButtonAction) {
-//            
-//        case WOAActionType_AddAssoc:
-//            [self onAddAssoc];
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//}
-//
-//- (void) onAddAssoc
-//{
-//    NSDictionary *optionDict = [NSMutableDictionary dictionaryWithDictionary: self.baseRequestDict];
-//    [optionDict setValue: [self toSimpleDataModelValue] forKey: @"para_value"];
-//    
-//    [[WOARequestManager sharedInstance] simpleQuery: @"addAssoc"
-//                                         optionDict: optionDict
-//                                         onSuccuess: ^(WOAResponeContent *responseContent)
-//     {
-//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-//         [baseDict removeObjectForKey: @"para_value"];
-//         
-//         [self onGetOAPerson: baseDict];
-//     }];
-//}
-//
-//- (void) onGetOAPerson: (NSDictionary*)optionDict
-//{
-//    [[WOARequestManager sharedInstance] simpleQuery: @"getOAPerson"
-//                                         optionDict: optionDict
-//                                         onSuccuess: ^(WOAResponeContent *responseContent)
-//     {
-//         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-//         NSMutableDictionary *baseDict = [NSMutableDictionary dictionaryWithDictionary: optionDict];
-//         [baseDict setValue: tid forKey: kWOAKey_TableRecordID];
-//         
-//         NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-//         NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
-//         
-//         NSArray *modelArray = [WOAStudentPacketHelper modelForAddAssoc: personList
-//                                                  departmentDict: departmentList
-//                                                      actionType: WOAActionType_None];
-//         
-//         NSMutableArray *pairArray = [NSMutableArray array];
-//         for (NSInteger index = 0; index < modelArray.count; index++)
-//         {
-//             WOAContentModel *contentModel = (WOAContentModel*)[modelArray objectAtIndex: index];
-//             
-//             [pairArray addObject: [contentModel toNameValuePair]];
-//         }
-//         
-//         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @""
-//                                                                 pairArray: pairArray
-//                                                                actionType: WOAActionType_AddOAPerson];
-//         
-//         WOAMultiPickerViewController *subVC;
-//         subVC = [WOAMultiPickerViewController multiPickerViewController: flowContentModel
-//                                                  selectedIndexPathArray: nil
-//                                                                delegate: self
-//                                                             relatedDict: baseDict];
-//         
-//         [self.navigationController pushViewController: subVC animated: YES];
-//     }];
-//}
 
 
 @end
