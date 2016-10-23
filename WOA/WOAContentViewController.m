@@ -405,7 +405,25 @@
 {
     NSArray *itemArrArray = [self toItemValueArray];
     
-    return @{kWOASrvKeyForItemArrays: itemArrArray};
+    NSString *itemArrKeyName;
+    if (self.contentModel.actionType == WOAActionType_TeacherSubmitBusinessCreate)
+    {
+        itemArrKeyName = kWOASrvKeyForDataFieldArrays;
+        
+        NSMutableArray *newArr = [NSMutableArray array];
+        for (NSUInteger index = 0; index < itemArrArray.count; index++)
+        {
+            [newArr addObjectsFromArray: itemArrArray[index]];
+        }
+        
+        itemArrArray = newArr;
+    }
+    else
+    {
+        itemArrKeyName = kWOASrvKeyForItemArrays;
+    }
+    
+    return @{itemArrKeyName: itemArrArray};
 }
 
 - (NSDictionary*) toStudentDataModel;

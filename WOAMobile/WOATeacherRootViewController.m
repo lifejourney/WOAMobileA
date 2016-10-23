@@ -627,6 +627,7 @@
          NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
          [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
          [contentReleatedDict setValue: tableStruct forKey: kWOASrvKeyForTableStruct];
+         [contentReleatedDict setValue: tableStyle forKey: kWOASrvKeyForTableStyle];
          
          NSArray *teacherPairArray = [WOATeacherPacketHelper teacherPairArrayForCreateBusinessItem: responseContent.bodyDictionary
                                                                                     pairActionType: WOAActionType_TeacherBusinessSelectOtherTeacher];
