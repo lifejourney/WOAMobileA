@@ -25,7 +25,7 @@
     
     return @{@"AppStoreID": @"908853362",
              @"DefaultServerAddress": @{@"Production": @"http://www.qz5z.com",
-                                        @"Test": @"http://220.162.12.167:8080"},
+                                        @"Test": @"http://120.43.238.29:8086"},
              @"DefaultTabID": @(0),
              @"RootViewControllerClass": @"WOATeacherRootViewController"};
     

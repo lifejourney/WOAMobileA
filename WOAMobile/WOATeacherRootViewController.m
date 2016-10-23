@@ -50,6 +50,10 @@
  增加新功能:
  1. 业务管理：表格填写，调课，课表查询，工资查询。
  2. 学生管理：学生考勤，学生评语与评价。
+ 
+ Ver 2.02.01
+ Fix bug.
+ 
  */
 
 @interface WOATeacherRootViewController() <WOASinglePickViewControllerDelegate,
@@ -2429,7 +2433,7 @@
 - (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
                                       navVC: (UINavigationController*)navVC
 {
-    //[navVC popViewControllerAnimated: YES];
+    [navVC popViewControllerAnimated: YES];
 }
 
 #pragma mark - private

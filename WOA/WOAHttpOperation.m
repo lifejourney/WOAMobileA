@@ -188,8 +188,8 @@
             
             NSMutableURLRequest *request = [WOAHTTPRequest URLRequestWithBodyData: bodyData];
             
-            NSLog(@"To send request for action: %ld\n%@\n-------->\n\n",
-                    (long)requestContent.actionType,
+            NSLog(@"To send request for action: %@\n%@\n-------->\n\n",
+                    [WOAActionDefine actionTypeName: requestContent.actionType],
                     [self formattedString: [[NSString alloc] initWithData: bodyData encoding: NSUTF8StringEncoding]]);//requestContent.bodyDictionary);
             
             self.httpConnection = [[NSURLConnection alloc] initWithRequest: request
@@ -343,8 +343,8 @@
             
             if (bodyDictionary)
             {
-                NSLog(@"Received response for action: %ld\n%@\n<--------\n\n",
-                        (long)self.currentActionType,
+                NSLog(@"Received response for action: %@\n%@\n<--------\n\n",
+                        [WOAActionDefine actionTypeName: self.currentActionType],
                         [self formattedString: tmpString]);//bodyDictionary);
                 
                 WOAWorkflowResultCode resultCode = [WOAPacketHelper resultCodeFromPacketDictionary: bodyDictionary];
@@ -478,7 +478,9 @@
         }
         else
         {
-            NSLog(@"currentAction: %ld, origin action: %ld", (long)self.currentActionType, (long)self.finalResponseContent.actionType);
+            NSLog(@"currentAction: %@, origin action: %@",
+                  [WOAActionDefine actionTypeName: self.currentActionType],
+                  [WOAActionDefine actionTypeName: self.finalResponseContent.actionType]);
             NSLog(@"Request fail for invalid session (login when retrying). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
             
             self.httpConnection = nil;
