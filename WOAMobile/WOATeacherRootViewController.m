@@ -11,6 +11,7 @@
 #import "WOAFlowListViewController.h"
 #import "WOAFilterListViewController.h"
 #import "WOAMultiPickerViewController.h"
+#import "WOALevel3TreeViewController.h"
 #import "WOAContentViewController.h"
 #import "WOADateFromToPickerViewController.h"
 #import "WOARequestManager.h"
@@ -58,6 +59,7 @@
 
 @interface WOATeacherRootViewController() <WOASinglePickViewControllerDelegate,
                                             WOAMultiPickerViewControllerDelegate,
+                                            WOALevel3TreeViewControllerDelegate,
                                             WOAContentViewControllerDelegate,
                                             WOAUploadAttachmentRequestDelegate>
 
@@ -325,13 +327,13 @@
                                                additionalDict: contentDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAActionType itemActionType = WOAActionType_TeacherOAProcessStyle;
+         WOAActionType itemActionType = WOAActionType_TeacherOAMultiNextStep;
          
          NSString *workID = responseContent.bodyDictionary[kWOASrvKeyForWorkID];
          
-         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrSubmitOADetail: responseContent.bodyDictionary
+         NSArray *pairArray = [WOATeacherPacketHelper itemPairsForTchrSubmitOADetailN: responseContent.bodyDictionary
                                                                       pairActionType: itemActionType];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选择下一步"
                                                              pairArray: pairArray
                                                             actionType: itemActionType
                                                             isReadonly: YES];
@@ -339,11 +341,30 @@
          NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionary];
          [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
          
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
-                                                                                     delegate: self
-                                                                                  relatedDict: contentReleatedDict];
+         WOALevel3TreeViewController *subVC = [WOALevel3TreeViewController level3TreeViewController: contentModel
+                                                                                           delegate: self
+                                                                                        relatedDict: contentReleatedDict];
          
          [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onTchrOAMultiNextStep: (WOAActionType)actionType
+            selectedStepsArray: (NSArray*)selectedStepsArray
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict setValue: selectedStepsArray forKey: @"multiStep"];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: @"已转至下一步"
+                                    navVC: navVC];
      }];
 }
 
@@ -2433,6 +2454,71 @@
 
 - (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
                                       navVC: (UINavigationController*)navVC
+{
+    [navVC popViewControllerAnimated: YES];
+}
+
+#pragma mark - WOALevel3TreeViewControllerDelegate
+
+- (void) level3TreeViewControllerSubmit: (WOAContentModel*)contentModel
+                            relatedDict: (NSDictionary*)relatedDict
+                                  navVC: (UINavigationController*)navVC
+{
+    WOAActionType actionType = contentModel.actionType;
+    
+    switch (actionType)
+    {
+        case WOAActionType_TeacherOAMultiNextStep:
+        {
+            NSMutableArray *selectedStepsArray = [NSMutableArray array];
+            for (WOANameValuePair *processPair in contentModel.pairArray)
+            {
+                if ([processPair.tagNumber boolValue] == NO)
+                {
+                    continue;
+                }
+                
+                NSString *processID = [processPair stringValue];
+                NSMutableArray *accountIDArray = [NSMutableArray array];
+                
+                for (WOANameValuePair *groupPair in (NSArray*)processPair.value)
+                {
+                    for (WOANameValuePair *accountPair in (NSArray*)groupPair.value)
+                    {
+                        if ([accountPair.tagNumber boolValue] == YES)
+                        {
+                            [accountIDArray addObject: [accountPair stringValue]];
+                        }
+                    }   
+                }
+                
+                NSMutableDictionary *processDict = [NSMutableDictionary dictionary];
+                [processDict setValue: processID forKey: kWOASrvKeyForProcessID];
+                [processDict setValue: accountIDArray forKey: kWOASrvKeyForAccountArray];
+                
+                [selectedStepsArray addObject: processDict];
+            }
+            
+            [self onTchrOAMultiNextStep: actionType
+                     selectedStepsArray: selectedStepsArray
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+            break;
+        }
+            
+        case WOAActionType_FlowDone:
+        {
+            [self onFlowDoneWithLatestActionType: actionType
+                                           navVC: navVC];
+        }
+            
+        default:
+            break;
+    }
+}
+
+- (void) level3TreeViewControllerCancelled: (WOAContentModel*)contentModel
+                                     navVC: (UINavigationController*)navVC
 {
     [navVC popViewControllerAnimated: YES];
 }

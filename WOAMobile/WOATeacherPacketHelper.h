@@ -33,11 +33,13 @@
 
 #pragma mark -
 
++ (NSArray*) itemPairsForTchrSubmitOADetailN: (NSDictionary*)respDict
+                              pairActionType: (WOAActionType)pairActionType;
+
+//Obsoleted
 + (NSArray*) itemPairsForTchrSubmitOADetail: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
-
-#pragma mark -
-
+//Obsoleted
 + (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType;
 

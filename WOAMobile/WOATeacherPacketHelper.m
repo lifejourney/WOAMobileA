@@ -451,6 +451,57 @@
 
 #pragma mark -
 
++ (NSArray*) itemPairsForTchrSubmitOADetailN: (NSDictionary*)respDict
+                              pairActionType: (WOAActionType)pairActionType
+{
+    NSMutableArray *level1PairArray = [NSMutableArray array];
+    
+    for (NSDictionary *processDict in respDict[kWOASrvKeyForItemArrays])
+    {
+        NSString *processName = processDict[kWOASrvKeyForTableName];
+        NSString *processID = processDict[kWOASrvKeyForProcessID];
+        
+        NSMutableArray *level2PairArray = [NSMutableArray array];
+        for (NSDictionary* groupDict in processDict[kWOASrvKeyForItemArrays])
+        {
+            for (NSString *groupName in [groupDict allKeys])
+            {
+                NSMutableArray *level3PairArray = [NSMutableArray array];
+                for (NSDictionary *accountDict in groupDict[groupName])
+                {
+                    NSString *accountID = accountDict[kWOASrvKeyForAccountID];
+                    NSString *accountName = accountDict[kWOASrvKeyForAccountName];
+                    
+                    WOANameValuePair *level3Pair = [WOANameValuePair pairWithName: accountName
+                                                                            value: accountID
+                                                                       actionType: pairActionType];
+                    [level3PairArray addObject: level3Pair];
+                }
+                
+                WOANameValuePair *level2Pair = [WOANameValuePair pairWithName: groupName
+                                                                        value: groupName
+                                                                   actionType: pairActionType];
+                level2Pair.subArray = level3PairArray;
+                
+                [level2PairArray addObject: level2Pair];
+            }
+        }
+        
+        WOANameValuePair *level1Pair = [WOANameValuePair pairWithName: processName
+                                                                value: processID
+                                                           actionType: pairActionType];
+        if ([level2PairArray count] > 0)
+        {
+            level1Pair.subArray = level2PairArray;
+        }
+        
+        [level1PairArray addObject: level1Pair];
+    }
+    
+    return [WOANameValuePair integerValueSortedPairArray: level1PairArray
+                                             isAscending: YES];
+}
+
 + (NSArray*) itemPairsForTchrSubmitOADetail: (NSDictionary*)respDict
                              pairActionType: (WOAActionType)pairActionType
 {

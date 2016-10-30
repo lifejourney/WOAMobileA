@@ -29,7 +29,9 @@
                reuseIdentifier:(NSString *)reuseIdentifier
                        section: (NSInteger)section
                            row: (NSInteger)row
-                 checkedButton: (BOOL)checkedButton
+                 checkedButton: (BOOL)isSelected
                       delegate: (NSObject<VSSelectedTableViewCellDelegate>*)delegate;
+
+- (void) setupWithCheckedButtonStatus: (BOOL)isSelected;
 
 @end

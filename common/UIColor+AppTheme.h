@@ -11,6 +11,8 @@
 
 @interface UIColor (AppTheme)
 
++ (UIColor*) colorFromRGB: (NSInteger)rgbValue;
+
 + (UIColor*) mainItemBgColor;
 + (UIColor*) mainItemColor;
 + (UIColor*) navigationItemNormalColor;

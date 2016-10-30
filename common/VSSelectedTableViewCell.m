@@ -10,27 +10,32 @@
 
 @implementation VSSelectedTableViewCell
 
+- (void) setupWithCheckedButtonStatus: (BOOL)isSelected
+{
+    self.selectButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    
+    _selectButton.selected = isSelected;
+    
+    UIImage *selectedImage = [[UIImage imageNamed: @"checkedIcon"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    [_selectButton setImage: nil forState: UIControlStateNormal];
+    [_selectButton setImage: selectedImage forState: UIControlStateSelected];
+    [_selectButton setAdjustsImageWhenHighlighted: NO];
+    [_selectButton addTarget: self action: @selector(selectButtonAction:) forControlEvents: UIControlEventTouchUpInside];
+    [self.contentView addSubview: _selectButton];
+    
+    self.contentLabel = [[UILabel alloc] initWithFrame: CGRectZero];
+    _contentLabel.backgroundColor = [UIColor clearColor];
+    _contentLabel.textAlignment = NSTextAlignmentLeft;
+    [self.contentView addSubview: _contentLabel];
+}
+
 - (id) initWithStyle: (UITableViewCellStyle)style
      reuseIdentifier: (NSString *)reuseIdentifier
-       checkedButton: (BOOL)checkedButton
+       checkedButton: (BOOL)isSelected
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
-        self.selectButton = [UIButton buttonWithType: UIButtonTypeCustom];
-        
-        _selectButton.selected = checkedButton;
-        
-        UIImage *selectedImage = [[UIImage imageNamed: @"checkedIcon"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
-        [_selectButton setImage: nil forState: UIControlStateNormal];
-        [_selectButton setImage: selectedImage forState: UIControlStateSelected];
-        [_selectButton setAdjustsImageWhenHighlighted: NO];
-        [_selectButton addTarget: self action: @selector(selectButtonAction:) forControlEvents: UIControlEventTouchUpInside];
-        [self.contentView addSubview: _selectButton];
-        
-        self.contentLabel = [[UILabel alloc] initWithFrame: CGRectZero];
-        _contentLabel.backgroundColor = [UIColor clearColor];
-        _contentLabel.textAlignment = NSTextAlignmentLeft;
-        [self.contentView addSubview: _contentLabel];
+        [self setupWithCheckedButtonStatus: isSelected];
     }
     return self;
 }
@@ -39,10 +44,10 @@
                reuseIdentifier: (NSString *)reuseIdentifier
                        section: (NSInteger)section
                            row: (NSInteger)row
-                 checkedButton: (BOOL)checkedButton
+                 checkedButton: (BOOL)isSelected
                       delegate: (NSObject<VSSelectedTableViewCellDelegate>*)delegate
 {
-    if (self = [self initWithStyle: style reuseIdentifier: reuseIdentifier checkedButton: checkedButton])
+    if (self = [self initWithStyle: style reuseIdentifier: reuseIdentifier checkedButton: isSelected])
     {
         self.section = section;
         self.row = row;

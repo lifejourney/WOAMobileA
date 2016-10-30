@@ -59,6 +59,8 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 @property (nonatomic, assign) WOAActionType actionType; //What action to do when select or submit.
 @property (nonatomic, assign) BOOL isWritable;
 
+@property (nonatomic, strong) NSNumber *tagNumber;
+
 //For selective list, it's array of string.
 //Also use it as a carried item to pass to next step.
 @property (nonatomic, strong) NSArray *subArray;

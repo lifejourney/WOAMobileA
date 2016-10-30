@@ -37,8 +37,9 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_TeacherCreateOAItem,
     WOAActionType_TeacherSubmitOACreate,
     
-    WOAActionType_TeacherOAProcessStyle,
-    WOAActionType_TeacherNextAccounts,
+    WOAActionType_TeacherOAProcessStyle, //Obseleted
+    WOAActionType_TeacherNextAccounts, //Obseleted
+    WOAActionType_TeacherOAMultiNextStep,
     
     WOAActionType_TeacherQueryHistoryOA,
     WOAActionType_TeacherQueryOADetail,

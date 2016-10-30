@@ -61,6 +61,8 @@ static NSDictionary *__actionMapDict = nil;
                                                               @"sendProcessingStyle"],
       @(WOAActionType_TeacherNextAccounts):                 @[@"TeacherNextAccounts",
                                                               @"sendNextStep"],
+      @(WOAActionType_TeacherOAMultiNextStep):              @[@"TeacherOAMultiNextStep",
+                                                              @"sendNextMultiStep"],
       
       @(WOAActionType_TeacherQueryHistoryOA):               @[@"TeacherQueryHistoryOA",
                                                               @"getQueryList"],
