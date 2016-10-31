@@ -234,6 +234,21 @@
     return pairItem.subArray && ([pairItem.subArray count] > 0);
 }
 
+/**
+ *  Asks delegate whether a row for a specified item should be collapsed.
+ *
+ *  @param treeView     The tree-view object requesting this information.
+ *  @param item         An item identifying a row in tree view.
+ *
+ *  @return YES if the background of the row should be expanded, otherwise NO.
+ *  @discussion If the delegate does not implement this method, the default is YES.
+ */
+- (BOOL)treeView:(RATreeView *)treeView shouldCollapaseRowForItem:(id)item
+{
+    NSInteger level = [treeView levelForCellForItem: item];
+    
+    return (level == 0);
+}
 
 /**
  *  Tells the delegate that a row for a specified item is about to be expanded.
@@ -265,13 +280,104 @@
 {
     WOANameValuePair *pairItem = item;
     RATableViewCell *cell = (RATableViewCell*)[treeView cellForItem: item];
+    NSInteger level = [treeView levelForCell: cell];
     
     BOOL newStatus = ![pairItem.tagNumber boolValue];
-
-    [treeView deselectRowForItem: item animated: NO];
     
-    pairItem.tagNumber = [NSNumber numberWithBool: newStatus];
-    cell.selectedButton.selected = newStatus;
+    if (level == 0)
+    {
+        BOOL hasSubItem = (pairItem.subArray && [pairItem.subArray count] > 0);
+        if (!hasSubItem)
+        {
+            pairItem.tagNumber = [NSNumber numberWithBool: newStatus];
+            cell.selectedButton.selected = newStatus;
+        }
+        
+        if ([[pairItem stringValue] integerValue] == [kWOASrvValueForProcessIDDone integerValue]
+            && (newStatus == YES)
+            && (hasSubItem == NO))
+        {
+            for (WOANameValuePair *rootPair in self.contentModel.pairArray)
+            {
+                NSInteger rootPairProcessID = [[rootPair stringValue] integerValue];
+                
+                if (rootPairProcessID == [kWOASrvValueForProcessIDDone integerValue])
+                {
+                    continue;
+                }
+                
+                [self recurssiveSetPairItem: rootPair
+                                 inTreeView: treeView
+                                 isSelected: NO];
+            }
+        }
+    }
+    else if (level > 0)
+    {
+        [self recurssiveSetPairItem: pairItem
+                         inTreeView: treeView
+                         isSelected: newStatus];
+        
+        WOANameValuePair *testPair = pairItem;
+        while (true)
+        {
+            WOANameValuePair *parentPair = (WOANameValuePair*)[treeView parentForItem: testPair];
+            
+            if (parentPair == nil)
+            {
+                if ([[testPair stringValue] integerValue] != [kWOASrvValueForProcessIDDone integerValue]
+                    && (newStatus == YES))
+                {
+                    for (WOANameValuePair *rootPair in self.contentModel.pairArray)
+                    {
+                        NSInteger rootPairProcessID = [[rootPair stringValue] integerValue];
+                        
+                        if (rootPairProcessID != [kWOASrvValueForProcessIDDone integerValue])
+                        {
+                            continue;
+                        }
+                        
+                        [self recurssiveSetPairItem: rootPair
+                                         inTreeView: treeView
+                                         isSelected: NO];
+                    }
+                }
+                
+                break;
+            }
+            else
+            {
+                testPair = parentPair;
+            }
+        }
+    }
+    
+    [treeView deselectRowForItem: item animated: NO];
+    [treeView reloadRows];
+}
+
+- (void) recurssiveSetPairItem: (WOANameValuePair*)pairItem
+                    inTreeView: (RATreeView*)treeView
+                    isSelected: (BOOL)isSelected
+{
+    return;
+    pairItem.tagNumber = [NSNumber numberWithBool: isSelected];
+//    RATableViewCell *rootCell = (RATableViewCell*)[treeView cellForItem: pairItem];
+//    rootCell.selectedButton.selected = isSelected;
+    
+    for (WOANameValuePair *level2Pair in pairItem.subArray)
+    {
+        level2Pair.tagNumber = [NSNumber numberWithBool: isSelected];
+//        RATableViewCell *level2Cell = (RATableViewCell*)[treeView cellForItem: level2Pair];
+//        level2Cell.selectedButton.selected = isSelected;
+        
+        for (WOANameValuePair *level3Pair in level2Pair.subArray)
+        {
+            level3Pair.tagNumber = [NSNumber numberWithBool: isSelected];
+//            RATableViewCell *level3Cell = (RATableViewCell*)[treeView cellForItem: level3Pair];
+//            level3Cell.selectedButton.selected = isSelected;
+        }
+    }
 }
 
 /**

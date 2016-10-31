@@ -166,6 +166,7 @@
 #define kWOASrvKeyForAttachmentRetUrl @"ret_file"
 
 #define kWOASrvKeyForProcessID @"processID"
+#define kWOASrvValueForProcessIDDone @"0"
 
 
 ////////////////////////////////////////

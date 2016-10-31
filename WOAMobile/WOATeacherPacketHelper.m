@@ -475,6 +475,8 @@
                     WOANameValuePair *level3Pair = [WOANameValuePair pairWithName: accountName
                                                                             value: accountID
                                                                        actionType: pairActionType];
+                    level3Pair.tagNumber = [NSNumber numberWithBool: NO];
+                    
                     [level3PairArray addObject: level3Pair];
                 }
                 
@@ -482,6 +484,7 @@
                                                                         value: groupName
                                                                    actionType: pairActionType];
                 level2Pair.subArray = level3PairArray;
+                level2Pair.tagNumber = [NSNumber numberWithBool: NO];
                 
                 [level2PairArray addObject: level2Pair];
             }
@@ -494,6 +497,7 @@
         {
             level1Pair.subArray = level2PairArray;
         }
+        level1Pair.tagNumber = [NSNumber numberWithBool: NO];
         
         [level1PairArray addObject: level1Pair];
     }
