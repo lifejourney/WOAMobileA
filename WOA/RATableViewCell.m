@@ -26,14 +26,19 @@
     self.selectedBackgroundView = [UIView new];
     self.selectedBackgroundView.backgroundColor = [UIColor clearColor];
     
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    //cell.backgroundColor = [UIColor listLightBgColor];
+    
+    UIImage *selectedImage = [[UIImage imageNamed: @"checkedIcon"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    [self.selectedButton setImage: nil forState: UIControlStateNormal];
+    [self.selectedButton setImage: selectedImage forState: UIControlStateSelected];
+    [self.selectedButton setAdjustsImageWhenHighlighted: NO];
 }
 
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    
-    self.expandedButton.hidden = NO;
-    self.selectedButton.hidden = NO;
 }
 
 - (void) updateComponentsPosition
@@ -71,12 +76,16 @@
 - (void) setupWithTitle: (NSString *)title
              detailText: (NSString *)detailText
                   level: (NSInteger)level
+             isExpanded: (BOOL)isExpanded
            expandHidden: (BOOL)expandHidden
+             isSelected: (BOOL)isSelected
            selectHidden: (BOOL)selectHidden
 {
     self.customTitleLabel.text = title;
     
+    self.expandedButton.selected = isExpanded;
     self.expandedButton.hidden = expandHidden;
+    self.selectedButton.selected = isSelected;
     self.selectedButton.hidden = selectHidden;
     
     if (level == 0)

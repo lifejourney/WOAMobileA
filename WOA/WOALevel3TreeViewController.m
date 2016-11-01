@@ -158,26 +158,20 @@
 - (UITableViewCell *)treeView:(RATreeView *)treeView cellForItem:(nullable id)item
 {
     WOANameValuePair *pairItem = item;
+    BOOL isSelected = [pairItem.tagNumber boolValue];
     
     NSInteger level = [treeView levelForCellForItem:item];
     
     RATableViewCell *cell = [treeView dequeueReusableCellWithIdentifier: NSStringFromClass([RATableViewCell class])];
+    
     cell.delegate = self;
     [cell setupWithTitle: pairItem.name
               detailText: @""
                    level: level
+              isExpanded: NO
             expandHidden: YES
+              isSelected: isSelected
             selectHidden: NO];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    //cell.backgroundColor = [UIColor listLightBgColor];
-    cell.selectedBackgroundView = [[UIView alloc] initWithFrame: cell.frame];
-    cell.selectedBackgroundView.backgroundColor = [UIColor mainItemBgColor];
-    
-    UIImage *selectedImage = [[UIImage imageNamed: @"checkedIcon"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
-    [cell.selectedButton setImage: nil forState: UIControlStateNormal];
-    [cell.selectedButton setImage: selectedImage forState: UIControlStateSelected];
-    [cell.selectedButton setAdjustsImageWhenHighlighted: NO];
     
     return cell;
 }
@@ -278,6 +272,8 @@
  */
 - (void)treeView:(RATreeView *)treeView didSelectRowForItem:(id)item
 {
+    [treeView deselectRowForItem: item animated: NO];
+
     WOANameValuePair *pairItem = item;
     RATableViewCell *cell = (RATableViewCell*)[treeView cellForItem: item];
     NSInteger level = [treeView levelForCell: cell];
@@ -289,8 +285,9 @@
         BOOL hasSubItem = (pairItem.subArray && [pairItem.subArray count] > 0);
         if (!hasSubItem)
         {
-            pairItem.tagNumber = [NSNumber numberWithBool: newStatus];
-            cell.selectedButton.selected = newStatus;
+            [self recurssiveSetPairItem: pairItem
+                             inTreeView: treeView
+                             isSelected: newStatus];
         }
         
         if ([[pairItem stringValue] integerValue] == [kWOASrvValueForProcessIDDone integerValue]
@@ -308,7 +305,7 @@
                 
                 [self recurssiveSetPairItem: rootPair
                                  inTreeView: treeView
-                                 isSelected: NO];
+                                 isSelected: !newStatus];
             }
         }
     }
@@ -339,7 +336,7 @@
                         
                         [self recurssiveSetPairItem: rootPair
                                          inTreeView: treeView
-                                         isSelected: NO];
+                                         isSelected: !newStatus];
                     }
                 }
                 
@@ -351,32 +348,23 @@
             }
         }
     }
-    
-    [treeView deselectRowForItem: item animated: NO];
-    [treeView reloadRows];
+
+    //[treeView reloadRows];
 }
 
 - (void) recurssiveSetPairItem: (WOANameValuePair*)pairItem
                     inTreeView: (RATreeView*)treeView
                     isSelected: (BOOL)isSelected
 {
-    return;
     pairItem.tagNumber = [NSNumber numberWithBool: isSelected];
-//    RATableViewCell *rootCell = (RATableViewCell*)[treeView cellForItem: pairItem];
-//    rootCell.selectedButton.selected = isSelected;
+    RATableViewCell *rootCell = (RATableViewCell*)[treeView cellForItem: pairItem];
+    rootCell.selectedButton.selected = isSelected;
     
-    for (WOANameValuePair *level2Pair in pairItem.subArray)
+    for (WOANameValuePair *subPair in pairItem.subArray)
     {
-        level2Pair.tagNumber = [NSNumber numberWithBool: isSelected];
-//        RATableViewCell *level2Cell = (RATableViewCell*)[treeView cellForItem: level2Pair];
-//        level2Cell.selectedButton.selected = isSelected;
-        
-        for (WOANameValuePair *level3Pair in level2Pair.subArray)
-        {
-            level3Pair.tagNumber = [NSNumber numberWithBool: isSelected];
-//            RATableViewCell *level3Cell = (RATableViewCell*)[treeView cellForItem: level3Pair];
-//            level3Cell.selectedButton.selected = isSelected;
-        }
+        [self recurssiveSetPairItem: subPair
+                         inTreeView: treeView
+                         isSelected: isSelected];
     }
 }
 
@@ -399,7 +387,7 @@
 
 - (void) onRATableViewCellTapSelectButton: (RATableViewCell*)cell
 {
-    
+    [self treeView: self.treeView didSelectRowForItem: [self.treeView itemForCell: cell]];
 }
 
 @end

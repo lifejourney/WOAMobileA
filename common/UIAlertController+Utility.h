@@ -16,6 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
                                    alertMessage: (nullable NSString*)alertMessage
                                      actionText: (NSString*)actionText
                                   actionHandler: (void (^ __nullable)(UIAlertAction *action))actionHandler;
+
++ (void) presentAlertOnVC: (UIViewController*)vc
+                    title: (nullable NSString*)alertTitle
+             alertMessage: (nullable NSString*)alertMessage
+               actionText: (NSString*)actionText
+            actionHandler: (void (^ __nullable)(UIAlertAction *action))actionHandler;
+
 @end
 
 NS_ASSUME_NONNULL_END

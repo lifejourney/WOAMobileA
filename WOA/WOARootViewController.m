@@ -13,6 +13,7 @@
 #import "WOAAboutViewController.h"
 #import "WOAStartWorkflowActionReqeust.h"
 #import "UINavigationController+RootViewController.h"
+#import "WOAPacketHelper.h"
 #import "WOAPropertyInfo.h"
 #import "WOATargetInfo.h"
 #import "UIImage+Utility.h"
@@ -354,7 +355,7 @@
                      defaultMsgText: (NSString*)defaultMsgText
                               navVC: (UINavigationController*)navVC
 {
-    NSString *resultText = respDict[kWOASrvKeyForResultDescription];
+    NSString *resultText = [WOAPacketHelper resultDescriptionFromPacketDictionary: respDict];
     if ([NSString isEmptyString: resultText])
     {
         resultText = defaultMsgText;

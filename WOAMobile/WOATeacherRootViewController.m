@@ -357,13 +357,24 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
     [addtDict setValue: selectedStepsArray forKey: @"multiStep"];
     
+    if (!selectedStepsArray || [selectedStepsArray count] == 0)
+    {
+        [UIAlertController presentAlertOnVC: self
+                                      title: @""
+                               alertMessage: @"未选择下一步转向的步骤."
+                                 actionText: @"确定"
+                              actionHandler: nil];
+        
+        return;
+    }
+    
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
-                           defaultMsgText: @"已转至下一步"
+                           defaultMsgText: @"已转至下一步."
                                     navVC: navVC];
      }];
 }
@@ -437,7 +448,7 @@
      {
          [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
                                actionType: actionType
-                           defaultMsgText: @"已转至下一步"
+                           defaultMsgText: @"已转至下一步."
                                     navVC: navVC];
      }];
 }
@@ -2473,17 +2484,12 @@
             NSMutableArray *selectedStepsArray = [NSMutableArray array];
             for (WOANameValuePair *processPair in contentModel.pairArray)
             {
-                if ([processPair.tagNumber boolValue] == NO)
-                {
-                    continue;
-                }
-                
                 NSString *processID = [processPair stringValue];
                 NSMutableArray *accountIDArray = [NSMutableArray array];
                 
-                for (WOANameValuePair *groupPair in (NSArray*)processPair.value)
+                for (WOANameValuePair *groupPair in processPair.subArray)
                 {
-                    for (WOANameValuePair *accountPair in (NSArray*)groupPair.value)
+                    for (WOANameValuePair *accountPair in groupPair.subArray)
                     {
                         if ([accountPair.tagNumber boolValue] == YES)
                         {
@@ -2496,7 +2502,18 @@
                 [processDict setValue: processID forKey: kWOASrvKeyForProcessID];
                 [processDict setValue: accountIDArray forKey: kWOASrvKeyForAccountArray];
                 
-                [selectedStepsArray addObject: processDict];
+                if ([accountIDArray count] > 0)
+                {
+                    [selectedStepsArray addObject: processDict];
+                }
+                else
+                {
+                    if ([processID isEqualToString: kWOASrvValueForProcessIDDone]
+                        && ([processPair.tagNumber boolValue] == YES))
+                    {
+                        [selectedStepsArray addObject: processDict];
+                    }
+                }
             }
             
             [self onTchrOAMultiNextStep: actionType

@@ -29,7 +29,9 @@
 - (void) setupWithTitle: (NSString *)title
              detailText: (NSString *)detailText
                   level: (NSInteger)level
+             isExpanded: (BOOL)isExpanded
            expandHidden: (BOOL)expandHidden
+             isSelected: (BOOL)isSelected
            selectHidden: (BOOL)selectHidden;
 
 @end
