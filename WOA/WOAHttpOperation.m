@@ -248,6 +248,11 @@
 
 - (void) main
 {
+    if (self.initialRequestContent.actionType == WOAActionType_Login)
+    {
+        NSLog(@"Server: %@", [WOAPropertyInfo serverAddress]);
+    }
+    
     self.finalResponseContent.actionType = self.initialRequestContent.actionType;
     self.finalResponseContent.requestResult = WOAHTTPRequestResult_Unknown;
     

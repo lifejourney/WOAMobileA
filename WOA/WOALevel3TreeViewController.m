@@ -290,22 +290,34 @@
                              isSelected: newStatus];
         }
         
-        if ([[pairItem stringValue] integerValue] == [kWOASrvValueForProcessIDDone integerValue]
-            && (newStatus == YES)
-            && (hasSubItem == NO))
+        BOOL curItemIsForDone = [[pairItem stringValue] integerValue] == [kWOASrvValueForProcessIDDone integerValue];
+        if (newStatus && !hasSubItem)
         {
             for (WOANameValuePair *rootPair in self.contentModel.pairArray)
             {
                 NSInteger rootPairProcessID = [[rootPair stringValue] integerValue];
                 
-                if (rootPairProcessID == [kWOASrvValueForProcessIDDone integerValue])
+                if (curItemIsForDone)
                 {
-                    continue;
+                    if (rootPairProcessID == [kWOASrvValueForProcessIDDone integerValue])
+                    {
+                        continue;
+                    }
+                    
+                    [self recurssiveSetPairItem: rootPair
+                                     inTreeView: treeView
+                                     isSelected: !newStatus];
                 }
-                
-                [self recurssiveSetPairItem: rootPair
-                                 inTreeView: treeView
-                                 isSelected: !newStatus];
+                else
+                {
+                    if (rootPairProcessID == [kWOASrvValueForProcessIDDone integerValue])
+                    {
+                        
+                        [self recurssiveSetPairItem: rootPair
+                                         inTreeView: treeView
+                                         isSelected: !newStatus];
+                    }
+                }
             }
         }
     }
@@ -319,6 +331,15 @@
         while (true)
         {
             WOANameValuePair *parentPair = (WOANameValuePair*)[treeView parentForItem: testPair];
+            BOOL hasSelectedSubPair = newStatus || [self hasSelectedSubPair: parentPair];
+            
+            if (hasSelectedSubPair != [parentPair.tagNumber boolValue])
+            {
+                parentPair.tagNumber = [NSNumber numberWithBool: hasSelectedSubPair];
+                
+                RATableViewCell *parentCell = (RATableViewCell*)[treeView cellForItem: parentPair];
+                parentCell.selectedButton.selected = hasSelectedSubPair;
+            }
             
             if (parentPair == nil)
             {
@@ -366,6 +387,23 @@
                          inTreeView: treeView
                          isSelected: isSelected];
     }
+}
+
+- (BOOL) hasSelectedSubPair: (WOANameValuePair*)pairItem
+{
+    BOOL found = NO;
+    
+    for (WOANameValuePair *subPair in pairItem.subArray)
+    {
+        if ([subPair.tagNumber boolValue])
+        {
+            found = YES;
+            
+            break;
+        }
+    }
+    
+    return found;
 }
 
 /**
