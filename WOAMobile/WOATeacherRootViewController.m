@@ -58,6 +58,9 @@
  Ver 2.03.01
  修改OA流程.
  
+ Ver 2.03.02
+ Fixed bug: 新建工作，附件上传后看不到。
+ 
  */
 
 @interface WOATeacherRootViewController() <WOASinglePickViewControllerDelegate,
@@ -306,6 +309,7 @@
          
          NSMutableDictionary *contentReleatedDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
          [contentReleatedDict setValue: workID forKey: kWOASrvKeyForWorkID];
+         [contentReleatedDict setValue: tableID forKey: kWOASrvKeyForTableID];
          [contentReleatedDict setValue: tableStructDict forKey: kWOASrvKeyForTableStruct];
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: @"新建工作"

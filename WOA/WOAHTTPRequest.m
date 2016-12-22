@@ -98,6 +98,11 @@
     [bodyData appendString: contentDis];
     //TO-DO:
     [bodyData appendString: @"Content-Type: image/png\r\n\r\n"];
+    
+    NSString *bodyString = [[NSMutableString alloc] initWithData: bodyData encoding: NSUTF8StringEncoding];
+    
+    NSLog(@"bodyString:\n%@", bodyString);
+    
     [bodyData appendDataFromFile: filePath];
     [bodyData appendString: @"\r\n"];
     
