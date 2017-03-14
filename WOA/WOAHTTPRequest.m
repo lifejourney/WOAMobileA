@@ -16,7 +16,11 @@
 
 + (NSMutableURLRequest*) URLRequestWithBodyData: (NSData*)bodyData
 {
+#if defined(WOAMobileTeacher)
     NSString *urlString = [NSString stringWithFormat: @"%@/?action=app", [WOAPropertyInfo serverAddress]];
+#else
+    NSString *urlString = [NSString stringWithFormat: @"%@/?action=stu", [WOAPropertyInfo serverAddress]];
+#endif
     NSString *httpMethod = @"POST";
     //@"multipart/mixed; boundary=%@"
     NSDictionary *headers = @{@"Content-Type": @"application/x-www-form-urlencoded",

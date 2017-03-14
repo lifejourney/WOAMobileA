@@ -31,9 +31,9 @@
     
 #elif defined(WOAMobileStudent)
     
-    return @{@"AppStoreID": @"908853362",
+    return @{@"AppStoreID": @"1090667418",
              @"DefaultServerAddress": @{@"Production": @"http://www.qz5z.com",
-                                        @"Test": @"http://220.162.12.166:8080/jsonS.php"},
+                                        @"Test": @"http://120.43.238.29:8001"},
              @"DefaultTabID": @(0),
              @"RootViewControllerClass": @"WOAStudentRootViewController"};
     
