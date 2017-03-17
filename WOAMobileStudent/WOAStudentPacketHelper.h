@@ -35,7 +35,8 @@
 
 #pragma mark - Packet to model
 
-+ (WOAContentModel*) modelForSchoolInfo: (NSDictionary*)retDict;
++ (WOAContentModel*) contentModelForSchoolInfo: (NSDictionary*)respDict
+                                pairActionType: (WOAActionType)pairActionType;
 + (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)retDict;
 + (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)retDict;
 + (NSArray*) modelForStudyAchievement: (NSDictionary*)retDict;

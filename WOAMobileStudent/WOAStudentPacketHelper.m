@@ -259,12 +259,31 @@
                  autoSeperator: autoSeperator];
 }
 
-+ (WOAContentModel*) modelForSchoolInfo: (NSDictionary*)retDict
++ (WOAContentModel*) contentModelForSchoolInfo: (NSDictionary*)respDict
+                                pairActionType: (WOAActionType)pairActionType
 {
-    return [self modelForTitlInfoGroup: retDict
-                            groupTitle: nil
-                            prefixPair: nil
-                         autoSeperator: [WOANameValuePair seperatorPair]];
+    WOAContentModel *contentModel;
+    
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *itemName = itemDict[kWOASrvKeyForItemName];
+        NSString *itemValue = itemDict[kWOASrvKeyForItemValue];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: itemValue
+                                                     actionType: pairActionType];
+        
+        [pairArray addObject: pair];
+        [pairArray addObject: seperatorPair];
+    }
+    
+    return [WOAContentModel contentModel: @""
+                               pairArray: pairArray];
 }
 
 + (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)retDict

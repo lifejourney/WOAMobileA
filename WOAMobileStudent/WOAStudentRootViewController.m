@@ -140,9 +140,8 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForSchoolInfo: retList];
+         WOAContentModel *sectionModel = [WOAStudentPacketHelper contentModelForSchoolInfo: responseContent.bodyDictionary
+                                                                            pairActionType: WOAActionType_None];
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                           contentArray: @[sectionModel]];
