@@ -174,6 +174,8 @@ static NSDictionary *__actionMapDict = nil;
                                                               @"GetConsumList"],
       @(WOAActionType_StudentQueryAttendInfo):              @[@"StudentQueryAttendInfo",
                                                               @"getAttendInfo"],
+      @(WOAActionType_StudentQueryBorrowBook):              @[@"StudentQueryBorrowBook",
+                                                              @"getCheckout"],
       @(WOAActionType_StudentQueryStudyAchievement):        @[@"StudentQueryStudyAchievement",
                                                               @"getResultInfo"],
       @(WOAActionType_StudentQueryMySociety):               @[@"StudentQueryMySociety",

@@ -278,6 +278,37 @@
                                pairArray: pairArray];
 }
 
++ (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict
+{
+    NSMutableArray *modelArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSMutableArray *pairArray = [NSMutableArray array];
+        
+        NSString *bookName = itemDict[@"bookName"];
+        NSString *bookDate1 = itemDict[@"checkoutDate1"];
+        NSString *bookDate2 = itemDict[@"checkoutDate2"];
+        
+        [pairArray addObject: [WOANameValuePair pairWithName: @"书名"
+                                                       value: bookName]];
+        [pairArray addObject: [WOANameValuePair pairWithName: @"借出时间"
+                                                       value: bookDate1]];
+        [pairArray addObject: [WOANameValuePair pairWithName: @"归还时间"
+                                                       value: bookDate2]];
+        [pairArray addObject: seperatorPair];
+        
+        [modelArray addObject: [WOAContentModel contentModel: @""
+                                                   pairArray: pairArray]];
+    }
+    
+    return modelArray;
+}
+
 + (NSArray*) modelForStudyAchievement: (NSDictionary*)retDict
 {
     return [self modelForGroup: retDict

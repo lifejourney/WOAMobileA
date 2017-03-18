@@ -52,7 +52,7 @@
          imageName
          */
     self.funcDictionary =
-    @{@"checkForUpdate":        @[@(1),     @"版本",           @(3), @(NO), @(NO), @"",                      @""]
+  @{@"checkForUpdate":        @[@(1),     @"版本",           @(3), @(NO), @(NO), @"",                      @""]
     ,@"aboutManufactor":        @[@(2),     @"关于我们",        @(3), @(NO), @(NO), @"",                      @""]
     ,@"_31":                    @[@(3),     @"-",              @(3), @(NO), @(NO), @"",                      @""]
     ,@"logout":                 @[@(4),     @"退出登录",        @(3), @(NO), @(NO), @"",                      @""]
@@ -60,22 +60,23 @@
     ,@"studQuerySchoolInfo":    @[@(1),     @"学籍信息",        @(0), @(NO), @(NO), @"",                      @""]
     ,@"studQueryConsumeInfo":   @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryAttendInfo":    @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studQueryBorrowBook":    @[@(4),     @"借阅信息",        @(0), @(NO), @(NO), @"",                      @""]
     ,@"studQueryStudyAchievement":
-                                @[@(4),     @"学业成绩",        @(0), @(NO),@(NO),  @"",                      @""]
-    ,@"studQueryMySociety":     @[@(5),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
-    ,@"studSelfEvaluation":     @[@(6),     @"自我评价",        @(0), @(YES),@(YES), @"",                     @""]
+                                @[@(5),     @"学业成绩",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studQueryMySociety":     @[@(6),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
+    ,@"studSelfEvaluation":     @[@(7),     @"自我评价",        @(0), @(YES),@(YES), @"",                     @""]
     ,@"studQueryQuantitativeEvaluation":
-                                @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"studSelfEvaluation",    @""]
+                                @[@(8),     @"量化评价",        @(0), @(NO),@(NO),  @"studSelfEvaluation",    @""]
     ,@"studQuerySummativeEvaluation":
-                                @[@(8),     @"总结性评价",       @(0), @(NO),@(NO),  @"studSelfEvaluation",   @""]
-    ,@"studTeacherEvaluation":  @[@(9),     @"教师评价",        @(0), @(YES),@(YES), @"",                     @""]
+                                @[@(9),     @"总结性评价",       @(0), @(NO),@(NO),  @"studSelfEvaluation",   @""]
+    ,@"studTeacherEvaluation":  @[@(10),     @"教师评价",        @(0), @(YES),@(YES), @"",                     @""]
     ,@"studQueryEvalFromCourseTeacher":
-                                @[@(10),    @"课任评价",       @(0), @(NO),@(NO),  @"studTeacherEvaluation", @""]
+                                @[@(11),    @"课任评价",       @(0), @(NO),@(NO),  @"studTeacherEvaluation", @""]
     ,@"studQueryEvalFromClassTeacher":
-                                @[@(11),    @"班主任评价",      @(0), @(NO),@(NO), @"studTeacherEvaluation",  @""]
-    ,@"studQueryParentWishes":  @[@(12),    @"父母寄语",       @(0), @(NO),@(NO), @"",                        @""]
+                                @[@(12),    @"班主任评价",      @(0), @(NO),@(NO), @"studTeacherEvaluation",  @""]
+    ,@"studQueryParentWishes":  @[@(13),    @"父母寄语",       @(0), @(NO),@(NO), @"",                        @""]
     ,@"studQueryDevelopmentEvaluation":
-                                @[@(13),    @"发展性评价",      @(0), @(NO),@(NO), @"",                       @""]
+                                @[@(14),    @"发展性评价",      @(0), @(NO),@(NO), @"",                       @""]
     ,@"studQueryMySyllabus":    @[@(1),     @"我的课表",        @(1), @(NO),@(NO), @"",                       @""]
     ,@"studSelectiveSyllabus":  @[@(2),     @"选修课程",        @(1), @(YES),@(YES), @"",                      @""]
     ,@"studSiginSelectiveCourse":
@@ -239,6 +240,28 @@
                 }];
     
     [ownerNav pushViewController: pickerVC animated: YES];
+}
+
+- (void) studQueryBorrowBook
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryBorrowBook
+                                           paraDict: nil
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSArray *modelArray = [WOAStudentPacketHelper modelForBorrowBookInfo: responseContent.bodyDictionary];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: modelArray];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [ownerNav pushViewController: subVC animated: YES];
+     }];
 }
 
 - (void) studQueryStudyAchievement
