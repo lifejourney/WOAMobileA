@@ -166,6 +166,7 @@
                ownerNavC: (UINavigationController*)ownerNavC
 {
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -222,6 +223,7 @@
     [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -261,6 +263,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryOATableList
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -289,6 +292,7 @@
     [addtDict setValue: selectedTableID forKey: kWOASrvKeyForTableID];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -331,6 +335,7 @@
                         navVC: (UINavigationController*)navVC
 {
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: contentDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -376,6 +381,7 @@
     }
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -396,6 +402,7 @@
     [addtDict setValue: selectedProcessID forKey: kWOASrvKeyForProcessID];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -450,6 +457,7 @@
     [addtDict setValue: selectedAccountArray forKey: kWOASrvKeyForAccountArray];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -484,6 +492,7 @@
     [addtDict setValue: selectedItemID forKey: kWOASrvKeyForItemID];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -518,6 +527,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQuerySyllabusConditions
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -573,6 +583,7 @@
     
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -605,6 +616,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryBusinessTableList
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -653,6 +665,7 @@
     NSDictionary *selectedTableInfoDict = (NSDictionary*)selectedPair.value;
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: selectedTableInfoDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -762,6 +775,7 @@
                               navVC: (UINavigationController*)navVC
 {
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: contentDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -781,6 +795,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryContacts
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -811,6 +826,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryMySubject
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -873,6 +889,7 @@
     }
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1031,6 +1048,7 @@
     
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1050,6 +1068,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryTodoTakeover
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1128,6 +1147,7 @@
     [additionalDict setValue: adviceString forKey: kWOASrvKeyForSubjectChangeAdvice];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: additionalDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1156,6 +1176,7 @@
                                                                                      toTime: toDateString];
                     
                     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryMyConsume
+                                                            additionalHeaders: nil
                                                                additionalDict: addtDict
                                                                    onSuccuess: ^(WOAResponeContent *responseContent)
                      {
@@ -1229,6 +1250,7 @@
                                @"pageSize": pageSize};
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryPayoffSalary
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1253,6 +1275,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryMeritPay
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1278,6 +1301,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryAttdCourses
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1306,6 +1330,7 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1431,6 +1456,7 @@
     WOAActionType actionType = contentModel.actionType;
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1450,6 +1476,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryCommentConditions
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1481,6 +1508,7 @@
     NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1697,6 +1725,7 @@
     [addtDict setValue: studentComment forKey: kWOASrvKeyForStdEvalItemContent_Post];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1717,6 +1746,7 @@
     WOAActionType actionType = WOAActionType_TeacherSubmitCommentDelete;
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1737,6 +1767,7 @@
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_TeacherQueryQuatEvalItems
+                                            additionalHeaders: nil
                                                additionalDict: nil
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -1789,6 +1820,7 @@
     [addtDict setValue: [selectedPair stringValue] forKey: kWOASrvKeyForQutEvalEvalItemID];
 
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
     {
@@ -1837,6 +1869,7 @@
     [addtDict setValue: [selectedPair stringValue] forKey: kWOASrvKeyForQutEvalClassItemID];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -2046,6 +2079,7 @@
     [addtDict setValue: studentInfoArray forKey: @"scoreItems"];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -2080,6 +2114,7 @@
         [itemDict setValue: [WOAPropertyInfo latestWorkID] forKey: kWOASrvKeyForWorkID];
         
         NSDictionary *bodyDict = [WOATeacherPacketHelper packetForSimpleQuery: WOAActionType_UploadAttachment
+                                                             addtionalHeaders: nil
                                                                additionalDict: itemDict];
         
         [multiBodyArray addObject: bodyDict];

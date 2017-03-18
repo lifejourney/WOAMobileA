@@ -35,7 +35,8 @@
 + (NSDictionary*) studPacketForActionType: (WOAActionType)actionType
                                  paraDict: (NSDictionary*)paraDict
 {
-    NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType];
+    NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType
+                                                   additionalHeaders: nil];
     
     if (paraDict)
     {
@@ -180,47 +181,6 @@
     return modelArray;
 }
 
-+ (WOAContentModel*) modelForGroup: (NSDictionary*)retDict
-                              key1: (NSString*)key1
-                              key2: (NSString*)key2
-                        groupTitle: (NSString*)groupTitle
-                        prefixPair: (WOANameValuePair*)prefixPair
-                     autoSeperator: (WOANameValuePair*)autoSeperator
-{
-    NSMutableArray *pairArray = [[NSMutableArray alloc] init];
-    
-    NSArray *column1Array = [self toLevel1Array: retDict[key1]];
-    NSArray *column2Array = [self toLevel1Array: retDict[key2]];
-    
-    if (prefixPair)
-    {
-        [pairArray addObject: prefixPair];
-        
-        if (autoSeperator)
-        {
-            [pairArray addObject: autoSeperator];
-        }
-    }
-    
-    NSString *col1 = nil;
-    NSString *col2 = nil;
-    for (NSInteger index = 0; index < [column1Array count]; index++)
-    {
-        col1 = [self trimedValue: column1Array atIndex: index defVal: @""];
-        col2 = [self trimedValue: column2Array atIndex: index defVal: @""];
-        
-        [pairArray addObject: [WOANameValuePair pairWithName: col1 value: col2]];
-        
-        if (autoSeperator)
-        {
-            [pairArray addObject: autoSeperator];
-        }
-    }
-    
-    return [WOAContentModel contentModel: groupTitle
-                               pairArray: pairArray];
-}
-
 + (NSDictionary*) dictForGroup: (NSDictionary*)retDict
                        keyName: (NSString*)keyName
                      valueName: (NSString*)valueName
@@ -246,24 +206,8 @@
     return dict;
 }
 
-+ (WOAContentModel*) modelForTitlInfoGroup: (NSDictionary*)retDict
-                                groupTitle: (NSString*)groupTitle
-                                prefixPair: (WOANameValuePair*)prefixPair
-                             autoSeperator: (WOANameValuePair*)autoSeperator
++ (WOAContentModel*) modelForSchoolInfo: (NSDictionary*)respDict
 {
-    return [self modelForGroup: retDict
-                          key1: @"titl"
-                          key2: @"info"
-                    groupTitle: groupTitle
-                    prefixPair: prefixPair
-                 autoSeperator: autoSeperator];
-}
-
-+ (WOAContentModel*) contentModelForSchoolInfo: (NSDictionary*)respDict
-                                pairActionType: (WOAActionType)pairActionType
-{
-    WOAContentModel *contentModel;
-    
     NSMutableArray *pairArray = [NSMutableArray array];
     NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
     
@@ -275,8 +219,7 @@
         NSString *itemValue = itemDict[kWOASrvKeyForItemValue];
         
         WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
-                                                          value: itemValue
-                                                     actionType: pairActionType];
+                                                          value: itemValue];
         
         [pairArray addObject: pair];
         [pairArray addObject: seperatorPair];
@@ -286,22 +229,53 @@
                                pairArray: pairArray];
 }
 
-+ (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)retDict
++ (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)respDict
 {
-    return [self modelForTitlInfoGroup: retDict
-                            groupTitle: nil
-                            prefixPair: [WOANameValuePair pairWithName: @"消费时间"
-                                                                 value: @"消费余额"]
-                         autoSeperator: nil];
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = respDict[@"ConsumList"];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    NSUInteger fixedLength = 20;
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *itemName = itemDict[@"ConsumTime"];
+        NSString *part1 = [NSString stringWithFormat: @"%@: %@", itemDict[@"ConsumType"], itemDict[@"ConsumChangeNum"]];
+        NSString *part2 = [NSString stringWithFormat: @"余额: %@", itemDict[@"ConsumBalance"]];
+        part1 = [part1 stringByPaddingToLength: fixedLength
+                                    withString: @" "
+                               startingAtIndex: 0];
+        NSString *itemValue = [NSString stringWithFormat: @"%@ %@", part1, part2];
+        
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: itemValue];
+        
+        [pairArray addObject: pair];
+        [pairArray addObject: seperatorPair];
+    }
+    
+    return [WOAContentModel contentModel: @""
+                               pairArray: pairArray];
 }
 
-+ (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)retDict
++ (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)respDict
 {
-    return [self modelForTitlInfoGroup: retDict
-                            groupTitle: nil
-                            prefixPair: [WOANameValuePair pairWithName: @"刷卡时间"
-                                                                 value: @""]
-                         autoSeperator: nil];
+    NSMutableArray *pairArray = [NSMutableArray array];
+    NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *attendTime = [itemDict[@"AttendTime"] stringByPaddingToLength: 20
+                                                                     withString: @" "
+                                                                startingAtIndex: 0];
+        NSString *itemName = [NSString stringWithFormat: @"%@  %@", attendTime, itemDict[@"AttendPlace"]];
+        WOANameValuePair *pair = [WOANameValuePair pairWithName: itemName
+                                                          value: nil];
+        
+        [pairArray addObject: pair];
+    }
+    
+    return [WOAContentModel contentModel: @""
+                               pairArray: pairArray];
 }
 
 + (NSArray*) modelForStudyAchievement: (NSDictionary*)retDict

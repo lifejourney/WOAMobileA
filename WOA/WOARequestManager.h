@@ -37,6 +37,7 @@
 #pragma mark -
 
 - (void) simpleQueryActionType: (WOAActionType)actionType
+             additionalHeaders: (NSDictionary*)additionalHeaders
                 additionalDict: (NSDictionary*)additionalDict
                     onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler;
 

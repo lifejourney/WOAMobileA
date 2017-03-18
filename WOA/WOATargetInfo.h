@@ -9,16 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-#ifdef WOAMobileTeacher
-
-#define kWOASrvKeyForResultDescription @"description"
-
-#elif defined(WOAMobileStudent)
-
-#define kWOASrvKeyForResultDescription @"prompt"
-
-#endif
-
 @interface WOATargetInfo : NSObject
 
 + (NSString*) appStoreID;

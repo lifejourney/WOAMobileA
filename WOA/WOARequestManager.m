@@ -115,10 +115,12 @@ static WOARequestManager *requestManager = nil;
 #pragma mark -
 
 - (void) simpleQueryActionType: (WOAActionType)actionType
+             additionalHeaders: (NSDictionary*)additionalHeaders
                 additionalDict: (NSDictionary*)additionalDict
                     onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
 {
     WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: actionType
+                                                               additionalHeaders: additionalHeaders
                                                                   additionalDict: additionalDict];
     
     [self sendRequest: requestContent

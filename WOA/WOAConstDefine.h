@@ -14,6 +14,9 @@
 #define kWOAKeyForSubValue @"_subValue"
 #define KWOAKeyForActionTitle @"_actionTitle"
 
+#define kWOASrvKeyForResultDescription @"description"
+#define kWOASrvKeyForResultPrompt @"prompt"
+
 #define kWOASrvKeyForWorkID @"workID"
 #define kWOASrvKeyForItemArrays @"items"
 #define kWOASrvKeyForDataFieldArrays @"dataFields"

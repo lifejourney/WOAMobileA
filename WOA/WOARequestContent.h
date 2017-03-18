@@ -35,6 +35,7 @@
 #pragma mark -
 
 + (WOARequestContent*) contentForSimpleQuery: (WOAActionType)actionType
+                           additionalHeaders: (NSDictionary*)additionalHeaders
                               additionalDict: (NSDictionary*)additionalDict;
 
 @end

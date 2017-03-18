@@ -140,8 +140,7 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         WOAContentModel *sectionModel = [WOAStudentPacketHelper contentModelForSchoolInfo: responseContent.bodyDictionary
-                                                                            pairActionType: WOAActionType_None];
+         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForSchoolInfo: responseContent.bodyDictionary];
          
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                           contentArray: @[sectionModel]];
@@ -165,20 +164,27 @@
                 {
                     [pickerVC.navigationController popViewControllerAnimated: YES];
                     
-                    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryConsumeInfo
-                                                           fromDate: fromDateString
-                                                             toDate: toDateString
+                    NSMutableDictionary *bodyDict = [NSMutableDictionary dictionary];
+                    if (fromDateString)
+                    {
+                        [bodyDict setValue: fromDateString forKey: @"fromTime"];
+                    }
+                    if (toDateString)
+                    {
+                        [bodyDict setValue: toDateString forKey: @"toTime"];
+                    }
+                    
+                    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentQueryConsumeInfo
+                                                            additionalHeaders: nil
+                                                               additionalDict: bodyDict
                                                          onSuccuess: ^(WOAResponeContent *responseContent)
                      {
-                         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-                         
-                         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForConsumeInfo: retList];
+                         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForConsumeInfo: responseContent.bodyDictionary];
                          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                                           contentArray: @[sectionModel]];
                          
-                         WOASimpleListViewController *subVC;
-                         subVC = [WOASimpleListViewController listViewController: contentModel
-                                                                       cellStyle: UITableViewCellStyleValue1];
+                         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                                  delegate: self];
                          
                          [ownerNav pushViewController: subVC animated: YES];
                      }];
@@ -202,14 +208,22 @@
                 {
                     [pickerVC.navigationController popViewControllerAnimated: YES];
                     
-                    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryAttendInfo
-                                                           fromDate: fromDateString
-                                                             toDate: toDateString
-                                                         onSuccuess: ^(WOAResponeContent *responseContent)
+                    NSMutableDictionary *headerDict = [NSMutableDictionary dictionary];
+                    if (fromDateString)
+                    {
+                        [headerDict setValue: fromDateString forKey: @"beginDate"];
+                    }
+                    if (toDateString)
+                    {
+                        [headerDict setValue: toDateString forKey: @"endDate"];
+                    }
+                    
+                    [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentQueryAttendInfo
+                                                            additionalHeaders: headerDict
+                                                               additionalDict: nil
+                                                                   onSuccuess: ^(WOAResponeContent *responseContent)
                      {
-                         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-                         
-                         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForAttendanceInfo: retList];
+                         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForAttendanceInfo: responseContent.bodyDictionary];
                          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                                           contentArray: @[sectionModel]];
                          
@@ -525,6 +539,7 @@
     [optionDict setValue: transType forKey: @"type"];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: optionDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -562,6 +577,7 @@
     [addtDict addEntriesFromDictionary: selectedPair.subDictionary];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -595,6 +611,7 @@
     [addtDict addEntriesFromDictionary: contentDict];
 
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -641,6 +658,7 @@
     [optionDict setValue: [selectedPair stringValue] forKey: @"OpID"];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
                                                additionalDict: optionDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -677,6 +695,7 @@
     [addtDict addEntriesFromDictionary: contentDict];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {
@@ -686,6 +705,7 @@
          [baseDict removeObjectForKey: kWOAStudContentParaValue];
          
          [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentPickOAPerson
+                                                 additionalHeaders: nil
                                                     additionalDict: baseDict
                                                         onSuccuess: ^(WOAResponeContent *responseContent)
           {
@@ -742,6 +762,7 @@
     [addtDict setValue: paraValue forKey: kWOAStudContentParaValue];
     
     [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentSubmitOAPerson
+                                            additionalHeaders: nil
                                                additionalDict: addtDict
                                                    onSuccuess: ^(WOAResponeContent *responseContent)
      {

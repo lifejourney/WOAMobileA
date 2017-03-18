@@ -16,10 +16,14 @@
 
 #pragma mark -
 
-+ (NSDictionary*) headerForMsgType: (NSString*)msgType;
-+ (NSDictionary*) headerForActionType: (WOAActionType)actionType;
-+ (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType;
-+ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAActionType)actionType;
++ (NSDictionary*) headerForMsgType: (NSString*)msgType
+                 additionalHeaders: (NSDictionary*)additionalHeaders;
++ (NSDictionary*) headerForActionType: (WOAActionType)actionType
+                    additionalHeaders: (NSDictionary*)additionalHeaders;
++ (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType
+                                   additionalHeaders: (NSDictionary*)additionalHeaders;
++ (NSMutableDictionary*) baseRequestPacketForActionType: (WOAActionType)actionType
+                                      additionalHeaders: (NSDictionary*)additionalHeaders;
 
 #pragma mark -
 
@@ -28,6 +32,7 @@
 #pragma mark -
 
 + (NSDictionary*) packetForSimpleQuery: (WOAActionType)actionType
+                     additionalHeaders: (NSDictionary*)additionalHeaders
                         additionalDict: (NSDictionary*)additionalDict;
 
 #pragma mark -

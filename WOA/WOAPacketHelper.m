@@ -20,6 +20,7 @@
 #pragma mark -
 
 + (NSDictionary*) headerForMsgType: (NSString*)msgType
+                 additionalHeaders: (NSDictionary*)additionalHeaders
 {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
@@ -36,22 +37,30 @@
     [dict setValue: [WOAPropertyInfo latestAccountPassword] forKey: @"psw"];
 #endif
     
+    if (additionalHeaders)
+    {
+        [dict addEntriesFromDictionary: additionalHeaders];
+    }
     
     return dict;
 }
 
 + (NSDictionary*) headerForActionType: (WOAActionType)actionType
+                    additionalHeaders: (NSDictionary*)additionalHeaders
 {
     NSString *msgType = [WOAActionDefine msgTypeByActionType: actionType];
     
-    return [self headerForMsgType: msgType];
+    return [self headerForMsgType: msgType
+                additionalHeaders: additionalHeaders];
 }
 
 + (NSMutableDictionary*) baseRequestPacketForMsgType: (NSString*)msgType
+                                   additionalHeaders: (NSDictionary*)additionalHeaders
 {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity: 3];
     
-    NSDictionary *headerDict = [self headerForMsgType: msgType];
+    NSDictionary *headerDict = [self headerForMsgType: msgType
+                                    additionalHeaders: additionalHeaders];
     
     [dict setValue: headerDict forKey: @"head"];
     [dict setValue: [WOAPropertyInfo latestDeviceToken] forKey: @"deviceToken"];
@@ -60,8 +69,10 @@
 }
 
 + (NSMutableDictionary*) baseRequestPacketForActionType: (WOAActionType)actionType
+                                      additionalHeaders: (NSDictionary*)additionalHeaders
 {
-    return [self baseRequestPacketForMsgType: [WOAActionDefine msgTypeByActionType: actionType]];
+    return [self baseRequestPacketForMsgType: [WOAActionDefine msgTypeByActionType: actionType]
+                           additionalHeaders: additionalHeaders];
 }
 
 #pragma mark -
@@ -87,7 +98,8 @@
 
 + (NSDictionary*) packetForLogin: (NSString*)accountID password: (NSString*)password
 {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary: [self baseRequestPacketForMsgType: kWOAValue_MsgType_Login]];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary: [self baseRequestPacketForMsgType: kWOAValue_MsgType_Login
+                                                                                               additionalHeaders: nil]];
     
     [dict setValue: accountID forKey: @"account"];
     [dict setValue: password forKey: @"psw"];
@@ -106,9 +118,11 @@
 #pragma mark -
 
 + (NSDictionary*) packetForSimpleQuery: (WOAActionType)actionType
+                     additionalHeaders: (NSDictionary*)additionalHeaders
                         additionalDict: (NSDictionary*)additionalDict
 {
-    NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType];
+    NSMutableDictionary *dict = [self baseRequestPacketForActionType: actionType
+                                                   additionalHeaders: additionalHeaders];
     
     if (additionalDict)
     {
@@ -270,7 +284,13 @@
 {
     NSDictionary *resultDict = [self resultFromPacketDictionary: dict];
     
-    return [resultDict valueForKey: kWOASrvKeyForResultDescription];
+    NSString *errorMsg = [resultDict valueForKey: kWOASrvKeyForResultDescription];
+    if (!errorMsg)
+    {
+        errorMsg = [resultDict valueForKey: kWOASrvKeyForResultPrompt];
+    }
+    
+    return errorMsg;
 }
 
 + (NSString*) descriptionFromPacketDictionary: (NSDictionary*)dict

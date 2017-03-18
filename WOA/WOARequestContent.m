@@ -68,11 +68,13 @@ static WOARequestContent *_latestRequestLoginContent = nil;
 #pragma mark -
 
 + (WOARequestContent*) contentForSimpleQuery: (WOAActionType)actionType
+                           additionalHeaders: (NSDictionary*)additionalHeaders
                               additionalDict: (NSDictionary*)additionalDict
 {
     WOARequestContent *content = [[WOARequestContent alloc] initWithFlowActionType: actionType];
     
     content.bodyDictionary = [WOAPacketHelper packetForSimpleQuery: actionType
+                                                 additionalHeaders: additionalHeaders
                                                     additionalDict: additionalDict];
     
     return content;

@@ -113,13 +113,23 @@
     
     WOAContentModel *contentModel = self.contentModel.contentArray[indexPath.section];
     WOANameValuePair *pair = contentModel.pairArray[indexPath.row];
+    
+    UIFont *textFont = [UILabel defaultLabelFontWithSize: [self fontSizeByRowIndex: indexPath.row]];
+    
+    if (_cellStyle == UITableViewCellStyleDefault)
+    {
+        cell.textLabel.font = textFont;
+        cell.textLabel.text = pair.name;
+        
+        return cell;
+    }
+    
     NSInteger columnCount = 2;
     
     CGFloat fullWidth = cell.frame.size.width;
     CGFloat columnWidth = (columnCount > 0) ? (fullWidth / columnCount) : fullWidth;
     
     CGFloat height = [self heightByRowIndex: indexPath.row];
-    UIFont *textFont = [UILabel defaultLabelFontWithSize: [self fontSizeByRowIndex: indexPath.row]];
     
     for (NSInteger col = 0; col < columnCount; col++)
     {
@@ -140,8 +150,7 @@
         
         [cell.contentView addSubview: label];
         
-        if ((_cellStyle == UITableViewCellStyleDefault && col >= 0)
-            || (col > 0))
+        if (col > 0)
         {
             break;
         }
