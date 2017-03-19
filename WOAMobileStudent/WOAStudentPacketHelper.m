@@ -118,69 +118,6 @@
     return [value trim];
 }
 
-+ (NSArray*) modelForGroup: (NSDictionary*)retDict
-                      key1: (NSString*)key1
-                      key2: (NSString*)key2
-                      key3: (NSString*)key3
-                prefixPair: (WOANameValuePair*)prefixPair
-             autoSeperator: (WOANameValuePair*)autoSeperator
-{
-    NSMutableArray *modelArray = [[NSMutableArray alloc] init];
-    
-    NSArray *column1Array = [self toLevel1Array: retDict[key1]];
-    NSArray *column2Array = [self toLevel1Array: retDict[key2]];
-    NSArray *column3Array = [self toLevel1Array: retDict[key3]];
-    
-    NSString *col1 = nil;
-    NSString *col2 = nil;
-    NSString *col3 = nil;
-    
-    for (NSInteger index = 0; index < [column1Array count]; index++)
-    {
-        col1 = [self trimedValue: column1Array atIndex: index defVal: @""];
-        col2 = [self trimedValue: column2Array atIndex: index defVal: nil];
-        col3 = [self trimedValue: column3Array atIndex: index defVal: nil];
-        
-        if (![col1 isNotEmpty])
-            continue;
-        
-        NSArray *col2Array = [self toLevel2Array: col2];
-        NSArray *col3Array = [self toLevel2Array: col3];
-        
-        NSMutableArray *pairArray = [[NSMutableArray alloc] init];
-        NSString *name = nil;
-        NSString *value = nil;
-        
-        if (prefixPair)
-        {
-            [pairArray addObject: prefixPair];
-            
-            if (autoSeperator)
-            {
-                [pairArray addObject: autoSeperator];
-            }
-        }
-        
-        for (NSInteger idx = 0; idx < [col2Array count]; idx++)
-        {
-            name = [self trimedValue: col2Array atIndex: idx defVal: @""];
-            value = [self trimedValue: col3Array atIndex: idx defVal: @""];
-            
-            [pairArray addObject: [WOANameValuePair pairWithName: name value: value]];
-            
-            if (autoSeperator)
-            {
-                [pairArray addObject: autoSeperator];
-            }
-        }
-        
-        [modelArray addObject: [WOAContentModel contentModel: col1
-                                                   pairArray: pairArray]];
-    }
-    
-    return modelArray;
-}
-
 + (NSDictionary*) dictForGroup: (NSDictionary*)retDict
                        keyName: (NSString*)keyName
                      valueName: (NSString*)valueName
@@ -309,15 +246,49 @@
     return modelArray;
 }
 
-+ (NSArray*) modelForStudyAchievement: (NSDictionary*)retDict
++ (NSArray*) modelForAchievement: (NSDictionary*)respDict
 {
-    return [self modelForGroup: retDict
-                          key1: @"titl"
-                          key2: @"info"
-                          key3: @"chengji"
-                    prefixPair: [WOANameValuePair pairWithName: @"课程"
-                                                         value: @"成绩"]
-                 autoSeperator: nil];
+    NSMutableArray *modelArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSMutableArray *pairArray = [NSMutableArray array];
+        
+        NSString *itemName = itemDict[@"name"];
+        NSString *parentEval = itemDict[@"parentEvaluate"];
+        NSString *teacherEval = itemDict[@"teacherEvaluate"];
+        NSArray *courseArray = itemDict[@"courseList"];
+        NSArray *valueArray = itemDict[@"scoreList"];
+        
+        [pairArray addObject: [WOANameValuePair pairWithName: @"阶段"
+                                                       value: itemName]];
+        [pairArray addObject: [WOANameValuePair pairWithName: @"教师评语"
+                                                       value: teacherEval]];
+        [pairArray addObject: [WOANameValuePair pairWithName: @"家长评语"
+                                                       value: parentEval]];
+        
+        if (courseArray && valueArray)
+        {
+            for (NSUInteger index = 0; index < courseArray.count; index++)
+            {
+                NSString *cName = courseArray[index];
+                NSString *cValue = valueArray.count > index ? valueArray[index] : @"";
+                
+                [pairArray addObject: [WOANameValuePair pairWithName: cName
+                                                               value: cValue]];
+            }
+        }
+        [pairArray addObject: seperatorPair];
+        
+        [modelArray addObject: [WOAContentModel contentModel: @""
+                                                   pairArray: pairArray]];
+    }
+    
+    return modelArray;
 }
 
 

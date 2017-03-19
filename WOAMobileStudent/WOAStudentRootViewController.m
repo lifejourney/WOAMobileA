@@ -61,8 +61,6 @@
     ,@"studQueryConsumeInfo":   @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryAttendInfo":    @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryBorrowBook":    @[@(4),     @"借阅信息",        @(0), @(NO), @(NO), @"",                      @""]
-    ,@"studQueryStudyAchievement":
-                                @[@(5),     @"学业成绩",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryMySociety":     @[@(6),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studSelfEvaluation":     @[@(7),     @"自我评价",        @(0), @(YES),@(YES), @"",                     @""]
     ,@"studQueryQuantitativeEvaluation":
@@ -90,6 +88,7 @@
     ,@"studCreateTransaction":  @[@(9),     @"新建事项",        @(1), @(NO),@(NO), @"",                      @""]
     ,@"studTodoTransaction":    @[@(10),     @"待办事项",       @(1), @(NO),@(NO), @"",                      @""]
     ,@"studTransactionList":    @[@(11),     @"事项查询",       @(1), @(NO),@(NO), @"",                      @""]
+    ,@"studQueryAchievement":   @[@(12),    @"成绩查询",        @(1), @(NO),@(NO),  @"",                      @""]
     ,@"studJoinSociety":        @[@(1),     @"加入社团",        @(2), @(NO),@(NO), @"",                      @""]
     ,@"studManageSociety":      @[@(2),     @"管理社团",        @(2), @(YES),@(YES), @"",                      @""]
     ,@"studQuerySocietyInfo":   @[@(3),     @"社团信息",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
@@ -257,28 +256,6 @@
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                           contentArray: modelArray];
          
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) studQueryStudyAchievement
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryStudyAchievement
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForStudyAchievement: retList];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
@@ -835,6 +812,26 @@
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                           contentArray: sectionArray];
          
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
+         
+         [ownerNav pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) studQueryAchievement
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryAchievement
+                                           paraDict: nil
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSArray *modelArray = [WOAStudentPacketHelper modelForAchievement: responseContent.bodyDictionary];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: modelArray];
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          

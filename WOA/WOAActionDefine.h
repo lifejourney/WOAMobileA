@@ -108,7 +108,7 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentQueryConsumeInfo,
     WOAActionType_StudentQueryAttendInfo,
     WOAActionType_StudentQueryBorrowBook,
-    WOAActionType_StudentQueryStudyAchievement,
+    WOAActionType_StudentQueryAchievement,
     WOAActionType_StudentQueryMySociety,
     WOAActionType_StudentQueryQuantitativeEvaluation,
     WOAActionType_StudentQuerySummativeEvaluation,

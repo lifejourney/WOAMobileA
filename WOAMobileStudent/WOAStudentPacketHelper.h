@@ -39,7 +39,7 @@
 + (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)respDict;
 + (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)respDict;
 + (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict;
-+ (NSArray*) modelForStudyAchievement: (NSDictionary*)retDict;
++ (NSArray*) modelForAchievement: (NSDictionary*)respDict;
 + (NSArray*) modelForAssociationInfo: (NSDictionary*)retDict;
 + (NSArray*) modelForEvaluationInfo: (NSDictionary*)retDict
                           byTeacher: (BOOL) byTeacher;

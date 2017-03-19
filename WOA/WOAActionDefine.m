@@ -176,7 +176,7 @@ static NSDictionary *__actionMapDict = nil;
                                                               @"getAttendInfo"],
       @(WOAActionType_StudentQueryBorrowBook):              @[@"StudentQueryBorrowBook",
                                                               @"getCheckout"],
-      @(WOAActionType_StudentQueryStudyAchievement):        @[@"StudentQueryStudyAchievement",
+      @(WOAActionType_StudentQueryAchievement):             @[@"StudentQueryAchievement",
                                                               @"getResultInfo"],
       @(WOAActionType_StudentQueryMySociety):               @[@"StudentQueryMySociety",
                                                               @"getAssocInfo"],
