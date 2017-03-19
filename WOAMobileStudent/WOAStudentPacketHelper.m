@@ -291,101 +291,6 @@
     return modelArray;
 }
 
-+ (NSArray*) modelForEvaluationInfo: (NSDictionary*)retDict
-                          byTeacher: (BOOL) byTeacher
-{
-    NSMutableArray *modelArray = [[NSMutableArray alloc] init];
-    NSMutableArray *pairArray;
-    
-    NSArray *gradeArray = [self toLevel1Array: retDict[@"grade"]];
-    NSArray *dateArray = [self toLevel1Array: retDict[@"date"]];
-    NSArray *contArray = [self toLevel1Array: retDict[@"cont"]];
-    NSArray *fileArray = [self toLevel1Array: retDict[@"file"]];
-    NSArray *teachArray = [self toLevel1Array: retDict[@"teach"]];
-    
-    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
-    
-    for (NSInteger index = 0; index < [gradeArray count]; index++)
-    {
-        NSString *grade = [self trimedValue: gradeArray atIndex: index defVal: @""];
-        NSString *date = [self trimedValue: dateArray atIndex: index defVal: @""];
-        NSString *cont = [self trimedValue: contArray atIndex: index defVal: @""];
-        NSString *file = [self trimedValue: fileArray atIndex: index defVal: @""];
-        NSString *teach = [self trimedValue: teachArray atIndex: index defVal: @""];
-        
-        if (![grade isNotEmpty])
-            continue;
-        
-        pairArray = [[NSMutableArray alloc] init];
-        
-        [pairArray addObject: [WOANameValuePair pairWithName: @"评价内容" value: cont]];
-        [pairArray addObject: seperatorPair];
-        //[pairArray addObject: [WOANameValuePair pairWithName: @"附件" value: file dataType: WOAPairDataType_AttachFile]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"附件" value: file]];
-        [pairArray addObject: seperatorPair];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"日期" value: date]];
-        [pairArray addObject: seperatorPair];
-        if (byTeacher)
-        {
-            [pairArray addObject: [WOANameValuePair pairWithName: @"评价教师" value: teach]];
-            [pairArray addObject: seperatorPair];
-        }
-        
-        WOAContentModel *model = [WOAContentModel contentModel: grade
-                                                     pairArray: pairArray];
-        
-        [modelArray addObject: model];
-    }
-    
-    return modelArray;
-}
-
-+ (NSArray*) modelForDevelopmentEvaluation: (NSDictionary*)retDict
-{
-    NSMutableArray *modelArray = [[NSMutableArray alloc] init];
-    NSMutableArray *pairArray;
-    
-    NSDictionary *titleDict = [self dictForGroup: retDict
-                                         keyName: @"id"
-                                       valueName: @"titl"];
-    
-    NSArray *gradeArray = [self toLevel1Array: retDict[@"grade"]];
-    NSArray *iditemArray = [self toLevel1Array: retDict[@"iditem"]];
-    NSArray *contArray = [self toLevel1Array: retDict[@"cont"]];
-    NSArray *fenArray = [self toLevel1Array: retDict[@"fen"]];
-    
-    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
-    
-    for (NSInteger index = 0; index < [iditemArray count]; index++)
-    {
-        NSString *grade = [self trimedValue: gradeArray atIndex: index defVal: @""];
-        NSString *iditem = [self trimedValue: iditemArray atIndex: index defVal: @""];
-        NSString *cont = [self trimedValue: contArray atIndex: index defVal: @""];
-        NSString *fen = [self trimedValue: fenArray atIndex: index defVal: @""];
-        
-        if (![iditem isNotEmpty])
-            continue;
-        
-        NSString *title = [titleDict valueForKey: iditem];
-        
-        pairArray = [[NSMutableArray alloc] init];
-        
-        [pairArray addObject: [WOANameValuePair pairWithName: @"获奖年级" value: grade]];
-        [pairArray addObject: seperatorPair];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"分数" value: fen]];
-        [pairArray addObject: seperatorPair];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"详细内容" value: cont]];
-        [pairArray addObject: seperatorPair];
-        
-        WOAContentModel *model = [WOAContentModel contentModel: title
-                                                     pairArray: pairArray];
-        
-        [modelArray addObject: model];
-    }
-    
-    return modelArray;
-}
-
 + (NSArray*) modelForMySyllabus: (NSDictionary*)retDict
 {
     NSMutableArray *groupArray = [[NSMutableArray alloc] init];
@@ -464,47 +369,6 @@
     return groupArray;
 }
 
-+ (NSArray*) modelForCourseList: (NSDictionary*)retDict
-{
-    NSMutableArray *modelArray = [[NSMutableArray alloc] init];
-    NSMutableArray *pairArray;
-    
-    NSArray *nameArray = [self toLevel1Array: retDict[@"name"]];
-    NSArray *subArray = [self toLevel1Array: retDict[@"sub"]];
-    NSArray *objArray = [self toLevel1Array: retDict[@"obj"]];
-    NSArray *teachArray = [self toLevel1Array: retDict[@"teach"]];
-    NSArray *dateArray = [self toLevel1Array: retDict[@"date"]];
-    
-    //WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
-    
-    for (NSInteger index = 0; index < [nameArray count]; index++)
-    {
-        NSString *name = [self trimedValue: nameArray atIndex: index defVal: @""];
-        NSString *sub = [self trimedValue: subArray atIndex: index defVal: @""];
-        NSString *obj = [self trimedValue: objArray atIndex: index defVal: @""];
-        NSString *teach = [self trimedValue: teachArray atIndex: index defVal: @""];
-        NSString *date = [self trimedValue: dateArray atIndex: index defVal: @""];
-        
-        if (![name isNotEmpty])
-            continue;
-        
-        pairArray = [[NSMutableArray alloc] init];
-        //[pairArray addObject: [WOANameValuePair pairOnlyName: name]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"课程类型" value: sub]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"面向对象" value: obj]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"任课教师" value: teach]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"报名期限" value: date]];
-        //[pairArray addObject: seperatorPair];
-        
-        WOAContentModel *model = [WOAContentModel contentModel: name
-                                                     pairArray: pairArray];
-        
-        [modelArray addObject: model];
-    }
-    
-    return modelArray;
-}
-
 + (NSArray*) modelForMySelectiveCourses: (NSDictionary*)retDict
 {
     NSMutableArray *modelArray = [[NSMutableArray alloc] init];
@@ -541,36 +405,6 @@
     }
     
     return modelArray;
-}
-
-+ (NSArray*) pairArrayForStudQueryFormList: (NSDictionary*)retDict
-                                actionType: (WOAActionType)actionType
-{
-    NSMutableArray *pairArray = [NSMutableArray array];
-    
-    NSArray *nameArray = [self toLevel1Array: retDict[@"name"]];
-    NSArray *itemIDArray = [self toLevel1Array: retDict[@"id"]];
-    NSArray *typeArray = [self toLevel1Array: retDict[@"type"]];
-    
-    for (NSInteger index = 0; index < [nameArray count]; index++)
-    {
-        NSString *name = [self trimedValue: nameArray atIndex: index defVal: @""];
-        NSString *itemID = [self trimedValue: itemIDArray atIndex: index defVal: @""];
-        NSString *type = [self trimedValue: typeArray atIndex: index defVal: @""];
-        
-        NSMutableDictionary *subDict = [NSMutableDictionary dictionary];
-        [subDict setValue: itemID forKey: kWOAStudSrvKeyForItemID];
-        [subDict setValue: type forKey: kWOAStudSrvKeyForItemType];
-        
-        WOANameValuePair *pair = [WOANameValuePair pairWithName: name
-                                                          value: itemID
-                                                     actionType: actionType];
-        pair.subDictionary = subDict;
-        
-        [pairArray addObject: pair];
-    }
-    
-    return pairArray;
 }
 
 + (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict

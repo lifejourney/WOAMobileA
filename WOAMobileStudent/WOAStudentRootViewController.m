@@ -61,34 +61,20 @@
     ,@"studQueryConsumeInfo":   @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryAttendInfo":    @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryBorrowBook":    @[@(4),     @"借阅信息",        @(0), @(NO), @(NO), @"",                      @""]
-    ,@"studSelfEvaluation":     @[@(7),     @"自我评价",        @(0), @(YES),@(YES), @"",                     @""]
-    ,@"studQueryQuantitativeEvaluation":
-                                @[@(8),     @"量化评价",        @(0), @(NO),@(NO),  @"studSelfEvaluation",    @""]
-    ,@"studQuerySummativeEvaluation":
-                                @[@(9),     @"总结性评价",       @(0), @(NO),@(NO),  @"studSelfEvaluation",   @""]
-    ,@"studTeacherEvaluation":  @[@(10),     @"教师评价",        @(0), @(YES),@(YES), @"",                     @""]
-    ,@"studQueryEvalFromCourseTeacher":
-                                @[@(11),    @"课任评价",       @(0), @(NO),@(NO),  @"studTeacherEvaluation", @""]
-    ,@"studQueryEvalFromClassTeacher":
-                                @[@(12),    @"班主任评价",      @(0), @(NO),@(NO), @"studTeacherEvaluation",  @""]
-    ,@"studQueryParentWishes":  @[@(13),    @"父母寄语",       @(0), @(NO),@(NO), @"",                        @""]
-    ,@"studQueryDevelopmentEvaluation":
-                                @[@(14),    @"发展性评价",      @(0), @(NO),@(NO), @"",                       @""]
+    ,@"studSelfEvaluation":     @[@(5),     @"自我评价",        @(0), @(NO),@(NO), @"",                     @""]
+    ,@"studTeacherEvaluation":  @[@(6),     @"教师评价",        @(0), @(NO),@(NO), @"",                     @""]
+    ,@"studQuantitativeEval":   @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"",                    @""]
+    ,@"studQueryParentWishes":  @[@(8),     @"父母寄语",        @(0), @(NO),@(NO), @"",                     @""]
+    ,@"studQueryLifeTrace":     @[@(9),     @"生活记录",        @(0), @(NO),@(NO), @"",                       @""]
+    ,@"studQueryGrowth":        @[@(10),    @"成长足迹",        @(0), @(NO),@(NO), @"",                       @""]
     ,@"studQueryMySyllabus":    @[@(1),     @"我的课表",        @(1), @(NO),@(NO), @"",                       @""]
-    ,@"studSelectiveSyllabus":  @[@(2),     @"选修课程",        @(1), @(YES),@(YES), @"",                      @""]
     ,@"studSiginSelectiveCourse":
-                                @[@(3),     @"选修报名",        @(1), @(NO),@(NO), @"studSelectiveSyllabus",   @""]
-    ,@"studQueryCourseList":    @[@(4),     @"课程资源",        @(1), @(NO),@(NO), @"studSelectiveSyllabus",   @""]
-    ,@"studQueryMySelectiveCourses":
-                                @[@(5),     @"我的选修课",       @(1), @(NO),@(NO), @"studSelectiveSyllabus",   @""]
-    ,@"studHomeworkBoard":      @[@(6),     @"作业区",         @(1), @(NO),@(NO), @"studSelectiveSyllabus",    @""]
-    ,@"studDiscussionBoard":    @[@(7),     @"讨论区",         @(1), @(NO),@(NO), @"studSelectiveSyllabus",    @""]
-    ,@"studFillFormTask":       @[@(8),     @"填表任务",        @(1), @(NO),@(NO), @"",                      @""]
-    ,@"studCreateTransaction":  @[@(9),     @"新建事项",        @(1), @(NO),@(NO), @"",                      @""]
-    ,@"studTodoTransaction":    @[@(10),     @"待办事项",       @(1), @(NO),@(NO), @"",                      @""]
-    ,@"studTransactionList":    @[@(11),     @"事项查询",       @(1), @(NO),@(NO), @"",                      @""]
-    ,@"studQueryAchievement":   @[@(12),    @"成绩查询",        @(1), @(NO),@(NO),  @"",                      @""]
-    ,@"studQueryMySociety":     @[@(6),     @"学生社团",        @(2), @(NO),@(NO),  @"",                      @""]
+                                @[@(2),     @"选修报名",        @(1), @(NO),@(NO), @"",                     @""]
+    ,@"studQueryAchievement":   @[@(3),     @"成绩查询",        @(1), @(NO),@(NO),  @"",                      @""]
+    ,@"studCreateTransaction":  @[@(1),     @"新建事项",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"studTodoTransaction":    @[@(2),     @"待办事项",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"studTransactionList":    @[@(3),     @"事项查询",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"studQueryMySociety":     @[@(4),     @"学生社团",        @(2), @(NO),@(NO),  @"",                      @""]
     };
         
         NSArray *rootLevelMenuArray = [self rootLevelMenuListArray: 4];
@@ -258,132 +244,32 @@
      }];
 }
 
-- (void) studQueryQuantitativeEvaluation
+- (void) studSelfEvaluation
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryQuantitativeEvaluation
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
-                                                                      byTeacher: NO];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
 }
 
-- (void) studQuerySummativeEvaluation
+- (void) studTeacherEvaluation
 {
+    
 }
 
-- (void) studQueryEvalFromCourseTeacher
+- (void) studQuantitativeEval
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryEvalFromCourseTeacher
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
-                                                                      byTeacher: YES];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) studQueryEvalFromClassTeacher
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryEvalFromClassTeacher
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         //         retList = @{@"grade":@"初二下学期|初二下学期",
-         //                     @"date":@"2015-10-10|2015-11-11",
-         //                     @"cont":@"评价内容1|内容2",
-         //                     @"file":@"附件地址1|地址2",
-         //                     @"teach":@"评价教师1|教师2"};
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
-                                                                      byTeacher: YES];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
 }
 
 - (void) studQueryParentWishes
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryParentWishes
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForEvaluationInfo: retList
-                                                                      byTeacher: NO];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
 }
 
-- (void) studQueryDevelopmentEvaluation
+- (void) studQueryLifeTrace
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryDevelopmentEvaluation
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForDevelopmentEvaluation: retList];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
+}
+
+- (void) studQueryGrowth
+{
+    
 }
 
 #pragma mark - action for myStudy
@@ -413,29 +299,6 @@
 {
 }
 
-- (void) studQueryCourseList
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryCourseList
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForCourseList: retList];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
-}
-
 - (void) studQueryMySelectiveCourses
 {
     NSString *funcName = [self simpleFuncName: __func__];
@@ -457,140 +320,6 @@
          
          [ownerNav pushViewController: subVC animated: YES];
      }];
-}
-
-- (void) studHomeworkBoard
-{
-}
-
-- (void) studDiscussionBoard
-{
-}
-
-- (void) studFillFormTask
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryFormList
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         WOAActionType pairActionType = WOAActionType_StudentQueryFormTransPerson;
-         
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *modelArray = [WOAStudentPacketHelper pairArrayForStudQueryFormList: retList
-                                                                          actionType: pairActionType]
-         ;
-         WOAContentModel *flowContentModel = [WOAContentModel contentModel: vcTitle
-                                                                 pairArray: modelArray];
-         
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
-                                                                                     delegate: self
-                                                                                  relatedDict: nil];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) onStudQueryFormTransPerson: (WOANameValuePair*)selectedPair
-                        relatedDict: (NSDictionary*)relatedDict
-                              navVC: (UINavigationController*)navVC
-{
-    NSDictionary *itemSubDict = selectedPair.subDictionary;
-    
-    NSString *transID = itemSubDict[kWOAStudSrvKeyForItemID];
-    NSString *transType = itemSubDict[kWOAStudSrvKeyForItemType];
-    
-    NSDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setValue: transID forKey: @"OpID"];
-    [optionDict setValue: transType forKey: @"type"];
-    
-    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
-                                            additionalHeaders: nil
-                                               additionalDict: optionDict
-                                                   onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *personList = [WOAStudentPacketHelper personListFromPacketDictionary: responseContent.bodyDictionary];
-         NSDictionary *departmentList = [WOAStudentPacketHelper departmentListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *contentArray = [WOAStudentPacketHelper modelForGetTransPerson: personList
-                                                                 departmentDict: departmentList
-                                                                         needXq: [transType isEqualToString: @"1"]
-                                                                     actionType: WOAActionType_StudentQueryFormTransTable];
-         NSMutableArray *pairArray = [NSMutableArray array];
-         for (NSInteger index = 0; index < contentArray.count; index++)
-         {
-             WOAContentModel *contentModel = (WOAContentModel*)contentArray[index];
-             
-             [pairArray addObject: [contentModel toNameValuePair]];
-         }
-         
-         WOAContentModel *flowContentModel = [WOAContentModel contentModel: @"表单对象"
-                                                                 pairArray: pairArray];
-         
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: flowContentModel
-                                                                                     delegate: self
-                                                                                  relatedDict: optionDict];
-         
-         [navVC pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) onStudQueryFormTransTable: (WOANameValuePair*)selectedPair
-                       relatedDict: (NSDictionary*)relatedDict
-                             navVC: (UINavigationController*)navVC
-{
-    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-    [addtDict addEntriesFromDictionary: selectedPair.subDictionary];
-    
-    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
-                                            additionalHeaders: nil
-                                               additionalDict: addtDict
-                                                   onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSString *tid = [WOAStudentPacketHelper tableRecordIDFromPacketDictionary: responseContent.bodyDictionary];
-         NSMutableDictionary *contentRelatedDict = [NSMutableDictionary dictionaryWithDictionary: addtDict];
-         [contentRelatedDict setValue: tid forKey: kWOAKey_TableRecordID];
-         
-         NSDictionary *retList = [WOAStudentPacketHelper opListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         WOAContentModel *sectionModel = [WOAStudentPacketHelper modelForTransactionTable: retList];
-         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
-                                                          contentArray: @[sectionModel]
-                                                            actionType: WOAActionType_StudentSubmitFormTransTable
-                                                            actionName: @"提交"
-                                                            isReadonly: NO
-                                                               subDict: contentRelatedDict];
-         
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
-         
-         [navVC pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) onStudSubmitFormTransTable: (WOAActionType)actionType
-                        contentDict: (NSDictionary*)contentDict
-                        relatedDict: (NSDictionary*)relatedDict
-                              navVC: (UINavigationController*)navVC
-{
-    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
-    [addtDict addEntriesFromDictionary: contentDict];
-
-    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
-                                            additionalHeaders: nil
-                                               additionalDict: addtDict
-                                                   onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
-                               actionType: actionType
-                           defaultMsgText: @"已提交."
-                                    navVC: navVC];
-     }];
-    
 }
 
 - (void) studCreateTransaction
@@ -876,24 +605,6 @@
 {
     switch (selectedPair.actionType)
     {
-        case WOAActionType_StudentQueryFormTransPerson:
-        {
-            [self onStudQueryFormTransPerson: selectedPair
-                                 relatedDict: relatedDict
-                                       navVC: navVC];
-            
-            break;
-        }
-            
-        case WOAActionType_StudentQueryFormTransTable:
-        {
-            [self onStudQueryFormTransTable: selectedPair
-                                 relatedDict: relatedDict
-                                       navVC: navVC];
-            
-            break;
-        }
-
         case WOAActionType_StudentCreateOATable:
         {
             [self onStudCreateOATable: selectedPair
@@ -931,15 +642,6 @@
     
     switch (actionType)
     {
-        case WOAActionType_StudentSubmitFormTransTable:
-        {
-            [self onStudSubmitFormTransTable: actionType
-                                 contentDict: contentDict
-                                 relatedDict: relatedDict
-                                       navVC: vc.navigationController];
-            break;
-        }
-            
         case WOAActionType_StudentSubmitOATable:
         {
             [self onStudSubmitOATable: actionType
