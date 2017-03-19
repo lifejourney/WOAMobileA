@@ -178,8 +178,6 @@ static NSDictionary *__actionMapDict = nil;
                                                               @"getCheckout"],
       @(WOAActionType_StudentQueryAchievement):             @[@"StudentQueryAchievement",
                                                               @"getResultInfo"],
-      @(WOAActionType_StudentQueryMySociety):               @[@"StudentQueryMySociety",
-                                                              @"getAssocInfo"],
       @(WOAActionType_StudentQueryQuantitativeEvaluation):  @[@"StudentQueryQuantitativeEvaluation",
                                                               @"getEvalMyInfo"],
       @(WOAActionType_StudentQuerySummativeEvaluation):     @[@"StudentQuerySummativeEvaluation",
@@ -231,11 +229,9 @@ static NSDictionary *__actionMapDict = nil;
       @(WOAActionType_StudentQueryHistoryOA):               @[@"StudentQueryHistoryOA",
                                                               @"getEventInfo"],
       
+      @(WOAActionType_StudentQueryMySociety):               @[@"StudentQueryMySociety",
+                                                              @"getAssocList"],
       @(WOAActionType_StudentQuerySocietyInfo):             @[@"StudentQuerySocietyInfo",
-                                                              @"getAssocMy"],
-      @(WOAActionType_StudentApplyForActivity):             @[@"StudentApplyForActivity",
-                                                              @""],
-      @(WOAActionType_StudentQueryActivityRecord):          @[@"StudentQueryActivityRecord",
                                                               @"getAssocInfo"],
       };
     

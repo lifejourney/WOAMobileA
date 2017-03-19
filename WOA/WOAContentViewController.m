@@ -12,6 +12,7 @@
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
 #import "WOAMultiStyleItemField.h"
+#import "WOAButton.h"
 #import "WOALayout.h"
 #import "UIColor+AppTheme.h"
 #import "UIView+IndexPathTag.h"
@@ -170,6 +171,34 @@
     }
 }
 
+- (void) onGroupButtonAction: (id)sender
+{
+    if (![sender isKindOfClass: [WOAButton class]])
+    {
+        return;
+    }
+    
+    WOAButton *actionButton = (WOAButton*)sender;
+    if (self.delegate
+        && [self.delegate respondsToSelector: @selector(contentViewController:actionType:submitContent:relatedDict:)])
+    {
+        NSUInteger groupIndex = actionButton.groupIndex;
+        WOAContentModel *groupContentModel = self.contentModel.contentArray[groupIndex];
+        
+#ifdef WOAMobileTeacher
+        NSDictionary *contentDict = nil;//[self toTeacherDataModel];
+#else
+        NSDictionary *contentDict = nil;//[self toStudentDataModel];
+#endif
+        
+        [self.delegate contentViewController: self
+                                  actionType: groupContentModel.actionType
+                               submitContent: contentDict
+                                 relatedDict: groupContentModel.subDict];
+    }
+    
+}
+
 #pragma mark - WOAMultiStyleItemFieldDelegate
 
 - (void) textFieldDidBecameFirstResponder: (UITextField *)textField
@@ -307,6 +336,34 @@
             
             itemHeight = itemTextField.frame.size.height;
         }
+        
+        totalHeight += itemHeight;
+        itemOriginY += itemHeight;
+    }
+    
+    NSString *groupActionName = groupContentModel.actionName;
+    if (groupActionName && groupActionName.length > 0 && groupContentModel.actionType != WOAActionType_None)
+    {
+        itemSizeHeight = kWOALayout_ItemDetailHeight;
+        rect = CGRectMake(itemOriginX, itemOriginY, itemSizeWidth, itemSizeHeight);
+        
+        WOAButton *actionButton = [[WOAButton alloc] initWithFrame: rect];
+        [actionButton setTitle: groupActionName forState: UIControlStateNormal];
+        [actionButton setTitleColor: [UIColor blueColor] forState: UIControlStateNormal];
+        actionButton.titleLabel.font = [UIFont systemFontOfSize: kWOALayout_DetailItemFontSize];
+        actionButton.groupIndex = groupIndex;
+        [actionButton sizeToFit];
+        CGRect newRect = actionButton.frame;
+        newRect.origin.x = itemOriginX + (itemSizeWidth - actionButton.frame.size.width) / 2;
+        [actionButton setFrame: newRect];
+        
+        [actionButton addTarget: self
+                         action: @selector(onGroupButtonAction:)
+               forControlEvents: UIControlEventTouchUpInside];
+        
+        [scrollView addSubview: actionButton];
+        
+        itemHeight = actionButton.frame.size.height;
         
         totalHeight += itemHeight;
         itemOriginY += itemHeight;

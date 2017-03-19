@@ -291,37 +291,6 @@
     return modelArray;
 }
 
-
-+ (NSArray*) modelForAssociationInfo: (NSDictionary*)retDict
-{
-    NSMutableArray *modelArray = [[NSMutableArray alloc] init];
-    NSMutableArray *pairArray = [[NSMutableArray alloc] init];
-    
-    NSArray *huodongArray = [self toLevel1Array: retDict[@"titl"]];
-    NSArray *fzrArray = [self toLevel1Array: retDict[@"fzr"]];
-    NSArray *numbArray = [self toLevel1Array: retDict[@"numb"]];
-    
-    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
-    
-    for (NSInteger index = 0; index < [huodongArray count]; index++)
-    {
-        NSString *huodong = [self trimedValue: huodongArray atIndex: index defVal: @""];
-        NSString *fzr = [self trimedValue: fzrArray atIndex: index defVal: @""];
-        NSString *numb = [self trimedValue: numbArray atIndex: index defVal: @""];
-        
-        [pairArray addObject: [WOANameValuePair pairOnlyName: huodong]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"负责人" value: fzr]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"numb" value: numb]];
-        [pairArray addObject: seperatorPair];
-    }
-    
-    WOAContentModel *model = [WOAContentModel contentModel: @"参加社团信息"
-                                                 pairArray: pairArray];
-    [modelArray addObject: model];
-    
-    return modelArray;
-}
-
 + (NSArray*) modelForEvaluationInfo: (NSDictionary*)retDict
                           byTeacher: (BOOL) byTeacher
 {
@@ -572,111 +541,6 @@
     }
     
     return modelArray;
-}
-
-+ (NSArray*) modelForSocietyInfo: (NSDictionary*)retDict
-{
-    NSMutableArray *modelArray = [[NSMutableArray alloc] init];
-    NSMutableArray *pairArray;
-    
-    NSArray *nameArray = [self toLevel1Array: retDict[@"name"]];
-    NSArray *numbArray = [self toLevel1Array: retDict[@"numb"]];
-    NSArray *dateArray = [self toLevel1Array: retDict[@"date"]];
-    
-    //WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
-    
-    for (NSInteger index = 0; index < [nameArray count]; index++)
-    {
-        NSString *name = [self trimedValue: nameArray atIndex: index defVal: @""];
-        NSString *numb = [self trimedValue: numbArray atIndex: index defVal: @""];
-        NSString *date = [self trimedValue: dateArray atIndex: index defVal: @""];
-        
-        if (![name isNotEmpty])
-            continue;
-        
-        pairArray = [[NSMutableArray alloc] init];
-        //[pairArray addObject: [WOANameValuePair pairOnlyName: name]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"成员数" value: numb]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"创建日期" value: date]];
-        //[pairArray addObject: seperatorPair];
-        
-        WOAContentModel *model = [WOAContentModel contentModel: name
-                                                     pairArray: pairArray];
-        
-        [modelArray addObject: model];
-    }
-    
-    return modelArray;
-}
-
-+ (NSArray*) modelForActivityRecord: (NSDictionary*)retDict
-{
-    NSMutableArray *groupArray = [[NSMutableArray alloc] init];
-    
-    NSArray *titlArray = [self toLevel1Array: retDict[@"titl"]];
-    NSArray *fzrArray = [self toLevel1Array: retDict[@"fzr"]];
-    NSArray *numbArray = [self toLevel1Array: retDict[@"numb"]];
-    NSArray *hdjjArray = [self toLevel1Array: retDict[@"hdjj"]];
-    NSArray *hdsjArray = [self toLevel1Array: retDict[@"hdsj"]];
-    NSArray *cjjjArray = [self toLevel1Array: retDict[@"cjjj"]];
-    NSArray *cjsjArray = [self toLevel1Array: retDict[@"cjsj"]];
-    
-    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
-    
-    NSMutableArray *modelArray;
-    NSMutableArray *pairArray;
-    
-    modelArray = [[NSMutableArray alloc] init];
-    for (NSInteger index = 0; index < [titlArray count]; index++)
-    {
-        NSString *titl = [self trimedValue: titlArray atIndex: index defVal: @""];
-        NSString *fzr = [self trimedValue: fzrArray atIndex: index defVal: @""];
-        NSString *numb = [self trimedValue: numbArray atIndex: index defVal: @""];
-        
-        pairArray = [[NSMutableArray alloc] init];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"社团名称" value: titl]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"人数" value: numb]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"负责人" value: fzr]];
-        [pairArray addObject: seperatorPair];
-        
-        [modelArray addObject: [WOAContentModel contentModel: @""
-                                                   pairArray: pairArray]];
-    }
-    [groupArray addObject: [WOANameValuePair pairWithName: @"参加的社团" value: modelArray]];
-    
-    modelArray = [[NSMutableArray alloc] init];
-    for (NSInteger index = 0; index < [hdjjArray count]; index++)
-    {
-        NSString *hdjj = [self trimedValue: hdjjArray atIndex: index defVal: @""];
-        NSString *hdsj = [self trimedValue: hdsjArray atIndex: index defVal: @""];
-        
-        pairArray = [[NSMutableArray alloc] init];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"活动简介" value: hdjj]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"活动时间" value: hdsj]];
-        [pairArray addObject: seperatorPair];
-        
-        [modelArray addObject: [WOAContentModel contentModel: @""
-                                                   pairArray: pairArray]];
-    }
-    [groupArray addObject: [WOANameValuePair pairWithName: @"发起的活动" value: modelArray]];
-    
-    modelArray = [[NSMutableArray alloc] init];
-    for (NSInteger index = 0; index < [hdjjArray count]; index++)
-    {
-        NSString *cjjj = [self trimedValue: cjjjArray atIndex: index defVal: @""];
-        NSString *cjsj = [self trimedValue: cjsjArray atIndex: index defVal: @""];
-        
-        pairArray = [[NSMutableArray alloc] init];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"活动简介" value: cjjj]];
-        [pairArray addObject: [WOANameValuePair pairWithName: @"活动时间" value: cjsj]];
-        [pairArray addObject: seperatorPair];
-        
-        [modelArray addObject: [WOAContentModel contentModel: @""
-                                                   pairArray: pairArray]];
-    }
-    [groupArray addObject: [WOANameValuePair pairWithName: @"参加的活动" value: modelArray]];
-    
-    return groupArray;
 }
 
 + (NSArray*) pairArrayForStudQueryFormList: (NSDictionary*)retDict
@@ -992,6 +856,106 @@
 }
 
 
+
++ (NSArray*) modelForSocietyList: (NSDictionary*)respDict
+                      actionType: (WOAActionType)actionType
+{
+    NSMutableArray *modelArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[kWOASrvKeyForItemArrays];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSMutableArray *pairArray = [NSMutableArray array];
+        
+        NSString *itemName = itemDict[@"name"];
+        NSString *manager = itemDict[@"manager"];
+        NSString *teacher = itemDict[@"teacher"];
+        NSString *membership = itemDict[@"membership"];
+        
+        [pairArray addObject: [WOANameValuePair pairWithName: @"负责人"
+                                                       value: manager]];
+        [pairArray addObject: [WOANameValuePair pairWithName: @"指导教师"
+                                                       value: teacher]];
+        [pairArray addObject: [WOANameValuePair pairWithName: @"会员人数"
+                                                       value: membership]];
+        
+        [modelArray addObject: [WOAContentModel contentModel: itemName
+                                                   pairArray: pairArray
+                                                  actionType: actionType
+                                                  actionName: @"查询详情"
+                                                  isReadonly: YES
+                                                     subDict: itemDict]];
+    }
+    
+    return modelArray;
+}
+
++ (NSArray*) modelForSocietyInfo: (NSDictionary*)respDict
+{
+    NSMutableArray *modelArray = [NSMutableArray array];
+    
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    [pairArray addObject: [WOANameValuePair pairWithName: @"社团名称"
+                                                   value: respDict[@"name"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"社团宗旨"
+                                                   value: respDict[@"aims"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"社团类别"
+                                                   value: respDict[@"classifications"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"社团负责人"
+                                                   value: respDict[@"manager"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"负责人电话"
+                                                   value: respDict[@"manaphone"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"负责人简历"
+                                                   value: respDict[@"manaCV"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"副社长"
+                                                   value: respDict[@"vicemanager"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"骨干成员"
+                                                   value: respDict[@"skeleton"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"一般会员"
+                                                   value: respDict[@"members"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"纳新时段"
+                                                   value: respDict[@"takingtime"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"计划招纳人数"
+                                                   value: respDict[@"plannumber"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"报名上限"
+                                                   value: respDict[@"maxnumber"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"人数下限"
+                                                   value: respDict[@"minnumber"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"已报人员名单"
+                                                   value: respDict[@"enterlist"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"纳新面向年级"
+                                                   value: respDict[@"orient"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"社团主要活动形式"
+                                                   value: respDict[@"activities"]]];
+    [pairArray addObject: seperatorPair];
+    [pairArray addObject: [WOANameValuePair pairWithName: @"指导教师"
+                                                   value: respDict[@"teacher"]]];
+    [pairArray addObject: seperatorPair];
+     
+     [modelArray addObject: [WOAContentModel contentModel: @""
+                                                pairArray: pairArray]];
+    
+    return modelArray;
+}
 
 @end
 

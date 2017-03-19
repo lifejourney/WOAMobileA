@@ -40,15 +40,12 @@
 + (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)respDict;
 + (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict;
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict;
-+ (NSArray*) modelForAssociationInfo: (NSDictionary*)retDict;
 + (NSArray*) modelForEvaluationInfo: (NSDictionary*)retDict
                           byTeacher: (BOOL) byTeacher;
 + (NSArray*) modelForDevelopmentEvaluation: (NSDictionary*)retDict;
 + (NSArray*) modelForMySyllabus: (NSDictionary*)retDict;
 + (NSArray*) modelForCourseList: (NSDictionary*)retDict;
 + (NSArray*) modelForMySelectiveCourses: (NSDictionary*)retDict;
-+ (NSArray*) modelForSocietyInfo: (NSDictionary*)retDict;
-+ (NSArray*) modelForActivityRecord: (NSDictionary*)retDict;
 + (NSArray*) pairArrayForStudQueryFormList: (NSDictionary*)retDict
                                 actionType: (WOAActionType)actionType;
 + (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict
@@ -65,6 +62,10 @@
 + (NSArray*) modelForAddAssoc: (NSDictionary*)personDict
                departmentDict: (NSDictionary*)departmentDict
                    actionType: (WOAActionType)actionType;
+
++ (NSArray*) modelForSocietyList: (NSDictionary*)respDict
+                      actionType: (WOAActionType)actionType;
++ (NSArray*) modelForSocietyInfo: (NSDictionary*)respDict;
 
 @end
 

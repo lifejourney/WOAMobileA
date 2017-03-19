@@ -16,6 +16,7 @@
 #define kWOALayout_DefaultBottomMargin 10
 
 #define kWOALayout_ItemCommonHeight (24)
+#define kWOALayout_ItemDetailHeight (16)
 #define kWOALayout_ItemLabelWidth (80)
 #define kWOALayout_ItemTopMargin (4)
 #define kWOALayout_ItemLabelTextField_Gap (2)

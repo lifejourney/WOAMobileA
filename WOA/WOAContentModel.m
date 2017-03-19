@@ -58,6 +58,22 @@
 }
 
 + (instancetype) contentModel: (NSString*)groupTitle
+                    pairArray: (NSArray*)pairArray
+                   actionType: (WOAActionType)actionType
+                   actionName: (NSString*)actionName
+                   isReadonly: (BOOL)isReadonly
+                      subDict: (NSDictionary*)subDict
+{
+    return [self contentModel: groupTitle
+                    pairArray: pairArray
+                 contentArray: nil
+                   actionType: actionType
+                   actionName: actionName
+                   isReadonly: isReadonly
+                      subDict: subDict];
+}
+
++ (instancetype) contentModel: (NSString*)groupTitle
                  contentArray: (NSArray*)contentArray
                    actionType: (WOAActionType)actionType
                    actionName: (NSString*)actionName

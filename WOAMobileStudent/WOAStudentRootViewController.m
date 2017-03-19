@@ -61,7 +61,6 @@
     ,@"studQueryConsumeInfo":   @[@(2),     @"消费信息",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryAttendInfo":    @[@(3),     @"考勤记录",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studQueryBorrowBook":    @[@(4),     @"借阅信息",        @(0), @(NO), @(NO), @"",                      @""]
-    ,@"studQueryMySociety":     @[@(6),     @"社团情况",        @(0), @(NO),@(NO),  @"",                      @""]
     ,@"studSelfEvaluation":     @[@(7),     @"自我评价",        @(0), @(YES),@(YES), @"",                     @""]
     ,@"studQueryQuantitativeEvaluation":
                                 @[@(8),     @"量化评价",        @(0), @(NO),@(NO),  @"studSelfEvaluation",    @""]
@@ -89,11 +88,7 @@
     ,@"studTodoTransaction":    @[@(10),     @"待办事项",       @(1), @(NO),@(NO), @"",                      @""]
     ,@"studTransactionList":    @[@(11),     @"事项查询",       @(1), @(NO),@(NO), @"",                      @""]
     ,@"studQueryAchievement":   @[@(12),    @"成绩查询",        @(1), @(NO),@(NO),  @"",                      @""]
-    ,@"studJoinSociety":        @[@(1),     @"加入社团",        @(2), @(NO),@(NO), @"",                      @""]
-    ,@"studManageSociety":      @[@(2),     @"管理社团",        @(2), @(YES),@(YES), @"",                      @""]
-    ,@"studQuerySocietyInfo":   @[@(3),     @"社团信息",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
-    ,@"studApplyForActivity":   @[@(4),     @"活动申请",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
-    ,@"studQueryActivityRecord":@[@(5),     @"活动记录",        @(2), @(NO),@(NO), @"studManageSociety",       @""]
+    ,@"studQueryMySociety":     @[@(6),     @"学生社团",        @(2), @(NO),@(NO),  @"",                      @""]
     };
         
         NSArray *rootLevelMenuArray = [self rootLevelMenuListArray: 4];
@@ -260,31 +255,6 @@
                                                                                   delegate: self];
          
          [ownerNav pushViewController: subVC animated: YES];
-     }];
-}
-
-- (void) studQueryMySociety
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySociety
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-//          NSArray *modelArray = [WOAStudentPacketHelper modelForAssociationInfo: retList];
-//          WOAContentViewController *subVC = [WOAContentViewController contentViewController: vcTitle
-//                                                                                 modelArray: modelArray];
-         NSArray *modelArray = [WOAStudentPacketHelper modelForActivityRecord: retList];
-         WOAListDetailViewController *subVC = [WOAListDetailViewController listViewController: vcTitle
-                                                                                    pairArray: modelArray
-                                                                                  detailStyle: WOAListDetailStyleContent];
-         
-         [ownerNav pushViewController: subVC animated: YES];
-         
      }];
 }
 
@@ -841,37 +811,20 @@
 
 #pragma mark - action for mySociety
 
-- (void) studJoinSociety
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    //NSString *vcTitle = [self titleForFuncName: funcName];
-    UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    WOANameValuePair *pair = [WOANameValuePair pairWithName: @"学生申请加入社团申报表"
-                                                      value: kWOAValue_OATableID_JoinSociety
-                                                 actionType: WOAActionType_StudentCreateOATable];
-    
-    [self onStudCreateOATable: pair
-                  relatedDict: nil
-                        navVC: ownerNav];
-}
-
-- (void) studQuerySocietyInfo
+- (void) studQueryMySociety
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQuerySocietyInfo
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySociety
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
-         
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForSocietyInfo: retList];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForSocietyList: responseContent.bodyDictionary
+                                                                actionType: WOAActionType_StudentQuerySocietyInfo];
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                             pairArray: sectionArray];
-         
+                                                          contentArray: modelArray];
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
@@ -879,31 +832,29 @@
      }];
 }
 
-- (void) studApplyForActivity
+- (void) onStudQuerySocietyInfo: (WOAActionType)actionType
+                    contentDict: (NSDictionary*)contentDict
+                    relatedDict: (NSDictionary*)relatedDict
+                          navVC: (UINavigationController*)navVC
 {
-}
-
-- (void) studQueryActivityRecord
-{
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionary];
+    [addtDict setValue: relatedDict[kWOASrvKeyForItemID] forKey: kWOASrvKeyForItemID];
     
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryActivityRecord
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSArray *modelArray = [WOAStudentPacketHelper modelForSocietyInfo: responseContent.bodyDictionary];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @""
+                                                          contentArray: modelArray];
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
-         NSArray *modelArray = [WOAStudentPacketHelper modelForActivityRecord: retList];
-         WOAListDetailViewController *subVC = [WOAListDetailViewController listViewController: vcTitle
-                                                                                    pairArray: modelArray
-                                                                                  detailStyle: WOAListDetailStyleContent];
-         
-         [ownerNav pushViewController: subVC animated: YES];
+         [navVC pushViewController: subVC animated: YES];
      }];
+    
 }
-
 
 #pragma mark - WOAUploadAttachmentRequestDelegate
 
@@ -995,6 +946,15 @@
                           contentDict: contentDict
                           relatedDict: relatedDict
                                 navVC: vc.navigationController];
+            break;
+        }
+            
+        case WOAActionType_StudentQuerySocietyInfo:
+        {
+            [self onStudQuerySocietyInfo: actionType
+                             contentDict: contentDict
+                             relatedDict: relatedDict
+                                   navVC: vc.navigationController];
             break;
         }
             
