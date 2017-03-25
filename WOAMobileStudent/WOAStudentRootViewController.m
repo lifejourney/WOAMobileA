@@ -14,6 +14,8 @@
 #import "WOASimpleListViewController.h"
 #import "WOAListDetailViewController.h"
 #import "WOADateFromToPickerViewController.h"
+#import "WOAURLNavigationViewController.h"
+#import "WOAFileSelectorView.h"
 #import "WOARequestManager+Student.h"
 #import "WOAStudentPacketHelper.h"
 #import "WOAPropertyInfo.h"
@@ -24,12 +26,15 @@
 @interface WOAStudentRootViewController() <WOASinglePickViewControllerDelegate,
                                             WOAMultiPickerViewControllerDelegate,
                                             WOAContentViewControllerDelegate,
-                                            WOAUploadAttachmentRequestDelegate>
+                                            WOAUploadAttachmentRequestDelegate,
+                                            WOAURLNavigationViewControllerDelegate>
 
 @property (nonatomic, strong) UINavigationController *myProfileNavC;
 @property (nonatomic, strong) UINavigationController *myStudyNavC;
 @property (nonatomic, strong) UINavigationController *mySocietyNavC;
 @property (nonatomic, strong) UINavigationController *moreFeatureNavC;
+
+@property (nonatomic, strong) WOAFileSelectorView *fileSelectorView;
 
 @end
 
@@ -103,6 +108,11 @@
         
         self.vcArray = @[self.myProfileNavC, self.myStudyNavC, self.mySocietyNavC, self.moreFeatureNavC];
         self.viewControllers = self.vcArray;
+        
+        self.fileSelectorView = [[WOAFileSelectorView alloc] initWithFrame: CGRectZero
+                                                                  delegate: nil
+                                                             limitMaxCount: 1
+                                                          displayLineCount: 0];
     }
     
     return self;
@@ -246,7 +256,202 @@
 
 - (void) studSelfEvaluation
 {
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQuerySelfEvalInfo
+                                           paraDict: nil
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         
+         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForSelfEvaluationInfo: responseContent.bodyDictionary];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                            actionType: WOAActionType_StudentCreateSelfEval
+                                                            actionName: @"添加"
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         subVC.textLabelFont = [WOALayout flowCellTextFont];
+         subVC.rowHeight = 60;
+         
+         [ownerNav pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudCreateSelfEval: (WOAActionType)actionType
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                             message: @"请选择您需要的操作： "
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *textAction = [UIAlertAction actionWithTitle: @"编辑文本"
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: ^(UIAlertAction * _Nonnull action)
+                                 {
+                                     [self onStudCreateSelfEvalText: WOAActionType_StudentCreateSelfEvalText
+                                                        relatedDict: relatedDict
+                                                              navVC: navVC];
+                                 }];
+    UIAlertAction *fileAction = [UIAlertAction actionWithTitle: @"上传文件"
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: ^(UIAlertAction * _Nonnull action)
+                                   {
+                                       [self onStudCreateSelfEvalFile: WOAActionType_StudentCreateSelfEvalFile
+                                                          relatedDict: relatedDict
+                                                                navVC: navVC];
+                                   }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    [alertController addAction: textAction];
+    [alertController addAction: fileAction];
+    [alertController addAction: cancelAction];
+    
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
+}
+
+- (void) onStudCreateSelfEvalText: (WOAActionType)actionType
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
+{
+    WOAContentModel *contentModel = [WOAStudentPacketHelper contentModelForCreateSelfEval: @""];
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onStudCreateSelfEvalFile: (WOAActionType)actionType
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
+{
+    self.fileSelectorView.ignoreTitle = YES;
+    self.fileSelectorView.navC = navVC;
+    
+    [self.fileSelectorView selectFileWithCompletion: ^(NSString *filePath, NSString *title)
+     {
+         self.fileSelectorView.navC = nil;
+         
+         if ([NSString isEmptyString: filePath])
+         {
+             return;
+         }
+         
+         NSArray *filePathArray = @[filePath];
+         NSArray *titleArray = title ? @[title] : @[@""];
+         [self requestUploadAttachment: actionType
+                         filePathArray: filePathArray
+                            titleArray: titleArray
+                        additionalDict: relatedDict
+                          onCompletion: ^(BOOL isSuccess, NSArray *urlArray)
+          {
+              if (isSuccess && urlArray && urlArray.count > 0)
+              {
+                  NSString *infoContent = [urlArray firstObject];
+                  
+                  NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+                  [addtDict setValue: infoContent forKey: @"pjContent"];
+                  
+                  [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentSubmitSelfEvalDetail
+                                                          additionalHeaders: nil
+                                                             additionalDict: addtDict
+                                                                 onSuccuess: ^(WOAResponeContent *responseContent)
+                   {
+                       [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                                             actionType: actionType
+                                         defaultMsgText: nil
+                                                  navVC: navVC];
+                   }];
+              }
+              else
+              {
+                  NSLog(@"%d, %@", isSuccess, urlArray);
+              }
+          }];
+     }];
+}
+
+- (void) onStudViewSelfEvalAttachment: (WOANameValuePair*)selectedPair
+                          relatedDict: (NSDictionary*)relatedDict
+                                navVC: (UINavigationController*)navVC
+{
+    WOAContentModel *contentModel = (WOAContentModel*)selectedPair.value;
+    NSString *attachmentURL = [contentModel.subArray firstObject];
+    if ([NSString isEmptyString: attachmentURL])
+    {
+        return;
+    }
+    
+    WOAURLNavigationViewController *subVC = [[WOAURLNavigationViewController alloc] init];
+    subVC.delegate = self;
+    subVC.contentModel = contentModel;
+    subVC.url = [NSURL URLWithString: attachmentURL];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onStudViewSelfEvalDetail: (WOANameValuePair*)selectedPair
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
+{
+    WOAContentModel *contentModel = (WOAContentModel*)selectedPair.value;
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onStudDeleteSelfEval: (WOAActionType)actionType
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: nil
+                                    navVC: navVC];
+     }];
+}
+
+- (void) onStudSubmitSelfEval: (WOAActionType)actionType
+                  contentDict: (NSDictionary*)contentDict
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict addEntriesFromDictionary: contentDict];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: nil
+                                    navVC: navVC];
+     }];
 }
 
 - (void) studTeacherEvaluation
@@ -585,16 +790,6 @@
     
 }
 
-#pragma mark - WOAUploadAttachmentRequestDelegate
-
-- (void) requestUploadAttachment: (WOAActionType)contentActionType
-                   filePathArray: (NSArray*)filePathArray
-                      titleArray: (NSArray*)titleArray
-                  additionalDict: (NSDictionary*)additionalDict
-                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler
-{
-}
-
 #pragma mark - WOASinglePickViewControllerDelegate
 
 - (void) singlePickViewControllerSelected: (WOASinglePickViewController*)vc
@@ -605,6 +800,22 @@
 {
     switch (selectedPair.actionType)
     {
+        case WOAActionType_StudentViewSelfEvalAttachment:
+        {
+            [self onStudViewSelfEvalAttachment: selectedPair
+                                   relatedDict: relatedDict
+                                         navVC: navVC];
+        }
+            break;
+            
+        case WOAActionType_StudentViewSelfEvalDetail:
+        {
+            [self onStudViewSelfEvalDetail: selectedPair
+                               relatedDict: relatedDict
+                                     navVC: navVC];
+        }
+            break;
+            
         case WOAActionType_StudentCreateOATable:
         {
             [self onStudCreateOATable: selectedPair
@@ -624,7 +835,21 @@
                             relatedDict: (NSDictionary*)relatedDict
                                   navVC: (UINavigationController*)navVC
 {
+    WOAActionType actionType = contentModel.actionType;
     
+    switch (actionType)
+    {
+        case WOAActionType_StudentCreateSelfEval:
+        {
+            [self onStudCreateSelfEval: actionType
+                           relatedDict: relatedDict
+                                 navVC: vc.navigationController];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - WOAContentViewControllerDelegate
@@ -642,6 +867,23 @@
     
     switch (actionType)
     {
+        case WOAActionType_StudentDeleteSelfEvalInfo:
+        {
+            [self onStudDeleteSelfEval: actionType
+                           relatedDict: relatedDict
+                                 navVC: vc.navigationController];
+        }
+            break;
+            
+        case WOAActionType_StudentSubmitSelfEvalDetail:
+        {
+            [self onStudSubmitSelfEval: actionType
+                           contentDict: contentDict
+                           relatedDict: relatedDict
+                                 navVC: vc.navigationController];
+        }
+            break;
+            
         case WOAActionType_StudentSubmitOATable:
         {
             [self onStudSubmitOATable: actionType
@@ -708,6 +950,26 @@
     [navVC popViewControllerAnimated: YES];
 }
 
+#pragma mark - WOAURLNavigationViewControllerDelegate
+
+- (void) urlNavigationViewController: (WOAURLNavigationViewController *)vc
+                          actionType: (WOAActionType)actionType
+                         relatedDict:(NSDictionary *)relatedDict
+{
+    switch (actionType)
+    {
+        case WOAActionType_StudentDeleteSelfEvalInfo:
+        {
+            [self onStudDeleteSelfEval: actionType
+                           relatedDict: relatedDict
+                                 navVC: vc.navigationController];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 
 @end
 

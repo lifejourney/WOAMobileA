@@ -63,4 +63,12 @@
 
 - (void) switchToDefaultTab: (BOOL)popToRootVC;
 
+#pragma mark - WOAUploadAttachmentRequestDelegate
+
+- (void) requestUploadAttachment: (WOAActionType)contentActionType
+                   filePathArray: (NSArray*)filePathArray
+                      titleArray: (NSArray*)titleArray
+                  additionalDict: (NSDictionary*)additionalDict
+                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler;
+
 @end

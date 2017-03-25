@@ -30,9 +30,14 @@
 @end
 
 
+typedef void (^WOASelectFileCompletion)(NSString *filePath, NSString* title);
+
 @interface WOAFileSelectorView : UIView
 
 @property (nonatomic, weak) id<WOAFileSelectorViewDelegate> delegate;
+@property (nonatomic, assign) BOOL ignoreTitle;
+@property (nonatomic, strong) UINavigationController *navC;
+
 
 - (instancetype) initWithFrame: (CGRect)frame
                       delegate: (id<WOAFileSelectorViewDelegate>)delegate
@@ -40,5 +45,9 @@
               displayLineCount: (NSUInteger)displayLineCount;
 
 - (void) fileInfoUpdated;
+
+#pragma mark -
+
+- (void) selectFileWithCompletion: (WOASelectFileCompletion)completionBlock;
 
 @end

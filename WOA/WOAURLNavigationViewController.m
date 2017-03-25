@@ -34,6 +34,16 @@
                                                                             action: @selector(backAction:)];
     self.navigationItem.titleView = [WOALayout lableForNavigationTitleView: _urlTitle ? _urlTitle : @""];
     
+    if (self.contentModel.actionName)
+    {
+        UIBarButtonItem *rightBarButtonItem;
+        rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle: self.contentModel.actionName
+                                                              style: UIBarButtonItemStylePlain
+                                                             target: self
+                                                             action: @selector(onRightButtonAction:)];
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    }
+    
     _webView.scalesPageToFit = YES;
     
     if (_url)
@@ -51,6 +61,17 @@
 - (void) backAction: (id)sender
 {
     [self.navigationController popViewControllerAnimated: YES];
+}
+
+- (void) onRightButtonAction: (id)sender
+{
+    if (self.delegate
+        && [self.delegate respondsToSelector: @selector(urlNavigationViewController:actionType:relatedDict:)])
+    {
+        [self.delegate urlNavigationViewController: self
+                                        actionType: self.contentModel.actionType
+                                       relatedDict: self.contentModel.subDict];
+    }
 }
 
 @end

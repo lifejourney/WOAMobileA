@@ -284,10 +284,21 @@
 {
     NSDictionary *resultDict = [self resultFromPacketDictionary: dict];
     
-    NSString *errorMsg = [resultDict valueForKey: kWOASrvKeyForResultDescription];
+    NSString *errorMsg = resultDict[kWOASrvKeyForResultDescription];
+    
     if (!errorMsg)
     {
-        errorMsg = [resultDict valueForKey: kWOASrvKeyForResultPrompt];
+        errorMsg = resultDict[kWOASrvKeyForResultPrompt];
+    }
+    
+    if (!errorMsg)
+    {
+        errorMsg = dict[kWOASrvKeyForResultDescription];
+    }
+    
+    if (!errorMsg)
+    {
+        errorMsg = dict[kWOASrvKeyForResultPrompt];
     }
     
     return errorMsg;

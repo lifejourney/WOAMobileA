@@ -8,11 +8,14 @@
 
 #import "WOARootViewController.h"
 #import "WOAAppDelegate.h"
+#import "WOAContentViewController.h"
 #import "WOAMenuListViewController.h"
 #import "WOAVersionInfoViewController.h"
 #import "WOAAboutViewController.h"
 #import "WOAStartWorkflowActionReqeust.h"
 #import "UINavigationController+RootViewController.h"
+#import "WOARequestManager.h"
+#import "WOARequestContent.h"
 #import "WOAPacketHelper.h"
 #import "WOAPropertyInfo.h"
 #import "WOATargetInfo.h"
@@ -22,7 +25,8 @@
 
 
 
-@interface WOARootViewController () <UITabBarControllerDelegate>
+@interface WOARootViewController () <UITabBarControllerDelegate,
+                                    WOAUploadAttachmentRequestDelegate>
 
 
 @end
@@ -470,6 +474,59 @@
     
     WOAAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate presentLoginViewController: NO animated: YES];
+}
+
+#pragma mark - WOAUploadAttachmentRequestDelegate
+
+- (void) requestUploadAttachment: (WOAActionType)contentActionType
+                   filePathArray: (NSArray*)filePathArray
+                      titleArray: (NSArray*)titleArray
+                  additionalDict: (NSDictionary*)additionalDict
+                    onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler
+{
+    WOARequestContent *requestContent = [WOARequestContent contentWithActionType: WOAActionType_UploadAttachment];
+    
+    NSMutableArray *multiBodyArray = [NSMutableArray array];
+    for (NSInteger index = 0; index < filePathArray.count; index++)
+    {
+        NSString *fileFullPath = filePathArray[index];
+        NSString *title = titleArray[index];
+        NSString *itemID = @"0";
+        
+        NSDictionary *itemDict = [NSMutableDictionary dictionaryWithDictionary: additionalDict];
+        [itemDict setValue: fileFullPath forKey:kWOASrvKeyForAttachmentFilePath];
+        [itemDict setValue: title forKey: kWOASrvKeyForSendAttachmentTitle];
+        [itemDict setValue: itemID forKey: kWOASrvKeyForItemID];
+        [itemDict setValue: [WOAPropertyInfo latestWorkID] forKey: kWOASrvKeyForWorkID];
+        
+        NSDictionary *bodyDict = [WOAPacketHelper packetForSimpleQuery: WOAActionType_UploadAttachment
+                                                            additionalHeaders: nil
+                                                               additionalDict: itemDict];
+        
+        [multiBodyArray addObject: bodyDict];
+    }
+    requestContent.multiBodyArray = multiBodyArray;
+    
+    [[WOARequestManager sharedInstance] sendRequest: requestContent
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSMutableArray *urlArray = [NSMutableArray array];
+         
+         for (NSInteger index = 0; index < responseContent.multiBodyArray.count; index++)
+         {
+             NSDictionary *bodyDictionary = responseContent.multiBodyArray[index];
+             
+             NSString *fileURL = [WOAPacketHelper resultUploadedFileNameFromPacketDictionary: bodyDictionary];
+             
+             [urlArray addObject: fileURL];
+         }
+         
+         completionHandler(YES, urlArray);
+     }
+                                          onFailure: ^(WOAResponeContent *responseContent)
+     {
+         completionHandler(NO, nil);
+     }];
 }
 
 @end

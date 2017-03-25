@@ -14,6 +14,7 @@
 @interface WOAContentModel : NSObject
 
 @property (nonatomic, copy) NSString *groupTitle;
+@property (nonatomic, copy) NSString *srvKeyName;
 @property (nonatomic, strong) NSArray *pairArray;       //Array of WOANameValuePair
 @property (nonatomic, strong) NSArray *contentArray;    //Array of WOAContentModel, Ex: ContentViewController.
 @property (nonatomic, assign) WOAActionType actionType; //What action to do when select or submit.

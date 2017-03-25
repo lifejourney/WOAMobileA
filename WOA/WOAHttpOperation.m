@@ -201,7 +201,7 @@
             self.finalResponseContent.requestResult = WOAHTTPRequestResult_JSONSerializationError;
             self.finalResponseContent.resultDescription = @"无效的请求内容.";
             
-            NSLog(@"Request fail during JSON serialization. error: %@\n request body: %@", [error localizedDescription], requestContent.bodyDictionary);
+            NSLog(@"Request fail during JSON serialization. error: %@\n request body: %@", [error description], requestContent.bodyDictionary);
             
             self.httpConnection = nil;
         }
@@ -341,9 +341,12 @@
             //TO-DO:
             NSString *tmpString = [[NSString alloc] initWithData: self.receivedData encoding: NSUTF8StringEncoding];
             tmpString = [tmpString stringByReplacingOccurrencesOfString: @"\000" withString: @""];
-            
-            bodyDictionary = [NSJSONSerialization JSONObjectWithData: self.receivedData
-                                                                 options: 0
+            tmpString = [tmpString stringByReplacingOccurrencesOfString: @"\r\n" withString: @""];
+            tmpString = [tmpString stringByReplacingOccurrencesOfString: @"\n" withString: @""];
+            tmpString = [tmpString stringByReplacingOccurrencesOfString: @"\t" withString: @""];
+            NSData *updatedData = [tmpString dataUsingEncoding: NSUTF8StringEncoding];
+            bodyDictionary = [NSJSONSerialization JSONObjectWithData: updatedData
+                                                             options: NSJSONReadingMutableContainers
                                                                error: &error];
             
             if (bodyDictionary)
@@ -385,7 +388,7 @@
                                      (long)[tmpString length],
                                      [tmpString substringToIndex: MIN(30, [tmpString length])]];
                 
-                NSLog(@"Request fail during JSON parsing. error: %@\n respone body: %@", [error localizedDescription], tmpString);
+                NSLog(@"Request fail during JSON parsing. error: %@\n respone body: %@", [error description], tmpString);
             }
         }
         else if (requestResult == WOAHTTPRequestResult_ServerError)
@@ -460,7 +463,7 @@
         {
             if (self.finalResponseContent.actionType == WOAActionType_Login)
             {
-                NSLog(@"Request fail for invalid session (login). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
+                NSLog(@"Request fail for invalid session (login). error: %@\n respone body: %@", [error description], bodyDictionary);
                 
                 self.httpConnection = nil;
             }
@@ -469,7 +472,7 @@
                 if (self.hasRefreshSession)
                 {
                     //Auto relogined
-                    NSLog(@"Request fail for invalid session (request retried). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
+                    NSLog(@"Request fail for invalid session (request retried). error: %@\n respone body: %@", [error description], bodyDictionary);
                     
                     self.httpConnection = nil;
                 }
@@ -486,7 +489,7 @@
             NSLog(@"currentAction: %@, origin action: %@",
                   [WOAActionDefine actionTypeName: self.currentActionType],
                   [WOAActionDefine actionTypeName: self.finalResponseContent.actionType]);
-            NSLog(@"Request fail for invalid session (login when retrying). error: %@\n respone body: %@", [error localizedDescription], bodyDictionary);
+            NSLog(@"Request fail for invalid session (login when retrying). error: %@\n respone body: %@", [error description], bodyDictionary);
             
             self.httpConnection = nil;
         }

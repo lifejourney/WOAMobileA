@@ -377,7 +377,8 @@ static NSArray *__typeMapArray = nil;
                        @[@"seperator",      @(WOAPairDataType_Seperator),       @"-1"],
                        @[@"titlekey",       @(WOAPairDataType_TitleKey),        @"-2"],
                        @[@"dictionary",     @(WOAPairDataType_Dictionary),      @"-3"],
-                       @[@"contentModel",   @(WOAPairDataType_ContentModel),    @"-4"]];
+                       @[@"contentModel",   @(WOAPairDataType_ContentModel),    @"-4"],
+                       @[@"referenceObj",   @(WOAPairDataType_ReferenceObj),    @"-5"]];
 
 }
 

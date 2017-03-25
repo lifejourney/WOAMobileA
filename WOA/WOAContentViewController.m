@@ -417,10 +417,7 @@
     
     for (NSInteger groupIndex = 0; groupIndex < self.contentModel.contentArray.count; groupIndex++)
     {
-#ifdef WOAMobileTeacher
         NSMutableArray *itemArray = [NSMutableArray array];
-#else
-#endif
         WOAContentModel *groupContent = self.contentModel.contentArray[groupIndex];
         
         for (NSInteger rowIndex = 0; rowIndex < groupContent.pairArray.count; rowIndex++)
@@ -438,21 +435,14 @@
             if ([subView isKindOfClass: [WOAMultiStyleItemField class]])
             {
                 WOAMultiStyleItemField *contentField = (WOAMultiStyleItemField*)subView;
-#ifdef WOAMobileTeacher
                 [itemArray addObject: [contentField toTeacherDataModel]];
-#else
-                [itemArrArray addObject: [contentField toStudentDataModel]];
-#endif
             }
         }
       
-#ifdef WOAMobileTeacher
         if (itemArray.count > 0)
         {
             [itemArrArray addObject: itemArray];
         }
-#else
-#endif
     }
     
     return itemArrArray;
@@ -485,14 +475,58 @@
 
 - (NSDictionary*) toStudentDataModel;
 {
-    NSArray *itemArrArray = [self toItemValueArray];
+    NSMutableDictionary *contentDict = [NSMutableDictionary dictionary];
     
-    NSString *contentString = [itemArrArray componentsJoinedByString: kWOA_Level_1_Seperator];
+    for (NSInteger groupIndex = 0; groupIndex < self.contentModel.contentArray.count; groupIndex++)
+    {
+        WOAContentModel *groupContent = self.contentModel.contentArray[groupIndex];
+        NSString *groupSrvKeyName = groupContent.srvKeyName;
+        
+        NSMutableDictionary *destDict;
+        if ([NSString isEmptyString: groupSrvKeyName])
+        {
+            destDict = contentDict;
+        }
+        else
+        {
+            NSMutableDictionary *subGroupDict = [NSMutableDictionary dictionary];
+            [contentDict setValue: subGroupDict forKey: groupSrvKeyName];
+            
+            destDict = subGroupDict;
+        }
+        
+        for (NSInteger rowIndex = 0; rowIndex < groupContent.pairArray.count; rowIndex++)
+        {
+            WOANameValuePair *itemPair = groupContent.pairArray[rowIndex];
+            if (itemPair.dataType == WOAPairDataType_Seperator)
+            {
+                continue;
+            }
+            
+            NSString *itemSrvKeyName = itemPair.srvKeyName;
+            if ([NSString isEmptyString: itemSrvKeyName])
+            {
+                continue;
+            }
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow: rowIndex inSection: groupIndex];
+            NSInteger subViewTag = [UIView tagByIndexPathE: indexPath];
+            UIView *subView = [self.view viewWithTag: subViewTag];
+            
+            if ([subView isKindOfClass: [WOAMultiStyleItemField class]])
+            {
+                WOAMultiStyleItemField *contentField = (WOAMultiStyleItemField*)subView;
+                NSString *itemValue = [contentField toStudentDataValue];
+                
+                if (itemValue)
+                {
+                    [destDict setValue: itemValue forKey: itemSrvKeyName];
+                }
+            }
+        }
+    }
     
-    NSDictionary *paraDict = [NSMutableDictionary dictionary];
-    [paraDict setValue: contentString forKey: kWOAStudContentParaValue];
-    
-    return paraDict;
+    return contentDict;
 }
 
 @end

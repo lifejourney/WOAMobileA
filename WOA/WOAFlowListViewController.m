@@ -264,7 +264,7 @@
     cell.textLabel.text = titleForRow;
     cell.detailTextLabel.text = subTitle;
     
-    if (cellStyle == UITableViewCellStyleSubtitle)
+//    if (cellStyle == UITableViewCellStyleSubtitle)
     {
         cell.textLabel.textColor = [UIColor textNormalColor];
         cell.textLabel.highlightedTextColor = [UIColor textHighlightedColor];
@@ -272,10 +272,10 @@
         //TO-DO, detailTextLabel
         cell.backgroundColor = ((indexPath.row % 2) == 0) ? [UIColor listDarkBgColor] : [UIColor listLightBgColor];
     }
-    else
-    {
-        cell.textLabel.highlightedTextColor = [UIColor mainItemColor];
-    }
+//    else
+//    {
+//        cell.textLabel.highlightedTextColor = [UIColor mainItemColor];
+//    }
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame: cell.frame];
     cell.selectedBackgroundView.backgroundColor = [UIColor mainItemBgColor];
     

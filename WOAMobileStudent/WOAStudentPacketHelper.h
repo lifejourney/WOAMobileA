@@ -39,9 +39,17 @@
 + (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)respDict;
 + (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)respDict;
 + (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict;
++ (NSArray*) pairArrayForSelfEvaluationInfo: (NSDictionary*)respDict;
++ (WOAContentModel*) contentModelForCreateSelfEval: (NSString*)title;
+
+#pragma mark -
+
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict;
 + (NSArray*) modelForMySyllabus: (NSDictionary*)retDict;
 + (NSArray*) modelForMySelectiveCourses: (NSDictionary*)retDict;
+
+#pragma mark -
+
 + (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict
                                    actionType: (WOAActionType)actionType;
 + (NSArray*) modelForTodoTransaction: (NSDictionary*)retDict;

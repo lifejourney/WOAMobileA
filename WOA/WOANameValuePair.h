@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
     
     WOAPairDataType_Dictionary,
     WOAPairDataType_ContentModel, //Recursion
+    WOAPairDataType_ReferenceObj,
     
     //WOA business type
     WOAPairDataType_IntString,
@@ -52,6 +53,7 @@ typedef NS_ENUM(NSUInteger, WOAPairDataType)
 
 //Generally take it as title.
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *srvKeyName;
 
 @property (nonatomic, strong) NSObject *value;
 @property (nonatomic, copy) NSString *tableAcountID;

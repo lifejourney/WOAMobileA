@@ -45,6 +45,6 @@
 
 
 - (NSDictionary*) toTeacherDataModel;
-- (NSString*) toStudentDataModel;
+- (NSString*) toStudentDataValue;
 
 @end

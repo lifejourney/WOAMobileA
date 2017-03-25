@@ -760,7 +760,7 @@
 }
 
 - (void) fileSelectorView: (WOAFileSelectorView *)fileSelectorView
-              deleteAtRow:(NSInteger)row
+              deleteAtRow: (NSInteger)row
 {
     fileSelectorView.delegate = nil;
     

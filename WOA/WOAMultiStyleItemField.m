@@ -671,7 +671,7 @@
 }
 
 - (void) fileSelectorView: (WOAFileSelectorView *)fileSelectorView
-              deleteAtRow:(NSInteger)row
+              deleteAtRow: (NSInteger)row
 {
     fileSelectorView.delegate = nil;
     
@@ -820,7 +820,7 @@
     return itemDict;
 }
 
-- (NSString*) toStudentDataModel
+- (NSString*) toStudentDataValue
 {
     NSString *stringValue;
     
@@ -830,7 +830,7 @@
     {
         stringValue = [(NSArray*)itemValue componentsJoinedByString: kWOA_Level_2_Seperator];
     }
-    else if ([itemValue isKindOfClass: [NSString class ]])
+    else if ([itemValue isKindOfClass: [NSString class]])
     {
         stringValue = (NSString*)itemValue;
     }

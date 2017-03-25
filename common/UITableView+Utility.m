@@ -30,7 +30,7 @@
             if (subview)
                 [subview removeFromSuperview];
         }
-        while (!subview);
+        while (subview != nil);
     }
     
     return cell;

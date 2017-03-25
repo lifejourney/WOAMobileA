@@ -20,6 +20,7 @@
                                     WOAInputTitleViewControllerDelegate,
                                     WOALabelButtonTableViewCellDelegate>
 
+@property (nonatomic, copy) WOASelectFileCompletion completionBlock;
 
 @property (nonatomic, assign) NSUInteger displayLineCount;
 @property (nonatomic, assign) NSUInteger limitMaxCount;
@@ -37,6 +38,7 @@
 {
     if (self = [super initWithFrame:frame])
     {
+        self.ignoreTitle = NO;
     }
     return self;
 }
@@ -107,6 +109,13 @@
     [_fileList flashScrollIndicators];
 }
 
+- (void) selectFileWithCompletion: (void(^)(NSString *filePath, NSString* title))completionBlock
+{
+    self.completionBlock = completionBlock;
+    
+    [self presentImagePickVC];
+}
+
 #pragma mark -
 - (NSInteger) numberOfSectionsInTableView: (UITableView *)tableView
 {
@@ -169,7 +178,8 @@
     NSInteger existItemCount = [[self.delegate fileInfoArray] count];
     if (self.limitMaxCount > 0 && existItemCount >= self.limitMaxCount)
     {
-        UIViewController *rootVC = [[self.delegate hostNavigation] parentViewController];
+        UINavigationController *hostNavC = self.navC ? self.navC : [self.delegate hostNavigation];
+        UIViewController *rootVC = [hostNavC parentViewController];
         NSString *alertMessage = [NSString stringWithFormat: @"最多只能 %ld 个附件.", (unsigned long)self.limitMaxCount];
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
@@ -185,6 +195,11 @@
         return;
     }
     
+    [self presentImagePickVC];
+}
+
+- (void) presentImagePickVC
+{
     UIImagePickerControllerSourceType sourceType;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeSavedPhotosAlbum])
         sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
@@ -198,7 +213,28 @@
     imagePickerVC.mediaTypes = @[@"public.image"];
     imagePickerVC.delegate = self;
     
-    [[self.delegate hostNavigation] presentViewController: imagePickerVC animated: YES completion: nil];
+    UINavigationController *hostNavC = self.navC ? self.navC : [self.delegate hostNavigation];
+    [hostNavC presentViewController: imagePickerVC animated: YES completion: nil];
+}
+
+- (void) onSelectFinish: (NSString*)filePath title: (NSString*)title
+{
+    UINavigationController *hostNavC = self.navC ? self.navC : [self.delegate hostNavigation];
+    [hostNavC popViewControllerAnimated: YES];
+    
+    if (self.completionBlock)
+    {
+        self.completionBlock(filePath, title);
+        
+        self.completionBlock = nil;
+    }
+    
+    if (self.delegate && [self.delegate respondsToSelector: @selector(fileSelectorView:addFilePath:withTitle:)])
+    {
+        [self.delegate fileSelectorView: self
+                            addFilePath: filePath
+                              withTitle: title];
+    }
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -228,15 +264,24 @@
         
         [picker dismissViewControllerAnimated: YES completion: ^()
         {
-            WOAInputTitleViewController *attachmentTitleVC = [[WOAInputTitleViewController alloc] initWithFilePath: imageFullFileName delegate: self];
-            [[self.delegate hostNavigation] pushViewController: attachmentTitleVC animated: NO];
+            if (self.ignoreTitle)
+            {
+                [self onSelectFinish: imageFullFileName title: nil];
+            }
+            else
+            {
+                WOAInputTitleViewController *attachmentTitleVC = [[WOAInputTitleViewController alloc] initWithFilePath: imageFullFileName delegate: self];
+                UINavigationController *hostNavC = self.navC ? self.navC : [self.delegate hostNavigation];
+                [hostNavC pushViewController: attachmentTitleVC animated: NO];
+            }
         }];
-        
     };
     
     ALAssetsLibraryAccessFailureBlock failureBlock = ^(NSError *error)
     {
         NSLog(@"image picker error: %@", error);
+        
+        self.completionBlock = nil;
         
         [picker dismissViewControllerAnimated: YES completion: nil];
     };
@@ -250,23 +295,20 @@
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated: YES completion: nil];
+    
+    self.completionBlock = nil;
 }
 
 - (void) inputTitleViewController: (WOAInputTitleViewController*)inputTitleViewController commitedWithTitle: (NSString*)title filePath: (NSString*)filePath
 {
-    [[self.delegate hostNavigation] popViewControllerAnimated: YES];
-    
-    if (self.delegate && [self.delegate respondsToSelector: @selector(fileSelectorView:addFilePath:withTitle:)])
-    {
-        [self.delegate fileSelectorView: self
-                            addFilePath: filePath
-                              withTitle: title];
-    }
+    [self onSelectFinish: filePath
+                   title: title];
 }
 
 - (void) inputTitleViewControllerCancelled: (WOAInputTitleViewController*)inputTitleViewController
 {
-    [[self.delegate hostNavigation] popViewControllerAnimated: YES];
+    UINavigationController *hostNavC = self.navC ? self.navC : [self.delegate hostNavigation];
+    [hostNavC popViewControllerAnimated: YES];
 }
 
 - (void) labelButtuonTableViewCell: (WOALabelButtonTableViewCell *)cell buttonClick:(NSInteger)tag

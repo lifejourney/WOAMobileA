@@ -143,6 +143,8 @@
     return dict;
 }
 
+#pragma mark -
+
 + (WOAContentModel*) modelForSchoolInfo: (NSDictionary*)respDict
 {
     NSMutableArray *pairArray = [NSMutableArray array];
@@ -245,6 +247,97 @@
     
     return modelArray;
 }
+
++ (NSArray*) pairArrayForSelfEvaluationInfo: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[@"evalItems"];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *isHtml = itemDict[@"isHtml"];
+        BOOL isAttachment = isHtml && ![isHtml boolValue];
+        NSString *infoContent = itemDict[@"Content"];
+        
+        NSString *nameInfo = [NSString stringWithFormat: @"阶段:\t\t%@\r\n评价人:\t%@\r\n评价日期:\t%@",
+                              itemDict[@"term"],itemDict[@"writer"],itemDict[@"createDate"]];
+        
+        NSMutableDictionary *detailSubDict = [NSMutableDictionary dictionary];
+        [detailSubDict setValue: itemDict[@"evalID"] forKey: @"evalID"];
+        
+        WOANameValuePair *infoPair;
+        WOAActionType infoActionType;
+        WOAContentModel *detailContent;
+        if (isAttachment)
+        {
+            NSString *attchmentURL = [NSString stringWithFormat: @"%@%@", [WOAPropertyInfo serverAddress], infoContent];
+            
+            detailContent = [WOAContentModel contentModel: nil
+                                             contentArray: nil
+                                               actionType: WOAActionType_StudentDeleteSelfEvalInfo
+                                               actionName: @"删除"
+                                               isReadonly: YES
+                                                  subDict: detailSubDict];
+            detailContent.subArray = @[attchmentURL];
+            
+            infoActionType = WOAActionType_StudentViewSelfEvalAttachment;
+        }
+        else
+        {
+            WOANameValuePair *commentPair = [WOANameValuePair pairWithName: @"评语:"
+                                                                     value: infoContent
+                                                                  dataType: WOAPairDataType_TextArea];
+            commentPair.srvKeyName = @"pjContent";
+            commentPair.isWritable = YES;
+            WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                                    pairArray: @[commentPair]
+                                                                   actionType: WOAActionType_StudentDeleteSelfEvalInfo
+                                                                   actionName: @"删除"
+                                                                   isReadonly: NO
+                                                                      subDict: detailSubDict];
+            
+            detailContent = [WOAContentModel contentModel: @""
+                                             contentArray: @[detailSubContent]
+                                               actionType: WOAActionType_StudentSubmitSelfEvalDetail
+                                               actionName: @"提交"
+                                               isReadonly: NO
+                                                  subDict: detailSubDict];
+            
+            infoActionType = WOAActionType_StudentViewSelfEvalDetail;
+        }
+        
+        infoPair = [WOANameValuePair pairWithName: nameInfo
+                                            value: detailContent
+                                         dataType: WOAPairDataType_ReferenceObj
+                                       actionType: infoActionType];
+        
+        [pairArray addObject: infoPair];
+    }
+    
+    return pairArray;
+}
+
++ (WOAContentModel*) contentModelForCreateSelfEval: (NSString*)title
+{
+    WOANameValuePair *commentPair = [WOANameValuePair pairWithName: @"评语:"
+                                                             value: @""
+                                                          dataType: WOAPairDataType_TextArea];
+    commentPair.srvKeyName = @"pjContent";
+    commentPair.isWritable = YES;
+    WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                            pairArray: @[commentPair]];
+    detailSubContent.isReadonly = NO;
+    
+    return [WOAContentModel contentModel: @""
+                            contentArray: @[detailSubContent]
+                              actionType: WOAActionType_StudentSubmitSelfEvalDetail
+                              actionName: @"提交"
+                              isReadonly: NO
+                                 subDict: nil];
+}
+
+#pragma mark -
 
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict
 {
@@ -406,6 +499,8 @@
     
     return modelArray;
 }
+
+#pragma mark -
 
 + (NSArray*) pairArrayForStudQueryOATableList: (NSDictionary*)retDict
                                    actionType: (WOAActionType)actionType

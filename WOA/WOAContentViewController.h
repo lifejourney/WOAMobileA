@@ -15,6 +15,8 @@
 
 @protocol WOAUploadAttachmentRequestDelegate <NSObject>
 
+@optional
+
 - (void) requestUploadAttachment: (WOAActionType)contentActionType
                    filePathArray: (NSArray*)filePathArray
                       titleArray: (NSArray*)titleArray
