@@ -108,6 +108,7 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentQueryConsumeInfo,
     WOAActionType_StudentQueryAttendInfo,
     WOAActionType_StudentQueryBorrowBook,
+    
     WOAActionType_StudentQuerySelfEvalInfo,
     WOAActionType_StudentCreateSelfEval,
     WOAActionType_StudentCreateSelfEvalText,
@@ -116,14 +117,21 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentViewSelfEvalAttachment,
     WOAActionType_StudentSubmitSelfEvalDetail,
     WOAActionType_StudentDeleteSelfEvalInfo,
+    
+    WOAActionType_StudentQueryTechEvalInfo,
+    WOAActionType_StudentViewTechEvalDetail,
+    WOAActionType_StudentViewTechEvalAttachment,
+    
     WOAActionType_StudentQuantitativeEval,
     WOAActionType_StudentQuerySummativeEvaluation,
     WOAActionType_StudentQueryParentWishes,
+    
     
     WOAActionType_StudentQueryMySyllabus,
     WOAActionType_StudentSiginSelectiveCourse,
     WOAActionType_StudentQueryMySelectiveCourses,
     WOAActionType_StudentQueryAchievement,
+    
     
     WOAActionType_StudentQueryOATableList,
     WOAActionType_StudentCreateOATable,

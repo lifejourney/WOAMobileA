@@ -41,6 +41,7 @@
 + (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict;
 + (NSArray*) pairArrayForSelfEvaluationInfo: (NSDictionary*)respDict;
 + (WOAContentModel*) contentModelForCreateSelfEval: (NSString*)title;
++ (NSArray*) pairArrayForTechEvaluationInfo: (NSDictionary*)respDict;
 
 #pragma mark -
 

@@ -438,15 +438,15 @@
                 _lineTextView.text = defaultValue;
                 _lineTextView.textAlignment = NSTextAlignmentLeft;
                 _lineTextView.layer.cornerRadius = 6.0f;
-                if (!_isHostReadonly && isWritable)
+//                if (!_isHostReadonly && isWritable)
                 {
                     _lineTextView.layer.borderColor = [[UIColor colorWithRed:215.0 / 255.0 green:215.0 / 255.0 blue:215.0 / 255.0 alpha:1] CGColor];
                     _lineTextView.layer.borderWidth = 0.6f;
                 }
-                else
-                {
-                    _lineTextView.layer.borderWidth = 0.0f;
-                }
+//                else
+//                {
+//                    _lineTextView.layer.borderWidth = 0.0f;
+//                }
                 _lineTextView.userInteractionEnabled = isWritable || [self couldUserInteractEvenUnWritable: pairDataType];
                 _lineTextView.keyboardType = (pairDataType == WOAPairDataType_IntString) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
                 

@@ -385,9 +385,9 @@
      }];
 }
 
-- (void) onStudViewSelfEvalAttachment: (WOANameValuePair*)selectedPair
-                          relatedDict: (NSDictionary*)relatedDict
-                                navVC: (UINavigationController*)navVC
+- (void) onStudViewEvalAttachment: (WOANameValuePair*)selectedPair
+                      relatedDict: (NSDictionary*)relatedDict
+                            navVC: (UINavigationController*)navVC
 {
     WOAContentModel *contentModel = (WOAContentModel*)selectedPair.value;
     NSString *attachmentURL = [contentModel.subArray firstObject];
@@ -404,9 +404,9 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onStudViewSelfEvalDetail: (WOANameValuePair*)selectedPair
-                      relatedDict: (NSDictionary*)relatedDict
-                            navVC: (UINavigationController*)navVC
+- (void) onStudViewEvalDetail: (WOANameValuePair*)selectedPair
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
 {
     WOAContentModel *contentModel = (WOAContentModel*)selectedPair.value;
     
@@ -456,7 +456,28 @@
 
 - (void) studTeacherEvaluation
 {
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryTechEvalInfo
+                                           paraDict: nil
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         
+         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForTechEvaluationInfo: responseContent.bodyDictionary];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
+         subVC.textLabelFont = [WOALayout flowCellTextFont];
+         subVC.rowHeight = 60;
+         
+         [ownerNav pushViewController: subVC animated: YES];
+     }];
 }
 
 - (void) studQuantitativeEval
@@ -801,18 +822,20 @@
     switch (selectedPair.actionType)
     {
         case WOAActionType_StudentViewSelfEvalAttachment:
+        case WOAActionType_StudentViewTechEvalAttachment:
         {
-            [self onStudViewSelfEvalAttachment: selectedPair
-                                   relatedDict: relatedDict
+            [self onStudViewEvalAttachment: selectedPair
+                               relatedDict: relatedDict
                                          navVC: navVC];
         }
             break;
             
         case WOAActionType_StudentViewSelfEvalDetail:
+        case WOAActionType_StudentViewTechEvalDetail:
         {
-            [self onStudViewSelfEvalDetail: selectedPair
-                               relatedDict: relatedDict
-                                     navVC: navVC];
+            [self onStudViewEvalDetail: selectedPair
+                           relatedDict: relatedDict
+                                 navVC: navVC];
         }
             break;
             

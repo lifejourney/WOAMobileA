@@ -293,7 +293,7 @@
             WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
                                                                     pairArray: @[commentPair]
                                                                    actionType: WOAActionType_StudentDeleteSelfEvalInfo
-                                                                   actionName: @"删除"
+                                                                   actionName: @"删除本条评价"
                                                                    isReadonly: NO
                                                                       subDict: detailSubDict];
             
@@ -335,6 +335,78 @@
                               actionName: @"提交"
                               isReadonly: NO
                                  subDict: nil];
+}
+
++ (NSArray*) pairArrayForTechEvaluationInfo: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[@"evalItems"];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *isHtml = itemDict[@"isHtml"];
+        BOOL isAttachment = isHtml && ![isHtml boolValue];
+        NSString *infoContent = itemDict[@"Content"];
+        
+        NSString *nameInfo = [NSString stringWithFormat: @"阶段:\t\t%@\r\n评价人:\t%@\r\n评价日期:\t%@",
+                              itemDict[@"term"],itemDict[@"writer"],itemDict[@"createDate"]];
+        
+        NSMutableDictionary *detailSubDict = [NSMutableDictionary dictionary];
+        [detailSubDict setValue: itemDict[@"evalID"] forKey: @"evalID"];
+        
+        WOANameValuePair *infoPair;
+        WOAActionType infoActionType;
+        WOAContentModel *detailContent;
+        if (isAttachment)
+        {
+            NSString *attchmentURL = [NSString stringWithFormat: @"%@%@", [WOAPropertyInfo serverAddress], infoContent];
+            
+            detailContent = [WOAContentModel contentModel: nil
+                                             contentArray: nil
+                                               actionType: WOAActionType_None
+                                               actionName: nil
+                                               isReadonly: YES
+                                                  subDict: detailSubDict];
+            detailContent.subArray = @[attchmentURL];
+            
+            infoActionType = WOAActionType_StudentViewSelfEvalAttachment;
+        }
+        else
+        {
+            WOANameValuePair *commentPair = [WOANameValuePair pairWithName: @"评语:"
+                                                                     value: infoContent
+                                                                  dataType: WOAPairDataType_TextArea];
+            commentPair.srvKeyName = @"pjContent";
+            commentPair.isWritable = NO;
+            WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                                    pairArray: @[commentPair, seperatorPair]
+                                                                   actionType: WOAActionType_None
+                                                                   actionName: nil
+                                                                   isReadonly: YES
+                                                                      subDict: detailSubDict];
+            
+            detailContent = [WOAContentModel contentModel: @""
+                                             contentArray: @[detailSubContent]
+                                               actionType: WOAActionType_None
+                                               actionName: nil
+                                               isReadonly: YES
+                                                  subDict: detailSubDict];
+            
+            infoActionType = WOAActionType_StudentViewSelfEvalDetail;
+        }
+        
+        infoPair = [WOANameValuePair pairWithName: nameInfo
+                                            value: detailContent
+                                         dataType: WOAPairDataType_ReferenceObj
+                                       actionType: infoActionType];
+        
+        [pairArray addObject: infoPair];
+    }
+    
+    return pairArray;
 }
 
 #pragma mark -
