@@ -39,9 +39,11 @@
 + (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)respDict;
 + (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)respDict;
 + (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict;
-+ (NSArray*) pairArrayForSelfEvaluationInfo: (NSDictionary*)respDict;
-+ (WOAContentModel*) contentModelForCreateSelfEval: (NSString*)title;
-+ (NSArray*) pairArrayForTechEvaluationInfo: (NSDictionary*)respDict;
+
++ (WOAContentModel*) contentModelForCreateTextEval: (WOAActionType)actionType;
++ (NSArray*) pairArrayForEvaluationInfo: (NSDictionary*)respDict
+                        queryActionType: (WOAActionType)queryActionType
+                      isEditableFeature: (BOOL)isEditableFeature;
 
 #pragma mark -
 

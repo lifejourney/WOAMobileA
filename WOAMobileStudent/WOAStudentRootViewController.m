@@ -254,23 +254,26 @@
      }];
 }
 
-- (void) studSelfEvaluation
+- (void) studQueryEvaluation: (WOAActionType)queryActionType
+            createActionType: (WOAActionType)createActionType
+           isEditableFeature: (BOOL)isEditableFeature
+                    funcName: (NSString*)funcName
+                     vcTitle: (NSString*)vcTitle
+                    ownerNav: (UINavigationController*)ownerNav
 {
-    NSString *funcName = [self simpleFuncName: __func__];
-    NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
-    
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQuerySelfEvalInfo
+    [[WOARequestManager sharedInstance] simpleQuery: queryActionType
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
          
-         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForSelfEvaluationInfo: responseContent.bodyDictionary];
-         
+         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForEvaluationInfo: responseContent.bodyDictionary
+                                                                 queryActionType: queryActionType
+                                                               isEditableFeature: isEditableFeature];
+         NSString *actionName = (createActionType != WOAActionType_None) ? @"添加" : nil;
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
                                                              pairArray: pairArray
-                                                            actionType: WOAActionType_StudentCreateSelfEval
-                                                            actionName: @"添加"
+                                                            actionType: createActionType
+                                                            actionName: actionName
                                                             isReadonly: YES
                                                                subDict: nil];
          
@@ -284,7 +287,21 @@
      }];
 }
 
-- (void) onStudCreateSelfEval: (WOAActionType)actionType
+- (void) studSelfEvaluation
+{
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    
+    [self studQueryEvaluation: WOAActionType_StudentQuerySelfEvalInfo
+             createActionType: WOAActionType_StudentCreateSelfEval
+            isEditableFeature: YES
+                     funcName: funcName
+                      vcTitle: vcTitle
+                     ownerNav: ownerNav];
+}
+
+- (void) onStudCreateEvalInfo: (WOAActionType)actionType
                   relatedDict: (NSDictionary*)relatedDict
                         navVC: (UINavigationController*)navVC
 {
@@ -296,17 +313,17 @@
                                                          style: UIAlertActionStyleDefault
                                                        handler: ^(UIAlertAction * _Nonnull action)
                                  {
-                                     [self onStudCreateSelfEvalText: WOAActionType_StudentCreateSelfEvalText
-                                                        relatedDict: relatedDict
-                                                              navVC: navVC];
+                                     [self onStudCreateEvalText: actionType
+                                                    relatedDict: relatedDict
+                                                          navVC: navVC];
                                  }];
     UIAlertAction *fileAction = [UIAlertAction actionWithTitle: @"上传文件"
                                                          style: UIAlertActionStyleDefault
                                                        handler: ^(UIAlertAction * _Nonnull action)
                                    {
-                                       [self onStudCreateSelfEvalFile: WOAActionType_StudentCreateSelfEvalFile
-                                                          relatedDict: relatedDict
-                                                                navVC: navVC];
+                                       [self onStudCreateEvalFile: actionType
+                                                      relatedDict: relatedDict
+                                                            navVC: navVC];
                                    }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
                                                            style: UIAlertActionStyleCancel
@@ -323,11 +340,25 @@
                      completion: nil];
 }
 
-- (void) onStudCreateSelfEvalText: (WOAActionType)actionType
-                      relatedDict: (NSDictionary*)relatedDict
-                            navVC: (UINavigationController*)navVC
+- (void) onStudCreateEvalText: (WOAActionType)actionType
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
 {
-    WOAContentModel *contentModel = [WOAStudentPacketHelper contentModelForCreateSelfEval: @""];
+    WOAActionType submitActionType;
+    if (actionType == WOAActionType_StudentCreateSelfEval)
+    {
+        submitActionType = WOAActionType_StudentSubmitSelfEvalDetail;
+    }
+    else if (actionType == WOAActionType_StudentCreateParentEval)
+    {
+        submitActionType = WOAActionType_StudentSubmitParentEvalDetail;
+    }
+    else
+    {
+        return;
+    }
+    
+    WOAContentModel *contentModel = [WOAStudentPacketHelper contentModelForCreateTextEval: submitActionType];
     
     WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                              delegate: self];
@@ -335,10 +366,24 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onStudCreateSelfEvalFile: (WOAActionType)actionType
-                      relatedDict: (NSDictionary*)relatedDict
-                            navVC: (UINavigationController*)navVC
+- (void) onStudCreateEvalFile: (WOAActionType)actionType
+                  relatedDict: (NSDictionary*)relatedDict
+                        navVC: (UINavigationController*)navVC
 {
+    WOAActionType submitActionType;
+    if (actionType == WOAActionType_StudentCreateSelfEval)
+    {
+        submitActionType = WOAActionType_StudentSubmitSelfEvalDetail;
+    }
+    else if (actionType == WOAActionType_StudentCreateParentEval)
+    {
+        submitActionType = WOAActionType_StudentSubmitParentEvalDetail;
+    }
+    else
+    {
+        return;
+    }
+    
     self.fileSelectorView.ignoreTitle = YES;
     self.fileSelectorView.navC = navVC;
     
@@ -353,7 +398,7 @@
          
          NSArray *filePathArray = @[filePath];
          NSArray *titleArray = title ? @[title] : @[@""];
-         [self requestUploadAttachment: actionType
+         [self requestUploadAttachment: submitActionType
                          filePathArray: filePathArray
                             titleArray: titleArray
                         additionalDict: relatedDict
@@ -366,7 +411,7 @@
                   NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
                   [addtDict setValue: infoContent forKey: @"pjContent"];
                   
-                  [[WOARequestManager sharedInstance] simpleQueryActionType: WOAActionType_StudentSubmitSelfEvalDetail
+                  [[WOARequestManager sharedInstance] simpleQueryActionType: submitActionType
                                                           additionalHeaders: nil
                                                              additionalDict: addtDict
                                                                  onSuccuess: ^(WOAResponeContent *responseContent)
@@ -416,7 +461,7 @@
     [navVC pushViewController: subVC animated: YES];
 }
 
-- (void) onStudDeleteSelfEval: (WOAActionType)actionType
+- (void) onStudDeleteEvalInfo: (WOAActionType)actionType
                   relatedDict: (NSDictionary*)relatedDict
                         navVC: (UINavigationController*)navVC
 {
@@ -460,24 +505,12 @@
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryTechEvalInfo
-                                           paraDict: nil
-                                         onSuccuess: ^(WOAResponeContent *responseContent)
-     {
-         
-         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForTechEvaluationInfo: responseContent.bodyDictionary];
-         
-         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                             pairArray: pairArray];
-         
-         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
-                                                                                     delegate: self
-                                                                                  relatedDict: nil];
-         subVC.textLabelFont = [WOALayout flowCellTextFont];
-         subVC.rowHeight = 60;
-         
-         [ownerNav pushViewController: subVC animated: YES];
-     }];
+    [self studQueryEvaluation: WOAActionType_StudentQueryTechEvalInfo
+             createActionType: WOAActionType_None
+            isEditableFeature: NO
+                     funcName: funcName
+                      vcTitle: vcTitle
+                     ownerNav: ownerNav];
 }
 
 - (void) studQuantitativeEval
@@ -486,6 +519,16 @@
 
 - (void) studQueryParentWishes
 {
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    
+    [self studQueryEvaluation: WOAActionType_StudentQueryParentEvalInfo
+             createActionType: WOAActionType_StudentCreateParentEval
+            isEditableFeature: YES
+                     funcName: funcName
+                      vcTitle: vcTitle
+                     ownerNav: ownerNav];
 }
 
 - (void) studQueryLifeTrace
@@ -863,8 +906,9 @@
     switch (actionType)
     {
         case WOAActionType_StudentCreateSelfEval:
+        case WOAActionType_StudentCreateParentEval:
         {
-            [self onStudCreateSelfEval: actionType
+            [self onStudCreateEvalInfo: actionType
                            relatedDict: relatedDict
                                  navVC: vc.navigationController];
         }
@@ -891,14 +935,16 @@
     switch (actionType)
     {
         case WOAActionType_StudentDeleteSelfEvalInfo:
+        case WOAActionType_StudentDeleteParentEvalInfo:
         {
-            [self onStudDeleteSelfEval: actionType
+            [self onStudDeleteEvalInfo: actionType
                            relatedDict: relatedDict
                                  navVC: vc.navigationController];
         }
             break;
             
         case WOAActionType_StudentSubmitSelfEvalDetail:
+        case WOAActionType_StudentSubmitParentEvalDetail:
         {
             [self onStudSubmitSelfEval: actionType
                            contentDict: contentDict
@@ -982,8 +1028,9 @@
     switch (actionType)
     {
         case WOAActionType_StudentDeleteSelfEvalInfo:
+        case WOAActionType_StudentDeleteParentEvalInfo:
         {
-            [self onStudDeleteSelfEval: actionType
+            [self onStudDeleteEvalInfo: actionType
                            relatedDict: relatedDict
                                  navVC: vc.navigationController];
         }
