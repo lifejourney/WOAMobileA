@@ -14,6 +14,8 @@
 
 @protocol WOAMultiPickerViewControllerDelegate <NSObject>
 
+@optional
+
 - (void) multiPickerViewController: (WOAMultiPickerViewController*)pickerViewController
                         actionType: (WOAActionType)actionType
                  selectedPairArray: (NSArray*)selectedPairArray

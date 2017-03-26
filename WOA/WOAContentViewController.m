@@ -11,6 +11,7 @@
 #import "WOARequestManager.h"
 #import "WOAContentModel.h"
 #import "WOANameValuePair.h"
+#import "WOAActionDefine.h"
 #import "WOAMultiStyleItemField.h"
 #import "WOAButton.h"
 #import "WOALayout.h"
@@ -121,10 +122,18 @@
     if (self.delegate
         && [self.delegate respondsToSelector: @selector(contentViewController:actionType:submitContent:relatedDict:)])
     {
+        NSDictionary *contentDict;
 #ifdef WOAMobileTeacher
-        NSDictionary *contentDict = [self toTeacherDataModel];
+        contentDict = [self toTeacherDataModel];
 #else
-        NSDictionary *contentDict = [self toStudentDataModel];
+        if ([WOAActionDefine isForceTechFormatAction: self.contentModel.actionType])
+        {
+            contentDict = [self toTeacherDataModel];
+        }
+        else
+        {
+            contentDict = [self toStudentDataModel];
+        }
 #endif
         
         [self.delegate contentViewController: self
@@ -185,10 +194,18 @@
         NSUInteger groupIndex = actionButton.groupIndex;
         WOAContentModel *groupContentModel = self.contentModel.contentArray[groupIndex];
         
+        NSDictionary *contentDict;
 #ifdef WOAMobileTeacher
-        NSDictionary *contentDict = nil;//[self toTeacherDataModel];
+        contentDict = nil;//[self toTeacherDataModel];
 #else
-        NSDictionary *contentDict = nil;//[self toStudentDataModel];
+        if ([WOAActionDefine isForceTechFormatAction: self.contentModel.actionType])
+        {
+            contentDict = nil;//[self toTeacherDataModel];
+        }
+        else
+        {
+            contentDict = nil;//[self toStudentDataModel];
+        }
 #endif
         
         [self.delegate contentViewController: self

@@ -127,9 +127,6 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentSubmitParentEvalDetail,
     WOAActionType_StudentDeleteParentEvalInfo,
     
-    WOAActionType_StudentQuantitativeEval,
-    WOAActionType_StudentQuerySummativeEvaluation,
-    
     
     WOAActionType_StudentQueryMySyllabus,
     WOAActionType_StudentSiginSelectiveCourse,
@@ -158,4 +155,12 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
 + (NSString*) actionTypeName: (WOAActionType)actionType;
 + (NSString*) msgTypeByActionType: (WOAActionType)actionType;
 
++ (BOOL) isForceTechFormatAction: (WOAActionType)actionType;
+
 @end
+
+
+
+
+
+

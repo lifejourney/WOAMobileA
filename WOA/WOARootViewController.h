@@ -7,6 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WOAMenuListViewController.h"
+#import "WOAFlowListViewController.h"
+#import "WOAFilterListViewController.h"
+#import "WOAMultiPickerViewController.h"
+#import "WOALevel3TreeViewController.h"
+#import "WOAContentViewController.h"
+#import "WOASimpleListViewController.h"
+#import "WOAListDetailViewController.h"
+#import "WOADateFromToPickerViewController.h"
 #import "WOAMenuItemModel.h"
 #import "WOAActionDefine.h"
 
@@ -63,6 +72,14 @@
 
 - (void) switchToDefaultTab: (BOOL)popToRootVC;
 
+#pragma mark - same features
+
+- (void) thcrQuantativeEval;
+
+- (void) tchrQueryTodoOA;
+- (void) tchrNewOATask;
+- (void) tchrQueryHistoryOA;
+
 #pragma mark - WOAUploadAttachmentRequestDelegate
 
 - (void) requestUploadAttachment: (WOAActionType)contentActionType
@@ -71,4 +88,44 @@
                   additionalDict: (NSDictionary*)additionalDict
                     onCompletion: (void (^)(BOOL isSuccess, NSArray *urlArray))completionHandler;
 
+#pragma mark - delegate for WOASinglePickViewControllerDelegate
+
+- (void) singlePickViewControllerSelected: (WOASinglePickViewController*)vc
+                                indexPath: (NSIndexPath*)indexPath
+                             selectedPair: (WOANameValuePair*)selectedPair
+                              relatedDict: (NSDictionary*)relatedDict
+                                    navVC: (UINavigationController*)navVC;
+- (void) singlePickViewControllerSubmit: (WOASinglePickViewController*)vc
+                           contentModel: (WOAContentModel*)contentModel
+                            relatedDict: (NSDictionary*)relatedDict
+                                  navVC: (UINavigationController*)navVC;
+#pragma mark - WOAContentViewControllerDelegate
+
+- (void) contentViewController: (WOAContentViewController*)vc
+//              rightButtonClick: (WOAContentModel*)contentModel
+                    actionType: (WOAActionType)actionType
+                 submitContent: (NSDictionary*)contentDict
+                   relatedDict: (NSDictionary*)relatedDict;
+#pragma mark - WOAMultiPickerViewControllerDelegate
+
+- (void) multiPickerViewController: (WOAMultiPickerViewController*)pickerViewController
+                        actionType: (WOAActionType)actionType
+                 selectedPairArray: (NSArray*)selectedPairArray
+                       relatedDict: (NSDictionary*)relatedDict
+                             navVC: (UINavigationController*)navVC;
+- (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
+                                      navVC: (UINavigationController*)navVC;
+#pragma mark - WOALevel3TreeViewControllerDelegate
+
+- (void) level3TreeViewControllerSubmit: (WOAContentModel*)contentModel
+                            relatedDict: (NSDictionary*)relatedDict
+                                  navVC: (UINavigationController*)navVC;
+- (void) level3TreeViewControllerCancelled: (WOAContentModel*)contentModel
+                                     navVC: (UINavigationController*)navVC;
 @end
+
+
+
+
+
+

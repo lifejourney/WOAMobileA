@@ -38,7 +38,7 @@
 + (WOAContentModel*) modelForSchoolInfo: (NSDictionary*)respDict;
 + (WOAContentModel*) modelForConsumeInfo: (NSDictionary*)respDict;
 + (WOAContentModel*) modelForAttendanceInfo: (NSDictionary*)respDict;
-+ (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict;
++ (NSArray*) modelForBorrowBookInfo: (NSDictionary*)respDict;
 
 + (WOAContentModel*) contentModelForCreateTextEval: (WOAActionType)actionType;
 + (NSArray*) pairArrayForEvaluationInfo: (NSDictionary*)respDict

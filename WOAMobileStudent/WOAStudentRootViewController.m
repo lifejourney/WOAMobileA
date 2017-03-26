@@ -7,13 +7,6 @@
 //
 
 #import "WOAStudentRootViewController.h"
-#import "WOAMenuListViewController.h"
-#import "WOAFlowListViewController.h"
-#import "WOAMultiPickerViewController.h"
-#import "WOAContentViewController.h"
-#import "WOASimpleListViewController.h"
-#import "WOAListDetailViewController.h"
-#import "WOADateFromToPickerViewController.h"
 #import "WOAURLNavigationViewController.h"
 #import "WOAFileSelectorView.h"
 #import "WOARequestManager+Student.h"
@@ -68,7 +61,7 @@
     ,@"studQueryBorrowBook":    @[@(4),     @"借阅信息",        @(0), @(NO), @(NO), @"",                      @""]
     ,@"studSelfEvaluation":     @[@(5),     @"自我评价",        @(0), @(NO),@(NO), @"",                     @""]
     ,@"studTeacherEvaluation":  @[@(6),     @"教师评价",        @(0), @(NO),@(NO), @"",                     @""]
-    ,@"studQuantitativeEval":   @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"",                    @""]
+    ,@"thcrQuantativeEval":     @[@(7),     @"量化评价",        @(0), @(NO),@(NO),  @"",                    @""]
     ,@"studQueryParentWishes":  @[@(8),     @"父母寄语",        @(0), @(NO),@(NO), @"",                     @""]
     ,@"studQueryLifeTrace":     @[@(9),     @"生活记录",        @(0), @(NO),@(NO), @"",                       @""]
     ,@"studQueryGrowth":        @[@(10),    @"成长足迹",        @(0), @(NO),@(NO), @"",                       @""]
@@ -76,9 +69,9 @@
     ,@"studSiginSelectiveCourse":
                                 @[@(2),     @"选修报名",        @(1), @(NO),@(NO), @"",                     @""]
     ,@"studQueryAchievement":   @[@(3),     @"成绩查询",        @(1), @(NO),@(NO),  @"",                      @""]
-    ,@"studCreateTransaction":  @[@(1),     @"新建事项",        @(2), @(NO),@(NO), @"",                      @""]
-    ,@"studTodoTransaction":    @[@(2),     @"待办事项",        @(2), @(NO),@(NO), @"",                      @""]
-    ,@"studTransactionList":    @[@(3),     @"事项查询",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"tchrNewOATask":          @[@(1),     @"新建事项",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"tchrQueryTodoOA":        @[@(2),     @"待办事项",        @(2), @(NO),@(NO), @"",                      @""]
+    ,@"tchrQueryHistoryOA":     @[@(3),     @"事项查询",        @(2), @(NO),@(NO), @"",                      @""]
     ,@"studQueryMySociety":     @[@(4),     @"学生社团",        @(2), @(NO),@(NO),  @"",                      @""]
     };
         
@@ -125,7 +118,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQuerySchoolInfo
                                            paraDict: nil
@@ -139,7 +132,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -147,7 +140,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     __block WOADateFromToPickerViewController *pickerVC;
     pickerVC = [WOADateFromToPickerViewController pickerWithTitle: @"设置时间段"
@@ -177,21 +170,21 @@
                          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                                   delegate: self];
                          
-                         [ownerNav pushViewController: subVC animated: YES];
+                         [ownerNavC pushViewController: subVC animated: YES];
                      }];
                 }
                                                          onCancel: ^()
                 {
                 }];
     
-    [ownerNav pushViewController: pickerVC animated: YES];
+    [ownerNavC pushViewController: pickerVC animated: YES];
 }
 
 - (void) studQueryAttendInfo
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     __block WOADateFromToPickerViewController *pickerVC;
     pickerVC = [WOADateFromToPickerViewController pickerWithTitle: @"设置时间段"
@@ -222,21 +215,21 @@
                          subVC = [WOASimpleListViewController listViewController: contentModel
                                                                        cellStyle: UITableViewCellStyleDefault];
                          
-                         [ownerNav pushViewController: subVC animated: YES];
+                         [ownerNavC pushViewController: subVC animated: YES];
                      }];
                 }
                                                          onCancel: ^()
                 {
                 }];
     
-    [ownerNav pushViewController: pickerVC animated: YES];
+    [ownerNavC pushViewController: pickerVC animated: YES];
 }
 
 - (void) studQueryBorrowBook
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryBorrowBook
                                            paraDict: nil
@@ -250,7 +243,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -259,13 +252,12 @@
            isEditableFeature: (BOOL)isEditableFeature
                     funcName: (NSString*)funcName
                      vcTitle: (NSString*)vcTitle
-                    ownerNav: (UINavigationController*)ownerNav
+                   ownerNavC: (UINavigationController*)ownerNavC
 {
     [[WOARequestManager sharedInstance] simpleQuery: queryActionType
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         
          NSArray *pairArray = [WOAStudentPacketHelper pairArrayForEvaluationInfo: responseContent.bodyDictionary
                                                                  queryActionType: queryActionType
                                                                isEditableFeature: isEditableFeature];
@@ -283,7 +275,7 @@
          subVC.textLabelFont = [WOALayout flowCellTextFont];
          subVC.rowHeight = 60;
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -291,14 +283,14 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [self studQueryEvaluation: WOAActionType_StudentQuerySelfEvalInfo
              createActionType: WOAActionType_StudentCreateSelfEval
             isEditableFeature: YES
                      funcName: funcName
                       vcTitle: vcTitle
-                     ownerNav: ownerNav];
+                    ownerNavC: ownerNavC];
 }
 
 - (void) onStudCreateEvalInfo: (WOAActionType)actionType
@@ -503,14 +495,14 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [self studQueryEvaluation: WOAActionType_StudentQueryTechEvalInfo
              createActionType: WOAActionType_None
             isEditableFeature: NO
                      funcName: funcName
                       vcTitle: vcTitle
-                     ownerNav: ownerNav];
+                    ownerNavC: ownerNavC];
 }
 
 - (void) studQuantitativeEval
@@ -521,14 +513,14 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [self studQueryEvaluation: WOAActionType_StudentQueryParentEvalInfo
              createActionType: WOAActionType_StudentCreateParentEval
             isEditableFeature: YES
                      funcName: funcName
                       vcTitle: vcTitle
-                     ownerNav: ownerNav];
+                    ownerNavC: ownerNavC];
 }
 
 - (void) studQueryLifeTrace
@@ -547,7 +539,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySyllabus
                                            paraDict: nil
@@ -560,7 +552,7 @@
                                                                                     pairArray: modelArray
                                                                                   detailStyle: WOAListDetailStyleContent];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -572,7 +564,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySelectiveCourses
                                            paraDict: nil
@@ -587,7 +579,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -595,7 +587,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryOATableList
                                            paraDict: nil
@@ -614,7 +606,7 @@
                                                                                      delegate: self
                                                                                   relatedDict: nil];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -745,7 +737,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryTodoOA
                                            paraDict: nil
@@ -760,7 +752,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -768,7 +760,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryHistoryOA
                                            paraDict: nil
@@ -783,7 +775,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -791,7 +783,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryAchievement
                                            paraDict: nil
@@ -803,7 +795,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -813,7 +805,7 @@
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
-    __block __weak UINavigationController *ownerNav = [self navForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
     [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySociety
                                            paraDict: nil
@@ -826,7 +818,7 @@
          WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
                                                                                   delegate: self];
          
-         [ownerNav pushViewController: subVC animated: YES];
+         [ownerNavC pushViewController: subVC animated: YES];
      }];
 }
 
@@ -862,6 +854,12 @@
                               relatedDict: (NSDictionary*)relatedDict
                                     navVC: (UINavigationController*)navVC
 {
+    [super singlePickViewControllerSelected: vc
+                                  indexPath: indexPath
+                               selectedPair: selectedPair
+                                relatedDict: relatedDict
+                                      navVC: navVC];
+    
     switch (selectedPair.actionType)
     {
         case WOAActionType_StudentViewSelfEvalAttachment:
@@ -901,6 +899,11 @@
                             relatedDict: (NSDictionary*)relatedDict
                                   navVC: (UINavigationController*)navVC
 {
+    [super singlePickViewControllerSubmit: vc
+                             contentModel: contentModel
+                              relatedDict: relatedDict
+                                    navVC: navVC];
+    
     WOAActionType actionType = contentModel.actionType;
     
     switch (actionType)
@@ -927,6 +930,11 @@
                  submitContent: (NSDictionary*)contentDict
                    relatedDict: (NSDictionary*)relatedDict
 {
+    [super contentViewController: vc
+                      actionType: actionType
+                   submitContent: contentDict
+                     relatedDict: relatedDict];
+    
     //WOAActionType actionType = contentModel.actionType;
     
     NSMutableDictionary *combinedCntDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
@@ -990,6 +998,12 @@
                        relatedDict: (NSDictionary*)relatedDict
                              navVC: (UINavigationController*)navVC
 {
+    [super multiPickerViewController: pickerViewController
+                          actionType: actionType
+                   selectedPairArray: selectedPairArray
+                         relatedDict: relatedDict
+                               navVC: navVC];
+    
     switch (actionType)
     {
         case WOAActionType_StudentSubmitOAPerson:
@@ -1002,12 +1016,6 @@
             break;
         }
             
-        case WOAActionType_FlowDone:
-        {
-            [self onFlowDoneWithLatestActionType: actionType
-                                           navVC: navVC];
-        }
-            
         default:
             break;
     }
@@ -1016,7 +1024,8 @@
 - (void) multiPickerViewControllerCancelled: (WOAMultiPickerViewController*)pickerViewController
                                       navVC: (UINavigationController*)navVC
 {
-    [navVC popViewControllerAnimated: YES];
+    [super multiPickerViewControllerCancelled: pickerViewController
+                                        navVC: navVC];
 }
 
 #pragma mark - WOAURLNavigationViewControllerDelegate

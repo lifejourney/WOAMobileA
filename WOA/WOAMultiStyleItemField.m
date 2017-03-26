@@ -718,7 +718,7 @@
 
 #pragma mark -
 
-- (id) toItemValue
+- (id) toItemValue: (BOOL)isTechFormat
 {
     id itemValue;
     BOOL isWritable = self.itemModel.isWritable;
@@ -758,14 +758,17 @@
             
             for (NSInteger index = 0; index < _imageURLArray.count; index++)
             {
-#ifdef WOAMobileTeacher
-                NSDictionary *attachmentInfo = @{kWOASrvKeyForAttachmentTitle: self.imageTitleArray[index],
-                                                 kWOASrvKeyForAttachmentUrl: self.imageURLArray[index]};
-                
-                [attachmentArray addObject: attachmentInfo];
-#else
-                [attachmentArray addObject: self.imageURLArray[index]];
-#endif
+                if (isTechFormat)
+                {
+                    NSDictionary *attachmentInfo = @{kWOASrvKeyForAttachmentTitle: self.imageTitleArray[index],
+                                                     kWOASrvKeyForAttachmentUrl: self.imageURLArray[index]};
+                    
+                    [attachmentArray addObject: attachmentInfo];
+                }
+                else
+                {
+                    [attachmentArray addObject: self.imageURLArray[index]];
+                }
             }
             
             itemValue = attachmentArray;
@@ -810,7 +813,7 @@
     
     NSString *itemName = self.titleLabel.text;
     NSString *itemType = [WOANameValuePair textTypeFromPairType: dataType];
-    id itemValue = [self toItemValue];
+    id itemValue = [self toItemValue: YES];
     
     NSMutableDictionary *itemDict = [NSMutableDictionary dictionary];
     [itemDict setValue: itemName forKey: kWOASrvKeyForItemName];
@@ -824,7 +827,7 @@
 {
     NSString *stringValue;
     
-    id itemValue = [self toItemValue];
+    id itemValue = [self toItemValue: NO];
     
     if ([itemValue isKindOfClass: [NSArray class]])
     {

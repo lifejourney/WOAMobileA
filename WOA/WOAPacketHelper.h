@@ -16,6 +16,61 @@
 
 #pragma mark -
 
++ (NSArray*) weekdayNameArray;
++ (NSString*) nameByWeekday: (NSInteger)weekday;
++ (NSArray*) weeknameArrayFrom1to7;
++ (NSInteger) weekdayByName: (NSString*)name;
++ (NSArray*) dateStingArrayForComingWeekdays: (NSInteger)dstWeekday
+                                   itemCount: (NSInteger)itemCount;
++ (NSString*) idFromCombinedString: (NSString*)srcString;
++ (NSString*) nameFromCombinedString: (NSString*)srcString;
+
+#pragma mark - same features
+
++ (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict;
+
+#pragma mark -
+
++ (NSArray*) pairArrayForTchrQueryQuatEvalItems: (NSDictionary*)respDict
+                                    actionTypeA: (WOAActionType)actionTypeA
+                                    actionTypeB: (WOAActionType)actionTypeB;
++ (NSArray*) pairArrayForTchrQueryQuatEvalClasses: (NSDictionary*)respDict
+                                   pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) pairArrayForTchrQueryQuatEvalStudents: (NSDictionary*)respDict
+                                    pairActionType: (WOAActionType)pairActionType;
+
+#pragma mark - OA
+
++ (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
+                          pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) contentArrayForTchrProcessOAItem: (NSDictionary*)respDict
+                                    tableName: (NSString*)tableName
+                                   isReadonly: (BOOL)isReadonly;
+
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType;
++ (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
+                        pairActionType: (WOAActionType)pairActionType;
+
+#pragma mark -
+
++ (NSArray*) itemPairsForTchrSubmitOADetailN: (NSDictionary*)respDict
+                              pairActionType: (WOAActionType)pairActionType;
+
+//Obsoleted
++ (NSArray*) itemPairsForTchrSubmitOADetail: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType;
+
++ (NSArray*) itemPairsForTchrSelectiveTeacherList: (NSDictionary*)respDict
+                                   pairActionType: (WOAActionType)pairActionType;
+//Obsoleted
++ (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
+                             pairActionType: (WOAActionType)pairActionType;
+
+#pragma mark -
+
 + (NSDictionary*) headerForMsgType: (NSString*)msgType
                  additionalHeaders: (NSDictionary*)additionalHeaders;
 + (NSDictionary*) headerForActionType: (WOAActionType)actionType

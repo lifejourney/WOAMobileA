@@ -16,33 +16,6 @@
 + (NSDictionary*) packetDictWithFromTime: (NSString*)fromTimeStr
                                   toTime: (NSString*)endTimeStr;
 
-#pragma mark - OA
-
-+ (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict
-                          pairActionType: (WOAActionType)pairActionType;
-+ (NSArray*) contentArrayForTchrProcessOAItem: (NSDictionary*)respDict
-                                    tableName: (NSString*)tableName
-                                   isReadonly: (BOOL)isReadonly;
-
-#pragma mark -
-
-+ (NSArray*) itemPairsForTchrQueryOATableList: (NSDictionary*)respDict
-                               pairActionType: (WOAActionType)pairActionType;
-+ (NSArray*) itemPairsForTchrNewOATask: (NSDictionary*)respDict
-                        pairActionType: (WOAActionType)pairActionType;
-
-#pragma mark -
-
-+ (NSArray*) itemPairsForTchrSubmitOADetailN: (NSDictionary*)respDict
-                              pairActionType: (WOAActionType)pairActionType;
-
-//Obsoleted
-+ (NSArray*) itemPairsForTchrSubmitOADetail: (NSDictionary*)respDict
-                             pairActionType: (WOAActionType)pairActionType;
-//Obsoleted
-+ (NSArray*) itemPairsForTchrOAProcessStyle: (NSDictionary*)respDict
-                             pairActionType: (WOAActionType)pairActionType;
-
 
 #pragma mark - Business
 
@@ -104,15 +77,6 @@
 + (NSArray*) pairArrayForTchrQueryCommentStudents: (NSDictionary*)respDict
                                       actionTypeA: (WOAActionType)actionTypeA
                                       actionTypeB: (WOAActionType)actionTypeB;
-#pragma mark -
-
-+ (NSArray*) pairArrayForTchrQueryQuatEvalItemso: (NSDictionary*)respDict
-                                     actionTypeA: (WOAActionType)actionTypeA
-                                     actionTypeB: (WOAActionType)actionTypeB;
-+ (NSArray*) pairArrayForTchrQueryQuatEvalClasses: (NSDictionary*)respDict
-                                   pairActionType: (WOAActionType)pairActionType;
-+ (NSArray*) pairArrayForTchrQueryQuatEvalStudents: (NSDictionary*)respDict
-                                    pairActionType: (WOAActionType)pairActionType;
 @end
 
 

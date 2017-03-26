@@ -210,11 +210,6 @@ static NSDictionary *__actionMapDict = nil;
       @(WOAActionType_StudentDeleteParentEvalInfo):         @[@"StudentDeleteParentEvalInfo",
                                                               @"delpasEval"],
       
-      @(WOAActionType_StudentQuantitativeEval):             @[@"StudentQuantitativeEval",
-                                                              @"getEvalMyInfo"],
-      @(WOAActionType_StudentQuerySummativeEvaluation):     @[@"StudentQuerySummativeEvaluation",
-                                                              @""],
-      
       @(WOAActionType_StudentQueryMySyllabus):              @[@"StudentQueryMySyllabus",
                                                               @"getCourseInfo"],
       @(WOAActionType_StudentSiginSelectiveCourse):         @[@"StudentSiginSelectiveCourse",
@@ -279,4 +274,41 @@ static NSDictionary *__actionMapDict = nil;
     return retStr;
 }
 
++ (BOOL) isForceTechFormatAction: (WOAActionType)actionType
+{
+    switch (actionType) {
+        case WOAActionType_TeacherQueryTodoOA:
+        case WOAActionType_TeacherProcessOAItem:
+        case WOAActionType_TeacherSubmitOAProcess:
+        case WOAActionType_TeacherQueryOATableList:
+        case WOAActionType_TeacherCreateOAItem:
+        case WOAActionType_TeacherSubmitOACreate:
+            
+        case WOAActionType_TeacherOAProcessStyle:
+        case WOAActionType_TeacherNextAccounts:
+        case WOAActionType_TeacherOAMultiNextStep:
+            
+        case WOAActionType_TeacherQueryHistoryOA:
+        case WOAActionType_TeacherQueryOADetail:
+        case WOAActionType_TeacherQueryQuatEvalItems:
+        case WOAActionType_TeacherPickQuatEvalItem:
+        case WOAActionType_TeacherQueryQuatEvalClasses:
+        case WOAActionType_TeacherQueryQuatEvalStudents:
+        case WOAActionType_TeacherPickQuatEvalStudent:
+        case WOAActionType_TeacherSubmitStudentQuatEval:
+            return YES;
+            
+        default:
+            break;
+    }
+    
+    return NO;
+}
+
 @end
+
+
+
+
+
+

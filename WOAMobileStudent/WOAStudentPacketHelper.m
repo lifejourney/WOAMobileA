@@ -217,7 +217,7 @@
                                pairArray: pairArray];
 }
 
-+ (NSArray<WOAContentModel*>*) modelForBorrowBookInfo: (NSDictionary*)respDict
++ (NSArray*) modelForBorrowBookInfo: (NSDictionary*)respDict
 {
     NSMutableArray *modelArray = [NSMutableArray array];
     
