@@ -233,7 +233,7 @@ static NSDictionary *__actionMapDict = nil;
                                                               @"delGrowth"],
       
       @(WOAActionType_StudentQueryMySyllabus):              @[@"StudentQueryMySyllabus",
-                                                              @"getCourseInfo"],
+                                                              @"syllabusQuery"],
       @(WOAActionType_StudentSiginSelectiveCourse):         @[@"StudentSiginSelectiveCourse",
                                                               @""],
       @(WOAActionType_StudentQueryMySelectiveCourses):      @[@"StudentQueryMySelectiveCourses",

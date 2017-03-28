@@ -348,6 +348,55 @@
     return pairArray;
 }
 
+#pragma mark -
+
+
++ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+                                   isReadonly: (BOOL)isReadonly
+{
+    NSMutableArray *dayContentArray = [NSMutableArray array];
+    NSArray *sectionItemArray = respDict[kWOASrvKeyForItemArrays];
+    
+    NSArray *dayNameArray = [self weeknameArrayFrom1to7];
+    
+    for (NSInteger index = 0; index < dayNameArray.count; index++)
+    {
+        NSString *dayName = dayNameArray[index];
+        NSMutableArray *daySectionArray = [NSMutableArray array];
+        WOAContentModel *dayContentModel = [WOAContentModel contentModel: dayName
+                                                               pairArray: daySectionArray
+                                                              actionType: pairActionType
+                                                              isReadonly: isReadonly];
+        
+        [dayContentArray addObject: dayContentModel];
+    }
+    
+    for (NSInteger sectionIndex = 0; sectionIndex < sectionItemArray.count; sectionIndex++)
+    {
+        NSDictionary *sectionDict = sectionItemArray[sectionIndex];
+        NSString *sectionName = sectionDict[kWOASrvKeyForSyllabusSectionName];
+        NSArray *sectionClassList = sectionDict[kWOASrvKeyForSyllabusClassList];
+        NSInteger sectionClassCount = sectionClassList.count;
+        
+        for (NSInteger dayIndex = 0; dayIndex < dayNameArray.count; dayIndex++)
+        {
+            NSString *className = (dayIndex < sectionClassCount) ? sectionClassList[dayIndex] : @"";
+            
+            WOANameValuePair *sectionPair = [WOANameValuePair pairWithName: sectionName
+                                                                     value: className
+                                                                actionType: pairActionType];
+            
+            WOAContentModel *dayContentModel = dayContentArray[dayIndex];
+            NSMutableArray *daySectionArray = [NSMutableArray arrayWithArray: dayContentModel.pairArray];
+            [daySectionArray addObject: sectionPair];
+            dayContentModel.pairArray = daySectionArray;
+        }
+    }
+    
+    return dayContentArray;
+}
+
 #pragma mark - OA
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict

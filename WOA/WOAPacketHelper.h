@@ -40,6 +40,12 @@
 + (NSArray*) pairArrayForTchrQueryQuatEvalStudents: (NSDictionary*)respDict
                                     pairActionType: (WOAActionType)pairActionType;
 
+#pragma mark -
+
++ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
+                               pairActionType: (WOAActionType)pairActionType
+                                   isReadonly: (BOOL)isReadonly;
+
 #pragma mark - OA
 
 + (NSArray*) itemPairsForTchrQueryOAList: (NSDictionary*)respDict

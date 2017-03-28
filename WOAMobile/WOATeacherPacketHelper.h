@@ -22,9 +22,6 @@
 + (NSArray*) itemPairsForTchrQuerySyllabusConditions: (NSDictionary*)respDict
                                          actionTypeA: (WOAActionType)actionTypeA
                                          actionTypeB: (WOAActionType)actionTypeB;
-+ (NSArray*) contentArrayForTchrQuerySyllabus: (NSDictionary*)respDict
-                               pairActionType: (WOAActionType)pairActionType
-                                   isReadonly: (BOOL)isReadonly;
 
 #pragma mark -
 

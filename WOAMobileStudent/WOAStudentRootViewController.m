@@ -889,12 +889,21 @@
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         WOAActionType itemActionType = WOAActionType_None;
+         NSString *itemActionName = @"";
          
-         NSArray *modelArray = [WOAStudentPacketHelper modelForMySyllabus: retList];
-         WOAListDetailViewController *subVC = [WOAListDetailViewController listViewController: vcTitle
-                                                                                    pairArray: modelArray
-                                                                                  detailStyle: WOAListDetailStyleContent];
+         NSArray *contentArray = [WOAPacketHelper contentArrayForTchrQuerySyllabus: responseContent.bodyDictionary
+                                                                    pairActionType: itemActionType
+                                                                        isReadonly: YES];
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                          contentArray: contentArray
+                                                            actionType: itemActionType
+                                                            actionName: itemActionName
+                                                            isReadonly: YES
+                                                               subDict: nil];
+         
+         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                                  delegate: self];
          
          [ownerNavC pushViewController: subVC animated: YES];
      }];

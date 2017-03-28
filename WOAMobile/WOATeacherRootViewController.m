@@ -225,9 +225,9 @@
          WOAActionType itemActionType = WOAActionType_None;
          NSString *itemActionName = @"";
          
-         NSArray *contentArray = [WOATeacherPacketHelper contentArrayForTchrQuerySyllabus: responseContent.bodyDictionary
-                                                                           pairActionType: itemActionType
-                                                                               isReadonly: YES];
+         NSArray *contentArray = [WOAPacketHelper contentArrayForTchrQuerySyllabus: responseContent.bodyDictionary
+                                                                    pairActionType: itemActionType
+                                                                        isReadonly: YES];
          WOAContentModel *contentModel = [WOAContentModel contentModel: @""
                                                           contentArray: contentArray
                                                             actionType: itemActionType
