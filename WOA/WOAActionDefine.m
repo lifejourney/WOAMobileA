@@ -221,6 +221,17 @@ static NSDictionary *__actionMapDict = nil;
       @(WOAActionType_StudentDeleteLifeTraceInfo):          @[@"StudentDeleteLifeTraceInfo",
                                                               @"delStudyLife"],
       
+      @(WOAActionType_StudentQueryGrowthInfo):              @[@"StudentQueryGrowthInfo",
+                                                              @"stu_growthQuery"],
+      @(WOAActionType_StudentCreateGrowth):                 @[@"StudentCreateGrowth",
+                                                              @""],
+      @(WOAActionType_StudentViewGrowthDetail):             @[@"StudentViewGrowthDetail",
+                                                              @""],
+      @(WOAActionType_StudentSubmitGrowthDetail):           @[@"StudentSubmitGrowthDetail",
+                                                              @"postGrowth"],
+      @(WOAActionType_StudentDeleteGrowthInfo):             @[@"StudentDeleteGrowthInfo",
+                                                              @"delGrowth"],
+      
       @(WOAActionType_StudentQueryMySyllabus):              @[@"StudentQueryMySyllabus",
                                                               @"getCourseInfo"],
       @(WOAActionType_StudentSiginSelectiveCourse):         @[@"StudentSiginSelectiveCourse",

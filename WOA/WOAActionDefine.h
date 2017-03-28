@@ -133,6 +133,12 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentSubmitLifeTraceDetail,
     WOAActionType_StudentDeleteLifeTraceInfo,
     
+    WOAActionType_StudentQueryGrowthInfo,
+    WOAActionType_StudentCreateGrowth,
+    WOAActionType_StudentViewGrowthDetail,
+    WOAActionType_StudentSubmitGrowthDetail,
+    WOAActionType_StudentDeleteGrowthInfo,
+    
     WOAActionType_StudentQueryMySyllabus,
     WOAActionType_StudentSiginSelectiveCourse,
     WOAActionType_StudentQueryMySelectiveCourses,

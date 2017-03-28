@@ -458,7 +458,7 @@
         [subPairArray addObject: subItemPair];
         [subPairArray addObject: seperatorPair];
         
-        subItemDict = @{kWOASrvKeyForItemName: @"内容",
+        subItemDict = @{kWOASrvKeyForItemName: @"评语",
                         kWOASrvKeyForItemType: @"textArea",
                         kWOASrvKeyForItemValue: @"",
                         kWOASrvKeyForItemWritable: @"True"};
@@ -589,7 +589,7 @@
             [subPairArray addObject: subItemPair];
             [subPairArray addObject: seperatorPair];
             
-            subItemDict = @{kWOASrvKeyForItemName: @"内容",
+            subItemDict = @{kWOASrvKeyForItemName: @"评语",
                             kWOASrvKeyForItemType: @"textArea",
                             kWOASrvKeyForItemValue: [itemDict[@"Content"] firstObject],
                             kWOASrvKeyForItemWritable: @"True"};
@@ -624,6 +624,200 @@
     
     return pairArray;
 }
+
++ (WOAContentModel*) contentModelForCreateGrowth: (NSDictionary*)respDict
+                                  isByAttachment: (BOOL)isByAttachment
+{
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    NSMutableDictionary *detailSubDict = [NSMutableDictionary dictionary];
+    [detailSubDict setValue: respDict[@"growthID"] forKey: @"growthID"];
+    
+    NSMutableArray *subPairArray = [NSMutableArray array];
+    NSDictionary *subItemDict;
+    WOANameValuePair *subItemPair;
+    
+    subItemDict = @{kWOASrvKeyForItemName: @"阶段",
+                    kWOASrvKeyForItemType: @"text",
+                    kWOASrvKeyForItemValue: @"",
+                    kWOASrvKeyForItemWritable: @"True"};
+    subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"growthTerm"];
+    [subPairArray addObject: subItemPair];
+    [subPairArray addObject: seperatorPair];
+    
+    if (isByAttachment)
+    {
+        subItemDict = @{kWOASrvKeyForItemName: @"附件",
+                        kWOASrvKeyForItemType: @"attFile",
+                        kWOASrvKeyForItemValue: @[],
+                        kWOASrvKeyForItemWritable: @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        [detailSubDict setValue: @"imgfile" forKey: @"growthType"];
+    }
+    else
+    {
+        subItemDict = @{kWOASrvKeyForItemName: @"标题",
+                        kWOASrvKeyForItemType: @"text",
+                        kWOASrvKeyForItemValue: @"",
+                        kWOASrvKeyForItemWritable: @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"growthTitle"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        subItemDict = @{kWOASrvKeyForItemName: @"评语",
+                        kWOASrvKeyForItemType: @"textArea",
+                        kWOASrvKeyForItemValue: @"",
+                        kWOASrvKeyForItemWritable: @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        [detailSubDict setValue: @"text" forKey: @"growthType"];
+    }
+    
+    WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                            pairArray: subPairArray
+                                                           actionType: WOAActionType_None
+                                                           isReadonly: NO];
+    
+    return [WOAContentModel contentModel: @""
+                            contentArray: @[detailSubContent]
+                              actionType: WOAActionType_StudentSubmitGrowthDetail
+                              actionName: @"提交"
+                              isReadonly: NO
+                                 subDict: detailSubDict];
+}
+
++ (NSArray*) pairArrayForGrowthInfo: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[@"growthItems"];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    WOANameValuePair *infoPair;
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *isHtml = itemDict[@"isHtml"];
+        BOOL isAttachment = isHtml && ![isHtml boolValue];
+        
+        NSArray *titleArray = itemDict[@"title"];
+        NSArray *contentArray = itemDict[@"Content"];
+        
+        NSString *nameInfo = [NSString stringWithFormat: @"阶段:\t\t%@\r\n作者:\t\t%@\r\n日期:\t\t%@\r\n标题:\t\t%@",
+                              itemDict[@"term"],
+                              itemDict[@"writer"],
+                              itemDict[@"createDate"],
+                              [titleArray componentsJoinedByString: @","]];
+        
+        NSMutableDictionary *detailSubDict = [NSMutableDictionary dictionary];
+        [detailSubDict setValue: itemDict[@"growthID"] forKey: @"growthID"];
+        
+        WOAActionType detailRightActionType;
+        NSString *detailRightActionName;
+        WOAContentModel *detailContent;
+        NSMutableArray *subPairArray = [NSMutableArray array];
+        NSDictionary *subItemDict;
+        WOANameValuePair *subItemPair;
+        
+        subItemDict = @{kWOASrvKeyForItemName: @"阶段",
+                        kWOASrvKeyForItemType: @"text",
+                        kWOASrvKeyForItemValue: itemDict[@"term"],
+                        kWOASrvKeyForItemWritable: isAttachment ? @"False" : @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"growthTerm"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        if (isAttachment && contentArray && titleArray && titleArray.count > 0)
+        {
+            detailRightActionType = WOAActionType_None;
+            detailRightActionName = nil;
+            
+            NSMutableArray *atthArray = [NSMutableArray array];
+            for (NSUInteger index = 0; index < titleArray.count; index++)
+            {
+                if (index >= contentArray.count)
+                {
+                    break;
+                }
+                
+                NSString *title = titleArray[index];
+                NSString *urlString = contentArray[index];
+                
+                if (title.length == 0 || urlString == 0)
+                {
+                    continue;
+                }
+                
+                NSDictionary *atthItemDict = @{kWOASrvKeyForAttachmentTitle: title,
+                                               kWOASrvKeyForAttachmentUrl: urlString};
+                
+                [atthArray addObject: atthItemDict];
+            }
+            
+            subItemDict = @{kWOASrvKeyForItemName: @"附件",
+                            kWOASrvKeyForItemType: @"attFile",
+                            kWOASrvKeyForItemValue: atthArray,
+                            kWOASrvKeyForItemWritable: @"False"};
+            subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+            [subPairArray addObject: subItemPair];
+            [subPairArray addObject: seperatorPair];
+            
+            [detailSubDict setValue: @"imgfile" forKey: @"growthType"];
+        }
+        else
+        {
+            detailRightActionType = WOAActionType_StudentSubmitGrowthDetail;
+            detailRightActionName = @"提交";
+            
+            subItemDict = @{kWOASrvKeyForItemName: @"标题",
+                            kWOASrvKeyForItemType: @"text",
+                            kWOASrvKeyForItemValue: [itemDict[@"title"] firstObject],
+                            kWOASrvKeyForItemWritable: @"True"};
+            subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"growthTitle"];
+            [subPairArray addObject: subItemPair];
+            [subPairArray addObject: seperatorPair];
+            
+            subItemDict = @{kWOASrvKeyForItemName: @"评语",
+                            kWOASrvKeyForItemType: @"textArea",
+                            kWOASrvKeyForItemValue: [itemDict[@"Content"] firstObject],
+                            kWOASrvKeyForItemWritable: @"True"};
+            subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+            [subPairArray addObject: subItemPair];
+            [subPairArray addObject: seperatorPair];
+            
+            [detailSubDict setValue: @"text" forKey: @"growthType"];
+        }
+        
+        WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                                pairArray: subPairArray
+                                                               actionType: WOAActionType_StudentDeleteGrowthInfo
+                                                               actionName: @"删除本条记录"
+                                                               isReadonly: isAttachment
+                                                                  subDict: detailSubDict];
+        
+        detailContent = [WOAContentModel contentModel: @""
+                                         contentArray: @[detailSubContent]
+                                           actionType: detailRightActionType
+                                           actionName: detailRightActionName
+                                           isReadonly: isAttachment
+                                              subDict: detailSubDict];
+        
+        infoPair = [WOANameValuePair pairWithName: nameInfo
+                                            value: detailContent
+                                         dataType: WOAPairDataType_ReferenceObj
+                                       actionType: WOAActionType_StudentViewGrowthDetail];
+        
+        [pairArray addObject: infoPair];
+    }
+    
+    return pairArray;
+}
+
 #pragma mark -
 
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict

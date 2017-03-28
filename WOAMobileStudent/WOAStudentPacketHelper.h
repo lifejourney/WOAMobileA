@@ -50,6 +50,10 @@
                                      isByAttachment: (BOOL)isByAttachment;
 + (NSArray*) pairArrayForLifeTraceInfo: (NSDictionary*)respDict;
 
++ (WOAContentModel*) contentModelForCreateGrowth: (NSDictionary*)respDict
+                                  isByAttachment: (BOOL)isByAttachment;
++ (NSArray*) pairArrayForGrowthInfo: (NSDictionary*)respDict;
+
 #pragma mark -
 
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict;
