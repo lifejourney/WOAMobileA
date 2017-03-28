@@ -525,7 +525,179 @@
 
 - (void) studQueryLifeTrace
 {
+    NSString *funcName = [self simpleFuncName: __func__];
+    NSString *vcTitle = [self titleForFuncName: funcName];
+    __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryLifeTraceInfo
+                                           paraDict: nil
+                                         onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForLifeTraceInfo: responseContent.bodyDictionary];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
+                                                             pairArray: pairArray
+                                                            actionType: WOAActionType_StudentCreateLifeTrace
+                                                            actionName: @"添加"
+                                                            isReadonly: YES
+                                                               subDict: responseContent.bodyDictionary];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: responseContent.bodyDictionary];
+         subVC.textLabelFont = [WOALayout flowCellTextFont];
+         subVC.rowHeight = 76;
+         
+         [ownerNavC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudCreateLifeTrace: (WOAActionType)actionType
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @""
+                                                                             message: @"请选择您需要的操作： "
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *textAction = [UIAlertAction actionWithTitle: @"编辑文本"
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: ^(UIAlertAction * _Nonnull action)
+                                 {
+                                     [self onStudCreateLifeTrace: actionType
+                                                  isByAttachment: NO
+                                                     relatedDict: relatedDict
+                                                           navVC: navVC];
+                                 }];
+    UIAlertAction *fileAction = [UIAlertAction actionWithTitle: @"上传文件"
+                                                         style: UIAlertActionStyleDefault
+                                                       handler: ^(UIAlertAction * _Nonnull action)
+                                 {
+                                     [self onStudCreateLifeTrace: actionType
+                                                  isByAttachment: YES
+                                                     relatedDict: relatedDict
+                                                           navVC: navVC];
+                                 }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    [alertController addAction: textAction];
+    [alertController addAction: fileAction];
+    [alertController addAction: cancelAction];
+    
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
+}
+
+- (void) onStudCreateLifeTrace: (WOAActionType)actionType
+                isByAttachment: (BOOL)isByAttachment
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    WOAContentModel *contentModel = [WOAStudentPacketHelper contentModelForCreateLifeTrace: relatedDict
+                                                                            isByAttachment: isByAttachment];
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onStudViewLifeTrace: (WOANameValuePair*)selectedPair
+                 relatedDict: (NSDictionary*)relatedDict
+                       navVC: (UINavigationController*)navVC
+{
+    WOAContentModel *contentModel = (WOAContentModel*)selectedPair.value;
+    
+    WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
+                                                                             delegate: self];
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onStudDeleteLifeTrace: (WOAActionType)actionType
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: nil
+                                    navVC: navVC];
+     }];
+}
+
+- (void) onStudSubmitLifeTrace: (WOAActionType)actionType
+                   contentDict: (NSDictionary*)contentDict
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: relatedDict];
+    [addtDict addEntriesFromDictionary: contentDict];
+    
+    NSMutableArray *titleArray = [NSMutableArray array];
+    NSMutableArray *contentArray = [NSMutableArray array];
+    
+    NSString *originalTitle = contentDict[@"studyLifeTitle"];
+    
+    if (originalTitle)
+    {
+        [titleArray addObject: originalTitle];
+        
+        NSString *originalContent = contentDict[@"Content"];
+        
+        if (originalContent)
+        {
+            [contentArray addObject: originalContent];
+        }
+        else
+        {
+            [contentArray addObject: @""];
+        }
+    }
+    else
+    {
+        NSArray *originalContent = contentDict[@"Content"];
+        
+        if (originalContent)
+        {
+            for (NSUInteger index = 0; index < originalContent.count; index++)
+            {
+                NSDictionary *originalItemDict = originalContent[index];
+                
+                if (originalItemDict[kWOASrvKeyForAttachmentTitle] && originalItemDict[kWOASrvKeyForAttachmentUrl])
+                {
+                    [titleArray addObject: originalItemDict[kWOASrvKeyForAttachmentTitle]];
+                    [contentArray addObject: originalItemDict[kWOASrvKeyForAttachmentUrl]];
+                }
+            }
+        }
+    }
+    
+    [addtDict setValue: titleArray forKey: @"studyLifeTitle"];
+    [addtDict setValue: contentArray forKey: @"studyLifeContent"];
+    [addtDict removeObjectForKey: @"Content"];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                            additionalHeaders: nil
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                               actionType: actionType
+                           defaultMsgText: nil
+                                    navVC: navVC];
+     }];
 }
 
 - (void) studQueryGrowth
@@ -880,6 +1052,14 @@
         }
             break;
             
+        case WOAActionType_StudentViewLifeTraceDetail:
+        {
+            [self onStudViewLifeTrace: selectedPair
+                          relatedDict: relatedDict
+                                navVC: navVC];
+        }
+            break;
+            
         case WOAActionType_StudentCreateOATable:
         {
             [self onStudCreateOATable: selectedPair
@@ -914,6 +1094,14 @@
             [self onStudCreateEvalInfo: actionType
                            relatedDict: relatedDict
                                  navVC: vc.navigationController];
+        }
+            break;
+            
+        case WOAActionType_StudentCreateLifeTrace:
+        {
+            [self onStudCreateLifeTrace: actionType
+                            relatedDict: relatedDict
+                                  navVC: vc.navigationController];
         }
             break;
             
@@ -958,6 +1146,23 @@
                            contentDict: contentDict
                            relatedDict: relatedDict
                                  navVC: vc.navigationController];
+        }
+            break;
+            
+        case WOAActionType_StudentDeleteLifeTraceInfo:
+        {
+            [self onStudDeleteLifeTrace: actionType
+                            relatedDict: relatedDict
+                                  navVC: vc.navigationController];
+        }
+            break;
+            
+        case WOAActionType_StudentSubmitLifeTraceDetail:
+        {
+            [self onStudSubmitLifeTrace: actionType
+                            contentDict: contentDict
+                            relatedDict: relatedDict
+                                  navVC: vc.navigationController];
         }
             break;
             

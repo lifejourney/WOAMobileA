@@ -45,6 +45,11 @@
                         queryActionType: (WOAActionType)queryActionType
                       isEditableFeature: (BOOL)isEditableFeature;
 
+
++ (WOAContentModel*) contentModelForCreateLifeTrace: (NSDictionary*)respDict
+                                     isByAttachment: (BOOL)isByAttachment;
++ (NSArray*) pairArrayForLifeTraceInfo: (NSDictionary*)respDict;
+
 #pragma mark -
 
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict;

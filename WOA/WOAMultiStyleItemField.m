@@ -758,17 +758,17 @@
             
             for (NSInteger index = 0; index < _imageURLArray.count; index++)
             {
-                if (isTechFormat)
+//                if (isTechFormat)
                 {
                     NSDictionary *attachmentInfo = @{kWOASrvKeyForAttachmentTitle: self.imageTitleArray[index],
                                                      kWOASrvKeyForAttachmentUrl: self.imageURLArray[index]};
                     
                     [attachmentArray addObject: attachmentInfo];
                 }
-                else
-                {
-                    [attachmentArray addObject: self.imageURLArray[index]];
-                }
+//                else
+//                {
+//                    [attachmentArray addObject: self.imageURLArray[index]];
+//                }
             }
             
             itemValue = attachmentArray;
@@ -823,26 +823,28 @@
     return itemDict;
 }
 
-- (NSString*) toStudentDataValue
+- (id) toStudentDataValue
 {
-    NSString *stringValue;
+//    NSString *stringValue;
+//    
+//    id itemValue = [self toItemValue: NO];
+//    
+//    if ([itemValue isKindOfClass: [NSArray class]])
+//    {
+//        stringValue = [(NSArray*)itemValue componentsJoinedByString: kWOA_Level_2_Seperator];
+//    }
+//    else if ([itemValue isKindOfClass: [NSString class]])
+//    {
+//        stringValue = (NSString*)itemValue;
+//    }
+//    else
+//    {
+//        stringValue = @"";
+//    }
+//    
+//    return stringValue;
     
-    id itemValue = [self toItemValue: NO];
-    
-    if ([itemValue isKindOfClass: [NSArray class]])
-    {
-        stringValue = [(NSArray*)itemValue componentsJoinedByString: kWOA_Level_2_Seperator];
-    }
-    else if ([itemValue isKindOfClass: [NSString class]])
-    {
-        stringValue = (NSString*)itemValue;
-    }
-    else
-    {
-        stringValue = @"";
-    }
-    
-    return stringValue;
+    return [self toItemValue: NO];
 }
 
 @end

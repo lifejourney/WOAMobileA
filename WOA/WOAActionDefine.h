@@ -127,6 +127,11 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentSubmitParentEvalDetail,
     WOAActionType_StudentDeleteParentEvalInfo,
     
+    WOAActionType_StudentQueryLifeTraceInfo,
+    WOAActionType_StudentCreateLifeTrace,
+    WOAActionType_StudentViewLifeTraceDetail,
+    WOAActionType_StudentSubmitLifeTraceDetail,
+    WOAActionType_StudentDeleteLifeTraceInfo,
     
     WOAActionType_StudentQueryMySyllabus,
     WOAActionType_StudentSiginSelectiveCourse,

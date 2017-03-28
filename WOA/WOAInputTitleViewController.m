@@ -96,6 +96,13 @@
 
 - (void) submitAction: (id)sender
 {
+    NSString *titleText = self.titleTextField.text;
+    titleText = [titleText stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (titleText.length == 0)
+    {
+        return;
+    }
+    
     if (self.delegate && [self.delegate respondsToSelector: @selector(inputTitleViewController:commitedWithTitle:filePath:)])
     {
         [self.delegate inputTitleViewController: self commitedWithTitle: self.titleTextField.text filePath: self.filePath];

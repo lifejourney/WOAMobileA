@@ -27,7 +27,8 @@
 
 #pragma mark - same features
 
-+ (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict;
++ (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict
+                            srvKeyName: (NSString*)srvKeyName;
 
 #pragma mark -
 

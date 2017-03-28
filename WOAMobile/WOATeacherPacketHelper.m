@@ -226,7 +226,8 @@
     
     for (NSDictionary *itemDict in itemDictArray)
     {
-        WOANameValuePair *pair = [self pairFromItemDict: itemDict];
+        WOANameValuePair *pair = [self pairFromItemDict: itemDict
+                                             srvKeyName: nil];
         if (pair.dataType == WOAPairDataType_SelectAccount)
         {
             pair.subArray = teacherPairArray;

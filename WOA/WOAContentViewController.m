@@ -533,7 +533,7 @@
             if ([subView isKindOfClass: [WOAMultiStyleItemField class]])
             {
                 WOAMultiStyleItemField *contentField = (WOAMultiStyleItemField*)subView;
-                NSString *itemValue = [contentField toStudentDataValue];
+                id itemValue = [contentField toStudentDataValue];
                 
                 if (itemValue)
                 {

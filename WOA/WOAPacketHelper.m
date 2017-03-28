@@ -135,6 +135,7 @@
 #pragma mark - same features
 
 + (WOANameValuePair*) pairFromItemDict: (NSDictionary*)itemDict
+                            srvKeyName: (NSString*)srvKeyName
 {
     //NSString *itemID = itemDict[kWOASrvKeyForItemID];
     NSString *itemName = itemDict[kWOASrvKeyForItemName];
@@ -188,6 +189,8 @@
                                      dataType: dataType
                                    actionType: WOAActionType_None];
     }
+    
+    pair.srvKeyName = srvKeyName;
     
     return pair;
 }
@@ -404,7 +407,8 @@
         
         for (NSDictionary *itemDict in itemArray)
         {
-            [pairArray addObject: [self pairFromItemDict: itemDict]];
+            [pairArray addObject: [self pairFromItemDict: itemDict
+                                              srvKeyName: nil]];
             [pairArray addObject: seperatorPair];
         }
         

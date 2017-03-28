@@ -368,7 +368,7 @@ static NSArray *__typeMapArray = nil;
                        @[@"tableAccount",   @(WOAPairDataType_TableAccountE),   @"tableAccount"],
                        @[@"selectAccount",  @(WOAPairDataType_SelectAccount),   @"selectAccount"],
                        
-                       @[@"2",              @(WOAPairDataType_TextArea),        @"2"], //todo
+                       @[@"textArea",       @(WOAPairDataType_TextArea),        @"2"], //todo
                        @[@"3",              @(WOAPairDataType_Radio),           @"3"], //todo
                        @[@"4",              @(WOAPairDataType_MultiPicker),     @"4"], //todo
                        @[@"6",              @(WOAPairDataType_FixedText),       @"6"],

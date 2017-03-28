@@ -406,6 +406,224 @@
     return pairArray;
 }
 
++ (WOAContentModel*) contentModelForCreateLifeTrace: (NSDictionary*)respDict
+                                     isByAttachment: (BOOL)isByAttachment
+{
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    NSMutableDictionary *detailSubDict = [NSMutableDictionary dictionary];
+    [detailSubDict setValue: respDict[@"studyLifeID"] forKey: @"studyLifeID"];
+    
+    NSMutableArray *subPairArray = [NSMutableArray array];
+    NSDictionary *subItemDict;
+    WOANameValuePair *subItemPair;
+    
+    subItemDict = @{kWOASrvKeyForItemName: @"阶段",
+                    kWOASrvKeyForItemType: @"combobox",
+                    kWOASrvKeyForItemValue: @"",
+                    kWOASrvKeyForItemOptionArray: respDict[@"studyLifeTerm"],
+                    kWOASrvKeyForItemWritable: @"True"};
+    subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"studyLifeTerm"];
+    [subPairArray addObject: subItemPair];
+    [subPairArray addObject: seperatorPair];
+    
+    subItemDict = @{kWOASrvKeyForItemName: @"记录类型",
+                    kWOASrvKeyForItemType: @"combobox",
+                    kWOASrvKeyForItemValue: @"",
+                    kWOASrvKeyForItemOptionArray: respDict[@"studyLifeType"],
+                    kWOASrvKeyForItemWritable: @"True"};
+    subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"studyLifeType"];
+    [subPairArray addObject: subItemPair];
+    [subPairArray addObject: seperatorPair];
+    
+    if (isByAttachment)
+    {
+        subItemDict = @{kWOASrvKeyForItemName: @"附件",
+                        kWOASrvKeyForItemType: @"attFile",
+                        kWOASrvKeyForItemValue: @[],
+                        kWOASrvKeyForItemWritable: @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        [detailSubDict setValue: @"imgfile" forKey: @"contType"];
+    }
+    else
+    {
+        subItemDict = @{kWOASrvKeyForItemName: @"标题",
+                        kWOASrvKeyForItemType: @"text",
+                        kWOASrvKeyForItemValue: @"",
+                        kWOASrvKeyForItemWritable: @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"studyLifeTitle"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        subItemDict = @{kWOASrvKeyForItemName: @"内容",
+                        kWOASrvKeyForItemType: @"textArea",
+                        kWOASrvKeyForItemValue: @"",
+                        kWOASrvKeyForItemWritable: @"True"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        [detailSubDict setValue: @"text" forKey: @"contType"];
+    }
+    
+    WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                            pairArray: subPairArray
+                                                           actionType: WOAActionType_None
+                                                           isReadonly: NO];
+    
+    return [WOAContentModel contentModel: @""
+                            contentArray: @[detailSubContent]
+                              actionType: WOAActionType_StudentSubmitLifeTraceDetail
+                              actionName: @"提交"
+                              isReadonly: NO
+                                 subDict: detailSubDict];
+}
+
++ (NSArray*) pairArrayForLifeTraceInfo: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *itemsArray = respDict[@"studyLifeItems"];
+    
+    WOANameValuePair *seperatorPair = [WOANameValuePair seperatorPair];
+    
+    WOANameValuePair *infoPair;
+    for (NSDictionary *itemDict in itemsArray)
+    {
+        NSString *isHtml = itemDict[@"isHtml"];
+        BOOL isAttachment = isHtml && ![isHtml boolValue];
+        
+        NSArray *titleArray = itemDict[@"title"];
+        NSArray *contentArray = itemDict[@"Content"];
+        
+        NSString *nameInfo = [NSString stringWithFormat: @"阶段:\t\t%@\r\n记录类型:\t%@\r\n记录标题:\t%@\r\n记录日期:\t%@",
+                              itemDict[@"term"],
+                              itemDict[@"studyLifeType"],
+                              [titleArray componentsJoinedByString: @","],
+                              itemDict[@"createDate"]];
+        
+        NSMutableDictionary *detailSubDict = [NSMutableDictionary dictionary];
+        [detailSubDict setValue: itemDict[@"studyLifeID"] forKey: @"studyLifeID"];
+        
+        WOAActionType detailRightActionType;
+        NSString *detailRightActionName;
+        WOAContentModel *detailContent;
+        NSMutableArray *subPairArray = [NSMutableArray array];
+        NSDictionary *subItemDict;
+        WOANameValuePair *subItemPair;
+        
+        subItemDict = @{kWOASrvKeyForItemName: @"阶段",
+                           kWOASrvKeyForItemType: @"text",
+                           kWOASrvKeyForItemValue: itemDict[@"term"],
+                           kWOASrvKeyForItemWritable: @"False"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"studyLifeTerm"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        subItemDict = @{kWOASrvKeyForItemName: @"记录类型",
+                        kWOASrvKeyForItemType: @"text",
+                        kWOASrvKeyForItemValue: itemDict[@"studyLifeType"],
+                        kWOASrvKeyForItemWritable: @"False"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"studyLifeType"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        subItemDict = @{kWOASrvKeyForItemName: @"记录日期",
+                        kWOASrvKeyForItemType: @"text",
+                        kWOASrvKeyForItemValue: itemDict[@"createDate"],
+                        kWOASrvKeyForItemWritable: @"False"};
+        subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"createDate"];
+        [subPairArray addObject: subItemPair];
+        [subPairArray addObject: seperatorPair];
+        
+        if (isAttachment && contentArray && titleArray && titleArray.count > 0)
+        {
+            detailRightActionType = WOAActionType_None;
+            detailRightActionName = nil;
+            
+            NSMutableArray *atthArray = [NSMutableArray array];
+            for (NSUInteger index = 0; index < titleArray.count; index++)
+            {
+                if (index >= contentArray.count)
+                {
+                    break;
+                }
+                
+                NSString *title = titleArray[index];
+                NSString *urlString = contentArray[index];
+                
+                if (title.length == 0 || urlString == 0)
+                {
+                    continue;
+                }
+                
+                NSDictionary *atthItemDict = @{kWOASrvKeyForAttachmentTitle: title,
+                                               kWOASrvKeyForAttachmentUrl: urlString};
+                
+                [atthArray addObject: atthItemDict];
+            }
+            
+            subItemDict = @{kWOASrvKeyForItemName: @"附件",
+                            kWOASrvKeyForItemType: @"attFile",
+                            kWOASrvKeyForItemValue: atthArray,
+                            kWOASrvKeyForItemWritable: @"False"};
+            subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+            [subPairArray addObject: subItemPair];
+            [subPairArray addObject: seperatorPair];
+            
+            [detailSubDict setValue: @"imgfile" forKey: @"contType"];
+        }
+        else
+        {
+            detailRightActionType = WOAActionType_StudentSubmitLifeTraceDetail;
+            detailRightActionName = @"提交";
+            
+            subItemDict = @{kWOASrvKeyForItemName: @"标题",
+                            kWOASrvKeyForItemType: @"text",
+                            kWOASrvKeyForItemValue: [itemDict[@"title"] firstObject],
+                            kWOASrvKeyForItemWritable: @"True"};
+            subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"studyLifeTitle"];
+            [subPairArray addObject: subItemPair];
+            [subPairArray addObject: seperatorPair];
+            
+            subItemDict = @{kWOASrvKeyForItemName: @"内容",
+                            kWOASrvKeyForItemType: @"textArea",
+                            kWOASrvKeyForItemValue: [itemDict[@"Content"] firstObject],
+                            kWOASrvKeyForItemWritable: @"True"};
+            subItemPair = [WOAPacketHelper pairFromItemDict: subItemDict srvKeyName: @"Content"];
+            [subPairArray addObject: subItemPair];
+            [subPairArray addObject: seperatorPair];
+            
+            [detailSubDict setValue: @"text" forKey: @"contType"];
+        }
+        
+        WOAContentModel *detailSubContent = [WOAContentModel contentModel: @" "
+                                                                pairArray: subPairArray
+                                                               actionType: WOAActionType_StudentDeleteLifeTraceInfo
+                                                               actionName: @"删除本条记录"
+                                                               isReadonly: isAttachment
+                                                                  subDict: detailSubDict];
+            
+        detailContent = [WOAContentModel contentModel: @""
+                                         contentArray: @[detailSubContent]
+                                           actionType: detailRightActionType
+                                           actionName: detailRightActionName
+                                           isReadonly: isAttachment
+                                              subDict: detailSubDict];
+        
+        infoPair = [WOANameValuePair pairWithName: nameInfo
+                                            value: detailContent
+                                         dataType: WOAPairDataType_ReferenceObj
+                                       actionType: WOAActionType_StudentViewLifeTraceDetail];
+        
+        [pairArray addObject: infoPair];
+    }
+    
+    return pairArray;
+}
 #pragma mark -
 
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict
