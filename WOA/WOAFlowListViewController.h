@@ -25,4 +25,6 @@
                                delegate: (NSObject<WOASinglePickViewControllerDelegate> *)delegate
                             relatedDict: (NSDictionary*)relatedDict;
 
+- (void) refreshData;
+
 @end

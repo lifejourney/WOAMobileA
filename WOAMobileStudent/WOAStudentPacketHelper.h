@@ -56,9 +56,11 @@
 
 #pragma mark -
 
++ (NSArray*) pairArrayForCourseType: (NSDictionary*)respDict;
++ (NSArray*) pairArrayForCourseList: (NSDictionary*)respDict;
+
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict;
 + (NSArray*) modelForMySyllabus: (NSDictionary*)retDict;
-+ (NSArray*) modelForMySelectiveCourses: (NSDictionary*)retDict;
 
 #pragma mark -
 

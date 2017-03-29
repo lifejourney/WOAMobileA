@@ -67,6 +67,13 @@
     return self;
 }
 
+- (void) refreshData
+{
+    self.allRootPairArray = self.allRootPairArray;
+    
+    [self.tableView reloadData];
+}
+
 - (void) setAllRootPairArray: (NSArray *)allRootPairArray
 {
     _allRootPairArray = allRootPairArray;

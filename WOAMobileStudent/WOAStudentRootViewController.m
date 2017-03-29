@@ -13,6 +13,7 @@
 #import "WOAStudentPacketHelper.h"
 #import "WOAPropertyInfo.h"
 #import "WOALayout.h"
+#import "UIAlertController+Utility.h"
 #import "NSString+Utility.h"
 
 
@@ -66,8 +67,7 @@
     ,@"studQueryLifeTrace":     @[@(9),     @"生活记录",        @(0), @(NO),@(NO), @"",                       @""]
     ,@"studQueryGrowth":        @[@(10),    @"成长足迹",        @(0), @(NO),@(NO), @"",                       @""]
     ,@"studQueryMySyllabus":    @[@(1),     @"我的课表",        @(1), @(NO),@(NO), @"",                       @""]
-    ,@"studSiginSelectiveCourse":
-                                @[@(2),     @"选修报名",        @(1), @(NO),@(NO), @"",                     @""]
+    ,@"studQueryCourseType":    @[@(2),     @"选修报名",        @(1), @(NO),@(NO), @"",                     @""]
     ,@"studQueryAchievement":   @[@(3),     @"成绩查询",        @(1), @(NO),@(NO),  @"",                      @""]
     ,@"tchrNewOATask":          @[@(1),     @"新建事项",        @(2), @(NO),@(NO), @"",                      @""]
     ,@"tchrQueryTodoOA":        @[@(2),     @"待办事项",        @(2), @(NO),@(NO), @"",                      @""]
@@ -909,31 +909,175 @@
      }];
 }
 
-- (void) studSiginSelectiveCourse
-{
-}
-
-- (void) studQueryMySelectiveCourses
+- (void) studQueryCourseType
 {
     NSString *funcName = [self simpleFuncName: __func__];
     NSString *vcTitle = [self titleForFuncName: funcName];
     __block __weak UINavigationController *ownerNavC = [self navForFuncName: funcName];
     
-    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryMySelectiveCourses
+    [[WOARequestManager sharedInstance] simpleQuery: WOAActionType_StudentQueryCourseType
                                            paraDict: nil
                                          onSuccuess: ^(WOAResponeContent *responseContent)
      {
-         NSDictionary *retList = [WOAStudentPacketHelper retListFromPacketDictionary: responseContent.bodyDictionary];
+         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForCourseType: responseContent.bodyDictionary];
          
-         NSArray *sectionArray = [WOAStudentPacketHelper modelForMySelectiveCourses: retList];
          WOAContentModel *contentModel = [WOAContentModel contentModel: vcTitle
-                                                          contentArray: sectionArray];
+                                                             pairArray: pairArray];
          
-         WOAContentViewController *subVC = [WOAContentViewController contentViewController: contentModel
-                                                                                  delegate: self];
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: nil];
          
          [ownerNavC pushViewController: subVC animated: YES];
+         
      }];
+}
+
+- (void) onStudQueryCourseList: (WOANameValuePair*)selectedPair
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
+    
+    [[WOARequestManager sharedInstance] simpleQueryActionType: selectedPair.actionType
+                                            additionalHeaders: nil
+                                               additionalDict: addtDict
+                                                   onSuccuess: ^(WOAResponeContent *responseContent)
+     {
+         NSArray *pairArray = [WOAStudentPacketHelper pairArrayForCourseList: responseContent.bodyDictionary];
+         
+         WOAContentModel *contentModel = [WOAContentModel contentModel: @"选课分组"
+                                                             pairArray: pairArray];
+         
+         WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                     delegate: self
+                                                                                  relatedDict: responseContent.bodyDictionary];
+         subVC.textLabelFont = [WOALayout flowCellTextFont];
+         subVC.rowHeight = 60;
+         
+         [navVC pushViewController: subVC animated: YES];
+     }];
+}
+
+- (void) onStudViewCourseGroup: (WOANameValuePair*)selectedPair
+                   relatedDict: (NSDictionary*)relatedDict
+                         navVC: (UINavigationController*)navVC
+{
+    WOAContentModel *contentModel = (WOAContentModel*)selectedPair.value;
+    
+    WOAFlowListViewController *subVC = [WOAFlowListViewController flowListViewController: contentModel
+                                                                                delegate: self
+                                                                             relatedDict: nil];
+    subVC.textLabelFont = [WOALayout flowCellTextFont];
+    subVC.rowHeight = 120;
+    
+    [navVC pushViewController: subVC animated: YES];
+}
+
+- (void) onStudChangeCourseState: (WOANameValuePair*)selectedPair
+                     relatedDict: (NSDictionary*)relatedDict
+                           navVC: (UINavigationController*)navVC
+{
+    NSMutableDictionary *addtDict = [NSMutableDictionary dictionaryWithDictionary: selectedPair.subDictionary];
+    NSString *currentOpState = addtDict[@"operatingState"];
+    
+    WOAActionType actionType;
+    if (currentOpState && [currentOpState isEqualToString: @"我要报名"])
+    {
+        actionType = WOAActionType_StudentJoinCourse;
+    }
+    else if (currentOpState && [currentOpState isEqualToString: @"退出重选"])
+    {
+        actionType = WOAActionType_StudentQuitCourse;
+    }
+    else
+    {
+        actionType = WOAActionType_None;
+    }
+    
+    NSString *groupName = addtDict[@"courseGroup"];
+    NSString *allowStr = addtDict[@"allowSeleNum"];
+    NSString *selectedStr = addtDict[@"selectedNum"];
+    NSUInteger allowCount = allowStr ? [allowStr integerValue] : 0;
+    NSUInteger selectedCount = selectedStr ? [selectedStr integerValue] : 0;
+    
+    if (actionType == WOAActionType_StudentJoinCourse && allowCount <= selectedCount)
+    {
+        NSString *alertMsg = [NSString stringWithFormat: @"最多允许选 %@ 门.", allowStr];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: groupName
+                                                                            alertMessage: alertMsg
+                                                                              actionText: @"确定"
+                                                                           actionHandler: ^(UIAlertAction * _Nonnull action)
+                                              {
+                                              }];
+        
+        [self presentViewController: alertController
+                           animated: YES
+                         completion: nil];
+        
+        
+        return;
+    }
+    
+    NSString *actionName;
+    switch (actionType)
+    {
+        case WOAActionType_StudentJoinCourse:
+            actionName = @"报名课程";
+            break;
+            
+        case WOAActionType_StudentQuitCourse:
+            actionName = @"退出报名";
+            break;
+            
+        default:
+            return;
+    }
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle: @"请确认:"
+                                                                             message: [NSString stringWithFormat: @"%@《%@》?", actionName, groupName]
+                                                                      preferredStyle: UIAlertControllerStyleAlert];
+    
+    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle: @"确认"
+                                                            style: UIAlertActionStyleDefault
+                                                          handler: ^(UIAlertAction * _Nonnull action)
+                                    {
+                                        [[WOARequestManager sharedInstance] simpleQueryActionType: actionType
+                                                                                additionalHeaders: nil
+                                                                                   additionalDict: addtDict
+                                                                                       onSuccuess: ^(WOAResponeContent *responseContent)
+                                         {
+                                             if (responseContent)
+                                             {
+                                                 [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                                                                       actionType: actionType
+                                                                   defaultMsgText: nil
+                                                                            navVC: navVC];
+                                             }
+                                         }
+                                                                                        onFailure: ^(WOAResponeContent *responseContent)
+                                         {
+                                             if (responseContent)
+                                             {
+                                                 [self onSumbitSuccessAndFlowDone: responseContent.bodyDictionary
+                                                                       actionType: actionType
+                                                                   defaultMsgText: nil
+                                                                            navVC: navVC];
+                                             }
+                                         }];
+                                    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle: @"取消"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    
+    [alertController addAction: confirmAction];
+    [alertController addAction: cancelAction];
+    
+    [self presentViewController: alertController
+                       animated: YES
+                     completion: nil];
 }
 
 - (void) studCreateTransaction
@@ -1246,6 +1390,30 @@
             [self onStudViewGrowth: selectedPair
                        relatedDict: relatedDict
                              navVC: navVC];
+        }
+            break;
+            
+        case WOAActionType_StudentQueryCourseList:
+        {
+            [self onStudQueryCourseList: selectedPair
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+        }
+            break;
+            
+        case WOAActionType_StudentViewCourseGroup:
+        {
+            [self onStudViewCourseGroup: selectedPair
+                            relatedDict: relatedDict
+                                  navVC: navVC];
+        }
+            break;
+            
+        case WOAActionType_StudentChangeCourseState:
+        {
+            [self onStudChangeCourseState: selectedPair
+                              relatedDict: relatedDict
+                                    navVC: navVC];
         }
             break;
             

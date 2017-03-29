@@ -133,6 +133,31 @@ static WOARequestManager *requestManager = nil;
      }];
 }
 
+- (void) simpleQueryActionType: (WOAActionType)actionType
+             additionalHeaders: (NSDictionary*)additionalHeaders
+                additionalDict: (NSDictionary*)additionalDict
+                    onSuccuess: (void (^)(WOAResponeContent *responseContent))successHandler
+                     onFailure: (void (^)(WOAResponeContent *responseContent))failHandler
+{
+    WOARequestContent *requestContent = [WOARequestContent contentForSimpleQuery: actionType
+                                                               additionalHeaders: additionalHeaders
+                                                                  additionalDict: additionalDict];
+    
+    [self sendRequest: requestContent
+           onSuccuess: successHandler
+            onFailure: ^(WOAResponeContent *responseContent)
+     {
+         NSString *msgType = [requestContent msgType];
+         
+         NSLog(@"Request [%@] fail: %lu, HTTPStatus=%ld", msgType, (unsigned long)responseContent.requestResult, (long)responseContent.HTTPStatus);
+         
+         if (failHandler)
+         {
+             failHandler(responseContent);
+         }
+     }];
+}
+
 #pragma mark -
 
 @end

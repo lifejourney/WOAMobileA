@@ -337,7 +337,9 @@
     }
     else if (actionType == WOAActionType_TeacherSubmitTakeover
              || actionType == WOAActionType_TeacherSubmitCommentCreate1
-             || actionType == WOAActionType_TeacherSubmitCommentDelete)
+             || actionType == WOAActionType_TeacherSubmitCommentDelete
+             || actionType == WOAActionType_StudentJoinCourse
+             || actionType == WOAActionType_StudentQuitCourse)
     {
         [navVC popViewControllerAnimated: NO];
         [navVC popViewControllerAnimated: YES];

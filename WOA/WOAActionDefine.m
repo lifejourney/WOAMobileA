@@ -234,10 +234,20 @@ static NSDictionary *__actionMapDict = nil;
       
       @(WOAActionType_StudentQueryMySyllabus):              @[@"StudentQueryMySyllabus",
                                                               @"syllabusQuery"],
-      @(WOAActionType_StudentSiginSelectiveCourse):         @[@"StudentSiginSelectiveCourse",
+      
+      @(WOAActionType_StudentQueryCourseType):              @[@"StudentQueryCourseType",
+                                                              @"courseList"],
+      @(WOAActionType_StudentQueryCourseList):              @[@"StudentQueryCourseList",
+                                                              @"courseList"],
+      @(WOAActionType_StudentViewCourseGroup):              @[@"StudentViewCourseGroup",
                                                               @""],
-      @(WOAActionType_StudentQueryMySelectiveCourses):      @[@"StudentQueryMySelectiveCourses",
-                                                              @"getElectMy"],
+      @(WOAActionType_StudentChangeCourseState):            @[@"StudentChangeCourseState",
+                                                              @""],
+      @(WOAActionType_StudentJoinCourse):                   @[@"StudentJoinCourse",
+                                                              @"joinCourse"],
+      @(WOAActionType_StudentQuitCourse):                   @[@"StudentQuitCourse",
+                                                              @"outCourse"],
+      
       @(WOAActionType_StudentQueryAchievement):             @[@"StudentQueryAchievement",
                                                               @"getResultInfo"],
       

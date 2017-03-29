@@ -140,10 +140,15 @@ typedef NS_ENUM(NSUInteger, WOAActionType)
     WOAActionType_StudentDeleteGrowthInfo,
     
     WOAActionType_StudentQueryMySyllabus,
-    WOAActionType_StudentSiginSelectiveCourse,
-    WOAActionType_StudentQueryMySelectiveCourses,
-    WOAActionType_StudentQueryAchievement,
     
+    WOAActionType_StudentQueryCourseType,
+    WOAActionType_StudentQueryCourseList,
+    WOAActionType_StudentViewCourseGroup,
+    WOAActionType_StudentChangeCourseState,
+    WOAActionType_StudentJoinCourse,
+    WOAActionType_StudentQuitCourse,
+    
+    WOAActionType_StudentQueryAchievement,
     
     WOAActionType_StudentQueryOATableList,
     WOAActionType_StudentCreateOATable,

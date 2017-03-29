@@ -818,7 +818,117 @@
     return pairArray;
 }
 
+
 #pragma mark -
+
++ (NSArray*) pairArrayForCourseType: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSArray *termArray = respDict[@"termList"];
+    NSArray *typeArray = respDict[@"courseTypeList"];
+    
+    
+    for (NSUInteger index = 0; index < termArray.count; index++)
+    {
+        NSString *term = termArray[index];
+        
+        NSMutableArray *subPairArray = [NSMutableArray array];
+        for (NSString *courseType in typeArray)
+        {
+            NSMutableDictionary *relatedDict = [NSMutableDictionary dictionary];
+            [relatedDict setValue: term forKey: @"term"];
+            [relatedDict setValue: courseType forKey: @"courseType"];
+            
+            WOANameValuePair *subPair = [WOANameValuePair pairWithName: courseType
+                                                                 value: courseType
+                                                            actionType: WOAActionType_StudentQueryCourseList];
+            subPair.subDictionary = relatedDict;
+            
+            [subPairArray addObject: subPair];
+        }
+        
+        WOAContentModel *subContent = [WOAContentModel contentModel: @""
+                                                          pairArray: subPairArray];
+        
+        [pairArray addObject: [WOANameValuePair pairWithName: term
+                                                       value: subContent
+                                                    dataType: WOAPairDataType_ContentModel]];
+    }
+    
+    return pairArray;
+}
+
++ (NSArray*) pairArrayForCourseList: (NSDictionary*)respDict
+{
+    NSMutableArray *pairArray = [NSMutableArray array];
+    
+    NSString *selectTerm = respDict[@"term"];
+    NSString *selectCourseType = respDict[@"courseType"];
+    
+    NSArray *groupList = respDict[@"courseGroupList"];
+    
+    WOANameValuePair *infoPair;
+    
+    for (NSDictionary *groupDict in groupList)
+    {
+        NSString *groupName = groupDict[@"courseGroup"];
+        groupName = [groupName stringByReplacingOccurrencesOfString: @"“" withString: @""];
+        groupName = [groupName stringByReplacingOccurrencesOfString: @"”" withString: @""];
+        NSString *groupNameInfo = [NSString stringWithFormat: @"%@:\r\n允许选:\t\t%@ 门\r\n已选:\t\t\t%@ 门",
+                                   groupName,
+                                   groupDict[@"allowSeleNum"],
+                                   groupDict[@"selectedNum"]];
+        
+        NSArray *courseList = groupDict[@"courseList"];
+        
+        WOAContentModel *detailContent;
+        NSMutableArray *detailPairArray = [NSMutableArray array];
+        
+        for (NSDictionary *courseDict in courseList)
+        {
+            NSString *courseOpState = courseDict[@"operatingState"];
+            
+            NSMutableDictionary *relatedDict = [NSMutableDictionary dictionary];
+            [relatedDict setValue: selectTerm forKey: @"term"];
+            [relatedDict setValue: selectCourseType forKey: @"courseType"];
+            [relatedDict setValue: courseDict[@"xxid"] forKey: @"xxid"];
+            [relatedDict setValue: groupName forKey: @"courseGroup"];
+            [relatedDict setValue: courseOpState forKey: @"operatingState"];
+            [relatedDict setValue: groupDict[@"allowSeleNum"] forKey: @"allowSeleNum"];
+            [relatedDict setValue: groupDict[@"selectedNum"] forKey: @"selectedNum"];
+            
+            NSString *courseNameInfo = [NSString stringWithFormat: @"序号:\t\t%@\r\n课程名称:\t%@\r\n任课教师:\t%@\r\n上课地点:\t%@\r\n报名时间:\t%@\r\n剩余名额:\t%@\r\n操作状态:\t%@",
+                                        courseDict[@"courseNO"],
+                                        courseDict[@"courseName"],
+                                        courseDict[@"teacherList"],
+                                        courseDict[@"classVenue"],
+                                        courseDict[@"applicationPeriod"],
+                                        courseDict[@"surplusPlaces"],
+                                        courseOpState];
+            
+            WOANameValuePair *detailPair = [WOANameValuePair pairWithName: courseNameInfo
+                                                                    value: courseOpState
+                                                                 dataType: WOAPairDataType_ReferenceObj
+                                                               actionType: WOAActionType_StudentChangeCourseState];
+            detailPair.subDictionary = relatedDict;
+            
+            [detailPairArray addObject: detailPair];
+        }
+        
+        detailContent = [WOAContentModel contentModel: groupName
+                                            pairArray: detailPairArray];
+        
+        infoPair = [WOANameValuePair pairWithName: groupNameInfo
+                                            value: detailContent
+                                         dataType: WOAPairDataType_ReferenceObj
+                                       actionType: WOAActionType_StudentViewCourseGroup];
+        
+        [pairArray addObject: infoPair];
+    }
+    
+    return pairArray;
+}
 
 + (NSArray*) modelForAchievement: (NSDictionary*)respDict
 {
